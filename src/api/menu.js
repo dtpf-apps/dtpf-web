@@ -1,4 +1,4 @@
-import { basePath, apiVersion } from "./config";
+import { basePath, apiVersion } from "./utils/config";
 import { makeRequest } from "../api/utils/makeRequest";
 
 export function getMenuApi() {

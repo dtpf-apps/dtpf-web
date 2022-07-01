@@ -1,3 +1,7 @@
 import { isLocalhost } from "../utils/isLocalhost";
-export const URL = isLocalhost ? "http://localhost:3000/" : "https://beta.dtpf.es/";
-export const ENDPOINT = isLocalhost ? "http://localhost:3998" : "https://beta.dtpf.es";
+export const URL = isLocalhost ?
+    `${window.location.protocol}//${window.location.hostname}:3000/` :
+    window.location.origin;
+export const ENDPOINT = isLocalhost ?
+    `${window.location.protocol}//${window.location.hostname}:3998/` :
+    window.location.origin;
