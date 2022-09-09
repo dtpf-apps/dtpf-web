@@ -4,7 +4,8 @@ import { Row, Col, Collapse } from "antd";
 import Modal from "../../../UI/Modal";
 import { LeftCircleTwoTone, FilePdfOutlined } from "@ant-design/icons";
 import "./Education.scss";
-const memoriaRecetasPDF = require("../../../../assets/pdf/memoria-proyecto-final.pdf");
+import memoriaRecetasPDF from "../../../../assets/pdf/memoria-proyecto-final.pdf";
+
 const { Panel } = Collapse;
 
 export default function Education() {
@@ -29,7 +30,7 @@ export default function Education() {
   );
 }
 
-function ModalPDF(props: any) {
+function ModalPDF(props) {
   const { isVisibleModal, setIsVisibleModal } = props;
   return (
     <Modal
@@ -41,7 +42,7 @@ function ModalPDF(props: any) {
       <object type="application/pdf" data={memoriaRecetasPDF}>
         <p>
           Error al mostrar el PDF,
-          <a href="../../../assets/pdf/memoria-proyecto-final.pdf" download>
+          <a href="../../../../assets/pdf/memoria-proyecto-final.pdf" download>
             &nbsp;descarga&nbsp;
           </a>
           el PDF para ver la memoria de proyecto final de Recetas Deliciosas
@@ -52,10 +53,10 @@ function ModalPDF(props: any) {
   );
 }
 
-function DesarrolloAppFPN3(props: any) {
+function DesarrolloAppFPN3(props) {
   const { setIsVisibleModal } = props;
   const [show, el] = useNearScreen();
-  const ref: any = el;
+  const ref = el;
   return (
     <div className="use-near-screen" ref={ref}>
       {show && (
@@ -118,7 +119,7 @@ function DesarrolloAppFPN3(props: any) {
 
 function CompetenciasClaveN3() {
   const [show, el] = useNearScreen();
-  const ref: any = el;
+  const ref = el;
   return (
     <div className="use-near-screen" ref={ref}>
       {show && (
@@ -152,7 +153,7 @@ function CompetenciasClaveN3() {
 
 function HerramientasWebN3() {
   const [show, el] = useNearScreen();
-  const ref: any = el;
+  const ref = el;
   return (
     <div className="use-near-screen" ref={ref}>
       {show && (
@@ -196,7 +197,7 @@ function HerramientasWebN3() {
 
 function AdministrativoN1() {
   const [show, el] = useNearScreen();
-  const ref: any = el;
+  const ref = el;
   return (
     <div className="use-near-screen" ref={ref}>
       {show && (
@@ -232,7 +233,7 @@ function AdministrativoN1() {
 
 function GraduadoEscolar() {
   const [show, el] = useNearScreen();
-  const ref: any = el;
+  const ref = el;
   return (
     <div className="use-near-screen" ref={ref}>
       {show && (
