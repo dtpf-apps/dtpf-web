@@ -1,4 +1,4 @@
-import { basePath, apiVersion } from "./config";
+import { basePath, apiVersion } from "./utils/config";
 import { makeRequest } from "../api/utils/makeRequest";
 
 export function addCourseApi(token, course) {
@@ -8,7 +8,7 @@ export function addCourseApi(token, course) {
 
 export function updateCourseApi(token, id, data) {
   const url = `${basePath}/${apiVersion}/update-course/${id}`;
-  return makeRequest(url, true, true, "PUT", token, JSON.stringify(data));
+  return makeRequest(url, true, true, "PUT", token, JSON.stringify(data), "application/json");
 }
 
 export function getCoursesApi(limit, page) {
@@ -21,8 +21,13 @@ export function getCourseApi(urlCourse) {
   return makeRequest(url);
 }
 
-export function getCourseByOrderApi(order) {
-  const url = `${basePath}/${apiVersion}/get-course-order/${order}`;
+export function getPrevCourseApi(urlCourse) {
+  const url = `${basePath}/${apiVersion}/get-prev-course/${urlCourse}`;
+  return makeRequest(url);
+}
+
+export function getNextCourseApi(urlCourse) {
+  const url = `${basePath}/${apiVersion}/get-next-course/${urlCourse}`;
   return makeRequest(url);
 }
 
