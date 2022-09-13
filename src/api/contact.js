@@ -1,4 +1,4 @@
-import { apiVersion, basePath } from "./config";
+import { apiVersion, basePath } from "./utils/config";
 import { makeRequest } from "../api/utils/makeRequest";
 
 export function subscribeContactApi(data) {
@@ -30,5 +30,5 @@ export function deleteContactMessageApi(token, messageId) {
 
 export function getLastMessageApi(token) {
   const url = `${basePath}/${apiVersion}/get-last-message-email`;
-  return makeRequest(url, true, true, "GET", token);
+  return makeRequest(url, true, false, "GET", token);
 }
