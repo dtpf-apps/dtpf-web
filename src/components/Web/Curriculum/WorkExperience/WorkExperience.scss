@@ -114,8 +114,8 @@
       }
     }
     .title-left {
-      right: -275px;
-      max-width: 250px;
+      right: -320px;
+      max-width: 300px;
     }
     .title-right {
       right: 100%;
@@ -178,7 +178,7 @@
         }
       }
     }
-    .workx-7 {
+    .workx-9 {
       animation: 400ms fadeIn;
       &::after {
         background-color: $secondary-color;
@@ -188,14 +188,20 @@
         animation-direction: alternate;
       }
     }
-    .workx-6 {
+    .workx-8 {
       animation: 400ms fadeIn;
-    }
-    .workx-5 {
+      }
+    .workx-7 {
+      animation: 425ms fadeIn;
+      }
+    .workx-6 {
       animation: 450ms fadeIn;
     }
-    .workx-4 {
+    .workx-5 {
       animation: 500ms fadeIn;
+    }
+    .workx-4 {
+      animation: 550ms fadeIn;
     }
     .workx-3,
     .workx-2,
