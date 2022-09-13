@@ -3,6 +3,7 @@ import useGetMainMenu from "../../hooks/useGetMainMenu";
 import useGetMainMenuDBIndexed from "./useGetMainMenuDBIndexed";
 import useConnection from "../../hooks/useConnection";
 
+// If connection is ok show database data else show indexed database data
 export default function GetMainMenu() {
   const { connectionStatus, isNavigatorOnline } = useConnection();
   const { mainMenu } = useGetMainMenu();

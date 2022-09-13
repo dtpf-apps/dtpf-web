@@ -18,6 +18,7 @@ export default function useGetMainMenuDBIndexed() {
       setMenu(db, setMainMenuData);
     };
     openRequest.onerror = function (e: any) {
+      // If indexedDb version is lower than the current.. 
       if (e.target.error.code === 0) {
         indexedDB.deleteDatabase(DB_DTPF);
         window.location.reload();
