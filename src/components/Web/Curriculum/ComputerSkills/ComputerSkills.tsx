@@ -24,24 +24,17 @@ export default function ComputerSkills() {
                 <Skill skill="NodeJS" percent={40} status="active" />
                 <Skill skill="ExpressJS" percent={60} status="active" />
                 <Skill skill="React" percent={70} status="active" />
-                <Skill skill="Angular" percent={40} />
-                <Skill skill="Vue" percent={40} />
-                <Skill skill="JQuery" percent={20} />
               </Col>
               <Col span={24} sm={12} className="computer-skills__col">
-                <Skill skill="Xampp, Wamp" percent={60} />
-                <Skill skill="Vagrant" percent={60} />
+                <Skill skill="Angular" percent={40} />
+                <Skill skill="JQuery" percent={20} />
                 <Skill skill="PHP" percent={40} status="active" />
                 <Skill skill="Laravel" percent={60} status="active" />
                 <Skill skill="Symfony" percent={20} />
-                <Skill skill="Nginx" percent={60} status="active" />
                 <Skill skill="MongoDB" percent={40} status="active" />
                 <Skill skill="MySQL" percent={40} />
                 <Skill skill="MariaDB" percent={40} status="active" />
                 <Skill skill="Git" percent={50} status="active" />
-                <Skill skill="Linux" percent={70} status="active" />
-                <Skill skill="Windows" percent={50} />
-                <Skill skill="Wordpress" percent={50} />
               </Col>
             </Row>
           </>
