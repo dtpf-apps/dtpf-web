@@ -230,12 +230,7 @@ function Tags(props: any) {
   const [tags, setTags] = useState([]);
   useEffect(() => {
     let isMounted = true;
-    const url = course && course.url;
-    if (url) {
-      getCourseApi(url).then((response) => {
-        isMounted && setTags(response.course && response.course.tags);
-      });
-    }
+    isMounted && setTags(course.tags)
     return () => {
       isMounted = false;
     };
