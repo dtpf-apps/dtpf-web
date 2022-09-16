@@ -66,7 +66,7 @@ function RenderButtons(props: any) {
 function FormacionTI(ramdomNumber: number) {
   const phrases = [
     `Desde que decidí introducirme en este mundo`,
-    `Relacionada con el mundo de TI`,
+    `Relacionada con el mundo de IT`,
     `En tecnologías de la información`,
   ];
   return phrases[ramdomNumber];
