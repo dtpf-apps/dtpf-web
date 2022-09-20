@@ -26,7 +26,7 @@ export default function Footer() {
             </Col>
             <Col span={24} sm={2} xl={4} />
             <Col span={24} sm={11} xl={10} aria-hidden="true">
-              Desarrollador Web
+              Desarrollador Web | 2022
             </Col>
           </Row>
         </Col>
