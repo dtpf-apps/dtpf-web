@@ -10,7 +10,8 @@ export default function WorkExperience() {
     <div className="work-experience">
       <h2 className="work-experience__title">Experiencia Laboral</h2>
       <div className="timeline">
-        <ProximaExperiencia />
+        <DesarrolladorFreelance />
+        <AlbañilFreelance />
         <SupermercadoChipYChop />
         <TizonaSL />
         <MoyaSaus />
@@ -22,18 +23,18 @@ export default function WorkExperience() {
   );
 }
 
-function ProximaExperiencia() {
+function DesarrolladorFreelance() {
   const [show, el] = useNearScreen();
   const ref: any = el;
   return (
     <div className="use-near-screen" ref={ref}>
       {show && (
-        <div className="container workx-7 right">
-          <div className="title-right workx-7">
-            <h3>PRÓXIMA EXPERIENCIA</h3>
+        <div className="container workx-8 left">
+          <div className="title-left workx-8">
+            <h3>DESARROLLADOR FREELANCE</h3>
           </div>
           <div className="content">
-            <span>Agosto 2020</span>
+            <span>2018 - 2022</span>
             <Collapse
               bordered={false}
               defaultActiveKey={["1"]}
@@ -57,6 +58,26 @@ function ProximaExperiencia() {
                 </p>
               </Panel>
             </Collapse>
+          </div>
+        </div>
+      )}
+    </div>
+  );
+}
+
+function AlbañilFreelance() {
+  const [show, el] = useNearScreen();
+  const ref: any = el;
+  return (
+    <div className="use-near-screen" ref={ref}>
+      {show && (
+        <div className="container workx-8 right">
+          <div className="title-right workx-7">
+            <h3>ALBAÑIL FREELANCE</h3>
+          </div>
+          <div className="content">
+            <span>2020 - 2022</span>
+            <p>Oficial de 1ª de albañilería</p>
           </div>
         </div>
       )}
@@ -95,7 +116,7 @@ function TizonaSL() {
             <h3>TIZONA S.L (GRUPO IFA)</h3>
           </div>
           <div className="content">
-            <span>2016</span>
+            <span>2017</span>
             <p>Encargado de supermercado</p>
           </div>
         </div>
