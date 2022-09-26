@@ -19,9 +19,9 @@ export default function RecetasDeliciosasMsr(props: {
       image={recetasDeliciosasImage}
       contentTitle="Recetas Deliciosas MSR's"
       contentText="Recetas Deliciosas MSR's es un blog de recetas de cocina, creado
-      para agrupar todas las recetas familiares en un solo sitio. Una aplicación
+      para agrupar todas las recetas culinarias en un solo sitio. Una aplicación
       web personal con acceso para usuarios previamente
-      registrados y verificados vía email."
+      registrados y verificados."
       modalTitle="Blog de recetas de cocina"
       modalImage1={ModalImage1}
       modalImage2={ModalImage2}
@@ -29,13 +29,10 @@ export default function RecetasDeliciosasMsr(props: {
       modalImageAlt="Imágen de www.recetasmsr.com"
       modalDate="Septiembre 2020"
       modalIntroduction="
-        Recetas Deliciosas MSR's es un proyecto realizado en solitario, creado 
-        por la necesidad de mi pareja de guardar recetas de cocina propias y
-        de sus familiares. 
+        Recetas Deliciosas MSR's es el proyecto de final de curso del FP3 de Desarrollo 
+        de Aplicaciones Web realizado en solitario. 
       "
       modalText={[
-        `La web está creada desde cero por mi y es el proyecto final de curso 
-        del FP3 de Desarrollo de Aplicaciones Web.`,
         `Es una aplicación web monolítica de Laravel, con una arquitectura MVC. MySQL
         como sistema de gestión de base de datos. HTML5 y CSS3 para la estructura
         y estilos, haciendo uso de las plantillas blade. Tiene sistema de gestión 
