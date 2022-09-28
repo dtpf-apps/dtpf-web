@@ -19,7 +19,7 @@ export default function Education(props: any) {
   }
   const { url } = useParams<URL>();
   const { connectionStatus, isNavigatorOnline } = useConnection();
-  const [itemsPerPage, setItemsPerPage] = useState(10);
+  const [itemsPerPage, setItemsPerPage] = useState(12);
   const courses = GetCoursesInfo(
     connectionStatus === 500 || !isNavigatorOnline ? 1000 : itemsPerPage
   );
@@ -70,22 +70,21 @@ function RenderEducation(props: any) {
               />
             </Col>
             <div className="div"></div>
-            {(courses?.totalPages > 1 ||
-              itemsPerPage === courses?.totalDocs) && (
-              <>
-                <Col key="pagination">
-                  <Suspense fallback={<></>}>
-                    <Pagination
-                      courses={courses}
-                      location={location}
-                      history={history}
-                      itemsPerPage={itemsPerPage}
-                      setItemsPerPage={setItemsPerPage}
-                    />
-                  </Suspense>
-                </Col>
-              </>
-            )}
+            {(courses?.totalPages > 1) && (
+                <>
+                  <Col key="pagination">
+                    <Suspense fallback={<></>}>
+                      <Pagination
+                        courses={courses}
+                        location={location}
+                        history={history}
+                        itemsPerPage={itemsPerPage}
+                        setItemsPerPage={setItemsPerPage}
+                      />
+                    </Suspense>
+                  </Col>
+                </>
+              )}
           </Col>
           <Col lg={1} />
         </Row>

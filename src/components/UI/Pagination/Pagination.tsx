@@ -28,6 +28,7 @@ export default function Pagination(props: any) {
     <PaginationAntd
       responsive
       defaultCurrent={currentPage}
+      current={currentPage}
       total={courses.totalDocs}
       pageSize={itemsPerPage}
       pageSizeOptions={["10", courses.totalDocs]}
