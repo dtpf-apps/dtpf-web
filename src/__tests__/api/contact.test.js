@@ -34,17 +34,13 @@ describe("Contact API", () => {
   it("Remove test mensaje", async () => {
     await getMessagesUnreadApi(TOKEN, false).then( async (data) => {
       expect(data.status).toBe(200);
-      let dataMessages = data.messages;
-      let testingMessage = dataMessages.find(
-        (subject) => subject.subject === "ContactTest"
-      );
       await deleteContactMessageApi(TOKEN, "id").then((data) => {
         expect(data.status).toBe(500);
       });
     });
   });
   it("Get last message email", async () => {
-    getLastMessageApi(TOKEN).then((data) => {
+    await getLastMessageApi(TOKEN).then((data) => {
       expect(data.status).toBe(200);
       console.log(data);
     })

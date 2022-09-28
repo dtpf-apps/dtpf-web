@@ -11,16 +11,6 @@ describe("Utils API", () => {
       expect(data.status).toBe(200);
     });
   });
-  it("Setting reloadMessages to true", async () => {
-    await reloadMessagesTrueApi().then((data) => {
-      expect(data.status).toBe(200);
-    });
-  });
-  it("Setting reloadMessages to false", async () => {
-    await reloadMessagesFalseApi().then((data) => {
-      expect(data.status).toBe(200);
-    });
-  });
   it("Getting messages status", async () => {
     await messagesStatusApi().then((data) => {
       expect(data.messagesStatus).toBeFalsy();
