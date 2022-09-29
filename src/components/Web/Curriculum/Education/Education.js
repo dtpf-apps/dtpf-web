@@ -16,6 +16,7 @@ export default function Education() {
         <Col span={24} className="education__title">
           <h2>Formación oficial</h2>
         </Col>
+        <MasterDesarrolloSoftware />
         <DesarrolloAppFPN3 setIsVisibleModal={setIsVisibleModal} />
         <CompetenciasClaveN3 />
         <HerramientasWebN3 />
@@ -50,6 +51,51 @@ function ModalPDF(props) {
         </p>
       </object>
     </Modal>
+  );
+}
+
+function MasterDesarrolloSoftware() {
+  const [show, el] = useNearScreen();
+  const ref = el;
+  return (
+    <div className="use-near-screen" ref={ref}>
+      {show && (
+        <Col span={24} className="education__collapse">
+          <Collapse
+            accordion
+            expandIconPosition={"right"}
+            expandIcon={({ isActive }) => (
+              <LeftCircleTwoTone
+                twoToneColor="#5d718d"
+                style={{ fontSize: "26px" }}
+                rotate={isActive ? -90 : 0}
+              />
+            )}
+          >
+            <Panel header="MÁSTER EN DESARROLLO DE SOFTWARE" key="1">
+              <h3>Octubre 2022 - Mayo 2023</h3>
+              <h4>Assembler Institute of Technologies</h4>
+              <ul>
+                <li>Work Integration Learning</li>
+                <li>Aprendizaje colaborativo y de competencias</li>
+                <li>Live coding y pair programming</li>
+                <li>Desarrollo de Soft Skills</li>
+                <li>Metodólogias AGILE</li>
+                <li>
+                  HTML5, CSS3, Javascript, JSON y LocalStorage, GIT, REST APIs, 
+                  Bootstrap
+                </li>
+                <li>PHP, MySQL, OOP, MVC PATTERN</li>
+                <li>
+                  React.js, React Testing Library, Jest, Node.js, Express, MongoDB, 
+                  Mongoose, Firebase, Docker, Laravel
+                </li>
+              </ul>
+            </Panel>
+          </Collapse>
+        </Col>
+      )}
+    </div>
   );
 }
 
