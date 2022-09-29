@@ -27,10 +27,9 @@ function Row1() {
           <Image src={image} preview={false}></Image>
         </div>
         <div className="about-me__row1-content-text1">
-          Estudiante de informática con conocimientos de programación para
-          páginas web y desarrollo de aplicaciones web progresivas. Interesado
-          en trabajar por primera vez como programador junior con el objetivo de
-          poner en práctica mis habilidades y proporcionar valor a la empresa.
+          Desarrollador de software Full Stack. Actualmente preparándome 
+          para realizar un Máster en Desarrollo de Software en Assembler Institute of 
+          Technologies.
         </div>
       </div>
     </div>
