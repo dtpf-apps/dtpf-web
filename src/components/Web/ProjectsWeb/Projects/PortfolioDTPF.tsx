@@ -18,10 +18,9 @@ export default function PortfolioDTPF(props: {
       imageAlt="Link a https://www.dtpf.es"
       image={PortfolioDTPFImage}
       contentTitle="Portfolio DTPF"
-      contentText="Mi último proyecto todavía en desarrollo es mi portfolio.
-      Una aplicación web hecha a medida, que muestra mi progreso en el sector de TI,
-      y que tiene como objetivo tener un contacto más directo con quién esté 
-      buscando un perfil como yo."
+      contentText="Mi portfolio es una aplicación web hecha a medida, que muestra mi 
+      progreso en el sector de IT, y que tiene como objetivo tener un contacto más 
+      directo con quien esté buscando un perfil como yo."
       modalTitle="Portfolio David Thomas Pizarro Frick"
       modalImage1={ModalImage1}
       modalImage2={ModalImage2}
@@ -37,7 +36,7 @@ export default function PortfolioDTPF(props: {
         oficiales de las tecnologías utilizadas y en foros especializados.
       "
       modalText={[
-        `Aplicación web PWA full-stack JavaScript, 100% responsive y con CMS a medida.
+        `Aplicación web progresiva full-stack JavaScript, 100% responsive y con CMS a medida.
         Gestionada por mi sin hacer uso de servicios en la nube.`,
         `Utilizo NodeJS para el back-end junto con Express para la infraestructura
         API de la aplicación. MongoDB como sistema de base de datos y Mongoose 
