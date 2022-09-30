@@ -1,0 +1,16 @@
+import React, { useState, Suspense, lazy } from "react";
+const AboutMeAdmin = lazy(() => import("../../../components/Admin/AboutMeAdmin"));
+const Helmet = lazy(() => import("../../../components/Helmet"));
+
+export default function AboutMeAdminPage() {
+  const [reloadAboutMeAdmin, setReloadAboutMeAdmin] = useState(false);
+  return (
+    <Suspense fallback={<></>}>
+      <Helmet titleHelmet="DTPF | Admin Sobre Mi" contentHelmet="Página Sobre Mi Admin" />
+      <AboutMeAdmin
+        reloadAboutMeAdmin={reloadAboutMeAdmin}
+        setReloadAboutMeAdmin={setReloadAboutMeAdmin}
+      />
+    </Suspense>
+  );
+}
