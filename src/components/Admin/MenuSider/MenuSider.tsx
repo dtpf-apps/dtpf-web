@@ -9,6 +9,7 @@ import {
   ChromeOutlined,
   MessageOutlined,
   ReadOutlined,
+  SmileOutlined
 } from "@ant-design/icons";
 import "./MenuSider.scss";
 import { getAccessTokenApi } from "../../../api/auth";
@@ -121,6 +122,12 @@ function NextRender(props: any) {
             <Link to="/ad1988/education">
               <ReadOutlined />
               <span className="nav-text">Formación</span>
+            </Link>
+          </Menu.Item>
+          <Menu.Item key="ad1988/about-me">
+            <Link to="/ad1988/about-me">
+              <SmileOutlined />
+              <span className="nav-text">Sobre Mi</span>
             </Link>
           </Menu.Item>
           <Menu.Item key="/">
