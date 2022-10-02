@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import { getAboutMeInfoApi } from "../../../api/aboutMe";
 import useScrollToTop from "../../../hooks/useScrollToTop";
 import { Image } from "antd";
 import "./AboutMeWeb.scss";
@@ -8,29 +9,38 @@ import image from "../../../assets/img/png/yo.png";
 
 export default function AboutMeWeb() {
   useScrollToTop();
+  const [mainInfo, setMainInfo] = useState([]);
+
+  useEffect(() => {
+    let isMounted = true;
+    getAboutMeInfoApi("mainInfo").then((response) => {
+      isMounted && setMainInfo(response.info)
+    });
+    return () => {
+      isMounted = false;
+    };
+  }, []);
+
   return (
     <div className="about-me">
       <div className="about-me__title">
         <h1>Sobre Mi</h1>
       </div>
-      <Row1 />
+      <Row1 mainInfo={mainInfo} />
       <Row2 />
     </div>
   );
 }
 
-function Row1() {
+function Row1(props: any) {
+  const { mainInfo } = props;
   return (
     <div className="about-me__row1">
       <div className="about-me__row1-content">
         <div className="about-me__row1-content-image">
           <Image src={image} preview={false}></Image>
         </div>
-        <div className="about-me__row1-content-text1">
-          Desarrollador de software Full Stack. Actualmente preparándome 
-          para realizar un Máster en Desarrollo de Software en Assembler Institute of 
-          Technologies.
-        </div>
+        <div className="about-me__row1-content-text1">{mainInfo.content1}</div>
       </div>
     </div>
   );
@@ -60,9 +70,7 @@ function Row2() {
       <div className="about-me__row2">
         <div
           className={
-            skillsBounce
-              ? "about-me__row2-emoticon-1 addBorderBottom"
-              : "about-me__row2-emoticon-1"
+            skillsBounce ? "about-me__row2-emoticon-1 addBorderBottom" : "about-me__row2-emoticon-1"
           }
           onClick={skillsB}
         >
@@ -72,9 +80,7 @@ function Row2() {
         </div>
         <div
           className={
-            clockBorderBottom
-              ? "about-me__row2-clock addBorderBottom"
-              : "about-me__row2-clock"
+            clockBorderBottom ? "about-me__row2-clock addBorderBottom" : "about-me__row2-clock"
           }
           onClick={clockBB}
         >
@@ -136,14 +142,12 @@ function MyHistory() {
     };
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isTyping]);
-  const txt1 = 
-  `Nacido en Mallorca, y gracias a mis padres fui criado
+  const txt1 = `Nacido en Mallorca, y gracias a mis padres fui criado
     con influencia sueca y española. Esto se refleja en cómo
     soy y cómo he ido creciendo a lo largo de los años.
     Una persona muy cercana, a la vez que un poco minimalista
     y sencillo.`;
-    const txt2 = 
-    `Siempre me ha apasionado crear cosas para hacer la vida 
+  const txt2 = `Siempre me ha apasionado crear cosas para hacer la vida 
     más fácil, no obstante nunca tuve claro que “quería ser 
     de mayor”, tenía claro que a lo que me dedicaba no era 
     lo mío, pero a la vez no llegaba a encontrar en qué
@@ -155,9 +159,9 @@ function MyHistory() {
     una de las mejores decisiones que he tomado. Estoy 
     empezando y tengo mucho recorrido por delante, eso 
     sí, ganas de aprender y de superarme no me faltan!`;
-    const random = (min: any, max: any) => {
-      return Math.floor((Math.random() * (max - min + 1)) + min);
-    }  
+  const random = (min: any, max: any) => {
+    return Math.floor(Math.random() * (max - min + 1) + min);
+  };
   let i = 0;
   const typeWriter1 = () => {
     let text1 = document.getElementById("type-history-1");
@@ -168,7 +172,6 @@ function MyHistory() {
         setTimeout(typeWriter1, random(13, 15));
       }
     }
-    
   };
   const typeWriter2 = () => {
     let text2 = document.getElementById("type-history-2");
@@ -217,35 +220,29 @@ function Hobbies() {
   }, []);
   return (
     <p>
-      ¿Qué me gusta? Es una pregunta que me hago a menudo, tengo muy claro lo
-      que no quiero y lo que no me gusta, pero seguir probando cosas nuevas es
-      algo que me encanta.
+      ¿Qué me gusta? Es una pregunta que me hago a menudo, tengo muy claro lo que no quiero y lo que
+      no me gusta, pero seguir probando cosas nuevas es algo que me encanta.
       <br />
       Soy una persona muy activa y el
       <span className={bold1 ? "addBoldText" : undefined}> deporte </span>
-      me ayuda a resolver problemas y a tener nuevas ideas, pero apesar de haber
-      practicado tantos, pocos como la bici se convierten en rutina. El
-      siguiente, será el tiro con arco.
+      me ayuda a resolver problemas y a tener nuevas ideas, pero apesar de haber practicado tantos,
+      pocos como la bici se convierten en rutina. El siguiente, será el tiro con arco.
       <br />
       Me encanta la
-      <span className={bold2 ? "addBoldText" : undefined}> naturaleza</span>, lo
-      relacionado con ella; poder ir al campo a dar un buen paseo y descubrir
-      nuevas rutas andando o en bici.
+      <span className={bold2 ? "addBoldText" : undefined}> naturaleza</span>, lo relacionado con
+      ella; poder ir al campo a dar un buen paseo y descubrir nuevas rutas andando o en bici.
       <br />
-      Crear, reparar y mejorar lo que quiera con mis manos y la ayuda de mis
-      herramientas ha sido mi principal afición hasta que conocí el mundo de la
-      programación; desde pequeño las
+      Crear, reparar y mejorar lo que quiera con mis manos y la ayuda de mis herramientas ha sido mi
+      principal afición hasta que conocí el mundo de la programación; desde pequeño las
       <span className={bold3 ? "addBoldText" : undefined}> manualidades </span>
       fueron lo mio.
       <br />
-      Podría seguir destacando muchas más cosas que me gustan y con las que me
-      identifico, pero sin duda, una de las que más me identifican es el amor
-      que tengo a los
-      <span className={bold4 ? "addBoldText" : undefined}> animales</span>. He
-      tenido tantos y tan diferentes que no sabría por donde empezar, desde
-      vertebrados de todos los grupos hasta invertebrados clasificados como
-      plagas; sin duda me quedo con los actuales, dos perros (un crestado chino
-      y una pitbull) y una gata común peculiar, con los que disfruto todo lo que
+      Podría seguir destacando muchas más cosas que me gustan y con las que me identifico, pero sin
+      duda, una de las que más me identifican es el amor que tengo a los
+      <span className={bold4 ? "addBoldText" : undefined}> animales</span>. He tenido tantos y tan
+      diferentes que no sabría por donde empezar, desde vertebrados de todos los grupos hasta
+      invertebrados clasificados como plagas; sin duda me quedo con los actuales, dos perros (un
+      crestado chino y una pitbull) y una gata común peculiar, con los que disfruto todo lo que
       puedo.
     </p>
   );
