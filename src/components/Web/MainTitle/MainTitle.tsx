@@ -71,7 +71,7 @@ export default function MainTitle() {
             }}
           >
             Pizarro&nbsp;Frick
-          </Texty>          
+          </Texty>
           <TweenOne
             className="combined-bar"
             animation={{
@@ -82,15 +82,10 @@ export default function MainTitle() {
               ease: "linear",
             }}
           />
-          <Texty
-            className="content"
-            type="bottom"
-            delay={400}
-            interval={5}
-          >
-            Desarrollador Junior de Software
+          <Texty className="content" type="bottom" delay={400} interval={5}>
+            Desarrollador Full Stack de Software
           </Texty>
-        </div>        
+        </div>
       </div>
     </div>
   );
