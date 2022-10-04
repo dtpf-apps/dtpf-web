@@ -127,14 +127,9 @@
       padding: 10px 20px;
       border-radius: 6px;
       background-color: var(--t-white-lightgrey-bg) !important;
-      span {
+      > span {
         @include H4();
         color: $font-primary-light;
-        margin: 0;
-        margin-top: 10px;
-        &:first-child {
-          margin-top: 0 !important;
-        }
       }
       p {
         margin: 3px 0;
@@ -146,6 +141,7 @@
     .work-collapse-panel {
       background-color: var(--t-white-lightgrey-bg) !important;
       border: 0;
+      width: 100%;
       .ant-collapse-content-box {
         padding: 5px;
       }
@@ -168,13 +164,16 @@
         font-size: 1em;
         padding: 5px 10px;
         border: 0 !important;
+        &-text {
+          margin-left: -22px !important;
+        }
         &:first-child {
           margin-top: 0 !important;
         }
         svg {
           position: absolute;
-          top: -5px;
-          left: -19px;
+          top: 10px;
+          left: -15px;
         }
       }
     }
@@ -190,10 +189,10 @@
     }
     .workx-8 {
       animation: 400ms fadeIn;
-      }
+    }
     .workx-7 {
       animation: 425ms fadeIn;
-      }
+    }
     .workx-6 {
       animation: 450ms fadeIn;
     }

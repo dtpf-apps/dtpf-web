@@ -6,15 +6,8 @@
   display: flex;
   align-items: center;
   justify-content: flex-start;
-  li {
-    border: 0 !important;
-    a {
-      &:focus,
-      &:active,
-      &:focus {
-        border: 0 !important;
-      }
-    }
+  li:after {
+    border-bottom: none !important
   }
   &__logo {
     a {

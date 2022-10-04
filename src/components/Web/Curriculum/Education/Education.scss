@@ -51,9 +51,8 @@
           @include H5();
           color: $font-primary-dark;
           font-weight: bold;
-          span {
+          .anticon-left-circle {
             position: absolute !important;
-            top: calc(50% - 12px) !important;
             font-size: 1.8em !important;
             margin: 0 -5px;
           }
