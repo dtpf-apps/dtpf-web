@@ -27,16 +27,10 @@ function RenderMenu(props: any) {
     gaEvent("click_menu_mobile_icon", "clicks", "UI Clicks", true);
   };
   return (
-    <Menu
-      selectedKeys={[location.pathname]}
-      className="menu-top-web"
-      mode="horizontal"
-    >
-      <Menu.Item className="menu-top-web__logo">
-        <NavLink to={"/"}>
-          <img src={Logo} alt="Logo de David Thomas Pizarro Frick" />
-        </NavLink>
-      </Menu.Item>
+    <Menu selectedKeys={[location.pathname]} className="menu-top-web" mode="horizontal">
+      <NavLink to={"/"} className="menu-top-web__logo">
+        <img src={Logo} alt="Logo de David Thomas Pizarro Frick" />
+      </NavLink>
       {mainMenu &&
         mainMenu.map((item: any) => {
           const external = item.url.indexOf("http") > -1 ? true : false;
@@ -68,9 +62,7 @@ function RenderMenu(props: any) {
               setMenuCollapsed(!menuCollapsed);
             }}
           >
-            {React.createElement(
-              menuCollapsed ? MenuOutlined : CloseCircleOutlined
-            )}
+            {React.createElement(menuCollapsed ? MenuOutlined : CloseCircleOutlined)}
           </Button>
         </div>
       </div>
