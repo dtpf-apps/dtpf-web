@@ -177,10 +177,10 @@ export default function ContactForm() {
         if (response.status === 200) {
           emailjs
             .send(
-              "default_service",
+              "contact-email-2365",
               "template_2uj79vj",
               finalData,
-              "user_EKNrzyANZUei9pNTOFMd6"
+              "iboAXgpflV9a6wRRG"
             )
             .then(
               (response) => {
