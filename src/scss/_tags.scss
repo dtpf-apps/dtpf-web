@@ -26,7 +26,11 @@
   .MomentJS,
   .Vagrant,
   .Xamp,
-  .Brackets {
+  .Brackets,
+  .JSON,
+  .Axios,
+  .SEO,
+  .SEM {
     > span {
       color: $default-color;
       background-color: $default-bg-color;
@@ -225,6 +229,55 @@
       color: #fff;
       background-color: rgba(255, 160, 96, 0.664);
       border: 3px solid rgb(255, 159, 96);
+    }
+  }
+  .Jest {
+    > span {
+      color: #fff;
+      background-color: rgba(192, 64, 16, 0.6);
+      border: 3px solid rgb(192, 64, 16);
+    }
+  }
+  .Firebase {
+    > span {
+      color: #fff;
+      background-color: rgba(237, 122, 13, 0.6);
+      border: 3px solid rgb(237, 122, 13);
+    }
+  }
+  .Docker {
+    > span {
+      color: #fff;
+      background-color: rgba(3, 150, 192, 0.3);
+      border: 3px solid rgb(3, 150, 192);
+    }
+  }
+  .Wordpress {
+    > span {
+      color: #fff;
+      background-color: rgba(32, 113, 150, 0.3);
+      border: 3px solid rgb(32, 113, 150);
+    }
+  }
+  .Prestashop {
+    > span {
+      color: #fff;
+      background-color: rgba(223, 81, 131, 0.3);
+      border: 3px solid rgb(223, 81, 131);
+    }
+  }
+  .Bigcommerce {
+    > span {
+      color: #fff;
+      background-color: rgba(52, 49, 63, 0.3);
+      border: 3px solid rgb(52, 49, 63);
+    }
+  }
+  .Shopify {
+    > span {
+      color: #fff;
+      background-color: rgba(138, 192, 78, 0.3);
+      border: 3px solid rgb(138, 192, 78);
     }
   }
 }
