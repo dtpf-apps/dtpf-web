@@ -22,7 +22,7 @@ export default function Footer() {
           </Row>
           <Row className="footer__copyright">
             <Col span={24} sm={11} xl={10}>
-              David Thomas Pizarro Frick
+              David T. Pizarro Frick
             </Col>
             <Col span={24} sm={2} xl={4} />
             <Col span={24} sm={11} xl={10} aria-hidden="true">

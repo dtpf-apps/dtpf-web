@@ -38,7 +38,7 @@ export default function MainTitle() {
               ],
             }}
           >
-            David&nbsp;Thomas
+            David&nbsp;T.
           </Texty>
           <Texty
             className="title-2"
@@ -83,7 +83,7 @@ export default function MainTitle() {
             }}
           />
           <Texty className="content" type="bottom" delay={400} interval={5}>
-            Desarrollador Full Stack de Software
+            Desarrollador de Software
           </Texty>
         </div>
       </div>

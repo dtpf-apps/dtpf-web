@@ -1,8 +1,8 @@
 {
   "name": "portfolio-dtpf",
   "version": "0.1.0",
-  "description": "Portfolio de David Thomas Pizarro Frick",
-  "author": "David Thomas Pizarro Frick",
+  "description": "Portfolio de David T. Pizarro Frick",
+  "author": "David T. Pizarro Frick",
   "license": "MIT",
   "private": true,
   "dependencies": {
