@@ -31,7 +31,7 @@ function DesarrolladorFreelance() {
       {show && (
         <div className="container workx-8 left">
           <div className="title-left workx-8">
-            <h3>DESARROLLADOR FREELANCE</h3>
+            <h3>DESARROLLADOR FULL STACK</h3>
           </div>
           <div className="content">
             <span>2018 - 2022</span>

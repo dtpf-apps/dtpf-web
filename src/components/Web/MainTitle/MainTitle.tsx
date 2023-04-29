@@ -83,7 +83,7 @@ export default function MainTitle() {
             }}
           />
           <Texty className="content" type="bottom" delay={400} interval={5}>
-            Desarrollador de Software
+            Desarrollador Full Stack
           </Texty>
         </div>
       </div>
