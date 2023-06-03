@@ -38,7 +38,7 @@ export default function MainTitle() {
               ],
             }}
           >
-            David&nbsp;T.
+            David&nbsp;Thomas
           </Texty>
           <Texty
             className="title-2"
