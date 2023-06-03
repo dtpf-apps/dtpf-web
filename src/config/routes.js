@@ -1,27 +1,27 @@
 // Layout
-import LayoutAdmin from "../layouts/LayoutAdmin.tsx";
-import LayoutBasic from "../layouts/LayoutBasic.tsx";
+import LayoutAdmin from "../views/layouts/LayoutAdmin";
+import LayoutBasic from "../views/layouts/LayoutBasic";
 
 // Admin Pages
-import AdminHome from "../pages/Admin";
-import AdminSignIn from "../pages/Admin/SignIn";
-import AdminUsers from "../pages/Admin/Users";
-import AdminMenuWeb from "../pages/Admin/MenuWeb";
-import AdminContactMessages from "../pages/Admin/ContactMessages";
-import AdminEducation from "../pages/Admin/Education";
-import AdminAboutMe from "../pages/Admin/AboutMeAdmin";
+import AdminHome from "../views/pages/Admin";
+import AdminSignIn from "../views/pages/Admin/SignIn";
+import AdminUsers from "../views/pages/Admin/Users";
+import AdminMenuWeb from "../views/pages/Admin/MenuWeb";
+import AdminContactMessages from "../views/pages/Admin/ContactMessages";
+import AdminEducation from "../views/pages/Admin/Education";
+import AdminAboutMe from "../views/pages/Admin/AboutMeAdmin";
 
 // Web Pages
-import Home from "../pages/Web/Home";
-import AboutMe from "../pages/Web/AboutMe";
-import Education from "../pages/Web/Education";
-import Curriculum from "../pages/Web/Curriculum";
-import Projects from "../pages/Web/Projects";
-import Contact from "../pages/Web/Contact";
+import Home from "../views/pages/Web/Home";
+import AboutMe from "../views/pages/Web/AboutMe";
+import Education from "../views/pages/Web/Education";
+import Curriculum from "../views/pages/Web/Curriculum";
+import Projects from "../views/pages/Web/Projects";
+import Contact from "../views/pages/Web/Contact";
 
 // Other
-import PrivacyPolicy from "../pages/PrivacyPolicy";
-import Errors from "../pages/Errors";
+import PrivacyPolicy from "../views/pages/PrivacyPolicy";
+import Errors from "../views/pages/Errors";
 
 const routes = [
   {

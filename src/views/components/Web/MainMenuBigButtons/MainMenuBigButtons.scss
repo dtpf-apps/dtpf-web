@@ -1,0 +1,102 @@
+@import "scss/variables";
+@import "scss/mixins";
+@import "scss/animations";
+
+:root[data-theme="light"] {
+  --t-categories-big-buttons-bg: #5d718d3f;
+  --t-categories-big-buttons-marked-1-bg: var(--primary-color-dark);
+  --t-categories-big-buttons-marked-2-bg: var(--primary-color);
+  --t-categories-big-butttons-color-dark-grey: var(--primary-color-dark);
+}
+:root[data-theme="dark"] {
+  --t-categories-big-buttons-bg: var(--primary-color-extra-dark);
+  --t-categories-big-buttons-marked-1-bg: var(--primary-color-extra-dark);
+  --t-categories-big-buttons-marked-2-bg: #51637d;
+  --t-categories-big-butttons-color-dark-grey: var(--color-lightgrey-medium);
+}
+
+.main-menu-big-buttons {
+  display: flex;
+  justify-content: center;
+  text-align: center;
+  padding-bottom: 20px;
+  min-height: 200px;
+  max-width: 1400px;
+  margin: 0 auto;
+  a {
+    padding: 15px;
+  }
+  @media (min-width: $media-breakpoint-up-md) {
+    margin-top: 20px;
+  }
+  .education,
+  .curriculum,
+  .projects,
+  .about-me,
+  .contact {
+    display: flex;
+    align-items: center;
+    margin: 7px;
+    background-color: var(--t-categories-big-buttons-bg);
+    @include boxShadowMd();
+    @media (min-width: $media-breakpoint-down-md) {
+      border-radius: 7px;
+    }
+    h1 {
+      font-size: 2em;
+      text-transform: uppercase;
+      margin: 0;
+      color: var(--t-primary-color-dark);
+    }
+    p {
+      font-size: 1.1em;
+      margin: 0;
+      padding: 0;
+      font-weight: 500;
+      text-align: center;
+      color: var(--t-categories-big-butttons-color-dark-grey);
+    }
+    a {
+      width: 100%;
+    }
+  }
+  .education {
+    @include fadeIn();
+    animation-duration: 0.2s;
+  }
+
+  .curriculum {
+    @include fadeIn();
+    animation-duration: 0.4s;
+  }
+  .projects {
+    @include fadeIn();
+    animation-duration: 0.6s;
+  }
+  .about-me {
+    @include fadeIn();
+    animation-duration: 0.8s;
+  }
+  .contact {
+    background: linear-gradient(
+      90deg,
+      var(--t-categories-big-buttons-marked-1-bg) 0%,
+      var(--t-categories-big-buttons-marked-2-bg) 50%,
+      var(--t-categories-big-buttons-marked-1-bg) 100%
+    );
+    h1 {
+      color: #fff;
+    }
+    p {
+      color: var(--t-white-lightgrey-color);
+    }
+    @include fadeIn();
+    animation-duration: 1s;
+  }
+
+  &__extra {
+    @media (min-width: $media-breakpoint-up-lg) {
+      display: none;
+    }
+  }
+}

@@ -1,0 +1,245 @@
+@import "scss/variables";
+@import "scss/mixins";
+
+:root[data-theme="light"] {
+  --t-courses-card-bg: var(--color-lightgrey);
+  --t-courses-card-anticon-eye-color: var(--primary-color-dark);
+}
+:root[data-theme="dark"] {
+  --t-courses-card-bg: var(--primary-bg-dark);
+  --t-courses-card-anticon-eye-color: #fff;
+}
+.courses-list {
+  max-width: 1450px;
+  margin: 0 auto;
+  &__element {
+    min-height: 200px;
+    @media (min-width: $media-breakpoint-up-lg) {
+      min-height: 310px;
+    }
+  }
+  a {
+    cursor: default;
+  }
+  &__title {
+    text-align: center !important;
+    h1 {
+      @include titleH1();
+      text-transform: uppercase;
+      margin: 0;
+      margin-top: 10px;
+      color: var(--t-primary-color-dark);
+    }
+    h2 {
+      @include H3();
+      font-weight: 500;
+      color: $primary-color;
+      padding: 0 10px;
+      margin: 15px auto;
+      color: var(--t-primary-color);
+      @media (min-width: $media-breakpoint-up-lg) {
+        font-size: 1.4em;
+      }
+    }
+  }
+
+  &__courses {
+    display: flex;
+    justify-content: center;
+    .ant-col {
+      padding: 3px;
+      @media (min-width: $media-breakpoint-up-xs) {
+        padding: 6px;
+      }
+      @media (min-width: $media-breakpoint-up-sm) {
+        padding: 9px;
+      }
+      @media (min-width: $media-breakpoint-up-md) {
+        padding: 12px;
+      }
+      @media (min-width: $media-breakpoint-up-lg) {
+        padding: 15px;
+      }
+      @media (min-width: $media-breakpoint-up-xl) {
+        padding: 20px;
+      }
+    }
+  }
+
+  &__edit {
+    position: absolute;
+    bottom: 3px;
+    right: 5px;
+    font-size: 1em;
+    cursor: pointer;
+    color: $font-primary;
+    &:hover {
+      color: $font-primary-dark;
+      cursor: pointer;
+    }
+    @media (min-width: $media-breakpoint-up-xs) {
+      bottom: 3px;
+      right: 10px;
+      font-size: 1.1em;
+    }
+    @media (min-width: $media-breakpoint-up-sm) {
+      bottom: 6px;
+      right: 12px;
+      font-size: 1.2em;
+    }
+    @media (min-width: $media-breakpoint-up-md) {
+      font-size: 1.3em;
+    }
+  }
+
+  &__tags {
+    position: absolute;
+    bottom: 4px;
+    left: 4px;
+    @media (min-width: $media-breakpoint-up-xs) {
+      bottom: 5px;
+      left: 5px;
+    }
+    @media (min-width: $media-breakpoint-up-sm) {
+      bottom: 8px;
+      left: 8px;
+    }
+  }
+
+  &__hours {
+    font-size: 0.7em;
+    color: #fff;
+    background-color: $primary-color-medium;
+    border: 1px solid $primary-color;
+    border-radius: 5px;
+    margin-right: 4px;
+    padding: 0 4px;
+    min-width: 35px;
+    @media (min-width: $media-breakpoint-up-xs) {
+      font-size: 0.8em;
+      margin-right: 6px;
+      padding-bottom: 1px;
+    }
+    @media (min-width: $media-breakpoint-up-sm) {
+      padding-top: 3px;
+      font-size: 0.9em;
+      margin-right: 8px;
+      padding-bottom: 2px;
+    }
+  }
+
+  &__tecnologies {
+    font-size: 0.7em;
+    color: $primary-color-dark;
+    background-color: $primary-color-light;
+    border: 1px solid $primary-color;
+    border-radius: 5px;
+    padding: 0 4px;
+    @media (min-width: $media-breakpoint-up-xs) {
+      font-size: 0.8em;
+      padding-bottom: 1px;
+    }
+    @media (min-width: $media-breakpoint-up-sm) {
+      padding-top: 3px;
+      font-size: 0.9em;
+      padding-bottom: 2px;
+    }
+  }
+
+  &__card {
+    border: 0;
+    border-radius: 5px;
+    overflow: hidden;
+    @include boxShadowLg();
+    margin: 5px;
+    max-width: 330px;
+    @media (min-width: $media-breakpoint-up-xs) {
+      margin: 7px;
+    }
+    @media (min-width: $media-breakpoint-up-sm) {
+      margin: 9px;
+    }
+    @media (min-width: $media-breakpoint-up-md) {
+      min-width: 240px;
+      margin: 11px;
+    }
+    @media (min-width: $media-breakpoint-up-lg) {
+      margin: 13px;
+    }
+    @media (min-width: $media-breakpoint-up-xl) {
+      margin: 15px;
+    }
+
+    .ant-card {
+      &-cover {
+        cursor: pointer;
+      }
+      &-body {
+        text-align: center;
+        background-color: var(--t-courses-card-bg);
+        min-height: 100%;
+        padding: 0;
+        padding-bottom: 35px;
+      }
+
+      &-meta {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        min-height: 80px;
+        background-color: var(--t-courses-card-bg);
+        @media (min-width: $media-breakpoint-up-xs) {
+          min-height: 85px;
+        }
+        @media (min-width: $media-breakpoint-up-sm) {
+          min-height: 90px;
+        }
+        @media (min-width: $media-breakpoint-up-md) {
+          min-height: 100px;
+        }
+        @media (min-width: $media-breakpoint-up-lg) {
+          min-height: 105px;
+        }
+        &-description {
+          color: var(--t-primary-color-dark);
+          font-size: 10px;
+          font-weight: bold;
+          padding: 0 5px;
+          padding-top: 10px;
+          padding-bottom: 3px;
+          @media (min-width: $media-breakpoint-up-xs) {
+            font-size: 12px;
+          }
+          @media (min-width: $media-breakpoint-up-sm) {
+            font-size: 14px;
+            padding: 0 10px;
+          }
+          @media (min-width: $media-breakpoint-up-md) {
+            font-size: 15px;
+            padding: 15px;
+          }
+        }
+      }
+    }
+    .anticon-eye {
+      color: var(--t-courses-card-anticon-eye-color) !important;
+    }
+  }
+
+  .ant-row {
+    display: flex;
+    justify-content: center;
+    margin: 2px;
+    height: 100%;
+    max-width: 1700px;
+    @media (min-width: $media-breakpoint-up-xs) {
+      margin: 3px;
+    }
+    @media (min-width: $media-breakpoint-up-sm) {
+      margin: 4px;
+    }
+    @media (min-width: $media-breakpoint-up-md) {
+      margin: 5px;
+    }
+  }
+}

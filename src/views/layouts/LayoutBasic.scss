@@ -1,0 +1,115 @@
+@import "/src/scss/variables";
+@import "/src/scss/mixins";
+@import "/src/scss/animations";
+
+:root[data-theme="light"] {
+  --t-layout-basic-bg-primary-G1: var(--bg-lightgrey);
+  --t-layout-basic-bg-primary-G2: #c6c8ca;
+  --t-layout-basic-border-top: var(--primary-bg-dark);
+  --t-layout-basic-backTop: var(--secondary-bg-opacity-8);
+}
+
+:root[data-theme="dark"] {
+  --t-layout-basic-bg-primary-G1: #5d718dc7;
+  --t-layout-basic-bg-primary-G2: var(--primary-bg);
+  --t-layout-basic-border-top: var(--primary-bg);
+  --t-layout-basic-backTop: var(--secondary-bg-opacity-9);
+}
+
+.layout-basic {
+  background-repeat: no-repeat;
+  background-position: 1% 1%;
+  background-size: cover;
+  -webkit-background-size: cover;
+  -moz-background-size: cover;
+  -o-background-size: cover;
+  background-attachment: fixed;
+  background: linear-gradient(
+    90deg,
+    var(--t-layout-basic-bg-primary-G2) 0%,
+    var(--t-layout-basic-bg-primary-G1) 50%,
+    var(--t-layout-basic-bg-primary-G2) 100%
+  );
+  &__header-box {
+    position: fixed;
+    z-index: 999;
+    width: 100%;
+    height: 56px;
+    @include boxShadowXl();
+    @media (min-width: $media-breakpoint-up-md) {
+      height: 61px;
+    }
+    @media (min-width: $media-breakpoint-up-lg) {
+      height: 66px;
+    }
+    @media (min-width: $media-breakpoint-up-xl) {
+      height: 71px;
+    }
+  }
+  &__header {
+    position: fixed;
+    z-index: 99999;
+    width: 100%;
+    .ant-menu-horizontal {
+      border-bottom: 0 !important;
+      border-top: 2px solid var(--t-layout-basic-border-top);
+      height: 56px;
+      @media (min-width: $media-breakpoint-up-md) {
+        height: 61px;
+      }
+      @media (min-width: $media-breakpoint-up-lg) {
+        height: 66px;
+      }
+      @media (min-width: $media-breakpoint-up-xl) {
+        height: 71px;
+      }
+    }
+  }
+  &__content {
+    min-height: 100vh;
+    padding-top: 60px;
+    @media (min-width: $media-breakpoint-up-md) {
+      padding-top: 75px;
+    }
+    @media (min-width: $media-breakpoint-up-lg) {
+      padding-top: 80px;
+    }
+    @media (min-width: $media-breakpoint-up-xl) {
+      padding-top: 90px;
+    }
+    @media (min-width: $media-breakpoint-up-xxl) {
+      width: 85vw;
+      margin: 0 auto;
+      padding-top: 100px;
+    }
+    @media (min-height: 950px) {
+      min-height: calc(100vh - 333px);
+    }
+  }
+  &__footer {
+    font-weight: bold;
+    @include boxShadowXl();
+    min-height: 300px;
+    @media (min-width: $media-breakpoint-up-xxl) {
+      width: 90vw;
+      margin: 0 auto;
+    }
+    .ant-layout-footer {
+      @media (min-width: $media-breakpoint-up-xxl) {
+        border-top-left-radius: 5px;
+        border-top-right-radius: 5px;
+      }
+    }
+  }
+}
+
+.ant-back-top-content {
+  background-color: var(--t-layout-basic-backTop) !important;
+  @include boxShadowLg();
+  &:hover {
+    background-color: $secondary-color !important;
+  }
+  svg {
+    color: $primary-color-dark;
+  }
+}

@@ -1,0 +1,15 @@
+@import "scss/variables";
+@import "scss/mixins";
+
+.projects-web {
+  max-width: 1450px;
+  margin: 0 auto;
+  margin-bottom: 20px;
+  &__title {
+    @include titleH1();
+    text-transform: uppercase;
+    text-align: center;
+    margin: 20px 0;
+    color: var(--t-primary-color-dark);
+  }
+}

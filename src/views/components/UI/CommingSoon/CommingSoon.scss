@@ -1,0 +1,29 @@
+@import "scss/mixins";
+@import "scss/variables";
+@import "scss/animations";
+
+.result-ant {
+  .ant-result {
+    background-color: $primary-color-light;
+    margin-top: 120px;
+    margin-bottom: 120px;
+    &-icon {
+      span {
+        color: $primary-color-dark !important;
+        @include rotateInfiniteAlternate30();
+      }
+    }
+    &-title {
+      color: $font-primary-dark;
+      font-size: 2em;
+      font-weight: 500;
+    }
+    &-extra {
+      button {
+        @include buttonPrimary();
+        @include boxShadowLg();
+        @include slideInLeftInfinite5();
+      }
+    }
+  }
+}

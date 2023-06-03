@@ -1,0 +1,17 @@
+@import "scss/variables";
+@import "scss/mixins";
+
+.curriculum {
+  margin: 0 auto;
+  max-width: 1700px;
+  &__title {
+    @include titleH1();
+    text-align: center;
+    margin-top: 20px;
+    color: var(--t-primary-color-dark);
+  }
+  &__languages-projects {
+    margin: 0 auto;
+    max-width: 750px;
+  }
+}

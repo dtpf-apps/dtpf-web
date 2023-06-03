@@ -1,0 +1,263 @@
+@import "scss/variables";
+@import "scss/mixins";
+@import "scss/animations";
+
+:root[data-theme="light"] {
+  --t-curriculum-ant-collapse-bg: rgba(192, 192, 192, 0.1);
+}
+
+:root[data-theme="dark"] {
+  --t-curriculum-ant-collapse-bg: var(--primary-bg-light);
+}
+.curriculum {
+  .work-experience {
+    margin: 0 auto;
+    max-width: 900px;
+    min-height: 900px;
+    @media (min-width: $media-breakpoint-up-md) {
+      margin-bottom: 20px;
+    }
+    .use-near-screen {
+      min-height: 100px;
+    }
+    &__title {
+      text-transform: uppercase;
+      text-align: center;
+      margin-top: 10px;
+      @include titleH2();
+      @include fadeIn();
+      color: var(--t-primary-color-dark);
+    }
+    .container {
+      padding: 10px 40px;
+      position: relative;
+      background-color: inherit;
+      width: 50%;
+      padding-top: 10px !important;
+      &::after {
+        content: "";
+        position: absolute;
+        width: 25px;
+        height: 25px;
+        right: -17px;
+        background-color: $primary-color-light;
+        border: 4px solid $primary-color-dark;
+        top: 15px;
+        border-radius: 50%;
+        z-index: 10;
+        margin: 0 4px;
+        @include fadeIn();
+        animation-duration: 2500ms;
+      }
+    }
+    .timeline {
+      position: relative;
+      max-width: 1200px;
+      margin: 0 auto;
+      &::after {
+        content: "";
+        position: absolute;
+        width: 7px;
+        background-color: var(--t-white-lightgrey-bg);
+        top: 40px;
+        bottom: 10px;
+        left: 50%;
+        margin-left: -3px;
+        @include boxShadowMd();
+        z-index: 0;
+        border-radius: 5px;
+        @include blur();
+        animation-duration: 3s;
+      }
+    }
+    .left {
+      left: 0;
+      &::before {
+        content: " ";
+        height: 0;
+        position: absolute;
+        top: 18px;
+        width: 0;
+        z-index: 1;
+        right: 30px;
+        border: medium solid white;
+        border-width: 10px 0 10px 10px;
+        border-color: transparent transparent transparent var(--t-white-lightgrey-bg);
+      }
+    }
+    .right {
+      left: 50%;
+      &::before {
+        content: " ";
+        height: 0;
+        position: absolute;
+        top: 18px;
+        width: 0;
+        z-index: 1;
+        left: 30px;
+        border: medium solid white;
+        border-width: 10px 10px 10px 0;
+        border-color: transparent var(--t-white-lightgrey-bg) transparent transparent;
+      }
+      &::after {
+        left: -16px;
+      }
+    }
+    .title-left,
+    .title-right {
+      position: absolute;
+      width: 100%;
+      top: 15px;
+      h3 {
+        @include H3();
+        color: var(--t-primary-color-dark);
+      }
+    }
+    .title-left {
+      right: -320px;
+      max-width: 300px;
+    }
+    .title-right {
+      right: 100%;
+      text-align: right;
+      margin-right: 23px;
+    }
+
+    .content {
+      padding: 10px 20px;
+      border-radius: 6px;
+      background-color: var(--t-white-lightgrey-bg) !important;
+      > span {
+        @include H4();
+        color: $font-primary-light;
+      }
+      p {
+        margin: 3px 0;
+        color: $font-primary-dark;
+        font-weight: 500;
+        font-size: 1em;
+      }
+    }
+    .work-collapse-panel {
+      background-color: var(--t-white-lightgrey-bg) !important;
+      border: 0;
+      width: 100%;
+      .ant-collapse-content-box {
+        padding: 5px;
+      }
+      &__text {
+        text-align: justify;
+        font-weight: 400 !important;
+        background-color: var(--t-curriculum-ant-collapse-bg);
+        color: #273b56 !important;
+        color: $font-primary-dark;
+        padding: 10px;
+        border-radius: 5px;
+        @include boxShadowMd();
+      }
+      .ant-collapse-header {
+        position: relative;
+        color: $font-primary-dark !important;
+        margin: 0;
+        margin-top: 10px;
+        font-weight: 500;
+        font-size: 1em;
+        padding: 5px 10px;
+        border: 0 !important;
+        &-text {
+          margin-left: -22px !important;
+        }
+        &:first-child {
+          margin-top: 0 !important;
+        }
+        svg {
+          position: absolute;
+          top: 10px;
+          left: 0px;
+        }
+      }
+    }
+    .workx-9 {
+      animation: 400ms fadeIn;
+      &::after {
+        background-color: $secondary-color;
+        @include fadeIn();
+        animation-duration: 1500ms;
+        animation-iteration-count: infinite;
+        animation-direction: alternate;
+      }
+    }
+    .workx-8 {
+      animation: 400ms fadeIn;
+    }
+    .workx-7 {
+      animation: 425ms fadeIn;
+    }
+    .workx-6 {
+      animation: 450ms fadeIn;
+    }
+    .workx-5 {
+      animation: 500ms fadeIn;
+    }
+    .workx-4 {
+      animation: 550ms fadeIn;
+    }
+    .workx-3,
+    .workx-2,
+    .workx-1 {
+      animation: 600ms fadeIn;
+    }
+
+    @media screen and (max-width: 600px) {
+      .timeline::after {
+        top: 58px !important;
+        left: 31px;
+        bottom: 30px;
+      }
+      .container {
+        width: 100%;
+        padding-left: 60px;
+        padding-right: 25px;
+        &::before {
+          left: 50px;
+          top: 35px;
+          border: medium solid var(--t-white-lightgrey-bg);
+          border-width: 10px 10px 10px 0;
+          border-color: transparent var(--t-white-lightgrey-bg) transparent transparent;
+          margin: 0;
+        }
+        &::after {
+          margin: 0;
+        }
+      }
+      .left::after,
+      .right::after {
+        left: 18px;
+        top: 32px !important;
+      }
+      .right {
+        left: 0%;
+      }
+      .content {
+        margin: 20px 0;
+        padding: 10px;
+      }
+      .title-left,
+      .title-right {
+        width: auto;
+        top: -17px;
+        left: 50px;
+        right: 0;
+        z-index: 1;
+        padding: 0 !important;
+        margin-top: 20px;
+        margin-left: 20px;
+        text-align: left;
+        h3 {
+          @include H3();
+          color: var(--t-primary-color-dark);
+        }
+      }
+    }
+  }
+}

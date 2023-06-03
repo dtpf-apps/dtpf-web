@@ -1,0 +1,60 @@
+@import "scss/mixins";
+@import "scss/variables";
+@import "scss/animations";
+
+.curriculum {
+  .computer-skills {
+    max-width: 850px;
+    margin: 0 auto;
+    @media (min-width: $media-breakpoint-up-xl) {
+      padding-right: 40px;
+    }
+    .use-near-screen {
+      min-height: 350px;
+    }
+    h2 {
+      @include titleH2();
+      text-transform: uppercase;
+      text-align: center;
+      margin-top: 23px;
+      color: var(--t-primary-color-dark);
+    }
+    padding: 0 15px;
+    &__skill {
+      display: flex;
+      justify-content: space-between;
+      width: 100%;
+      color: var(--t-primary-color-dark);
+      font-size: 1.2em;
+      font-weight: 500;
+      margin: 0 auto;
+      max-width: 320px;
+      &-name {
+        justify-content: flex-start;
+      }
+      &-progress {
+        display: flex;
+        justify-content: flex-end;
+        width: 100%;
+        max-width: 130px;
+      }
+      .ant-progress-bg {
+        border-top-left-radius: 0px !important;
+        border-bottom-left-radius: 0px !important;
+      }
+    }
+    &__col {
+      @include fadeIn();
+      animation-duration: 2s;
+      @media (min-width: $media-breakpoint-up-sm) {
+        padding: 10px;
+      }
+      @media (min-width: $media-breakpoint-up-lg) {
+        padding: 0;
+      }
+      @media (min-width: $media-breakpoint-up-xl) {
+        padding: 10px;
+      }
+    }
+  }
+}
