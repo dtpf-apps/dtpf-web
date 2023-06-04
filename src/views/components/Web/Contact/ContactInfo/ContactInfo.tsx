@@ -29,6 +29,7 @@ export default function ContactInfo(props: any) {
             <a href="tel:+34652490504">
               <PhoneTwoTone twoToneColor={"#273b56"} />
             </a>
+            <SocialLinks />
           </Col>
         </>
       ) : (

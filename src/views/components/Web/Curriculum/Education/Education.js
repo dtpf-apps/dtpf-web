@@ -3,8 +3,8 @@ import { useNearScreen } from "hooks/useNearScreen";
 import { Row, Col, Collapse } from "antd";
 import Modal from "views/components/UI/Modal";
 import { LeftCircleTwoTone, FilePdfOutlined } from "@ant-design/icons";
-import "./Education.scss";
 import memoriaRecetasPDF from "assets/pdf/memoria-proyecto-final.pdf";
+import "./Education.scss";
 
 const { Panel } = Collapse;
 
@@ -64,6 +64,7 @@ function MasterDesarrolloSoftware() {
           <Collapse
             accordion
             expandIconPosition={"right"}
+            defaultActiveKey={["1"]}
             expandIcon={({ isActive }) => (
               <LeftCircleTwoTone
                 twoToneColor="#5d718d"
@@ -118,7 +119,7 @@ function DesarrolloAppFPN3(props) {
             )}
           >
             <Panel
-              header="DESARROLLO DE APLICACIONES CON TECNOLOGÍAS WEB – NIVEL 3"
+              header="FP2 – DESARROLLO DE APLICACIONES WEB"
               key="1"
             >
               <h3>Marzo 2019 - Julio 2020</h3>
@@ -181,7 +182,7 @@ function CompetenciasClaveN3() {
               />
             )}
           >
-            <Panel header="PRUEBA DE COMPETENCIAS CLAVE - NIVEL 3" key="1">
+            <Panel header="PRUEBA DE COMPETENCIAS CLAVE – NIVEL 3" key="1">
               <h3>Marzo 2019</h3>
               <h4>CEPA La Balanguera</h4>
               <ul>
@@ -215,7 +216,7 @@ function HerramientasWebN3() {
               />
             )}
           >
-            <Panel header="HERRAMIENTAS WEB – NIVEL 2" key="1">
+            <Panel header="FP1 – HERRAMIENTAS WEB" key="1">
               <h3>Septiembre 2018 - Marzo 2019</h3>
               <h4>Muévete Formación</h4>
               <ul>
@@ -260,7 +261,7 @@ function AdministrativoN1() {
             )}
           >
             <Panel
-              header="PROGRAMA DE CUALIFICACIÓN PROFESIONAL INICIAL DE ADMINISTRATIVO"
+              header="FP1 – PROGRAMA DE CUALIFICACIÓN PROFESIONAL INICIAL DE ADMINISTRATIVO"
               key="1"
             >
               <h3>2006</h3>
@@ -295,7 +296,7 @@ function GraduadoEscolar() {
               />
             )}
           >
-            <Panel header="GRADUADO ESCOLAR" key="1">
+            <Panel header="GRADUADO ESCOLAR – ESO" key="1">
               <h3>2006</h3>
               <h4>IFOC</h4>
               <p>Graduado en secundaria</p>

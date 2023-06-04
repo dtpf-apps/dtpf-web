@@ -12,13 +12,13 @@
 .curriculum {
   .work-experience {
     margin: 0 auto;
-    max-width: 900px;
-    min-height: 900px;
+    max-width: 1200px;
+    min-height: 1200px;
     @media (min-width: $media-breakpoint-up-md) {
       margin-bottom: 20px;
     }
     .use-near-screen {
-      min-height: 100px;
+      min-height: 110px;
     }
     &__title {
       text-transform: uppercase;
@@ -127,6 +127,7 @@
       padding: 10px 20px;
       border-radius: 6px;
       background-color: var(--t-white-lightgrey-bg) !important;
+      min-width: 350px !important;
       @include boxShadowMd();
       > span {
         @include H4();
@@ -155,6 +156,10 @@
         padding: 10px;
         border-radius: 5px;
         @include boxShadowMd();
+
+        a {
+          color: var(--t-primary-color)
+        }
       }
       .ant-collapse-header {
         position: relative;
@@ -209,7 +214,7 @@
       animation: 600ms fadeIn;
     }
 
-    @media screen and (max-width: 600px) {
+    @media screen and (max-width: 850px) {
       .timeline::after {
         top: 58px !important;
         left: 31px;

@@ -1,25 +1,25 @@
-import React from "react";
-import { Row, Col } from "antd";
-import WorkExperience from "./WorkExperience";
-import Education from "./Education";
-import ComplementaryEducation from "./ComplementaryEducation";
-import ComputerSkills from "./ComputerSkills";
-import Languages from "./Languages";
-import useScrollToTop from "hooks/useScrollToTop";
-import "./Curriculum.scss";
+import React from "react"
+import { Row, Col } from "antd"
+import WorkExperience from "./WorkExperience"
+import Education from "./Education"
+import ComplementaryEducation from "./ComplementaryEducation"
+import ComputerSkills from "./ComputerSkills"
+import Languages from "./Languages"
+import useScrollToTop from "hooks/useScrollToTop"
+import "./Curriculum.scss"
 
 export default function Curriculum() {
-  useScrollToTop();
+  useScrollToTop()
   return (
     <div className="curriculum">
       <Row>
         <Col span={24}>
           <h1 className="curriculum__title">CURRICULUM VITAE</h1>
         </Col>
-        <Col span={24} xl={12}>
+        <Col span={24} xxl={15}>
           <WorkExperience />
         </Col>
-        <Col span={24} xl={12}>
+        <Col span={24} xxl={9}>
           <Row>
             <Col span={24} lg={12} xl={24}>
               <Education />
@@ -39,5 +39,5 @@ export default function Curriculum() {
         </Col>
       </Row>
     </div>
-  );
+  )
 }

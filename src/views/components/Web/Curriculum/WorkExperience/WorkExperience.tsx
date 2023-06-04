@@ -10,7 +10,7 @@ export default function WorkExperience() {
     <div className="work-experience">
       <h2 className="work-experience__title">Experiencia Laboral</h2>
       <div className="timeline">
-        <DesarrolladorFreelance />
+        <DesarrolladorFullStackAssembler />
         <AlbañilFreelance />
         <SupermercadoChipYChop />
         <TizonaSL />
@@ -23,7 +23,7 @@ export default function WorkExperience() {
   );
 }
 
-function DesarrolladorFreelance() {
+function DesarrolladorFullStackAssembler() {
   const [show, el] = useNearScreen();
   const ref: any = el;
   return (
@@ -34,7 +34,7 @@ function DesarrolladorFreelance() {
             <h3>DESARROLLADOR FULL STACK</h3>
           </div>
           <div className="content">
-            <span>2018 - 2022</span>
+            <span>2022 - 2023</span>
             <Collapse
               bordered={false}
               defaultActiveKey={["1"]}
@@ -44,17 +44,31 @@ function DesarrolladorFreelance() {
               className="work-collapse"
             >
               <Panel
-                header="Desarrollador Junior de Software"
+                header="Assembler Institute of Technology"
                 key="1"
                 className="work-collapse-panel"
               >
                 <p className="work-collapse-panel__text">
-                  En búsqueda activa de empleo.
-                  <br />
-                  Desde septiembre de 2018 formándome en diferentes lenguajes y
-                  tecnologías en un centro formativo (FP), complementándolo con
-                  cursos online con y sin certificado, y de manera autodidacta
-                  para ser desarrollador de software.
+                  Trabajando como desarrollador full-stack aplicando las últimas tecnologías
+                  con metodologías como <b>Peer Learning</b>, <b>Pair Programming</b> y <b>Live Coding</b>.
+                  <br /><br />
+
+                  ・Máster intensivo con más de 1200 horas de proyectos orientados
+                  al mundo real basados en metodologías ágiles.<br />
+                  ・Más de 30 proyectos en el mundo real realizados con un enfoque
+                  profundo en las pilas <b>MERN</b> y <b>LAMP</b> aplicando
+                  principios <b>SOLID</b>.<br />
+                  ・Trabajando en proyectos reales aplicando prácticas de código 
+                  limpio y patrones de escalabilidad.<br />
+                  ・Utilizando técnicas de desarrollo <b>Agile</b> (<b>Kaban</b>, <b>Scrum</b>).<br /><br />
+
+                  Proyectos destacados:<br />
+                  ・<a href="https://audity.dtpf.es" target="_blank" rel='noreferrer'><b>Audity</b>(Clon Spotify)</a>: <b>React</b>, <b>Typescript</b>, <b>NodeJS</b>, Express, <b>MongoDB</b>, <b>SASS</b>, Auth0, Ant-Design, Workbox, Google Analytics.<br />
+                  ・<a href="https://dalist.dtpf.es" target="_blank" rel='noreferrer'><b>Dalist</b>(Bloc de notas)</a>: <b>React</b>, <b>Typescript</b>, <b>NodeJS</b>, Express, <b>MongoDB</b>, <b>SASS</b>, Auth0, Ant-Design.<br />
+                  ・<a href="https://amazen.dtpf.es" target="_blank" rel='noreferrer'><b>Amazén</b>(Clon Amazon)</a>: <b>React</b>, <b>NodeJS</b>, ExpressJs, <b>MongoDB</b>, SCSS.<br />
+                  ・<a href="https://befriends.dtpf.es" target="_blank" rel='noreferrer'><b>BeFriends</b>(Red social)</a>: <b>PHP</b>, <b>JavaScript</b>, MySQL.<br /><br />
+
+                  Tecnologías: <b>Javascript</b>, <b>Typescript</b>, <b>MongoDB</b>, Express, <b>React</b>, <b>NodeJS</b>, HTML5, CSS3, <b>SASS</b>, Ant-Design, MySQL, <b>PHP</b>, <b>Git</b>, <b>GitHub</b>, Postman, Figma.
                 </p>
               </Panel>
             </Collapse>

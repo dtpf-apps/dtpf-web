@@ -67,25 +67,28 @@
     justify-content: center;
     margin-top: 10px;
 
-    .anticon {
-      font-size: 2.7em;
-
+  .anticon {
+      font-size: 2.2em;
+  
       &-mail {
-        margin-right: 5px;
-        @include fadeInfinite(0.7, 1, 1s);
+        margin-right: 7px;
+        @include fadeInfinite(0.8, 1, 1s);
+        font-size: 2.9em;
       }
-
+  
       &-whats-app {
-        margin: 0 15px;
+        margin: 0 7px;
         color: rgb(0, 210, 96);
-        @include fadeInfinite(0.7, 1, 1s);
+        @include fadeInfinite(0.8, 1, 1s);
         animation-delay: 200ms;
+        font-size: 2.9em;
       }
-
+  
       &-phone {
-        margin-right: -5px;
-        @include fadeInfinite(0.7, 1, 1s);
+        margin-right: 7px;
+        @include fadeInfinite(0.8, 1, 1s);
         animation-delay: 400ms;
+        font-size: 2.9em;
       }
     }
   }
