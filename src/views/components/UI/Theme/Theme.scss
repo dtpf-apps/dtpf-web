@@ -7,21 +7,26 @@
   top: -5px;
   right: 60px;
   z-index: 99999;
+
   @media (min-width: $media-breakpoint-up-md) {
     top: -2px;
   }
+
   @media (min-width: $media-breakpoint-up-lg) {
     top: 1px;
-    right: 115px;
+    right: 15px;
   }
+
   @media (min-width: $media-breakpoint-up-xl) {
     top: 4px;
   }
+
   input[type="checkbox"] {
     height: 0;
     width: 0;
     visibility: hidden;
   }
+
   label {
     cursor: pointer;
     text-indent: -9999px;
@@ -38,6 +43,7 @@
     position: relative;
     @include boxShadowLg();
   }
+
   label:after {
     content: "";
     background-image: url("../../../../assets/img/png/sun.png");
@@ -52,10 +58,12 @@
     left: 4px;
     transition: cubic-bezier(0.68, -0.55, 0.27, 01.55) 320ms;
   }
-  input:checked + label {
+
+  input:checked+label {
     background: var(--primary-bg);
   }
-  input:checked + label:after {
+
+  input:checked+label:after {
     left: calc(100% - 5px);
     background-image: url("../../../../assets/img/png/moon.png");
     -webkit-transform: translateX(-100%);

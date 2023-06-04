@@ -4,15 +4,21 @@
 .footer {
   background-color: var(--t-header-footer-bg);
   padding: 0;
-  padding-bottom: 15px;
-  padding-top: 10px;  
+  padding-bottom: 12px;
+  padding-top: 13px;
+  margin-top: 10px;
+
   &__content {
     display: flex;
     justify-content: center;
   }
+
   &__copyright {
-    margin-top: 20px;
-    .ant-col {      
+    margin: 10px 0;
+    white-space: nowrap;
+    font-size: 0.9rem;
+
+    .ant-col {
       display: flex;
       justify-content: center;
       text-transform: uppercase;

@@ -127,6 +127,7 @@
       padding: 10px 20px;
       border-radius: 6px;
       background-color: var(--t-white-lightgrey-bg) !important;
+      @include boxShadowMd();
       > span {
         @include H4();
         color: $font-primary-light;
