@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import "./ProjectsWeb.scss";
 import RecetasDeliciosasMsr from "./Projects/RecetasDeliciosasMsr";
 import PortfolioDTPF from "./Projects/PortfolioDTPF";
+import Audity from "./Projects/Audity";
 
 export default function ProjectsWeb() {
   const [innerWidth, setInnerWidth] = useState(window.innerWidth);
@@ -20,6 +21,7 @@ export default function ProjectsWeb() {
       <h1 className="projects-web__title">Proyectos</h1>
       <PortfolioDTPF innerWidth={innerWidth} align="left" />
       <RecetasDeliciosasMsr innerWidth={innerWidth} align="right" />
+      <Audity innerWidth={innerWidth} align="left" />
     </div>
   );
 }
