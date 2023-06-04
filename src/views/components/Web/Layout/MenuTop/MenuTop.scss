@@ -6,61 +6,60 @@
   display: flex;
   align-items: center;
   justify-content: flex-start;
+
   li:after {
     border-bottom: none !important
   }
+
   &__logo {
     margin-left: 20px;
+
     a {
+
       &:focus,
       &:active,
       &:focus {
         border: 0;
       }
     }
+
     img {
       margin: 0;
       padding: 7px 0;
       height: 55px;
+
       @media (min-width: $media-breakpoint-up-md) {
         height: 60px;
       }
+
       @media (min-width: $media-breakpoint-up-lg) {
         height: 65px;
       }
+
       @media (min-width: $media-breakpoint-up-xl) {
         height: 70px;
       }
     }
   }
+
   &__item {
     a {
       color: #fff !important;
       font-weight: bold;
+
       &:hover {
         border-bottom: 1px solid $primary-color-light !important;
       }
     }
+
     @media (min-width: $media-breakpoint-up-md) {
       font-size: $font-size-md;
     }
+
     @media (max-width: $media-breakpoint-up-lg) {
       display: none !important;
     }
-    &-social {
-      position: absolute !important;
-      right: 0 !important;
-      top: 17px !important;
-      @media (max-width: $media-breakpoint-up-lg) {
-        display: none !important;
-      }
-      @media (min-width: $media-breakpoint-up-lg) {
-        top: 19px !important;
-      }
-      @media (min-width: $media-breakpoint-up-xl) {
-        top: 22px !important;
-      }
-    }
+
     &.ant-menu-item-selected {
       a {
         border-bottom: 1px solid $primary-color-light !important;
@@ -73,6 +72,7 @@
       }
     }
   }
+
   &__menu {
     position: absolute;
     right: 0;
@@ -80,10 +80,12 @@
     display: flex;
     font-size: 1.9em;
     color: #fff;
+
     &:hover,
     &:focus {
       color: #fff;
     }
+
     @media (min-width: $media-breakpoint-up-lg) {
       display: none !important;
     }
