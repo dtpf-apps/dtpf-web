@@ -13,10 +13,8 @@ import AdminAboutMe from "../views/pages/Admin/AboutMeAdmin";
 
 // Web Pages
 import Home from "../views/pages/Web/Home";
-import AboutMe from "../views/pages/Web/AboutMe";
 import Education from "../views/pages/Web/Education";
 import Curriculum from "../views/pages/Web/Curriculum";
-import Projects from "../views/pages/Web/Projects";
 import Contact from "../views/pages/Web/Contact";
 
 // Other
@@ -93,16 +91,6 @@ const routes = [
         path: "/curriculum",
         exact: true,
         component: Curriculum
-      },
-      {
-        path: "/projects",
-        exact: true,
-        component: Projects
-      },
-      {
-        path: "/about-me",
-        exact: true,
-        component: AboutMe,
       },
       {
         path: "/contact",
