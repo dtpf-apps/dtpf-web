@@ -1,9 +1,9 @@
 import React from "react";
 import ProjectLayout from "../ProjectLayout";
-import PortfolioDTPFImage from "assets/img/jpg/dtpf.jpg";
-import ModalImage1 from "assets/img/jpg/dtpfModalImage1.jpg";
-import ModalImage2 from "assets/img/jpg/dtpfModalImage2.jpg";
-import ModalImage3 from "assets/img/jpg/dtpfModalImage3.jpg";
+import PortfolioDTPFImage from "assets/img/projects/dtpf/dtpf.jpg";
+import ModalImage1 from "assets/img/projects/dtpf/dtpfModalImage1.jpg";
+import ModalImage2 from "assets/img/projects/dtpf/dtpfModalImage2.jpg";
+import ModalImage3 from "assets/img/projects/dtpf/dtpfModalImage3.jpg";
 
 export default function PortfolioDTPF(props: {
   align: string;
