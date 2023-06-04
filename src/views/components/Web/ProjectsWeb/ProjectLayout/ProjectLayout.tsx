@@ -72,8 +72,9 @@ export default function ProyectLayout(props: {
                 contentTitle={contentTitle}
                 contentText={contentText}
                 setIsVisibleModal={setIsVisibleModal}
+                linkToWeb={linkToWeb}
               />
-              <Image image={image} linkToWeb={linkToWeb} imageAlt={imageAlt} />
+              <Image image={image} imageAlt={imageAlt} />
             </>
           ) : (
             <>
@@ -81,13 +82,13 @@ export default function ProyectLayout(props: {
                 <>
                   <Image
                     image={image}
-                    linkToWeb={linkToWeb}
                     imageAlt={imageAlt}
                   />
                   <Content
                     contentTitle={contentTitle}
                     contentText={contentText}
                     setIsVisibleModal={setIsVisibleModal}
+                    linkToWeb={linkToWeb}
                   />
                 </>
               ) : (
@@ -96,10 +97,10 @@ export default function ProyectLayout(props: {
                     contentTitle={contentTitle}
                     contentText={contentText}
                     setIsVisibleModal={setIsVisibleModal}
+                    linkToWeb={linkToWeb}
                   />
                   <Image
                     image={image}
-                    linkToWeb={linkToWeb}
                     imageAlt={imageAlt}
                   />
                 </>
@@ -113,21 +114,18 @@ export default function ProyectLayout(props: {
 }
 
 function Image(props: {
-  linkToWeb: string
   image: string
   imageAlt: string
 }) {
-  const { linkToWeb, image, imageAlt } = props;
+  const { image, imageAlt } = props;
   const clickProyectImage = () => {
-    gaEvent("click_project_image_" + linkToWeb, "clicks", "UI Clicks", true);
+    gaEvent("click_project_image_" + imageAlt, "clicks", "UI Clicks", true);
   };
   return (
     <Col span={24} md={12} className="project-layout__image">
       <QueueAnim type={"alpha"} duration={250} ease="easeInCubic">
         <div key="image" onClick={() => clickProyectImage}>
-          <a href={linkToWeb} target="_blank" rel="noopener noreferrer">
-            <img width="100%" alt={imageAlt} src={image}></img>
-          </a>
+          <ImageAnt width="300" alt={imageAlt} src={image} />
         </div>
       </QueueAnim>
     </Col>
@@ -137,12 +135,16 @@ function Image(props: {
 function Content(props: {
   contentTitle: string;
   contentText: string;
+  linkToWeb: string;
   setIsVisibleModal: React.Dispatch<boolean>;
 }) {
-  const { contentTitle, contentText, setIsVisibleModal } = props;
+  const { contentTitle, contentText, linkToWeb, setIsVisibleModal } = props;
   const gaTitle = contentTitle.replace(/[ ']/g, "");
-  const clickProject = () => {
-    gaEvent("click_project_modal" + gaTitle, "clicks", "UI Clicks", true);
+  const clickProjectSeeMore = () => {
+    gaEvent("click_project_see_more->" + gaTitle, "clicks", "UI Clicks", true);
+  };
+  const clickProjectGoToWeb = () => {
+    gaEvent("click_project_go_to_web->" + gaTitle, "clicks", "UI Clicks", true);
   };
   return (
     <Col span={24} md={12} className="project-layout__content">
@@ -151,19 +153,24 @@ function Content(props: {
           <div className="project-layout__content-title" key="titleh2">
             <h2>{contentTitle}</h2>
           </div>
-          <div>
+          <div className="project-layout__content-paragraph" key="titleP">
             <p>{contentText}</p>
           </div>
         </QueueAnim>
       </Col>
-      <Button
-        onClick={() => {
-          clickProject();
-          setIsVisibleModal(true);
-        }}
-      >
-        Ver más
-      </Button>
+      <div className="project-layout__content--links">
+        <Button
+          onClick={() => {
+            clickProjectSeeMore();
+            setIsVisibleModal(true);
+          }}
+        >
+          Ver más
+        </Button>
+        <a href={linkToWeb} onClick={() => { clickProjectGoToWeb() }} target="_blank" rel='noreferrer'>
+          Ir a la web
+        </a>
+      </div>
     </Col>
   );
 }
