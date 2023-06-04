@@ -3,7 +3,6 @@ import "./Education.scss"
 const Helmet = lazy(() => import("views/components/Helmet"))
 const EducationWeb = lazy(() => import("views/components/Web/Education"))
 const ButtonGoBack = lazy(() => import("views/components/UI/ButtonGoBack"))
-const MainMenuBigButtons = lazy(() => import("views/components/Web/MainMenuBigButtons"))
 
 export default function Education(props: any) {
   const { location, history } = props
@@ -15,7 +14,6 @@ export default function Education(props: any) {
       />
       <ButtonGoBack goBack={history.goBack} eventGoBack="formacion" />
       <EducationWeb location={location} history={history} />
-      <MainMenuBigButtons location={location.pathname} />
     </Suspense>
   )
 }

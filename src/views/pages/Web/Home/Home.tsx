@@ -1,13 +1,14 @@
-import React from "react";
-import useScrollToTop from "hooks/useScrollToTop";
-import WellcomeParagraph from "views/components/Web/WellcomeParagraph/WellcomeParagraph";
-import MainTitle from "views/components/Web/MainTitle";
-import MainMenuBigButtons from "views/components/Web/MainMenuBigButtons";
-import Helmet from "views/components/Helmet";
-import "./Home.scss";
+import React from "react"
+import useScrollToTop from "hooks/useScrollToTop"
+import MainTitle from "views/components/Web/MainTitle"
+import Helmet from "views/components/Helmet"
+import ProjectsWeb from "views/components/Web/ProjectsWeb"
+import AboutMeInfo from "views/components/Web/AboutMeWeb/AboutMeInfo"
+import { Divider } from "antd"
+import "./Home.scss"
 
 export default function Home() {
-  useScrollToTop();
+  useScrollToTop()
   return (
     <>
       <Helmet
@@ -16,9 +17,11 @@ export default function Home() {
       />
       <div className="home">
         <MainTitle />
-        <WellcomeParagraph />
-        <MainMenuBigButtons />
+        <Divider />
+        <AboutMeInfo />
+        <Divider style={{ marginBottom: 50 }} />
+        <ProjectsWeb />
       </div>
     </>
-  );
+  )
 }
