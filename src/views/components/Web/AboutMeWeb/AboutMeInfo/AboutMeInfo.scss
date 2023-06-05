@@ -1,8 +1,11 @@
 @import "scss/variables";
 @import "scss/mixins";
+@import "scss/animations";
 
 .about-me-info {
 	margin: 0 auto;
+	min-height: 400px;
+	@include fadeIn();
 
 	&-content {
 		display: flex;

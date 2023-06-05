@@ -76,10 +76,9 @@
   &__content {
     min-height: 100vh;
     padding-top: 60px;
-    min-height: calc(100vh - 82px) !important;
+    min-height: calc(100vh - 82px);
 
-    @media (min-width: $media-breakpoint-up-xxl) {
-      width: 85vw;
+    @media (min-width: $media-breakpoint-up-sm) {
       margin: 0 auto;
       padding-top: 100px;
     }
