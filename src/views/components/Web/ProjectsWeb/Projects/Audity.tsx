@@ -1,15 +1,15 @@
-import React from "react";
-import ProjectLayout from "../ProjectLayout";
-import PortfolioDTPFImage from "assets/img/projects/audity/audity.webp";
-import ModalImage1 from "assets/img/projects/audity/audityModalImage1.webp";
-import ModalImage2 from "assets/img/projects/audity/audityModalImage2.webp";
-import ModalImage3 from "assets/img/projects/audity/audityModalImage3.webp";
+import React from "react"
+import ProjectLayout from "../ProjectLayout"
+import PortfolioDTPFImage from "assets/img/projects/audity/audity.webp"
+import ModalImage1 from "assets/img/projects/audity/audityModalImage1.webp"
+import ModalImage2 from "assets/img/projects/audity/audityModalImage2.webp"
+import ModalImage3 from "assets/img/projects/audity/audityModalImage3.webp"
 
 export default function Audity(props: {
-  align: string;
-  innerWidth: number;
+  align: string
+  innerWidth: number
 }) {
-  const { align, innerWidth } = props;
+  const { align, innerWidth } = props
   return (
     <ProjectLayout
       innerWidth={innerWidth}
@@ -40,7 +40,10 @@ export default function Audity(props: {
         i18next para el multidioma, Swiper para los sliders de contenido, entre otras."
       modalText={[
         `La aplicación es una colaboración con Iuliia Shikhanova, Joe Alt, Javier Pascual 
-        y Lucia del Cacho. Mas información en: https://github.com/Lucydct22/audity_node_app.git.`
+        y Lucia del Cacho.`,
+        `Para más información:`,
+        `・ Backend: https://github.com/Lucydct22/audity_node_app`,
+        `・ Frontend: https://github.com/Lucydct22/audity_react_app`
       ]}
       modalTags={[
         "NodeJS",
@@ -59,6 +62,7 @@ export default function Audity(props: {
         "Helmet",
         "Google Analytics",
       ]}
+      analyticTag='Audity'
     />
-  );
+  )
 }

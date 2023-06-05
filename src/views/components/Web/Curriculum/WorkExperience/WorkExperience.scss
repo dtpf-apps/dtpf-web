@@ -151,14 +151,13 @@
         text-align: justify;
         font-weight: 400 !important;
         background-color: var(--t-curriculum-ant-collapse-bg);
-        color: #273b56 !important;
         color: $font-primary-dark;
         padding: 10px;
         border-radius: 5px;
         @include boxShadowMd();
 
         a {
-          color: var(--t-primary-color)
+          color: $font-primary-extra-dark;
         }
       }
       .ant-collapse-header {

@@ -1,15 +1,15 @@
-import React from "react";
-import ProjectLayout from "../ProjectLayout";
-import recetasDeliciosasImage from "assets/img/projects/recetasmsr/recetasmsr.jpg";
-import ModalImage1 from "assets/img/projects/recetasmsr/recetasmsrModalImage1.jpg";
-import ModalImage2 from "assets/img/projects/recetasmsr/recetasmsrModalImage2.jpg";
-import ModalImage3 from "assets/img/projects/recetasmsr/recetasmsrModalImage3.jpg";
+import React from "react"
+import ProjectLayout from "../ProjectLayout"
+import recetasDeliciosasImage from "assets/img/projects/recetasmsr/recetasmsr.jpg"
+import ModalImage1 from "assets/img/projects/recetasmsr/recetasmsrModalImage1.jpg"
+import ModalImage2 from "assets/img/projects/recetasmsr/recetasmsrModalImage2.jpg"
+import ModalImage3 from "assets/img/projects/recetasmsr/recetasmsrModalImage3.jpg"
 
 export default function RecetasDeliciosasMsr(props: {
-  align: string;
-  innerWidth: number;
+  align: string
+  innerWidth: number
 }) {
-  const { align, innerWidth } = props;
+  const { align, innerWidth } = props
   return (
     <ProjectLayout
       innerWidth={innerWidth}
@@ -57,6 +57,7 @@ export default function RecetasDeliciosasMsr(props: {
         "MVC",
         "MySQL",
       ]}
+      analyticTag='RecetasMSR'
     />
-  );
+  )
 }

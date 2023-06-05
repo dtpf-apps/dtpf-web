@@ -1,15 +1,15 @@
-import React from "react";
-import ProjectLayout from "../ProjectLayout";
-import PortfolioDTPFImage from "assets/img/projects/dtpf/dtpf.jpg";
-import ModalImage1 from "assets/img/projects/dtpf/dtpfModalImage1.jpg";
-import ModalImage2 from "assets/img/projects/dtpf/dtpfModalImage2.jpg";
-import ModalImage3 from "assets/img/projects/dtpf/dtpfModalImage3.jpg";
+import React from "react"
+import ProjectLayout from "../ProjectLayout"
+import PortfolioDTPFImage from "assets/img/projects/dtpf/dtpf.jpg"
+import ModalImage1 from "assets/img/projects/dtpf/dtpfModalImage1.jpg"
+import ModalImage2 from "assets/img/projects/dtpf/dtpfModalImage2.jpg"
+import ModalImage3 from "assets/img/projects/dtpf/dtpfModalImage3.jpg"
 
 export default function PortfolioDTPF(props: {
-  align: string;
-  innerWidth: number;
+  align: string
+  innerWidth: number
 }) {
-  const { align, innerWidth } = props;
+  const { align, innerWidth } = props
   return (
     <ProjectLayout
       innerWidth={innerWidth}
@@ -31,13 +31,12 @@ export default function PortfolioDTPF(props: {
         Mi portfolio es un proyecto que tiene como objetivo darme a 
         conocer, un registro de lo que he hecho hasta ahora y una muestra
         de lo que soy capaz de hacer. Este proyecto parte de un conocimiento
-        adquirido en un curso; posteriormente he seguido realizando cursos 
+        adquirido en un curso posteriormente he seguido realizando cursos 
         en diferentes plataformas, me he formado con las documentaciones
         oficiales de las tecnologías utilizadas y en foros especializados.
       "
       modalText={[
-        `Aplicación web progresiva full-stack JavaScript, 100% responsive y con CMS a medida.
-        Gestionada por mi sin hacer uso de servicios en la nube.`,
+        `Aplicación web progresiva Full Stack JavaScript, 100% responsive y con CMS a medida.`,
         `Utilizo NodeJS para el back-end junto con Express para la infraestructura
         API de la aplicación. MongoDB como sistema de base de datos y Mongoose 
         para la definición de objetos mediante esquemas tipados. Moment.js para
@@ -76,6 +75,7 @@ export default function PortfolioDTPF(props: {
         "Helmet",
         "Google Analytics",
       ]}
+      analyticTag='PortfolioDTPF'
     />
-  );
+  )
 }

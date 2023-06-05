@@ -7,16 +7,14 @@
   margin: 0 auto;
   margin-top: 10px;
   margin-bottom: 40px;
-  background-color: #cdd5df48;
   padding: 20px 10px;
-  @include boxShadowMd();
 
   @media (min-width: $media-breakpoint-up-md) {
     margin-bottom: 0px;
-    background-color: inherit;
-    box-shadow: inherit !important;
-    -webkit-box-shadow: inherit !important;
-    -moz-box-shadow: inherit !important;
+  }
+
+  &__use-near-screen {
+    min-height: 350px;
   }
 
   .clearfix {
@@ -129,6 +127,8 @@
 
       a {
         color: var(--t-primary-color);
+        font-size: 0.9rem;
+        padding-bottom: 10px;
 
         &:hover {
           color: var(--t-primary-color-dark);

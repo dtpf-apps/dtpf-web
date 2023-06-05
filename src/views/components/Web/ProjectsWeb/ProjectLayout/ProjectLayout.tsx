@@ -1,28 +1,30 @@
-import React, { useState } from "react";
-import { Row, Col, Button, Image as ImageAnt, Tag } from "antd";
-import QueueAnim from "rc-queue-anim";
-import Modal from "views/components/UI/Modal";
-import { gaEvent } from "utils/analytics.js";
-import useScrollToTop from "hooks/useScrollToTop";
-import "./ProjectLayout.scss";
+import React, { useState } from "react"
+import { Row, Col, Button, Image as ImageAnt, Tag } from "antd"
+import QueueAnim from "rc-queue-anim"
+import Modal from "views/components/UI/Modal"
+import { gaEvent } from "utils/analytics.js"
+import useScrollToTop from "hooks/useScrollToTop"
+import { useNearScreen } from "hooks/useNearScreen"
+import "./ProjectLayout.scss"
 
 export default function ProyectLayout(props: {
-  innerWidth: number;
-  align: string;
-  contentTitle: string;
-  contentText: string;
-  linkToWeb: string;
-  image: string;
-  imageAlt: string;
-  modalTitle: string;
-  modalTags: string[];
-  modalImage1: string;
-  modalImage2: string;
-  modalImage3: string;
-  modalImageAlt: string;
-  modalDate: string;
-  modalIntroduction: string;
-  modalText: string[];
+  innerWidth: number
+  align: string
+  contentTitle: string
+  contentText: string
+  linkToWeb: string
+  image: string
+  imageAlt: string
+  modalTitle: string
+  modalTags: string[]
+  modalImage1: string
+  modalImage2: string
+  modalImage3: string
+  modalImageAlt: string
+  modalDate: string
+  modalIntroduction: string
+  modalText: string[]
+  analyticTag: string
 }) {
   const {
     innerWidth,
@@ -41,9 +43,12 @@ export default function ProyectLayout(props: {
     modalDate,
     modalIntroduction,
     modalText,
-  } = props;
-  const [isVisibleModal, setIsVisibleModal] = useState(false);
-  useScrollToTop();
+    analyticTag
+  } = props
+  const [isVisibleModal, setIsVisibleModal] = useState(false)
+  const [show, el] = useNearScreen()
+  const ref = el as React.MutableRefObject<HTMLDivElement>
+  useScrollToTop()
   return (
     <>
       <Modal
@@ -64,63 +69,75 @@ export default function ProyectLayout(props: {
           modalTitle={modalTitle}
         />
       </Modal>
-      <div className="clearfix">
-        <Row className={"project-layout project-layout-" + align}>
-          {innerWidth <= 767 ? (
-            <>
-              <Content
-                contentTitle={contentTitle}
-                contentText={contentText}
-                setIsVisibleModal={setIsVisibleModal}
-                linkToWeb={linkToWeb}
-              />
-              <Image image={image} imageAlt={imageAlt} />
-            </>
-          ) : (
-            <>
-              {align === "left" ? (
-                <>
-                  <Image
-                    image={image}
-                    imageAlt={imageAlt}
-                  />
-                  <Content
-                    contentTitle={contentTitle}
-                    contentText={contentText}
-                    setIsVisibleModal={setIsVisibleModal}
-                    linkToWeb={linkToWeb}
-                  />
-                </>
-              ) : (
-                <>
-                  <Content
-                    contentTitle={contentTitle}
-                    contentText={contentText}
-                    setIsVisibleModal={setIsVisibleModal}
-                    linkToWeb={linkToWeb}
-                  />
-                  <Image
-                    image={image}
-                    imageAlt={imageAlt}
-                  />
-                </>
-              )}
-            </>
-          )}
-        </Row>
+      <div className="clearfix project-layout__use-near-screen" ref={ref}>
+        {show && (
+          <Row className={"project-layout project-layout-" + align}>
+            {innerWidth <= 767 ? (
+              <>
+                <Content
+                  contentTitle={contentTitle}
+                  contentText={contentText}
+                  setIsVisibleModal={setIsVisibleModal}
+                  linkToWeb={linkToWeb}
+                  analyticTag={analyticTag}
+                />
+                <Image
+                  image={image}
+                  imageAlt={imageAlt}
+                  analyticTag={analyticTag}
+                />
+              </>
+            ) : (
+              <>
+                {align === "left" ? (
+                  <div style={{ display: 'flex', justifyContent: 'center' }}>
+                    <Image
+                      image={image}
+                      imageAlt={imageAlt}
+                      analyticTag={analyticTag}
+                    />
+                    <Content
+                      contentTitle={contentTitle}
+                      contentText={contentText}
+                      setIsVisibleModal={setIsVisibleModal}
+                      linkToWeb={linkToWeb}
+                      analyticTag={analyticTag}
+                    />
+                  </div>
+                ) : (
+                  <div style={{ display: 'flex', justifyContent: 'center' }}>
+                    <Content
+                      contentTitle={contentTitle}
+                      contentText={contentText}
+                      setIsVisibleModal={setIsVisibleModal}
+                      linkToWeb={linkToWeb}
+                      analyticTag={analyticTag}
+                    />
+                    <Image
+                      image={image}
+                      imageAlt={imageAlt}
+                      analyticTag={analyticTag}
+                    />
+                  </div>
+                )}
+              </>
+            )}
+          </Row>
+        )}
       </div>
     </>
-  );
+  )
 }
 
 function Image(props: {
   image: string
   imageAlt: string
+  analyticTag: string
 }) {
-  const { image, imageAlt } = props;
+  const { image, imageAlt, analyticTag } = props
   const clickProyectImage = () => {
-    gaEvent("click_project_image_" + imageAlt, "clicks", "UI Clicks", true);
-  };
+    gaEvent("project_image--" + analyticTag, "clicks", "UI Clicks", true)
+  }
   return (
     <Col span={24} md={12} className="project-layout__image">
       <QueueAnim type={"alpha"} duration={250} ease="easeInCubic">
@@ -129,23 +146,23 @@ function Image(props: {
         </div>
       </QueueAnim>
     </Col>
-  );
+  )
 }
 
 function Content(props: {
-  contentTitle: string;
-  contentText: string;
-  linkToWeb: string;
-  setIsVisibleModal: React.Dispatch<boolean>;
+  contentTitle: string
+  contentText: string
+  linkToWeb: string
+  analyticTag: string
+  setIsVisibleModal: React.Dispatch<boolean>
 }) {
-  const { contentTitle, contentText, linkToWeb, setIsVisibleModal } = props;
-  const gaTitle = contentTitle.replace(/[ ']/g, "");
+  const { contentTitle, contentText, linkToWeb, analyticTag, setIsVisibleModal } = props
   const clickProjectSeeMore = () => {
-    gaEvent("click_project_see_more->" + gaTitle, "clicks", "UI Clicks", true);
-  };
+    gaEvent("project_btn_see_more--" + analyticTag, "clicks", "UI Clicks", true)
+  }
   const clickProjectGoToWeb = () => {
-    gaEvent("click_project_go_to_web->" + gaTitle, "clicks", "UI Clicks", true);
-  };
+    gaEvent("project_link_go_to_web--" + analyticTag, "clicks", "UI Clicks", true)
+  }
   return (
     <Col span={24} md={12} className="project-layout__content">
       <Col span={24} className="project-layout__content-text">
@@ -161,8 +178,8 @@ function Content(props: {
       <div className="project-layout__content--links">
         <Button
           onClick={() => {
-            clickProjectSeeMore();
-            setIsVisibleModal(true);
+            clickProjectSeeMore()
+            setIsVisibleModal(true)
           }}
         >
           Ver más
@@ -172,19 +189,19 @@ function Content(props: {
         </a>
       </div>
     </Col>
-  );
+  )
 }
 
 function ModalContent(props: {
-  modalTags: string[];
-  modalImage1: string;
-  modalImage2: string;
-  modalImage3: string;
-  modalImageAlt: string;
-  modalDate: string;
-  modalIntroduction: string;
-  modalText: string[];
-  modalTitle: string;
+  modalTags: string[]
+  modalImage1: string
+  modalImage2: string
+  modalImage3: string
+  modalImageAlt: string
+  modalDate: string
+  modalIntroduction: string
+  modalText: string[]
+  modalTitle: string
 }) {
   const {
     modalTags,
@@ -196,16 +213,16 @@ function ModalContent(props: {
     modalIntroduction,
     modalText,
     modalTitle,
-  } = props;
-  let gaModalTitle = modalTitle.replace(/[ ']/g, "");
+  } = props
+  let gaModalTitle = modalTitle.replace(/[ ']/g, "")
   const clickProyectModalImage = (e: number) => {
     gaEvent(
       "click_project_modal_image_" + e + "_" + gaModalTitle,
       "clicks",
       "UI Clicks",
       true
-    );
-  };
+    )
+  }
   return (
     <Row className="project-layout__modal">
       <Row className="project-layout__modal-image">
@@ -246,21 +263,21 @@ function ModalContent(props: {
                   <span key={key + 2}>{text}</span>
                   <br key={key + 3}></br>
                 </div>
-              );
+              )
             })}
         </Col>
       </div>
       <Col span={24} className="project-layout__modal-tags">
         {modalTags &&
           modalTags.map((tag: string) => {
-            let tagToClassname = tag.replace(/[ .]/g, "");
+            let tagToClassname = tag.replace(/[ .]/g, "")
             return (
               <span key={tag} className={tagToClassname}>
                 <Tag>{tag}</Tag>
               </span>
-            );
+            )
           })}
       </Col>
     </Row>
-  );
+  )
 }
