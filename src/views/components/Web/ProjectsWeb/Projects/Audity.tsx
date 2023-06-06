@@ -30,11 +30,11 @@ export default function Audity(props: {
       modalDate="Mayo 2023"
       modalIntroduction="Audity es una PWA Full Stack JavaScript, siguiendo los 
         principios SOLID, 100% responsive y con CMS a medida.
-        El back-end se ha desarrollado con NodeJS y Espress. Para la persistencia de datos 
+        El backend se ha desarrollado con NodeJS y Express. Para la persistencia de datos 
         MongoDB y Mongoose para el modelado y manejo de la base de datos. Para la 
         autentificación y autorización hemos utilizado Auth0, y para el manejo de archivos 
         multimedia Cloudinary. 
-        El front-end se ha realizado siguiendo los principios 
+        El frontend se ha realizado siguiendo los principios 
         SOLID. Es una SPA realizada con React y Typescript, Auth0 para la autentificación 
         de usuarios, Workbox para los Service Workers, Ant Design como framework de diseño, 
         i18next para el multidioma, Swiper para los sliders de contenido, entre otras."

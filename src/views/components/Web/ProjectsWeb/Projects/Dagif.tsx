@@ -52,7 +52,6 @@ export default function Dagif(props: {
         "NodeJS",
         "Express",
         "JavaScript",
-        "Workbox",
         "MongoDB",
         "Mongoose",
         "Auth0",
@@ -68,7 +67,7 @@ export default function Dagif(props: {
         "PWA",
         "Cloudinary",
         "Git",
-        "Git Hub",
+        "GitHub",
       ]}
       analyticTag='Dagif'
     />
