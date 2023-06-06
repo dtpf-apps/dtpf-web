@@ -5,6 +5,7 @@ import Audity from "./Projects/Audity"
 import Dalist from "./Projects/Dalist"
 import BeFriends from "./Projects/BeFriends"
 import Dagif from "./Projects/Dagif"
+import Amazen from "./Projects/Amazen"
 import "./ProjectsWeb.scss"
 
 export default function ProjectsWeb() {
@@ -27,7 +28,8 @@ export default function ProjectsWeb() {
       <Audity innerWidth={innerWidth} align="left" />
       <Dalist innerWidth={innerWidth} align="right" />
       <BeFriends innerWidth={innerWidth} align="left" />
-      <Dagif innerWidth={innerWidth} align="right" />
+      <Amazen innerWidth={innerWidth} align="right" />
+      <Dagif innerWidth={innerWidth} align="left" />
     </div>
   )
 }
