@@ -4,8 +4,16 @@
 
 .about-me-info {
 	margin: 0 auto;
-	min-height: 400px;
+	min-height: 280px;
 	@include fadeIn();
+
+	@media (min-width: $media-breakpoint-up-md) {
+		padding-top: 30px;
+	}
+
+	@media (min-width: $media-breakpoint-up-lg) {
+		padding-top: 25px;
+	}
 
 	&-content {
 		display: flex;
