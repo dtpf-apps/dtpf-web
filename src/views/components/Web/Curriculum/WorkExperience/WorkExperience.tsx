@@ -10,34 +10,90 @@ export default function WorkExperience() {
     <div className="work-experience">
       <h2 className="work-experience__title">Experiencia Laboral</h2>
       <div className="timeline">
-        <DesarrolladorFullStackAssembler />
-        <AlbañilFreelance />
-        <SupermercadoChipYChop />
-        <TizonaSL />
-        <MoyaSaus />
-        <IntegraTap />
-        <LlabresFeliu />
-        <TallerLaCabina />
+        <DesarrolladorFullStackPalmira position='left' />
+        <DesarrolladorFullStackAssembler position='right' />
+        <AlbañilFreelance position='left' />
+        <SupermercadoChipYChop position='right' />
+        <TizonaSL position='left' />
+        <MoyaSaus position='right' />
+        <IntegraTap position='left' />
+        <LlabresFeliu position='right' />
+        <TallerLaCabina position='left' />
       </div>
     </div>
   );
 }
 
-function DesarrolladorFullStackAssembler() {
+function DesarrolladorFullStackPalmira(props: { position: string }) {
   const [show, el] = useNearScreen();
   const ref: any = el;
+  const { position } = props;
   return (
     <div className="use-near-screen" ref={ref}>
       {show && (
-        <div className="container workx-8 left">
-          <div className="title-left workx-8">
+        <div className={`container workx-8 ${position}`}>
+          <div className={`title-${position} workx-8`}>
             <h3>DESARROLLADOR FULL STACK</h3>
           </div>
           <div className="content">
-            <span>2022 - 2023</span>
+            <span>Junio 2021 - Junio 2023</span>
             <Collapse
               bordered={false}
               defaultActiveKey={["1"]}
+              expandIcon={({ isActive }) => (
+                <CaretRightOutlined rotate={isActive ? 90 : 0} />
+              )}
+              className="work-collapse"
+            >
+              <Panel
+                header="Palmira"
+                key="1"
+                className="work-collapse-panel"
+              >
+                <p className="work-collapse-panel__text">
+                  ・Crear interfaces de usuario interactivas y atractivas utilizando tecnologías como
+                  HTML, CSS y JavaScript, y la librería de React Native.<br />
+                  ・Implementar lógica de negocio, manejar solicitudes del cliente y asegurar el rendimiento
+                  y la seguridad del sistema utilizando tecnologías del lado del servidor como Node.js y Express.<br />
+                  ・Diseñar y gestionar bases de datos NoSQL, optimizando consultas y garantizando
+                  la integridad de los datos.<br />
+                  ・Desarrollar y mantener APIs para permitir la comunicación eficiente entre diferentes
+                  componentes de la aplicación y servicios externos.<br />
+                  ・Resolver problemas y depurar errores en todas las capas de la aplicación, asegurando
+                  un funcionamiento fluido y sin problemas.<br />
+                  ・Colaborar estrechamente con otros miembros del equipo de desarrollo, participando
+                  en la planificación y gestión de proyectos.<br />
+                  ・Mantenerse actualizado sobre las últimas tendencias y mejores prácticas en el
+                  campo del desarrollo web y de aplicaciones.<br /><br />
+
+                  Tecnologías: <b>Javascript</b>, <b>Typescript</b>, <b>MongoDB</b>, 
+                  Express, <b>React Native</b>, <b>NodeJS</b>, HTML5, CSS3, <b>SCSS</b>, 
+                  <b> Git</b>, <b>GitHub</b>, Postman.
+                </p>
+              </Panel>
+            </Collapse>
+          </div>
+        </div>
+      )}
+    </div>
+  );
+}
+
+function DesarrolladorFullStackAssembler(props: { position: string }) {
+  const [show, el] = useNearScreen();
+  const ref: any = el;
+  const { position } = props;
+  return (
+    <div className="use-near-screen" ref={ref}>
+      {show && (
+        <div className={`container workx-8 ${position}`}>
+          <div className={`title-${position} workx-8`}>
+            <h3>DESARROLLADOR FULL STACK</h3>
+          </div>
+          <div className="content">
+            <span>Octubre 2022 - Mayo 2023</span>
+            <Collapse
+              bordered={false}
               expandIcon={({ isActive }) => (
                 <CaretRightOutlined rotate={isActive ? 90 : 0} />
               )}
@@ -58,7 +114,7 @@ function DesarrolladorFullStackAssembler() {
                   ・Más de 30 proyectos en el mundo real realizados con un enfoque
                   profundo en las pilas <b>MERN</b> y <b>LAMP</b> aplicando
                   principios <b>SOLID</b>.<br />
-                  ・Trabajando en proyectos reales aplicando prácticas de código 
+                  ・Trabajando en proyectos reales aplicando prácticas de código
                   limpio y patrones de escalabilidad.<br />
                   ・Utilizando técnicas de desarrollo <b>Agile</b> (<b>Kaban</b>, <b>Scrum</b>).<br /><br />
 
@@ -79,14 +135,15 @@ function DesarrolladorFullStackAssembler() {
   );
 }
 
-function AlbañilFreelance() {
+function AlbañilFreelance(props: { position: string }) {
   const [show, el] = useNearScreen();
   const ref: any = el;
+  const { position } = props;
   return (
     <div className="use-near-screen" ref={ref}>
       {show && (
-        <div className="container workx-8 right">
-          <div className="title-right workx-7">
+        <div className={`container workx-8 ${position}`}>
+          <div className={`title-${position} workx-7`}>
             <h3>ALBAÑIL FREELANCE</h3>
           </div>
           <div className="content">
@@ -99,14 +156,15 @@ function AlbañilFreelance() {
   );
 }
 
-function SupermercadoChipYChop() {
+function SupermercadoChipYChop(props: { position: string }) {
   const [show, el] = useNearScreen();
   const ref: any = el;
+  const { position } = props;
   return (
     <div className="use-near-screen" ref={ref}>
       {show && (
-        <div className="container workx-6 left">
-          <div className="title-left workx-6">
+        <div className={`container workx-6 ${position}`}>
+          <div className={`title-${position} workx-6`}>
             <h3>SUPERMERCADO CHIP Y CHOP</h3>
           </div>
           <div className="content">
@@ -119,14 +177,15 @@ function SupermercadoChipYChop() {
   );
 }
 
-function TizonaSL() {
+function TizonaSL(props: { position: string }) {
   const [show, el] = useNearScreen();
   const ref: any = el;
+  const { position } = props;
   return (
     <div className="use-near-screen" ref={ref}>
       {show && (
-        <div className="container workx-5 right">
-          <div className="title-right workx-5">
+        <div className={`container workx-5 ${position}`}>
+          <div className={`title-${position} workx-5`}>
             <h3>TIZONA S.L (GRUPO IFA)</h3>
           </div>
           <div className="content">
@@ -139,14 +198,15 @@ function TizonaSL() {
   );
 }
 
-function MoyaSaus() {
+function MoyaSaus(props: { position: string }) {
   const [show, el] = useNearScreen();
   const ref: any = el;
+  const { position } = props;
   return (
     <div className="use-near-screen" ref={ref}>
       {show && (
-        <div className="container workx-4 left">
-          <div className="title-left workx-4">
+        <div className={`container workx-4 ${position}`}>
+          <div className={`title-${position} workx-4`}>
             <h3>MOYA SAUS (Grupo IFA)</h3>
           </div>
           <div className="content">
@@ -163,14 +223,15 @@ function MoyaSaus() {
   );
 }
 
-function IntegraTap() {
+function IntegraTap(props: { position: string }) {
   const [show, el] = useNearScreen();
   const ref: any = el;
+  const { position } = props;
   return (
     <div className="use-near-screen" ref={ref}>
       {show && (
-        <div className="container workx-3 right">
-          <div className="title-right workx-3">
+        <div className={`container workx-3 ${position}`}>
+          <div className={`title-${position} workx-3`}>
             <h3>INTEGRA TAP</h3>
           </div>
           <div className="content">
@@ -183,14 +244,15 @@ function IntegraTap() {
   );
 }
 
-function LlabresFeliu() {
+function LlabresFeliu(props: { position: string }) {
   const [show, el] = useNearScreen();
   const ref: any = el;
+  const { position } = props;
   return (
     <div className="use-near-screen" ref={ref}>
       {show && (
-        <div className="container workx-2 left">
-          <div className="title-left workx-2">
+        <div className={`container workx-2 ${position}`}>
+          <div className={`title-${position} workx-2`}>
             <h3>LLABRÉS FELIU MEDI-AMBENT</h3>
           </div>
           <div className="content">
@@ -203,14 +265,15 @@ function LlabresFeliu() {
   );
 }
 
-function TallerLaCabina() {
+function TallerLaCabina(props: { position: string }) {
   const [show, el] = useNearScreen();
   const ref: any = el;
+  const { position } = props;
   return (
     <div className="use-near-screen" ref={ref}>
       {show && (
-        <div className="container workx-1 right">
-          <div className="title-right workx-1">
+        <div className={`container workx-1 ${position}`}>
+          <div className={`title-${position} workx-1`}>
             <h3>TALLER LA CABINA</h3>
           </div>
           <div className="content">
