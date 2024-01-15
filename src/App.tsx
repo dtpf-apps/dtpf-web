@@ -1,4 +1,4 @@
-import React from "react";
+import React, { memo } from "react";
 import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
 import routes from "./config/routes";
 import AuthProvider from "./providers/AuthProvider";
@@ -7,7 +7,7 @@ import MainMenuProvider from "./providers/MainMenuProvider";
 import dbIndexed from "./dbIndexed";
 import "./App.scss";
 
-export default function App() {
+function App() {
   dbIndexed();
   return (
     <AuthProvider>
@@ -25,6 +25,8 @@ export default function App() {
     </AuthProvider>
   );
 }
+
+export default memo(App);
 
 function RouteWithSubRoutes(route: {
   path: string;
