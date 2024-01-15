@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useCallback } from "react";
+import React, { useState, useEffect, useCallback, memo } from "react";
 import {
   Row,
   Col,
@@ -26,7 +26,7 @@ import NoImage from "assets/img/png/no-image.png";
 import "./AddEditCoursesForm.scss";
 const { TextArea } = Input;
 
-export default function AddEditCoursesForm(props: any) {
+function AddEditCoursesForm(props: any) {
   const { setIsVisibleModal, setReloadCourses, course } = props;
   const [image, setImage] = useState(null);
   const [courseData, setCourseData] = useState([]);
@@ -361,3 +361,5 @@ function transformTextToUrl(text: string) {
     .replace(/ú/gi, "u")
   return url.toLowerCase();
 }
+
+export default memo(AddEditCoursesForm);

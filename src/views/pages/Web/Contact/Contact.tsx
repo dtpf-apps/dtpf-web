@@ -1,9 +1,9 @@
-import React, { Suspense, lazy } from "react"
+import React, { Suspense, lazy, memo } from "react"
 const Helmet = lazy(() => import("views/components/Helmet"))
 const ContactPage = lazy(() => import("views/components/Web/Contact"))
 const ButtonGoBack = lazy(() => import("views/components/UI/ButtonGoBack"))
 
-export default function Contact(props: { history: { goBack: () => void }}) {
+function Contact(props: { history: { goBack: () => void }}) {
   const { history } = props
   return (
     <Suspense fallback={<></>}>
@@ -16,3 +16,5 @@ export default function Contact(props: { history: { goBack: () => void }}) {
     </Suspense>
   )
 }
+
+export default memo(Contact)

@@ -1,10 +1,10 @@
-import React, { Suspense, lazy } from "react"
+import React, { Suspense, lazy, memo } from "react"
 import "./Curriculum.scss"
 const Helmet = lazy(() => import("views/components/Helmet"))
 const CurriculumWeb = lazy(() => import("views/components/Web/Curriculum"))
 const ButtonGoBack = lazy(() => import("views/components/UI/ButtonGoBack"))
 
-export default function Curriculum(props: any) {
+function Curriculum(props: any) {
   const { history } = props
   return (
     <Suspense fallback={<></>}>
@@ -17,3 +17,5 @@ export default function Curriculum(props: any) {
     </Suspense>
   )
 }
+
+export default memo(Curriculum)

@@ -1,4 +1,4 @@
-import React, { useState, useEffect, Suspense, lazy } from "react";
+import React, { useState, useEffect, Suspense, lazy, memo } from "react";
 import { getAccessTokenApi } from "api/auth";
 import { getCourseApi, addTagApi, deleteTagApi } from "api/education";
 import { Button, Row, Col, Form, Divider, Input, Tag, Modal, notification } from "antd";
@@ -8,7 +8,7 @@ import "./AdminTags.scss";
 const Spin = lazy(() => import("views/components/UI/Spin"));
 const { confirm } = Modal;
 
-export default function AdminTags(props: {
+function AdminTags(props: {
   course: { url: string };
   courseData: { _id: string };
   setReloadCourses: any;
@@ -145,3 +145,5 @@ function AddTagForm(props: any) {
     </div>
   );
 }
+
+export default memo(AdminTags);

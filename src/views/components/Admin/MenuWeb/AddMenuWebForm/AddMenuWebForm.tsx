@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { memo, useState } from "react";
 import { Form, Input, Button, Select, notification } from "antd";
 import { addMenuApi } from "api/menu";
 import { getAccessTokenApi } from "api/auth";
@@ -6,7 +6,7 @@ import { notifDelay, notifDelayErr } from "utils/notifications";
 import { FontSizeOutlined } from "@ant-design/icons";
 import "./AddMenuWebForm.scss";
 
-export default function AddMenuWebForm(props: any) {
+function AddMenuWebForm(props: any) {
   const { setIsVisibleModal, setReloadMenuWeb } = props;
   const [menuWebData, setMenuWebData] = useState({});
   return (
@@ -20,6 +20,8 @@ export default function AddMenuWebForm(props: any) {
     </div>
   );
 }
+
+export default memo(AddMenuWebForm);
 
 function AddForm(props: any) {
   const { menuWebData, setMenuWebData, setIsVisibleModal, setReloadMenuWeb } = props;

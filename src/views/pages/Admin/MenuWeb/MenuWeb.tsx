@@ -1,8 +1,8 @@
-import React, { useState, Suspense, lazy } from "react";
+import React, { useState, Suspense, lazy, memo } from "react";
 const MenuWebList = lazy(() => import("views/components/Admin/MenuWeb/MenuWebList"));
 const Helmet = lazy(() => import("views/components/Helmet"));
 
-export default function MenuWeb() {
+function MenuWeb() {
   const [reloadMenuWeb, setReloadMenuWeb] = useState(false);
   return (
     <Suspense fallback={<></>}>
@@ -14,3 +14,5 @@ export default function MenuWeb() {
     </Suspense>
   );
 }
+
+export default memo(MenuWeb);

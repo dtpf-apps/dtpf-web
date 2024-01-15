@@ -1,7 +1,7 @@
-import React from "react";
+import React, { memo } from "react";
 import { Modal as ModalAntd } from "antd";
 
-export default function Modal(props: {
+function Modal(props: {
   children: any
   title: string
   isVisible: boolean
@@ -22,3 +22,5 @@ export default function Modal(props: {
     </ModalAntd>
   );
 }
+
+export default memo(Modal);

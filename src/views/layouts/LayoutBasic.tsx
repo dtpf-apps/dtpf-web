@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { memo, useState } from "react";
 import useConnection from "hooks/useConnection";
 import useShowContentOffline from "dbIndexed/utils/useShowContentOffline";
 import { gaEvent } from "utils/analytics.js";
@@ -11,7 +11,7 @@ import MenuSider from "views/components/Web/Layout/MenuSider";
 import Footer from "views/components/Web/Layout/Footer";
 import LoadRoutes from "providers/LoadRoutes";
 
-export default function LayoutBasic(props: any) {
+function LayoutBasic(props: any) {
   const { routes } = props;
   const { connectionStatus, isNavigatorOnline } = useConnection();
   const showContentOffline = useShowContentOffline();
@@ -49,6 +49,8 @@ export default function LayoutBasic(props: any) {
     </>
   );
 }
+
+export default memo(LayoutBasic);
 
 function RenderLayoutBasic(props: any) {
   const { routes, menuCollapsed, setMenuCollapsed } = props;

@@ -1,10 +1,10 @@
-import React from "react";
+import React, { memo } from "react";
 import { Button } from "antd";
 import { LeftOutlined } from "@ant-design/icons";
 import { gaEvent } from "utils/analytics.js";
 import "./ButtonGoBack.scss";
 
-export default function ButtonGoBack(props: any) {
+function ButtonGoBack(props: any) {
   const { goBack, eventGoBack } = props;
   const clickGoBack = () => {
     gaEvent(`click_goBack_${eventGoBack}`, "clicks", "UI Clicks", true);
@@ -17,3 +17,5 @@ export default function ButtonGoBack(props: any) {
     </div>
   );
 }
+
+export default memo(ButtonGoBack);

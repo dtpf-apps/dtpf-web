@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { memo, useState } from "react";
 import { Link } from "react-router-dom";
 import { Form, Input, Button, Checkbox, message } from "antd";
 import { UserOutlined, LockOutlined } from "@ant-design/icons";
@@ -10,7 +10,7 @@ import {
 import { signUpApi } from "api/user";
 import "./RegisterForm.scss";
 
-export default function RegisterForm() {
+function RegisterForm() {
   const [isLoading, setIsLoading] = useState(false);
   const [inputs, setInputs] = useState({
     email: "",
@@ -159,3 +159,5 @@ export default function RegisterForm() {
     </Form>
   );
 }
+
+export default memo(RegisterForm);

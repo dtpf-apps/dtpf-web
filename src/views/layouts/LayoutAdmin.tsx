@@ -1,4 +1,4 @@
-import React, { useState, Suspense, lazy } from "react";
+import React, { useState, Suspense, lazy, memo } from "react";
 import { Route, Redirect } from "react-router-dom";
 import { Layout, Tag } from "antd";
 import useAuth from "hooks/useAuth";
@@ -12,7 +12,7 @@ const MenuTop = lazy(() => import("views/components/Admin/MenuTop"));
 const MenuSider = lazy(() => import("views/components/Admin/MenuSider"));
 const LoadRoutes = lazy(() => import("providers/LoadRoutes"));
 
-export default function LayoutAdmin(props: any) {
+function LayoutAdmin(props: any) {
   const { routes } = props;
   const { connectionStatus, isNavigatorOnline } = useConnection();
   const { user, isLoading } = useAuth();
@@ -41,6 +41,8 @@ export default function LayoutAdmin(props: any) {
   }
   return null;
 }
+
+export default memo(LayoutAdmin);
 
 function RenderLayoutAdmin(props: any) {
   const { routes } = props;

@@ -1,15 +1,15 @@
-import React from "react";
+import React, { memo, useCallback } from "react";
 import { useHistory, Link } from "react-router-dom";
 import CookieConsent from "react-cookie-consent";
 import gtag from "utils/gtag";
 import "./CookiesConsent.scss";
 
-export default function CookiesConsent() {
+function CookiesConsent() {
   const history = useHistory();
-  const accept = () => {
+  const accept = useCallback(() => {
     gtag();
     history.go(0);
-  };
+  }, [])
   return (
     <CookieConsent
       location="bottom"
@@ -25,3 +25,5 @@ export default function CookiesConsent() {
     </CookieConsent>
   );
 }
+
+export default memo(CookiesConsent);

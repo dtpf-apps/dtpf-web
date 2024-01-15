@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, memo } from "react";
 import {
   Switch,
   List,
@@ -21,7 +21,7 @@ import moment from "moment";
 import "moment/locale/es";
 const { confirm } = ModalDelete;
 
-export default function ContactMessagesList(props: any) {
+function ContactMessagesList(props: any) {
   const { reloadMessages, setReloadMessages } = props;
   const [viewMessagesUnread, setViewMessagesUnread] = useState(true);
   const [isVisibleModal, setIsVisibleModal] = useState(false);
@@ -225,3 +225,5 @@ function MessageRead(props: any) {
     </List.Item>
   );
 }
+
+export default memo(ContactMessagesList);

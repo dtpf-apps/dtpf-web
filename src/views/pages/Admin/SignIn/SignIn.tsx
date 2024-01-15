@@ -1,8 +1,8 @@
-import React, { Suspense, lazy } from "react";
+import React, { Suspense, lazy, memo } from "react";
 const SignInComponent = lazy(() => import("views/components/Admin/SignIn"));
 const Helmet = lazy(() => import("views/components/Helmet"));
 
-export default function SignIn() {
+function SignIn() {
   return (
     <Suspense fallback={<></>}>
       <Helmet
@@ -13,3 +13,5 @@ export default function SignIn() {
     </Suspense>
   );
 }
+
+export default memo(SignIn);

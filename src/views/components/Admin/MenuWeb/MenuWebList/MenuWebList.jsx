@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, memo } from "react";
 import { Switch, List, Button, Modal as ModalAntd, notification } from "antd";
 import Modal from "views/components/UI/Modal";
 import {
@@ -16,7 +16,7 @@ import "./MenuWebList.scss";
 import DragSortableList from "react-drag-sortable";
 const { confirm } = ModalAntd;
 
-export default function MenuWebList(props) {
+function MenuWebList(props) {
   const { reloadMenuWeb, setReloadMenuWeb } = props;
   const [listItems, setListItems] = useState([]);
   const [isVisibleModal, setIsVisibleModal] = useState(false);
@@ -192,3 +192,5 @@ function MenuItem(props) {
     </List.Item>
   );
 }
+
+export default memo(MenuWebList);

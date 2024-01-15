@@ -11,7 +11,7 @@ import {
 
 import "./AddUserForm.scss";
 
-export default function AddUserForm(props: any) {
+function AddUserForm(props: any) {
   const { setIsVisibleModal, setReloadUsers } = props;
   const [userData, setUserData] = useState({});
   return (
@@ -25,6 +25,8 @@ export default function AddUserForm(props: any) {
     </div>
   );
 }
+
+export default AddUserForm;
 
 function AddForm(props: any) {
   const { userData, setUserData, setIsVisibleModal, setReloadUsers } = props;

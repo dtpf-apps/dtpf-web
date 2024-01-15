@@ -1,8 +1,8 @@
-import React from "react";
+import React, { memo } from "react";
 import useScrollToTop from "hooks/useScrollToTop";
 import "./PrivacyPolicy.scss";
 
-export default function PrivacyPolicy() {
+function PrivacyPolicy() {
   useScrollToTop();
   return (
     <div className="privacy-policy">
@@ -274,3 +274,5 @@ export default function PrivacyPolicy() {
     </div>
   );
 }
+
+export default memo(PrivacyPolicy);

@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useCallback } from "react";
+import React, { useState, useEffect, useCallback, memo } from "react";
 import { Avatar, Form, Input, Select, Button, Row, Col, notification } from "antd";
 import { useDropzone } from "react-dropzone";
 import NoAvatar from "assets/img/png/no-avatar.png";
@@ -8,7 +8,7 @@ import { notifDelay, notifDelayErr } from "utils/notifications";
 import { UserOutlined, LockOutlined } from "@ant-design/icons";
 import "./EditUserForm.scss";
 
-export default function EditUserForm(props: any) {
+function EditUserForm(props: any) {
   const { user, setIsVisibleModal, setReloadUsers } = props;
   const [avatar, setAvatar] = useState(null);
   const [userData, setUserData] = useState({});
@@ -260,3 +260,5 @@ function EditForm(props: any) {
     </Form>
   );
 }
+
+export default memo(EditUserForm);

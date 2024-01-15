@@ -1,4 +1,4 @@
-import React from "react"
+import React, { memo } from "react"
 import useScrollToTop from "hooks/useScrollToTop"
 import MainTitle from "views/components/Web/MainTitle"
 import Helmet from "views/components/Helmet"
@@ -7,7 +7,7 @@ import AboutMeInfo from "views/components/Web/AboutMeWeb/AboutMeInfo"
 import { Divider } from "antd"
 import "./Home.scss"
 
-export default function Home() {
+function Home() {
   useScrollToTop()
   return (
     <>
@@ -25,3 +25,5 @@ export default function Home() {
     </>
   )
 }
+
+export default memo(Home)

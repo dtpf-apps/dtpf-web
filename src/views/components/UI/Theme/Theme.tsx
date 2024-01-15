@@ -1,8 +1,8 @@
-import React from "react";
+import React, { memo } from "react";
 import { gaEvent } from "../../../../utils/analytics.js";
 import "./Theme.scss";
 
-export default function Theme() {
+function Theme() {
   const theme: any = localStorage.getItem("theme");
   theme && document.documentElement.setAttribute("data-theme", theme);
   const isDarkTheme = () => {
@@ -45,3 +45,5 @@ export default function Theme() {
     </div>
   );
 }
+
+export default memo(Theme);

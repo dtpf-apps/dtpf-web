@@ -1,8 +1,8 @@
-import React, { useState, Suspense, lazy } from "react"
+import React, { useState, Suspense, lazy, memo } from "react"
 const ContactMessagesList = lazy(() => import("views/components/Admin/ContactMessagesList"))
 const Helmet = lazy(() => import("views/components/Helmet"))
 
-export default function ContactMessages() {
+function ContactMessages() {
   const [reloadMessages, setReloadMessages] = useState(false)
   return (
     <Suspense fallback={<></>}>
@@ -17,3 +17,5 @@ export default function ContactMessages() {
     </Suspense>
   )
 }
+
+export default memo(ContactMessages)

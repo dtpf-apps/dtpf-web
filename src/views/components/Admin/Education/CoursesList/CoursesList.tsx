@@ -1,4 +1,4 @@
-import React, { Suspense, lazy } from "react";
+import React, { Suspense, lazy, memo } from "react";
 import { getAccessTokenApi } from "api/auth";
 import { deleteCourseApi } from "api/education";
 import { Link } from "react-router-dom";
@@ -13,7 +13,7 @@ import {
 const Spin = lazy(() => import("views/components/UI/Spin"));
 const { confirm } = Modal;
 
-export default function CoursesList(props: any) {
+function CoursesList(props: any) {
   const { courses, setReloadCourses, editCourse } = props;
   const deleteCourse = (course: any) => {
     const accessToken = getAccessTokenApi();
@@ -86,3 +86,5 @@ function Course(props: any) {
     </List.Item>
   );
 }
+
+export default memo(CoursesList);

@@ -1,8 +1,8 @@
-import React, { useState, Suspense, lazy } from "react"
+import React, { useState, Suspense, lazy, memo } from "react"
 const AboutMeAdmin = lazy(() => import("views/components/Admin/AboutMeAdmin"))
 const Helmet = lazy(() => import("views/components/Helmet"))
 
-export default function AboutMeAdminPage() {
+function AboutMeAdminPage() {
   const [reloadAboutMeAdmin, setReloadAboutMeAdmin] = useState(false)
   return (
     <Suspense fallback={<></>}>
@@ -14,3 +14,5 @@ export default function AboutMeAdminPage() {
     </Suspense>
   )
 }
+
+export default memo(AboutMeAdminPage)

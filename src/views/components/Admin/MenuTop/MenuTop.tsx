@@ -1,4 +1,4 @@
-import React from "react";
+import React, { memo } from "react";
 import { logout } from "api/auth";
 import { Button } from "antd";
 import Logo from "assets/img/png/logo128.png";
@@ -10,7 +10,7 @@ import {
 } from "@ant-design/icons";
 import "./MenuTop.scss";
 
-export default function MenuTop(props: any) {
+function MenuTop(props: any) {
   const { menuCollapsed, setMenuCollapsed } = props;
   const logoutUser = () => {
     logout();
@@ -44,3 +44,5 @@ export default function MenuTop(props: any) {
     </div>
   );
 }
+
+export default memo(MenuTop);

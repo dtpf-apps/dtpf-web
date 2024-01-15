@@ -1,10 +1,10 @@
-import React from "react";
+import React, { memo } from "react";
 import { useHistory } from "react-router";
 import { Result, Button } from "antd";
 import { SmileOutlined } from "@ant-design/icons";
 import "./CommingSoon.scss";
 
-export default function CommingSoon() {
+function CommingSoon() {
   const history = useHistory();
   const goBack = history.goBack;
   return (
@@ -21,3 +21,5 @@ export default function CommingSoon() {
     </div>
   );
 }
+
+export default memo(CommingSoon);

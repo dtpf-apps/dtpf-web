@@ -1,7 +1,7 @@
-import React from "react"
+import React, { memo } from "react"
 import { Helmet as ReactHelmet } from "react-helmet"
 
-export default function Helmet(props: {
+function Helmet(props: {
   titleHelmet: string
   contentHelmet: string
 }) {
@@ -17,3 +17,5 @@ export default function Helmet(props: {
     </ReactHelmet>
   )
 }
+
+export default memo(Helmet)

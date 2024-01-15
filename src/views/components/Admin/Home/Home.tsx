@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, memo } from "react";
 import { useHistory } from "react-router";
 import { checkUserLogin } from "providers/AuthProvider";
 import {
@@ -9,7 +9,7 @@ import { useCookies } from "react-cookie";
 import { Button, message, Modal } from "antd";
 import "./Home.scss";
 
-export default function Home(props: any) {
+function Home(props: any) {
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const [cookies, setCookie, removeCookie] = useCookies();
   const history = useHistory();
@@ -97,3 +97,5 @@ function RenderHome(props: any) {
     </div>
   );
 }
+
+export default memo(Home);

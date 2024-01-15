@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { memo, useState } from "react";
 import { Form, Input, Button, message } from "antd";
 import { UserOutlined, LockOutlined } from "@ant-design/icons";
 import { signInApi } from "api/user";
@@ -9,7 +9,7 @@ import {
 } from "utils/formValidation";
 import "./LoginForm.scss";
 
-export default function LoginForm() {
+function LoginForm() {
   const [isLoading, setIsLoading] = useState(false);
   const [countLogin, setCountLogin] = useState(0);
   const [timeToLogin, setTimeToLogin] = useState(0);
@@ -94,3 +94,5 @@ export default function LoginForm() {
     </Form>
   );
 }
+
+export default memo(LoginForm);

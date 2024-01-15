@@ -1,8 +1,8 @@
-import React from "react";
+import React, { memo } from "react";
 import { Result } from "antd";
 import "../Error.scss";
 
-export default function Error500(props: {
+function Error500(props: {
   title?: string;
   subtitle?: string;
 }) {
@@ -24,3 +24,5 @@ export default function Error500(props: {
     </div>
   );
 }
+
+export default memo(Error500);

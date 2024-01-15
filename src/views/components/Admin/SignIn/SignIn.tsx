@@ -1,4 +1,4 @@
-import React from "react";
+import React, { memo } from "react";
 import { Layout, Tabs } from "antd";
 import { Redirect } from "react-router-dom";
 import Logo from "assets/img/png/logo256.png";
@@ -7,7 +7,7 @@ import "./SignIn.scss";
 import LoginForm from "../LoginForm";
 import RegisterForm from "../RegisterForm";
 
-export default function SignIn() {
+function SignIn() {
   const { Content } = Layout;
   const { TabPane } = Tabs;
   if (getAccessTokenApi()) {
@@ -33,3 +33,5 @@ export default function SignIn() {
     </Layout>
   );
 }
+
+export default memo(SignIn);

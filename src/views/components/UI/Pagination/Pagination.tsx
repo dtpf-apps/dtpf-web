@@ -1,9 +1,9 @@
-import React, { useEffect } from "react";
+import React, { memo, useCallback, useEffect } from "react";
 import { Pagination as PaginationAntd } from "antd";
 import useScrollToTop from "hooks/useScrollToTop";
 import "./Pagination.scss";
 
-export default function Pagination(props: any) {
+function Pagination(props: any) {
   const { courses, location, history, itemsPerPage, setItemsPerPage } = props;
   const currentPage = parseInt(courses.page);
   useScrollToTop(location);
@@ -17,13 +17,20 @@ export default function Pagination(props: any) {
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [courses]);
-  const onChangePage = (newPage: number) => {
+  // const onChangePage = (newPage: number) => {
+  //   history.push(`${location.pathname}?limit=${courses.limit}&page=${newPage}`);
+  // };
+  const onChangePage = useCallback((newPage: number) => {
     history.push(`${location.pathname}?limit=${courses.limit}&page=${newPage}`);
-  };
-  const onShowSizeChange = (current: any, pageSize: any) => {
+  }, [history, location.pathname, courses.limit])
+  // const onShowSizeChange = (current: any, pageSize: any) => {
+  //   history.push(`${location.pathname}?limit=${pageSize}&page=${current}`);
+  //   setItemsPerPage(pageSize);
+  // };
+  const onShowSizeChange = useCallback((current: any, pageSize: any) => {
     history.push(`${location.pathname}?limit=${pageSize}&page=${current}`);
     setItemsPerPage(pageSize);
-  };
+  }, [history, location.pathname, setItemsPerPage])
   return (
     <PaginationAntd
       responsive
@@ -38,3 +45,5 @@ export default function Pagination(props: any) {
     />
   );
 }
+
+export default memo(Pagination);

@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, memo } from "react";
 import { Switch, List, Avatar, Button, Modal as ModalDelete, notification } from "antd";
 import NoAvatar from "assets/img/png/no-avatar.png";
 import Modal from "views/components/UI/Modal";
@@ -21,7 +21,7 @@ import {
 import "./ListUsers.scss";
 const { confirm } = ModalDelete;
 
-export default function ListUsers(props: any) {
+function ListUsers(props: any) {
   const { reloadUsers, setReloadUsers } = props;
   const [modalTitle, setModalTitle] = useState("");
   const [modalContent, setModalContent] = useState(null);
@@ -356,3 +356,5 @@ function UserInactive(props: any) {
     </List.Item>
   );
 }
+
+export default memo(ListUsers);

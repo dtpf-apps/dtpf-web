@@ -1,9 +1,9 @@
-import React, { Suspense, lazy } from "react"
+import React, { Suspense, lazy, memo } from "react"
 const Helmet = lazy(() => import("views/components/Helmet"))
 const ButtonGoBack = lazy(() => import("views/components/UI/ButtonGoBack"))
 const PrivacyPolicyComponent = lazy(() => import("views/components/PrivacyPolicy"))
 
-export default function PrivacyPolicy(props: any) {
+function PrivacyPolicy(props: any) {
   const { history } = props
   return (
     <Suspense fallback={<></>}>
@@ -16,3 +16,5 @@ export default function PrivacyPolicy(props: any) {
     </Suspense>
   )
 }
+
+export default memo(PrivacyPolicy)

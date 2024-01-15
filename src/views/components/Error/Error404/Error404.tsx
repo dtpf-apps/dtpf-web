@@ -1,8 +1,8 @@
-import React from "react";
+import React, { memo } from "react";
 import { Result, Button } from "antd";
 import "../Error.scss";
 
-export default function Error404(props: {
+function Error404(props: {
   title?: string;
   subtitle?: string;
   history: any;
@@ -25,3 +25,5 @@ export default function Error404(props: {
     </div>
   );
 }
+
+export default memo(Error404);

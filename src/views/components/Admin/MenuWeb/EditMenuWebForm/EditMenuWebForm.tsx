@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, memo } from "react";
 import { Form, Input, Button, notification } from "antd";
 import { updateMenuApi } from "api/menu";
 import { getAccessTokenApi } from "api/auth";
@@ -6,7 +6,7 @@ import { notifDelay, notifDelayErr } from "utils/notifications";
 import { FontSizeOutlined, LinkOutlined } from "@ant-design/icons";
 import "./EditMenuWebForm.scss";
 
-export default function EditMenuWebForm(props: any) {
+function EditMenuWebForm(props: any) {
   const { setIsVisibleModal, setReloadMenuWeb, menu } = props;
   const [menuWebData, setMenuWebData] = useState(menu);
   useEffect(() => {
@@ -80,3 +80,6 @@ function EditForm(props: any) {
     </Form>
   );
 }
+
+
+export default memo(EditMenuWebForm);
