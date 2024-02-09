@@ -1,4 +1,4 @@
-import React, { memo } from "react";
+import React from "react";
 import { gaEvent } from "../../../../utils/analytics.js";
 import "./Theme.scss";
 
@@ -46,4 +46,4 @@ function Theme() {
   );
 }
 
-export default memo(Theme);
+export default Theme;
