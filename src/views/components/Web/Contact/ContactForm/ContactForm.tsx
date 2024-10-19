@@ -133,6 +133,8 @@ export default function ContactForm() {
     ////////// VALIDATIONS
     // email
     const emailValid = emailValidation(emailTrim);
+    const spamWords = /(agenc|posicio|market|legal|juridi|consul)/i;
+    const containsSpamWords = spamWords.test(emailTrim);
     // name
     const nameMinLength = minLenghtValidation(name, 3);
     const nameIsNumber = isNumberValidation(nameTrim);
@@ -155,6 +157,8 @@ export default function ContactForm() {
       messageAnt.warn("El email es obligatorio.");
     } else if (!emailValid) {
       messageAnt.warn("El email no es correcto.");
+    } else if (containsSpamWords === true) {
+      messageAnt.warn("Lo siento, no estoy interesado en este tipo de servicios.");
     } else if (phone_number && !phoneValid) {
       messageAnt.warn("El número de teléfono no es correcto.");
     } else if (!message) {
