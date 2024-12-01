@@ -1,5 +1,5 @@
 import React, { memo } from "react";
-import { useHistory } from "react-router";
+import { useHistory } from "react-router-dom";
 import { Result, Button } from "antd";
 import { SmileOutlined } from "@ant-design/icons";
 import "./CommingSoon.scss";

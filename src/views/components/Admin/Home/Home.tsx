@@ -1,5 +1,5 @@
 import React, { useState, useEffect, memo } from "react";
-import { useHistory } from "react-router";
+import { useHistory } from "react-router-dom";
 import { checkUserLogin } from "providers/AuthProvider";
 import {
   getIndexedDBVersionApi,
