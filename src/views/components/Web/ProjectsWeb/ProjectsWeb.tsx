@@ -3,7 +3,7 @@ import RecetasDeliciosasMsr from "./Projects/RecetasDeliciosasMsr"
 // import PortfolioDTPF from "./Projects/PortfolioDTPF"
 import Audity from "./Projects/Audity"
 import Dalist from "./Projects/Dalist"
-import BeFriends from "./Projects/BeFriends"
+// import BeFriends from "./Projects/BeFriends"
 import Dagif from "./Projects/Dagif"
 import Amazen from "./Projects/Amazen"
 import "./ProjectsWeb.scss"
@@ -27,9 +27,9 @@ export default function ProjectsWeb() {
       <RecetasDeliciosasMsr innerWidth={innerWidth} align="left" />
       <Audity innerWidth={innerWidth} align="right" />
       <Dalist innerWidth={innerWidth} align="left" />
-      <BeFriends innerWidth={innerWidth} align="right" />
-      <Amazen innerWidth={innerWidth} align="left" />
-      <Dagif innerWidth={innerWidth} align="right" />
+      {/* <BeFriends innerWidth={innerWidth} align="right" /> */}
+      <Amazen innerWidth={innerWidth} align="right" />
+      <Dagif innerWidth={innerWidth} align="left" />
     </div>
   )
 }

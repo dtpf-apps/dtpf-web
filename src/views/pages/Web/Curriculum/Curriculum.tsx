@@ -10,7 +10,7 @@ function Curriculum(props: any) {
     <Suspense fallback={<></>}>
       <Helmet
         titleHelmet="DTPF | Curriculum"
-        contentHelmet="Curriculum de David Thomas Pizarro Frick"
+        contentHelmet="Curriculum de David T. Pizarro Frick"
       />
       <ButtonGoBack goBack={history.goBack} eventGoBack="curriculum" />
       <CurriculumWeb />

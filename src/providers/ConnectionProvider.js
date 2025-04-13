@@ -10,9 +10,11 @@ export default function ConnectionProvider(props) {
     connectionStatus: null,
     isNavigatorOnline: true,
   });
+
   useEffect(() => {
     checkConnection(setConnection, setTimeToReload);
   }, []);
+
   useEffect(() => {
     const interval = setInterval(() => {
       checkConnection(setConnection, setTimeToReload);
@@ -21,6 +23,7 @@ export default function ConnectionProvider(props) {
       clearInterval(interval);
     };
   }, [timeToReload]);
+  
   return (
     <ConnectionContext.Provider value={connection}>
       {children}

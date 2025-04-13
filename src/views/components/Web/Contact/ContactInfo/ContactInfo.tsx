@@ -13,7 +13,7 @@ export default function ContactInfo(props: any) {
           Ponte en contacto conmigo haciendo click en los iconos de contacto o a
           través del formulario.
         </p>
-        <h2>David Thomas Pizarro Frick</h2>
+        <h2>David T. Pizarro Frick</h2>
       </Col>
       {innerWidth <= 767 ? (
         <>

@@ -17,7 +17,7 @@ function SignIn() {
     <Layout className="sign-in">
       <Content className="sign-in__content">
         <h1 className="sign-in__content-logo">
-          <img src={Logo} alt="David Thomas Pizarro Frick" />
+          <img src={Logo} alt="David T. Pizarro Frick" />
         </h1>
         <div className="sign-in__content-tabs">
           <Tabs type="card">

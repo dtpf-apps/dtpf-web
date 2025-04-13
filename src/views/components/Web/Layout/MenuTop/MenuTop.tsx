@@ -30,7 +30,7 @@ function RenderMenu(props: any) {
   return (
     <Menu selectedKeys={[location.pathname]} className="menu-top-web" mode="horizontal">
       <NavLink to={"/"} className="menu-top-web__logo">
-        <img src={Logo} alt="Logo de David Thomas Pizarro Frick" />
+        <img src={Logo} alt="Logo de David T. Pizarro Frick" />
       </NavLink>
       <Menu.Item key={'/'} className="menu-top-web__item">
         <NavLink to={'/'}>Inicio</NavLink>

@@ -71,7 +71,7 @@ function RenderLayoutAdmin(props: any) {
             <LoadRoutes routes={routes && routes} />
           </Content>
           <Footer className="layout-admin__footer">
-            David Thomas Pizarro Frick
+            David T. Pizarro Frick
           </Footer>
         </Layout>
       </Suspense>

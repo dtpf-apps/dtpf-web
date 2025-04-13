@@ -14,10 +14,10 @@ export default function RecetasDeliciosasMsr(props: {
     <ProjectLayout
       innerWidth={innerWidth}
       align={align}
-      linkToWeb="https://www.recetasmsr.com"
-      imageAlt="Link a www.recetasmsr.com"
+      linkToWeb="https://www.mariachef.com"
+      imageAlt="Link a www.mariachef.com"
       image={recetasDeliciosasImage}
-      contentTitle="Recetas Deliciosas MSR's"
+      contentTitle="Reecetas Deliciosas MSR's"
       contentText="Recetas Deliciosas MSR's es un blog de recetas de cocina, creado
       para agrupar todas las recetas culinarias en un solo sitio. Una aplicación
       web personal con acceso para usuarios previamente

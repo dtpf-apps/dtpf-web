@@ -3,6 +3,7 @@ import { Route, Switch } from "react-router-dom";
 
 export default function LoadRoutes(props: any) {
   const { routes } = props;
+  
   return (
     <Switch>
       {routes.map((route: any, index: number) => (

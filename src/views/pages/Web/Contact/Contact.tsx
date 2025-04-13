@@ -9,7 +9,7 @@ function Contact(props: { history: { goBack: () => void }}) {
     <Suspense fallback={<></>}>
       <Helmet
         titleHelmet="DTPF | Contacto"
-        contentHelmet="Página para contactar con David Thomas Pizarro Frick"
+        contentHelmet="Página para contactar con David T. Pizarro Frick"
       />
       <ButtonGoBack goBack={history.goBack} eventGoBack="contacto" />
       <ContactPage />

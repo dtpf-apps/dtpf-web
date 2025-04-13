@@ -25,7 +25,7 @@ function MenuTop(props: any) {
         <img
           className="menu-top__left-logo"
           src={Logo}
-          alt="David Thomas Pizarro Frick"
+          alt="David T. Pizarro Frick"
           onClick={reload}
         />
         <div className="menu-top__left-button">

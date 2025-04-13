@@ -46,6 +46,7 @@
 			@include p();
 			color: var(--t-primary-color);
 			padding-top: 20px;
+			margin-left: 25px;
 
 			@media (min-width: $media-breakpoint-up-md) {
 				padding: 20px;

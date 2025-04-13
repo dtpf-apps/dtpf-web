@@ -10,9 +10,11 @@ export default function MainMenuProvider(props) {
     mainMenu: [],
   });
   const { connectionStatus, isNavigatorOnline } = useConnection();
+
   useEffect(() => {
     getMenu(setMenu);
   }, [connectionStatus, isNavigatorOnline]);
+  
   return (
     <MainMenuContext.Provider value={menuData}>
       {children}

@@ -8,7 +8,7 @@ function PrivacyPolicy() {
     <div className="privacy-policy">
       <h1>Política de Privacidad y Cookies</h1>
       <p>
-        David Thomas Pizarro Frick te informa sobre su Política de Privacidad y
+        David T. Pizarro Frick te informa sobre su Política de Privacidad y
         Cookies respecto del tratamiento y protección de los datos de carácter
         personal de los usuarios y clientes que puedan ser recabados por la
         navegación o contratación de servicios a través del sitio Web
@@ -29,7 +29,7 @@ function PrivacyPolicy() {
       </p>
       <h2>Identidad del responsable</h2>
       <ul>
-        <li>Titular: David Thomas Pizarro Frick</li>
+        <li>Titular: David T. Pizarro Frick</li>
         <li>Correo electrónico: davidpizarrofrick@gmail.com</li>
         <li>Sitio Web: www.dtpf.es</li>
       </ul>

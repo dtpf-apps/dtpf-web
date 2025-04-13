@@ -21,7 +21,7 @@ export default function PortfolioDTPF(props: {
       contentText="Mi portfolio es una aplicación web hecha a medida, que muestra mi 
       progreso en el sector de IT, y que tiene como objetivo tener un contacto más 
       directo con quien esté buscando un perfil como yo."
-      modalTitle="Portfolio David Thomas Pizarro Frick"
+      modalTitle="Portfolio David T. Pizarro Frick"
       modalImage1={ModalImage1}
       modalImage2={ModalImage2}
       modalImage3={ModalImage3}

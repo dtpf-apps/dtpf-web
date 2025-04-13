@@ -9,7 +9,7 @@ function PrivacyPolicy(props: any) {
     <Suspense fallback={<></>}>
       <Helmet
         titleHelmet="DTPF | Política de privacidad"
-        contentHelmet="Página de política de privacidad de David Thomas Pizarro Frick"
+        contentHelmet="Página de política de privacidad de David T. Pizarro Frick"
       />
       <ButtonGoBack goBack={history.goBack} eventGoBack="politica-privacidad" />
       <PrivacyPolicyComponent />

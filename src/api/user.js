@@ -1,5 +1,5 @@
 import { basePath, apiVersion } from "./utils/config";
-import { makeRequest } from "../api/utils/makeRequest";
+import { makeRequest } from "./utils/makeRequest";
 
 export function signUpApi(data) {
   const url = `${basePath}/${apiVersion}/sign-up`;

@@ -15,9 +15,11 @@ export default function AuthProvider(props) {
     user: null,
     isLoading: true,
   });
+
   useEffect(() => {
     checkUserLogin(setUser);
   }, []);
+  
   return <AuthContext.Provider value={user}>{children}</AuthContext.Provider>;
 }
 
