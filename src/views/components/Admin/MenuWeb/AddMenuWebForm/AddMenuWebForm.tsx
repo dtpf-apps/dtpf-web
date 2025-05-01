@@ -1,14 +1,19 @@
 import React, { memo, useState } from "react";
 import { Form, Input, Button, Select, notification } from "antd";
 import { addMenuApi } from "api/menu";
-import { getAccessTokenApi } from "api/auth";
 import { notifDelay, notifDelayErr } from "utils/notifications";
 import { FontSizeOutlined } from "@ant-design/icons";
 import "./AddMenuWebForm.scss";
+import { getAccessTokenApi } from "api/endpoints/auth/auth.api";
 
-function AddMenuWebForm(props: any) {
-  const { setIsVisibleModal, setReloadMenuWeb } = props;
+interface IAddMenuWebFormProps {
+  setIsVisibleModal: React.Dispatch<React.SetStateAction<boolean>>;
+  setReloadMenuWeb: React.Dispatch<React.SetStateAction<boolean>>;
+}
+
+function AddMenuWebForm({ setIsVisibleModal, setReloadMenuWeb }: IAddMenuWebFormProps) {
   const [menuWebData, setMenuWebData] = useState({});
+
   return (
     <div className="add-menu-web-form">
       <AddForm
@@ -23,9 +28,16 @@ function AddMenuWebForm(props: any) {
 
 export default memo(AddMenuWebForm);
 
-function AddForm(props: any) {
-  const { menuWebData, setMenuWebData, setIsVisibleModal, setReloadMenuWeb } = props;
+interface IAddFormProps {
+  menuWebData: any;
+  setMenuWebData: (data: any) => void;
+  setIsVisibleModal: React.Dispatch<React.SetStateAction<boolean>>;
+  setReloadMenuWeb: React.Dispatch<React.SetStateAction<boolean>>;
+}
+
+function AddForm({ menuWebData, setMenuWebData, setIsVisibleModal, setReloadMenuWeb }: IAddFormProps) {
   const { Option } = Select;
+
   const addMenu = () => {
     let finalData: any = {
       title: menuWebData.title,
@@ -59,6 +71,7 @@ function AddForm(props: any) {
         })
     }
   };
+
   const selectBefore = (
     <Select
       placeholder="http://"
@@ -69,6 +82,7 @@ function AddForm(props: any) {
       <Option value="https://">https://</Option>
     </Select>
   );
+
   return (
     <Form className="form-add" onFinish={addMenu}>
       <Form.Item>

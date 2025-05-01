@@ -1,23 +1,35 @@
 import React, { useState, useEffect, Suspense, lazy, memo } from "react";
-import { getAccessTokenApi } from "api/auth";
 import { getCourseApi, addTagApi, deleteTagApi } from "api/education";
-import { Button, Row, Col, Form, Divider, Input, Tag, Modal, notification } from "antd";
+import {
+  Button,
+  Row,
+  Col,
+  Form,
+  Divider,
+  Input,
+  Tag,
+  Modal,
+  notification,
+} from "antd";
 import { notifDelay, notifDelayErr } from "utils/notifications";
 import { TagOutlined, PlusCircleOutlined } from "@ant-design/icons";
 import "./AdminTags.scss";
+import { getAccessTokenApi } from "api/endpoints/auth/auth.api";
 const Spin = lazy(() => import("views/components/UI/Spin"));
 const { confirm } = Modal;
 
-function AdminTags(props: {
-  course: { url: string };
+interface IAdminTagsProps {
+  course: { _id: string, url: string };
   courseData: { _id: string };
-  setReloadCourses: any;
-}) {
-  const { course, courseData, setReloadCourses } = props;
+  setReloadCourses: React.Dispatch<React.SetStateAction<boolean>>;
+}
+
+function AdminTags({ course, courseData, setReloadCourses }: IAdminTagsProps) {
   const [tags, setTags] = useState([]);
   const [tag, setTag] = useState([]);
   const [reloadTags, setReloadTags] = useState(false);
   let tagType: any = tag;
+
   useEffect(() => {
     let unmounted = false;
     getCourseApi(course.url).then((response) => {
@@ -26,8 +38,11 @@ function AdminTags(props: {
       }
     });
     setReloadTags(false);
-    return () => { unmounted = true };
+    return () => {
+      unmounted = true;
+    };
   }, [course, reloadTags, tag]);
+
   const deleteTag = (tag: string) => {
     const token = getAccessTokenApi();
     confirm({
@@ -61,6 +76,7 @@ function AdminTags(props: {
       },
     });
   };
+
   return (
     <div>
       {!courseData ? (
@@ -77,7 +93,7 @@ function AdminTags(props: {
                 <Col key={tag} className={tagToClassname}>
                   <TagAnt tag={tag} deleteTag={deleteTag} />
                 </Col>
-              )
+              );
             })}
           </Row>
           <div className="admin-tags__add-tag">
@@ -95,13 +111,30 @@ function AdminTags(props: {
   );
 }
 
-function TagAnt(props: any) {
-  const { tag, deleteTag } = props;
+interface ITagAntProps {
+  tag: string;
+  deleteTag: (tag: string) => void;
+}
+
+function TagAnt({ tag, deleteTag }: ITagAntProps) {
   return <Tag onClick={() => deleteTag(tag)}>{tag}</Tag>;
 }
 
-function AddTagForm(props: any) {
-  const { tag, setTag, course, setReloadCourses, setReloadTags } = props;
+interface IAddTagFormProps {
+  tag: any;
+  course: { _id: string, url: string };
+  setTag: (tag: any) => void;
+  setReloadCourses: React.Dispatch<React.SetStateAction<boolean>>;
+  setReloadTags: React.Dispatch<React.SetStateAction<boolean>>;
+}
+
+function AddTagForm({
+  tag,
+  setTag,
+  course,
+  setReloadCourses,
+  setReloadTags,
+}: IAddTagFormProps) {
   const addTag = () => {
     const token = getAccessTokenApi();
     addTagApi(token, course._id, tag)

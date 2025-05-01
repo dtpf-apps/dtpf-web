@@ -1,7 +1,6 @@
 import React, { useState } from "react";
 import { Form, Input, Select, Button, Row, Col, notification } from "antd";
 import { signUpAdminApi } from "api/user";
-import { getAccessTokenApi } from "api/auth";
 import { notifDelay, notifDelayErr } from "utils/notifications";
 import {
   UserOutlined,
@@ -10,10 +9,16 @@ import {
 } from "@ant-design/icons";
 
 import "./AddUserForm.scss";
+import { getAccessTokenApi } from "api/endpoints/auth/auth.api";
 
-function AddUserForm(props: any) {
-  const { setIsVisibleModal, setReloadUsers } = props;
+interface IAddUserFormProps {
+  setIsVisibleModal: React.Dispatch<React.SetStateAction<boolean>>;
+  setReloadUsers: React.Dispatch<React.SetStateAction<boolean>>;
+}
+
+function AddUserForm({ setIsVisibleModal, setReloadUsers }: IAddUserFormProps) {
   const [userData, setUserData] = useState({});
+
   return (
     <div className="add-user-form">
       <AddForm
@@ -28,9 +33,16 @@ function AddUserForm(props: any) {
 
 export default AddUserForm;
 
-function AddForm(props: any) {
-  const { userData, setUserData, setIsVisibleModal, setReloadUsers } = props;
+interface IAddFormProps {
+  userData: any;
+  setUserData: (userData: any) => void;
+  setIsVisibleModal: React.Dispatch<React.SetStateAction<boolean>>;
+  setReloadUsers: React.Dispatch<React.SetStateAction<boolean>>;
+}
+
+function AddForm({ userData, setUserData, setIsVisibleModal, setReloadUsers }: IAddFormProps) {
   const { Option } = Select;
+
   const addUser = () => {
     if (
       !userData.name ||
@@ -76,6 +88,7 @@ function AddForm(props: any) {
         });
     }
   };
+  
   return (
     <Form className="form-add" onFinish={addUser}>
       <Row gutter={24}>

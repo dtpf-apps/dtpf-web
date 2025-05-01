@@ -5,7 +5,8 @@ import {
   getRefreshTokenApi,
   refreshAccessTokenApi,
   logout,
-} from "api/auth";
+} from "api/endpoints/auth/auth.api";
+import { ACCESS_TOKEN, REFRESH_TOKEN } from "utils/constants";
 
 export const AuthContext = createContext();
 
@@ -19,11 +20,11 @@ export default function AuthProvider(props) {
   useEffect(() => {
     checkUserLogin(setUser);
   }, []);
-  
+
   return <AuthContext.Provider value={user}>{children}</AuthContext.Provider>;
 }
 
-export function checkUserLogin(setUser) {
+export async function checkUserLogin(setUser) {
   const accessToken = getAccessTokenApi();
   if (!accessToken) {
     const refreshToken = getRefreshTokenApi();
@@ -34,7 +35,17 @@ export function checkUserLogin(setUser) {
         isLoading: false,
       });
     } else {
-      refreshAccessTokenApi(refreshToken);
+      const refresh = await refreshAccessTokenApi({ refreshToken });
+      if (refresh.response.status === 200) {
+        localStorage.setItem(ACCESS_TOKEN, refresh.data.accessToken);
+        localStorage.setItem(REFRESH_TOKEN, refresh.data.refreshToken);
+      } else {
+        logout();
+        setUser({
+          user: null,
+          isLoading: false,
+        });
+      }
     }
   } else {
     setUser({

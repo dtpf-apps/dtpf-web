@@ -12,13 +12,12 @@ import {
   SmileOutlined
 } from "@ant-design/icons";
 import "./MenuSider.scss";
-import { getAccessTokenApi } from "api/auth";
 import addNotification from "react-push-notification";
 import sound from "assets/audio/sound.mp3";
 import soundOGG from "assets/audio/sound.ogg";
+import { getAccessTokenApi } from "api/endpoints/auth/auth.api";
 
-function MenuSider(props: any) {
-  const { menuCollapsed, location, messagesUnreadLength } = props;
+function MenuSider({ menuCollapsed, location, messagesUnreadLength }: any) {
   return (
     <RenderMenuSider
       messagesUnreadLength={messagesUnreadLength}
@@ -28,8 +27,13 @@ function MenuSider(props: any) {
   );
 }
 
-function RenderMenuSider(props: any) {
-  const { messagesUnreadLength, menuCollapsed, location } = props;
+interface IRenderMenuSiderProps {
+  messagesUnreadLength: number;
+  menuCollapsed: boolean;
+  location: any;
+}
+
+function RenderMenuSider({ messagesUnreadLength, menuCollapsed, location }: IRenderMenuSiderProps) {
   const [newMessage, setNewMessage] = useState(messagesUnreadLength);
   useEffect(() => {
     let isMounted = true;
@@ -48,13 +52,21 @@ function RenderMenuSider(props: any) {
   );
 }
 
-function NextRender(props: any) {
-  const { menuCollapsed, location, messagesUnreadLength, newMessage } = props;
+interface INextRenderProps {
+  menuCollapsed: boolean;
+  location: any;
+  messagesUnreadLength: number;
+  newMessage: number;
+}
+
+function NextRender({ menuCollapsed, location, messagesUnreadLength, newMessage }: INextRenderProps) {
   const { Sider } = Layout;
+
   const playSound = () => {
     const a: any = document.getElementById("sound");
     a.play();
   };
+
   useEffect(() => {
     const token = getAccessTokenApi();
     getLastMessageApi(token).then((response) => {
@@ -75,6 +87,7 @@ function NextRender(props: any) {
       }
     });
   }, [messagesUnreadLength, newMessage]);
+
   return (
     <>
       <Sider

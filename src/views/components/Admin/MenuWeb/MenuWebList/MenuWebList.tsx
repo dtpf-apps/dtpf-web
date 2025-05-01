@@ -7,22 +7,27 @@ import {
   activateMenuApi,
   deleteMenuApi,
 } from "api/menu";
-import { getAccessTokenApi } from "api/auth";
 import { notifDelay, notifDelayErr } from "utils/notifications";
 import AddMenuWebForm from "../AddMenuWebForm";
 import EditMenuWebForm from "../EditMenuWebForm";
 import { EditOutlined, DeleteOutlined } from "@ant-design/icons";
 import "./MenuWebList.scss";
 import DragSortableList from "react-drag-sortable";
+import { getAccessTokenApi } from "api/endpoints/auth/auth.api";
 const { confirm } = ModalAntd;
 
-function MenuWebList(props) {
-  const { reloadMenuWeb, setReloadMenuWeb } = props;
-  const [listItems, setListItems] = useState([]);
+interface IMenuWebListProps {
+  reloadMenuWeb: boolean;
+  setReloadMenuWeb: React.Dispatch<React.SetStateAction<boolean>>;
+}
+
+function MenuWebList({ reloadMenuWeb, setReloadMenuWeb }: IMenuWebListProps) {
+  const [listItems, setListItems] = useState<any []>([]);
   const [isVisibleModal, setIsVisibleModal] = useState(false);
   const [modalTitle, setModalTitle] = useState("");
-  const [modalContent, setModalContent] = useState(null);
-  const [menu, setMenu] = useState(null);
+  const [modalContent, setModalContent] = useState<React.ReactNode | null>(null);
+  const [menu, setMenu] = useState<any[] | null>(null);
+
   useEffect(() => {
     let isMounted = true;
     getMenuApi().then((response) => {
@@ -30,9 +35,10 @@ function MenuWebList(props) {
     });
     return () => { isMounted = false };
   }, [reloadMenuWeb]);
+
   useEffect(() => {
     let isMounted = true;
-    const listItemsArray = [];
+    const listItemsArray: Array<{ content: React.ReactNode }> = [];
     menu && menu.forEach((item) => {
       listItemsArray.push({
         content: (
@@ -52,7 +58,8 @@ function MenuWebList(props) {
     return () => { isMounted = false };
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [menu]);
-  const activateMenu = (menu, status) => {
+
+  const activateMenu = (menu: any, status: any) => {
     const accessToken = getAccessTokenApi();
     activateMenuApi(accessToken, menu._id, status).then((response) => {
       if (status === true) {
@@ -68,7 +75,8 @@ function MenuWebList(props) {
       }
     });
   };
-  const onSort = (sortedList, dropEvent) => {
+
+  const onSort = (sortedList: any[], dropEvent: any) => {
     const accessToken = getAccessTokenApi();
     sortedList.forEach((item) => {
       const { _id } = item.content.props.item;
@@ -76,7 +84,8 @@ function MenuWebList(props) {
       updateMenuApi(accessToken, _id, { order });
     });
   };
-  const deleteMenu = (menu) => {
+
+  const deleteMenu = (menu: any) => {
     const accessToken = getAccessTokenApi();
     confirm({
       title: "Eliminando menú",
@@ -102,6 +111,7 @@ function MenuWebList(props) {
       },
     });
   };
+
   return (
     <div className="menu-web-list">
       <AddMenuWebModal
@@ -124,7 +134,7 @@ function MenuWebList(props) {
   );
 }
 
-function AddMenuWebModal(props) {
+function AddMenuWebModal(props: any) {
   const {
     setIsVisibleModal,
     setModalTitle,
@@ -150,17 +160,27 @@ function AddMenuWebModal(props) {
   );
 }
 
-function MenuItem(props) {
-  const {
-    item,
-    activateMenu,
-    deleteMenu,
-    setIsVisibleModal,
-    setModalTitle,
-    setModalContent,
-    setReloadMenuWeb,
-  } = props;
-  const editMenuWebModal = (menu) => {
+interface IMenuItemProps {
+  item: any;
+  activateMenu: (menu: any, status: any) => void;
+  deleteMenu: (menu: any) => void;
+  setIsVisibleModal: React.Dispatch<React.SetStateAction<boolean>>;
+  setModalTitle: (title: string) => void;
+  setModalContent: (content: React.ReactNode) => void;
+  setReloadMenuWeb: React.Dispatch<React.SetStateAction<boolean>>;
+}
+
+function MenuItem({
+  item,
+  activateMenu,
+  deleteMenu,
+  setIsVisibleModal,
+  setModalTitle,
+  setModalContent,
+  setReloadMenuWeb,
+}: IMenuItemProps) {
+  
+  const editMenuWebModal = (menu: any) => {
     setIsVisibleModal(true);
     setModalTitle(`Editando menu: ${menu.title}`);
     setModalContent(
@@ -171,6 +191,7 @@ function MenuItem(props) {
       />
     );
   };
+
   return (
     <List.Item
       actions={[

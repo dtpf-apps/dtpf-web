@@ -1,5 +1,4 @@
 import React, { memo } from "react";
-import { logout } from "api/auth";
 import { Button } from "antd";
 import Logo from "assets/img/png/logo128.png";
 import { URL } from "config/url";
@@ -9,16 +8,24 @@ import {
   PoweroffOutlined,
 } from "@ant-design/icons";
 import "./MenuTop.scss";
+import { logout } from "api/endpoints/auth/auth.api";
 
-function MenuTop(props: any) {
-  const { menuCollapsed, setMenuCollapsed } = props;
+interface IMenuTopProps {
+  menuCollapsed: boolean;
+  setMenuCollapsed: React.Dispatch<React.SetStateAction<boolean>>;
+}
+
+function MenuTop({ menuCollapsed, setMenuCollapsed }: IMenuTopProps) {
+
   const logoutUser = () => {
     logout();
     window.location.reload();
   };
+
   const reload = () => {
     window.location.href = URL + "ad1988";
   };
+  
   return (
     <div className="menu-top">
       <div className="menu-top__left">

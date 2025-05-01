@@ -1,5 +1,10 @@
 import { testingRefreshToken } from "../../utils/constants";
-import { getAccessTokenApi, refreshAccessTokenApi, logout, willExpireToken } from "../../api/auth";
+import {
+  getAccessTokenApi,
+  refreshAccessTokenApi,
+  logout,
+  willExpireToken,
+} from "../../api/auth";
 
 const TOKEN = testingRefreshToken;
 
@@ -14,7 +19,7 @@ describe("Api de auth", () => {
     done();
   });
   it("refreshAccessTokenApi", (done) => {
-    expect(refreshAccessTokenApi(TOKEN)).toBe(undefined);
+    expect(refreshAccessTokenApi({ refreshToken: TOKEN })).toBe(undefined);
     done();
   });
   it("logout", (done) => {
@@ -22,4 +27,3 @@ describe("Api de auth", () => {
     done();
   });
 });
-

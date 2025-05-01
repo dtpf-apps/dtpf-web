@@ -10,7 +10,6 @@ import {
   deleteUserApi,
   getUsersActiveApi
 } from "api/user";
-import { getAccessTokenApi } from "api/auth";
 import { notifDelay, notifDelayErr } from "utils/notifications";
 import {
   EditOutlined,
@@ -19,15 +18,21 @@ import {
   CheckOutlined,
 } from "@ant-design/icons";
 import "./ListUsers.scss";
+import { getAccessTokenApi } from "api/endpoints/auth/auth.api";
 const { confirm } = ModalDelete;
 
-function ListUsers(props: any) {
-  const { reloadUsers, setReloadUsers } = props;
+interface IListUsersProps {
+  reloadUsers: boolean;
+  setReloadUsers: React.Dispatch<React.SetStateAction<boolean>>;
+}
+
+function ListUsers({ reloadUsers, setReloadUsers }: IListUsersProps) {
   const [modalTitle, setModalTitle] = useState("");
   const [modalContent, setModalContent] = useState(null);
   const [usersActive, setUsersActive] = useState([]);
   const [usersInactive, setUsersInactive] = useState([]);
   const token = getAccessTokenApi();
+
   useEffect(() => {
     let isMounted = true;
     getUsersActiveApi(token, true).then((response) => {
@@ -39,6 +44,7 @@ function ListUsers(props: any) {
     return () => { isMounted = false };
     // eslint-disable-next-line 
   }, [reloadUsers]);
+
   return (
     <div className="list-users">
       <RenderListUsers
@@ -54,18 +60,28 @@ function ListUsers(props: any) {
   );
 }
 
-function RenderListUsers(props: any) {
-  const {
-    usersActive,
-    usersInactive,
-    setModalTitle,
-    setModalContent,
-    setReloadUsers,
-    modalTitle,
-    modalContent,
-  } = props;
+interface IRenderListUsersProps {
+  usersActive: any[];
+  usersInactive: any[];
+  setModalTitle: React.Dispatch<React.SetStateAction<string>>;
+  setModalContent: React.Dispatch<React.SetStateAction<any>>;
+  setReloadUsers: React.Dispatch<React.SetStateAction<boolean>>;
+  modalTitle: string;
+  modalContent: any;
+}
+
+function RenderListUsers({
+  usersActive,
+  usersInactive,
+  setModalTitle,
+  setModalContent,
+  setReloadUsers,
+  modalTitle,
+  modalContent,
+}: IRenderListUsersProps) {
   const [isVisibleModal, setIsVisibleModal] = useState(false);
   const [viewUsersActive, setViewUsersActive] = useState(true);
+
   const addUserModal = () => {
     setIsVisibleModal(true);
     setModalTitle("Creando nuevo usuario");
@@ -76,6 +92,7 @@ function RenderListUsers(props: any) {
       />
     );
   };
+
   return (
     <>
       <div className="list-users__header">
@@ -112,7 +129,6 @@ function RenderListUsers(props: any) {
         title={modalTitle}
         isVisible={isVisibleModal}
         setIsVisible={setIsVisibleModal}
-        className={null}
       >
         {modalContent}
       </Modal>
@@ -120,14 +136,22 @@ function RenderListUsers(props: any) {
   );
 }
 
-function UsersActive(props: any) {
-  const {
-    usersActive,
-    setIsVisibleModal,
-    setModalTitle,
-    setModalContent,
-    setReloadUsers,
-  } = props;
+interface IUsersActiveProps {
+  usersActive: any[];
+  setIsVisibleModal: React.Dispatch<React.SetStateAction<boolean>>;
+  setModalTitle: React.Dispatch<React.SetStateAction<string>>;
+  setModalContent: React.Dispatch<React.SetStateAction<any>>;
+  setReloadUsers: React.Dispatch<React.SetStateAction<boolean>>;
+}
+
+function UsersActive({
+  usersActive,
+  setIsVisibleModal,
+  setModalTitle,
+  setModalContent,
+  setReloadUsers,
+}: IUsersActiveProps) {
+
   const editUser = (user: any) => {
     setIsVisibleModal(true);
     setModalTitle(
@@ -142,6 +166,7 @@ function UsersActive(props: any) {
       />
     );
   };
+
   return (
     <List
       className="users-active"
@@ -158,9 +183,15 @@ function UsersActive(props: any) {
   );
 }
 
-function UserActive(props: any) {
-  const { user, editUser, setReloadUsers } = props;
+interface IUserActiveProps {
+  user: any;
+  editUser: (user: any) => void;
+  setReloadUsers: React.Dispatch<React.SetStateAction<boolean>>;
+}
+
+function UserActive({ user, editUser, setReloadUsers }: IUserActiveProps) {
   const [avatar, setAvatar] = useState("");
+
   useEffect(() => {
     let unmounted = false;
     if (user.avatar) {
@@ -176,6 +207,7 @@ function UserActive(props: any) {
       unmounted = true;
     };
   }, [user]);
+
   const deactivateUser = () => {
     const accessToken = getAccessTokenApi();
     if (user.email === "davidpizarrofrick@gmail.com") {
@@ -200,6 +232,7 @@ function UserActive(props: any) {
         });
     }
   };
+
   const showDeleteConfirm = () => {
     const accessToken = getAccessTokenApi();
     if (user.email === "davidpizarrofrick@gmail.com") {
@@ -233,6 +266,7 @@ function UserActive(props: any) {
       });
     }
   };
+
   return (
     <List.Item
       actions={[
@@ -259,8 +293,12 @@ function UserActive(props: any) {
   );
 }
 
-function UsersInactive(props: any) {
-  const { usersInactive, setReloadUsers } = props;
+interface IUsersInactiveProps {
+  usersInactive: any[];
+  setReloadUsers: React.Dispatch<React.SetStateAction<boolean>>;
+}
+
+function UsersInactive({ usersInactive, setReloadUsers }: IUsersInactiveProps) {
   return (
     <List
       className="users-active"
@@ -273,9 +311,14 @@ function UsersInactive(props: any) {
   );
 }
 
-function UserInactive(props: any) {
-  const { user, setReloadUsers } = props;
+interface IUserInactiveProps {
+  user: any;
+  setReloadUsers: React.Dispatch<React.SetStateAction<boolean>>;
+}
+
+function UserInactive({ user, setReloadUsers }: IUserInactiveProps) {
   const [avatar, setAvatar] = useState("");
+
   useEffect(() => {
     let unmounted = false;
     if (user.avatar) {
@@ -291,6 +334,7 @@ function UserInactive(props: any) {
       unmounted = true;
     };
   }, [user]);
+
   const activateUser = () => {
     const accessToken = getAccessTokenApi();
     activateUserApi(accessToken, user._id, true)
@@ -308,6 +352,7 @@ function UserInactive(props: any) {
         });
       });
   };
+
   const showDeleteConfirm = () => {
     const accessToken = getAccessTokenApi();
     confirm({
@@ -334,6 +379,7 @@ function UserInactive(props: any) {
       },
     });
   };
+
   return (
     <List.Item
       actions={[

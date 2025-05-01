@@ -1,6 +1,5 @@
 import React, { useEffect, useState, Suspense, lazy } from "react";
 import { withRouter } from "react-router-dom";
-import { getAccessTokenApi } from "api/auth";
 import {
   getAboutMeInfoAPI,
   updateAboutMeInfoAPI,
@@ -9,6 +8,7 @@ import { Form, Input, Button, notification, Divider } from "antd";
 import { notifDelay, notifDelayErr } from "utils/notifications";
 import "./AboutMeAdmin.scss";
 import { IgetAboutMeInfoAPIResponseInfo } from "api/endpoints/aboutMe/brandUsers.response.interface";
+import { getAccessTokenApi } from "api/endpoints/auth/auth.api";
 const Spin = lazy(() => import("views/components/UI/Spin"));
 
 function AboutMeAdmin(props: any) {

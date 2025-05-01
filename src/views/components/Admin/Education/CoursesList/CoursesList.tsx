@@ -1,20 +1,25 @@
 import React, { Suspense, lazy, memo } from "react";
-import { getAccessTokenApi } from "api/auth";
 import { deleteCourseApi } from "api/education";
 import { Link } from "react-router-dom";
 import moment from "moment";
 import "moment/locale/es";
 import { List, Button, Modal, notification } from "antd";
-import {
-  EyeOutlined,
-  EditOutlined,
-  DeleteOutlined,
-} from "@ant-design/icons";
+import { EyeOutlined, EditOutlined, DeleteOutlined } from "@ant-design/icons";
+import { getAccessTokenApi } from "api/endpoints/auth/auth.api";
 const Spin = lazy(() => import("views/components/UI/Spin"));
 const { confirm } = Modal;
 
-function CoursesList(props: any) {
-  const { courses, setReloadCourses, editCourse } = props;
+interface ICoursesListProps {
+  courses: any;
+  setReloadCourses: (reload: boolean) => void;
+  editCourse: (course: any) => void;
+}
+
+function CoursesList({
+  courses,
+  setReloadCourses,
+  editCourse,
+}: ICoursesListProps) {
   const deleteCourse = (course: any) => {
     const accessToken = getAccessTokenApi();
     confirm({
@@ -41,6 +46,7 @@ function CoursesList(props: any) {
       },
     });
   };
+
   return (
     <div className="courses-list">
       {!courses ? (
@@ -63,9 +69,15 @@ function CoursesList(props: any) {
   );
 }
 
-function Course(props: any) {
-  const { course, deleteCourse, editCourse } = props;
+interface ICourseProps {
+  course: any;
+  deleteCourse: (course: any) => void;
+  editCourse: (course: any) => void;
+}
+
+function Course({ course, deleteCourse, editCourse }: ICourseProps) {
   const date = `Hace ${course && moment(course.date).fromNow(true)}`;
+
   return (
     <List.Item
       actions={[

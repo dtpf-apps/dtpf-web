@@ -2,17 +2,19 @@ import React, { memo } from "react";
 import { Layout, Tabs } from "antd";
 import { Redirect } from "react-router-dom";
 import Logo from "assets/img/png/logo256.png";
-import { getAccessTokenApi } from "api/auth";
 import "./SignIn.scss";
 import LoginForm from "../LoginForm";
 import RegisterForm from "../RegisterForm";
+import { getAccessTokenApi } from "api/endpoints/auth/auth.api";
 
 function SignIn() {
   const { Content } = Layout;
   const { TabPane } = Tabs;
+
   if (getAccessTokenApi()) {
     return <Redirect to="/ad1988" />;
   }
+  
   return (
     <Layout className="sign-in">
       <Content className="sign-in__content">

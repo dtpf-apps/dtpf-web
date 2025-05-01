@@ -11,8 +11,12 @@ const AddEditCoursesForm = lazy(
   () => import("./AddEditCoursesForm")
 );
 
-function Courses(props: any) {
-  const { location, history } = props;
+interface ICoursesProps {
+  location: any;
+  history: any;
+}
+
+function Courses({ location, history }: ICoursesProps) {
   const [courses, setCourses] = useState(null);
   const { page = 1 } = queryString.parse(location.search);
   const [itemsPerPage, setItemsPerPage] = useState(10);
@@ -31,6 +35,7 @@ function Courses(props: any) {
       isMounted = false;
     };
   }, [page, reloadCourses, itemsPerPage]);
+
   return (
     <div className="admin-courses">
       <AddCourse
@@ -60,7 +65,6 @@ function Courses(props: any) {
           title={modalTitle}
           isVisible={isVisibleModal}
           setIsVisible={setIsVisibleModal}
-          className={null}
         >
           {modalContent}
         </Modal>
@@ -69,13 +73,20 @@ function Courses(props: any) {
   );
 }
 
-function AddCourse(props: any) {
-  const {
-    setIsVisibleModal,
-    setModalTitle,
-    setModalContent,
-    setReloadCourses,
-  } = props;
+interface IAddCourseProps {
+  setIsVisibleModal: React.Dispatch<React.SetStateAction<boolean>>;
+  setModalTitle: React.Dispatch<React.SetStateAction<string>>;
+  setModalContent: React.Dispatch<React.SetStateAction<any>>;
+  setReloadCourses: React.Dispatch<React.SetStateAction<boolean>>;
+}
+
+function AddCourse({
+  setIsVisibleModal,
+  setModalTitle,
+  setModalContent,
+  setReloadCourses,
+}: IAddCourseProps) {
+  
   const addCourse = () => {
     setIsVisibleModal(true);
     setModalTitle("Creando nueva Formación");
@@ -89,6 +100,7 @@ function AddCourse(props: any) {
       </Suspense>
     );
   };
+
   return (
     <div className="admin-courses__add-course">
       <Button type="primary" onClick={addCourse}>
@@ -98,14 +110,22 @@ function AddCourse(props: any) {
   );
 }
 
-function RenderListCourses(props: any) {
-  const {
-    courses,
-    setIsVisibleModal,
-    setModalTitle,
-    setModalContent,
-    setReloadCourses,
-  } = props;
+interface IRenderListCoursesProps {
+  courses: any;
+  setIsVisibleModal: React.Dispatch<React.SetStateAction<boolean>>;
+  setModalTitle: React.Dispatch<React.SetStateAction<string>>;
+  setModalContent: React.Dispatch<React.SetStateAction<any>>;
+  setReloadCourses: React.Dispatch<React.SetStateAction<boolean>>;
+}
+
+function RenderListCourses({
+  courses,
+  setIsVisibleModal,
+  setModalTitle,
+  setModalContent,
+  setReloadCourses,
+}: IRenderListCoursesProps) {
+  
   const editCourse = (course: any) => {
     setIsVisibleModal(true);
     setModalTitle("Editar Curso");
@@ -130,8 +150,15 @@ function RenderListCourses(props: any) {
   );
 }
 
-function Pagination(props: any) {
-  const { courses, location, history, itemsPerPage, setItemsPerPage } = props;
+interface IPaginationProps {
+  courses: any;
+  location: any;
+  history: any;
+  itemsPerPage: number;
+  setItemsPerPage: React.Dispatch<React.SetStateAction<number>>;
+}
+
+function Pagination({ courses, location, history, itemsPerPage, setItemsPerPage }: IPaginationProps) {
   return (
     <>
       {(courses?.totalPages > 1 || itemsPerPage === courses?.totalDocs) && (

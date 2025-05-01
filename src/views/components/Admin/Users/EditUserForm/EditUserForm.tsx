@@ -1,18 +1,37 @@
 import React, { useState, useEffect, useCallback, memo } from "react";
-import { Avatar, Form, Input, Select, Button, Row, Col, notification } from "antd";
+import {
+  Avatar,
+  Form,
+  Input,
+  Select,
+  Button,
+  Row,
+  Col,
+  notification,
+} from "antd";
 import { useDropzone } from "react-dropzone";
 import NoAvatar from "assets/img/png/no-avatar.png";
 import { updateUserApi, uploadAvatarApi, getAvatarApi } from "api/user";
-import { getAccessTokenApi } from "api/auth";
 import { notifDelay, notifDelayErr } from "utils/notifications";
 import { UserOutlined, LockOutlined } from "@ant-design/icons";
 import "./EditUserForm.scss";
+import { getAccessTokenApi } from "api/endpoints/auth/auth.api";
 
-function EditUserForm(props: any) {
-  const { user, setIsVisibleModal, setReloadUsers } = props;
+interface IEditUserFormProps {
+  user: any;
+  setIsVisibleModal: React.Dispatch<React.SetStateAction<boolean>>;
+  setReloadUsers: React.Dispatch<React.SetStateAction<boolean>>;
+}
+
+function EditUserForm({
+  user,
+  setIsVisibleModal,
+  setReloadUsers,
+}: IEditUserFormProps) {
   const [avatar, setAvatar] = useState(null);
   const [userData, setUserData] = useState({});
   let avatarType: any = avatar;
+
   useEffect(() => {
     setUserData({
       name: user.name,
@@ -20,23 +39,26 @@ function EditUserForm(props: any) {
       email: user.email,
       role: user.role,
       avatar: user.avatar,
-    })
+    });
   }, [user]);
+
   useEffect(() => {
     if (user.avatar) {
-      getAvatarApi(user.avatar).then(response => {
+      getAvatarApi(user.avatar).then((response) => {
         setAvatar(response.url);
-      })
+      });
     } else {
       setAvatar(null);
     }
   }, [user]);
+
   useEffect(() => {
     if (avatar) {
       setUserData({ ...userData, avatar: avatarType.file });
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [avatar]);
+
   return (
     <div className="edit-user-form">
       <UploadAvatar avatar={avatar} setAvatar={setAvatar} />
@@ -55,6 +77,7 @@ function UploadAvatar(props: any) {
   const { avatar, setAvatar } = props;
   const [avatarUrl, setAvatarUrl] = useState(null);
   let avatarType: any = avatarUrl;
+
   useEffect(() => {
     if (avatar) {
       if (avatar.preview) {
@@ -66,23 +89,28 @@ function UploadAvatar(props: any) {
       setAvatarUrl(null);
     }
   }, [avatar]);
+
   const onDrop = useCallback(
-    acceptedFiles => {
+    (acceptedFiles) => {
       const file = acceptedFiles[0];
       if (file === undefined) {
         notification["error"]({
           message: "Formato de imágen inválido.",
-          duration: notifDelay
+          duration: notifDelay,
         });
       } else {
         setAvatar({ file, preview: URL.createObjectURL(file) });
       }
-    }, [setAvatar]);
+    },
+    [setAvatar]
+  );
+
   const { getRootProps, getInputProps, isDragActive } = useDropzone({
     accept: "image/jpeg, image/png",
     noKeyboard: true,
     onDrop,
   });
+
   return (
     <div className="upload-avatar" {...getRootProps()}>
       <input {...getInputProps()} />
@@ -95,9 +123,23 @@ function UploadAvatar(props: any) {
   );
 }
 
-function EditForm(props: any) {
-  const { user, userData, setUserData, setIsVisibleModal, setReloadUsers } = props;
+interface IEditFormProps {
+  user: any;
+  userData: any;
+  setUserData: any;
+  setIsVisibleModal: React.Dispatch<React.SetStateAction<boolean>>;
+  setReloadUsers: React.Dispatch<React.SetStateAction<boolean>>;
+}
+
+function EditForm({
+  user,
+  userData,
+  setUserData,
+  setIsVisibleModal,
+  setReloadUsers,
+}: IEditFormProps) {
   const { Option } = Select;
+
   const updateUser = () => {
     const token = getAccessTokenApi();
     let userUpdate = userData;
@@ -105,8 +147,8 @@ function EditForm(props: any) {
       if (userUpdate.password !== userUpdate.repeatPassword) {
         notification["error"]({
           message: "Las contraseñas tienen que ser iguales.",
-          duration: notifDelay
-        })
+          duration: notifDelay,
+        });
         return;
       } else {
         delete userUpdate.repeatPassword;
@@ -115,62 +157,61 @@ function EditForm(props: any) {
     if (!userUpdate.name || !userUpdate.lastname || !userUpdate.email) {
       notification["error"]({
         message: "El nombre, apellidos y email son obligatorios.",
-        duration: notifDelay
-      })
+        duration: notifDelay,
+      });
       return;
     }
     if (typeof userUpdate.avatar === "object") {
-      uploadAvatarApi(token, userUpdate.avatar, user._id)
-        .then(response => {
-          userUpdate.avatar = response.avatarName;
-          if (response.avatarName !== undefined) {
-            updateUserApi(token, userUpdate, user._id).then(result => {
-              if (result.status === 200) {
-                notification["success"]({
-                  message: result.message,
-                  duration: notifDelay
-                });
-                setIsVisibleModal(false);
-                setReloadUsers(true);
-              } else {
-                notification["error"]({
-                  message: result.message,
-                  duration: notifDelayErr
-                });
-                notification["success"]({
-                  message: "Avatar cambiado corretamente.",
-                  duration: notifDelay
-                });
-                setReloadUsers(true);
-              }
-            });
-          } else {
-            notification["error"]({
-              message: "Extensiones admitidas: (.jpg, .jpeg, .png)",
-              duration: notifDelay
-            });
-            setIsVisibleModal(false);
-          }
-        });
+      uploadAvatarApi(token, userUpdate.avatar, user._id).then((response) => {
+        userUpdate.avatar = response.avatarName;
+        if (response.avatarName !== undefined) {
+          updateUserApi(token, userUpdate, user._id).then((result) => {
+            if (result.status === 200) {
+              notification["success"]({
+                message: result.message,
+                duration: notifDelay,
+              });
+              setIsVisibleModal(false);
+              setReloadUsers(true);
+            } else {
+              notification["error"]({
+                message: result.message,
+                duration: notifDelayErr,
+              });
+              notification["success"]({
+                message: "Avatar cambiado corretamente.",
+                duration: notifDelay,
+              });
+              setReloadUsers(true);
+            }
+          });
+        } else {
+          notification["error"]({
+            message: "Extensiones admitidas: (.jpg, .jpeg, .png)",
+            duration: notifDelay,
+          });
+          setIsVisibleModal(false);
+        }
+      });
     } else {
-      updateUserApi(token, userUpdate, user._id)
-        .then(result => {
-          if (result.status === 200) {
-            notification["success"]({
-              message: result.message,
-              duration: notifDelay
-            });
-            setIsVisibleModal(false);
-            setReloadUsers(true);
-          } else {
-            notification["error"]({
-              message: result.message,
-              duration: notifDelay
-            });
-          }
-        });
+      updateUserApi(token, userUpdate, user._id).then((result) => {
+        if (result.status === 200) {
+          notification["success"]({
+            message: result.message,
+            duration: notifDelay,
+          });
+          setIsVisibleModal(false);
+          setReloadUsers(true);
+        } else {
+          notification["error"]({
+            message: result.message,
+            duration: notifDelay,
+          });
+        }
+      });
     }
   };
+
   return (
     <Form className="form-edit" onFinish={updateUser}>
       <Row gutter={24}>

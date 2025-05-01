@@ -1,17 +1,24 @@
 import React, { useState, useEffect, memo } from "react";
 import { Form, Input, Button, notification } from "antd";
 import { updateMenuApi } from "api/menu";
-import { getAccessTokenApi } from "api/auth";
 import { notifDelay, notifDelayErr } from "utils/notifications";
 import { FontSizeOutlined, LinkOutlined } from "@ant-design/icons";
 import "./EditMenuWebForm.scss";
+import { getAccessTokenApi } from "api/endpoints/auth/auth.api";
 
-function EditMenuWebForm(props: any) {
-  const { setIsVisibleModal, setReloadMenuWeb, menu } = props;
+interface IEditMenuWebFormProps {
+  setIsVisibleModal: React.Dispatch<React.SetStateAction<boolean>>;
+  setReloadMenuWeb: React.Dispatch<React.SetStateAction<boolean>>;
+  menu: any;
+}
+
+function EditMenuWebForm({ setIsVisibleModal, setReloadMenuWeb, menu }: IEditMenuWebFormProps) {
   const [menuWebData, setMenuWebData] = useState(menu);
+
   useEffect(() => {
     setMenuWebData(menu);
   }, [menu]);
+
   const editMenu = () => {
     if (!menuWebData.title || !menuWebData.url) {
       notification["error"]({
@@ -37,6 +44,7 @@ function EditMenuWebForm(props: any) {
         });
     }
   };
+  
   return (
     <div className="edit-menu-web-form">
       <EditForm
@@ -48,8 +56,13 @@ function EditMenuWebForm(props: any) {
   );
 }
 
-function EditForm(props: any) {
-  const { menuWebData, setMenuWebData, editMenu } = props;
+interface IEditFormProps {
+  menuWebData: any;
+  setMenuWebData: React.Dispatch<React.SetStateAction<any>>;
+  editMenu: () => void;
+}
+
+function EditForm({ menuWebData, setMenuWebData, editMenu }: IEditFormProps) {
   return (
     <Form className="form-edit" onFinish={editMenu}>
       <Form.Item>

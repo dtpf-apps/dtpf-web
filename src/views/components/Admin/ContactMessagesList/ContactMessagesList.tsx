@@ -13,16 +13,20 @@ import {
   checkMessageApi,
   deleteContactMessageApi,
 } from "api/contact";
-import { getAccessTokenApi } from "api/auth";
 import { reloadMessagesApi } from "api/utils";
 import { CheckOutlined, DeleteOutlined } from "@ant-design/icons";
 import "./ContactMessagesList.scss";
 import moment from "moment";
 import "moment/locale/es";
+import { getAccessTokenApi } from "api/endpoints/auth/auth.api";
 const { confirm } = ModalDelete;
 
-function ContactMessagesList(props: any) {
-  const { reloadMessages, setReloadMessages } = props;
+interface IContactMessagesListProps {
+  reloadMessages: boolean;
+  setReloadMessages: React.Dispatch<React.SetStateAction<boolean>>;
+}
+
+function ContactMessagesList({ reloadMessages, setReloadMessages }: IContactMessagesListProps) {
   const [viewMessagesUnread, setViewMessagesUnread] = useState(true);
   const [isVisibleModal, setIsVisibleModal] = useState(false);
   const [modalTitle] = useState("");
@@ -31,6 +35,7 @@ function ContactMessagesList(props: any) {
   const [messagesUnread, setMessagesUnread] = useState([]);
   const [messagesRead, setMessagesRead] = useState([]);
   const token = getAccessTokenApi();
+
   useEffect(() => {
     let isMounted = true;
     reloadMessagesApi(false).then(() => {
@@ -79,7 +84,6 @@ function ContactMessagesList(props: any) {
         title={modalTitle}
         isVisible={isVisibleModal}
         setIsVisible={setIsVisibleModal}
-        className={null}
       >
         {modalContent}
       </Modal>
@@ -87,8 +91,12 @@ function ContactMessagesList(props: any) {
   );
 }
 
-function MessagesUnread(props: any) {
-  const { messagesUnread, setReloadMessages } = props;
+interface IMessagesUnreadProps {
+  messagesUnread: any[];
+  setReloadMessages: React.Dispatch<React.SetStateAction<boolean>>;
+}
+
+function MessagesUnread({ messagesUnread, setReloadMessages }: IMessagesUnreadProps) {
   return (
     <List
       className="messages-unread"
@@ -104,8 +112,12 @@ function MessagesUnread(props: any) {
   );
 }
 
-function MessageUnread(props: any) {
-  const { message, setReloadMessages } = props;
+interface IMessageUnreadProps {
+  message: any;
+  setReloadMessages: React.Dispatch<React.SetStateAction<boolean>>;
+}
+
+function MessageUnread({ message, setReloadMessages }: IMessageUnreadProps) {
   const checkMessage = () => {
     const accessToken = getAccessTokenApi();
     reloadMessagesApi(true).then(() => {
@@ -146,8 +158,12 @@ function MessageUnread(props: any) {
   );
 }
 
-function MessagesRead(props: any) {
-  const { messagesRead, setReloadMessages } = props;
+interface IMessagesReadProps {
+  messagesRead: any[];
+  setReloadMessages: React.Dispatch<React.SetStateAction<boolean>>;
+}
+
+function MessagesRead({ messagesRead, setReloadMessages }: IMessagesReadProps) {
   return (
     <List
       className="messages-read"
@@ -160,8 +176,13 @@ function MessagesRead(props: any) {
   );
 }
 
-function MessageRead(props: any) {
-  const { message, setReloadMessages } = props;
+interface IMessageReadProps {
+  message: any;
+  setReloadMessages: React.Dispatch<React.SetStateAction<boolean>>;
+}
+
+function MessageRead({ message, setReloadMessages }: IMessageReadProps) {
+
   const checkMessage = () => {
     const accessToken = getAccessTokenApi();
     checkMessageApi(accessToken, message._id, false)
@@ -173,6 +194,7 @@ function MessageRead(props: any) {
         messageAnt.error(err.message);
       });
   };
+
   const showDeleteConfirm = () => {
     const accessToken = getAccessTokenApi();
     confirm({
@@ -197,6 +219,7 @@ function MessageRead(props: any) {
       },
     });
   };
+  
   return (
     <List.Item
       actions={[

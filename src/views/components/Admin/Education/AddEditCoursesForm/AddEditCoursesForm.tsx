@@ -12,7 +12,6 @@ import {
 } from "antd";
 import { useDropzone } from "react-dropzone";
 import AdminTags from "../AdminTags";
-import { getAccessTokenApi } from "api/auth";
 import {
   addCourseApi,
   updateCourseApi,
@@ -24,12 +23,19 @@ import moment from "moment";
 import { notifDelay, notifDelayErr } from "utils/notifications";
 import NoImage from "assets/img/png/no-image.png";
 import "./AddEditCoursesForm.scss";
+import { getAccessTokenApi } from "api/endpoints/auth/auth.api";
 const { TextArea } = Input;
 
-function AddEditCoursesForm(props: any) {
-  const { setIsVisibleModal, setReloadCourses, course } = props;
+interface IAddEditCoursesFormProps {
+  setIsVisibleModal: React.Dispatch<React.SetStateAction<boolean>>;
+  setReloadCourses: React.Dispatch<React.SetStateAction<boolean>>;
+  course?: any;
+}
+
+function AddEditCoursesForm({ setIsVisibleModal, setReloadCourses, course }: IAddEditCoursesFormProps) {
   const [image, setImage] = useState(null);
   const [courseData, setCourseData] = useState([]);
+
   useEffect(() => {
     if (course) {
       setCourseData(course);
@@ -37,6 +43,7 @@ function AddEditCoursesForm(props: any) {
       setCourseData([]);
     }
   }, [course]);
+
   useEffect(() => {
     if (course && course.image) {
       getImageApi(course.image).then((response) => {
@@ -46,6 +53,7 @@ function AddEditCoursesForm(props: any) {
       setImage(null);
     }
   }, [course]);
+
   return (
     <div className="add-edit-course">
       {course && <UploadImage image={image} setImage={setImage} />}
@@ -61,17 +69,26 @@ function AddEditCoursesForm(props: any) {
   );
 }
 
-function AddEditForm(props: any) {
-  const {
-    courseData,
-    setCourseData,
-    course,
-    setReloadCourses,
-    image,
-    setIsVisibleModal,
-  } = props;
+interface IAddEditFormProps {
+  courseData: any;
+  setCourseData: (data: any) => void;
+  course?: any;
+  setReloadCourses: React.Dispatch<React.SetStateAction<boolean>>;
+  image?: any;
+  setIsVisibleModal: React.Dispatch<React.SetStateAction<boolean>>;
+}
+
+function AddEditForm({
+  courseData,
+  setCourseData,
+  course,
+  setReloadCourses,
+  image,
+  setIsVisibleModal,
+}: IAddEditFormProps) {
   const [proccessCourseState, setProccessCourseState] = useState(false);
   const token = getAccessTokenApi();
+
   useEffect(() => {
     if (image) {
       setCourseData({ ...courseData, image: image.file });
@@ -94,6 +111,7 @@ function AddEditForm(props: any) {
       }
     }
   };
+
   const updateCourse = async () => {
     let userUpdate = courseData;
     if (typeof userUpdate.image === "object") {
@@ -150,6 +168,7 @@ function AddEditForm(props: any) {
         });
     }
   };
+
   const addCourse = async () => {
     await addCourseApi(token, courseData)
       .then((response) => {
@@ -172,12 +191,15 @@ function AddEditForm(props: any) {
         });
       });
   };
+
   const loading = () => {
     setProccessCourseState(true);
   };
+
   setTimeout(() => {
     setProccessCourseState(false);
   }, 6000);
+
   return (
     <>
       <Form
@@ -301,8 +323,12 @@ function AddEditForm(props: any) {
   );
 }
 
-function UploadImage(props: any) {
-  const { image, setImage } = props;
+interface IUploadImageProps {
+  image: any;
+  setImage: (image: any) => void;
+}
+
+function UploadImage({ image, setImage }: IUploadImageProps) {
   const [imageUrl, setImageUrl] = useState("");
   let imageType: string = imageUrl;
   useEffect(() => {
