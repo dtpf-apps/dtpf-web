@@ -1,4 +1,4 @@
-@import "scss/index.scss";
+@import 'scss/index.scss';
 
 .project-layout {
   display: flex;
@@ -22,7 +22,7 @@
   }
 
   .clearfix::after {
-    content: "";
+    content: '';
     clear: both;
     display: table;
   }
@@ -178,8 +178,8 @@
       border-bottom-left-radius: 7px;
       border-bottom-right-radius: 7px;
 
-      >span {
-        >span {
+      > span {
+        > span {
           @include boxShadowLg();
           margin: 8px 5px;
           border: 0;
@@ -206,7 +206,7 @@
 .project-layout-modal-ant {
   margin-top: 60px;
 
-  >div {
+  > div {
     border-radius: 7px !important;
     background: var(--t-modal-bg);
   }
@@ -265,6 +265,5 @@
         padding: 15px 10px;
       }
     }
-
   }
 }

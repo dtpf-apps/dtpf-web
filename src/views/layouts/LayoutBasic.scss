@@ -1,15 +1,15 @@
-@import "/src/scss/variables";
-@import "/src/scss/mixins";
-@import "/src/scss/animations";
+@import '/src/scss/variables';
+@import '/src/scss/mixins';
+@import '/src/scss/animations';
 
-:root[data-theme="light"] {
+:root[data-theme='light'] {
   --t-layout-basic-bg-primary-G1: var(--bg-lightgrey);
   --t-layout-basic-bg-primary-G2: #f3f3f3;
   --t-layout-basic-border-top: var(--primary-bg-dark);
   --t-layout-basic-backTop: var(--secondary-bg-opacity-8);
 }
 
-:root[data-theme="dark"] {
+:root[data-theme='dark'] {
   --t-layout-basic-bg-primary-G1: #5d718dc7;
   --t-layout-basic-bg-primary-G2: var(--primary-bg);
   --t-layout-basic-border-top: var(--primary-bg);
@@ -24,10 +24,12 @@
   -moz-background-size: cover;
   -o-background-size: cover;
   background-attachment: fixed;
-  background: linear-gradient(90deg,
-      var(--t-layout-basic-bg-primary-G2) 0%,
-      var(--t-layout-basic-bg-primary-G1) 50%,
-      var(--t-layout-basic-bg-primary-G2) 100%);
+  background: linear-gradient(
+    90deg,
+    var(--t-layout-basic-bg-primary-G2) 0%,
+    var(--t-layout-basic-bg-primary-G1) 50%,
+    var(--t-layout-basic-bg-primary-G2) 100%
+  );
 
   &__header-box {
     position: fixed;

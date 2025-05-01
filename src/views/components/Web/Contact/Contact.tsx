@@ -1,8 +1,8 @@
-import React, { useState, useEffect } from "react";
-import ContactForm from "./ContactForm";
-import ContactInfo from "./ContactInfo/ContactInfo";
-import useScrollToTop from "hooks/useScrollToTop";
-import "./Contact.scss";
+import React, { useState, useEffect } from 'react';
+import ContactForm from './ContactForm';
+import ContactInfo from './ContactInfo/ContactInfo';
+import useScrollToTop from 'hooks/useScrollToTop';
+import './Contact.scss';
 
 export default function Contact() {
   const [innerWidth, setInnerWidth] = useState(window.innerWidth);
@@ -15,18 +15,16 @@ export default function Contact() {
     if (!unmounted) {
       window.onresize = reportWindowSize;
     }
-    return () => { unmounted = true };
+    return () => {
+      unmounted = true;
+    };
   }, []);
   return (
     <div className="contact">
       <h1 className="contact__title">Contacto</h1>
       <ContactInfo innerWidth={innerWidth} />
       <ContactForm />
-      {innerWidth <= 650 ? (
-        <div id="contact-map-mobile-image"></div>
-      ) : (
-        <div id="contact-map-desktop-image"></div>
-      )}
+      {innerWidth <= 650 ? <div id="contact-map-mobile-image"></div> : <div id="contact-map-desktop-image"></div>}
     </div>
   );
 }

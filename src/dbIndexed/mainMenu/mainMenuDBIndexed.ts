@@ -1,5 +1,5 @@
-import { getMenuApi } from "../../api/menu";
-import { MAIN_MENU } from "../config";
+import { getMenuApi } from '../../api/menu';
+import { MAIN_MENU } from '../config';
 
 export function updateMainMenuDBIndexed(db: any) {
   let mainMenu = {
@@ -8,9 +8,9 @@ export function updateMainMenuDBIndexed(db: any) {
   };
   getMenuApi()
     .then((res) => {
-      if (res.message !== "Failed to fetch") {
+      if (res.message !== 'Failed to fetch') {
         if (res) {
-          const arrayMenu : any = [];
+          const arrayMenu: any = [];
           res.menu &&
             res.menu.forEach((item: any) => {
               item.active && arrayMenu.push(item);
@@ -23,7 +23,7 @@ export function updateMainMenuDBIndexed(db: any) {
       }
     })
     .then(() => {
-      const transaction = db.transaction([MAIN_MENU], "readwrite");
+      const transaction = db.transaction([MAIN_MENU], 'readwrite');
       const store = transaction.objectStore(MAIN_MENU);
       store.put(mainMenu);
     });

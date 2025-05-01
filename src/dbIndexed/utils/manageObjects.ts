@@ -1,6 +1,6 @@
-import { DB_DTPF, VERSION, COURSES_INFO, MAIN_MENU } from "../config";
-import { updateCoursesDBIndexed } from "../courses/coursesDBIndexed";
-import { updateMainMenuDBIndexed } from "../mainMenu/mainMenuDBIndexed";
+import { DB_DTPF, VERSION, COURSES_INFO, MAIN_MENU } from '../config';
+import { updateCoursesDBIndexed } from '../courses/coursesDBIndexed';
+import { updateMainMenuDBIndexed } from '../mainMenu/mainMenuDBIndexed';
 
 export function createObjects(db: any) {
   if (!db.objectStoreNames.contains(COURSES_INFO)) {
@@ -12,10 +12,7 @@ export function createObjects(db: any) {
 }
 
 export function getObjects(db: any) {
-  if (
-    db.objectStoreNames.contains(COURSES_INFO) &&
-    db.objectStoreNames.contains(MAIN_MENU)
-  ) {
+  if (db.objectStoreNames.contains(COURSES_INFO) && db.objectStoreNames.contains(MAIN_MENU)) {
     return true;
   } else {
     return false;

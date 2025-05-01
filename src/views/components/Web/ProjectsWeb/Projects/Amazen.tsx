@@ -1,15 +1,12 @@
-import React from "react"
-import ProjectLayout from "../ProjectLayout"
-import amazenImage from "assets/img/projects/amazen/amazen.webp"
-import ModalImage1 from "assets/img/projects/amazen/amazenModalImage1.webp"
-import ModalImage2 from "assets/img/projects/amazen/amazenModalImage2.webp"
-import ModalImage3 from "assets/img/projects/amazen/amazenModalImage3.webp"
+import React from 'react';
+import ProjectLayout from '../ProjectLayout';
+import amazenImage from 'assets/img/projects/amazen/amazen.webp';
+import ModalImage1 from 'assets/img/projects/amazen/amazenModalImage1.webp';
+import ModalImage2 from 'assets/img/projects/amazen/amazenModalImage2.webp';
+import ModalImage3 from 'assets/img/projects/amazen/amazenModalImage3.webp';
 
-export default function Amazen(props: {
-  align: string
-  innerWidth: number
-}) {
-  const { align, innerWidth } = props
+export default function Amazen(props: { align: string; innerWidth: number }) {
+  const { align, innerWidth } = props;
   return (
     <ProjectLayout
       innerWidth={innerWidth}
@@ -38,26 +35,26 @@ export default function Amazen(props: {
       modalText={[
         `Para más información:`,
         `・ Backend: https://github.com/DTPF/amazen-ecommerce-node.git`,
-        `・ Frontend: https://github.com/DTPF/amazen-ecommerce.git`
+        `・ Frontend: https://github.com/DTPF/amazen-ecommerce.git`,
       ]}
       modalTags={[
-        "JavaScript",
-        "TypeScript",
-        "NodeJS",
-        "Express",
-        "JavaScript",
-        "MongoDB",
-        "Mongoose",
-        "SCSS",
-        "Ant Design",
-        "JWT",
-        "MVC",
-        "SOLID",
-        "PWA",
-        "Git",
-        "GitHub",
+        'JavaScript',
+        'TypeScript',
+        'NodeJS',
+        'Express',
+        'JavaScript',
+        'MongoDB',
+        'Mongoose',
+        'SCSS',
+        'Ant Design',
+        'JWT',
+        'MVC',
+        'SOLID',
+        'PWA',
+        'Git',
+        'GitHub',
       ]}
-      analyticTag='Amazen'
+      analyticTag="Amazen"
     />
-  )
+  );
 }

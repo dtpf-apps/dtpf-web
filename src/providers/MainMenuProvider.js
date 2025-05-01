@@ -1,6 +1,6 @@
-import React, { useState, useEffect, createContext } from "react";
-import { getMenuApi } from "../api/menu";
-import useConnection from "../hooks/useConnection";
+import React, { useState, useEffect, createContext } from 'react';
+import { getMenuApi } from '../api/menu';
+import useConnection from '../hooks/useConnection';
 
 export const MainMenuContext = createContext();
 
@@ -14,12 +14,8 @@ export default function MainMenuProvider(props) {
   useEffect(() => {
     getMenu(setMenu);
   }, [connectionStatus, isNavigatorOnline]);
-  
-  return (
-    <MainMenuContext.Provider value={menuData}>
-      {children}
-    </MainMenuContext.Provider>
-  );
+
+  return <MainMenuContext.Provider value={menuData}>{children}</MainMenuContext.Provider>;
 }
 
 function getMenu(setMenuData) {
@@ -34,7 +30,7 @@ function getMenu(setMenuData) {
         mainMenu: arrayMenu,
       });
     } else {
-      console.log("MainMenu Error.");
+      console.log('MainMenu Error.');
     }
   });
 }

@@ -1,1 +1,1 @@
-export { default } from "./AddEditCoursesForm";
+export { default } from './AddEditCoursesForm';

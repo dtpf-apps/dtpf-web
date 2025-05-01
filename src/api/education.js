@@ -1,14 +1,14 @@
-import { basePath, apiVersion } from "./utils/config";
-import { makeRequest } from "../api/utils/makeRequest";
+import { basePath, apiVersion } from './utils/config';
+import { makeRequest } from '../api/utils/makeRequest';
 
 export function addCourseApi(token, course) {
   const url = `${basePath}/${apiVersion}/add-course`;
-  return makeRequest(url, true, true, "POST", token, JSON.stringify(course));
+  return makeRequest(url, true, true, 'POST', token, JSON.stringify(course));
 }
 
 export function updateCourseApi(token, id, data) {
   const url = `${basePath}/${apiVersion}/update-course/${id}`;
-  return makeRequest(url, true, true, "PUT", token, JSON.stringify(data), "application/json");
+  return makeRequest(url, true, true, 'PUT', token, JSON.stringify(data), 'application/json');
 }
 
 export function getCoursesApi(limit, page) {
@@ -34,8 +34,8 @@ export function getNextCourseApi(urlCourse) {
 export function uploadImageApi(token, image, courseId) {
   const url = `${basePath}/${apiVersion}/upload-image/${courseId}`;
   const formData = new FormData();
-  formData.append("image", image);
-  return makeRequest(url, true, true, "PUT", token, formData, null);
+  formData.append('image', image);
+  return makeRequest(url, true, true, 'PUT', token, formData, null);
 }
 
 export function getImageApi(imageName) {
@@ -45,15 +45,15 @@ export function getImageApi(imageName) {
 
 export function deleteCourseApi(token, id) {
   const url = `${basePath}/${apiVersion}/delete-course/${id}`;
-  return makeRequest(url, true, true, "DELETE", token);
+  return makeRequest(url, true, true, 'DELETE', token);
 }
 
 export function addTagApi(token, id, data) {
   const url = `${basePath}/${apiVersion}/add-tag/${id}`;
-  return makeRequest(url, true, true, "PUT", token, JSON.stringify(data));
+  return makeRequest(url, true, true, 'PUT', token, JSON.stringify(data));
 }
 
 export function deleteTagApi(token, id, data) {
   const url = `${basePath}/${apiVersion}/delete-tag/${id}`;
-  return makeRequest(url, true, true, "DELETE", token, JSON.stringify(data));
+  return makeRequest(url, true, true, 'DELETE', token, JSON.stringify(data));
 }

@@ -1,25 +1,21 @@
-import React, { memo, useState } from "react";
-import { Link } from "react-router-dom";
-import { Form, Input, Button, Checkbox, message } from "antd";
-import { UserOutlined, LockOutlined } from "@ant-design/icons";
-import {
-  minLenghtValidation,
-  emailValidation,
-  inputValidationStyle,
-} from "utils/formValidation";
-import { signUpApi } from "api/user";
-import "./RegisterForm.scss";
+import React, { memo, useState } from 'react';
+import { Link } from 'react-router-dom';
+import { Form, Input, Button, Checkbox, message } from 'antd';
+import { UserOutlined, LockOutlined } from '@ant-design/icons';
+import { minLenghtValidation, emailValidation, inputValidationStyle } from 'utils/formValidation';
+import { signUpApi } from 'api/user';
+import './RegisterForm.scss';
 
 function RegisterForm() {
   const [isLoading, setIsLoading] = useState(false);
   const [inputs, setInputs] = useState({
-    email: "",
-    password: "",
-    repeatPassword: "",
+    email: '',
+    password: '',
+    repeatPassword: '',
     privacyPolicy: false,
   });
   const handleChangeForm = (e: any) => {
-    if (e.target.name === "privacyPolicy") {
+    if (e.target.name === 'privacyPolicy') {
       setInputs({
         ...inputs,
         [e.target.name]: e.target.checked,
@@ -35,22 +31,22 @@ function RegisterForm() {
     const { type } = e.target;
     const emailValid = emailValidation(e.target.value);
     const passwordMinLength = minLenghtValidation(e.target.value, 8);
-    if (type === "email") {
+    if (type === 'email') {
       if (!emailValid) {
-        inputValidationStyle(e, "add", "error");
+        inputValidationStyle(e, 'add', 'error');
       } else {
-        inputValidationStyle(e, "remove", "error");
+        inputValidationStyle(e, 'remove', 'error');
       }
     }
-    if (type === "password") {
+    if (type === 'password') {
       if (!passwordMinLength) {
-        inputValidationStyle(e, "add", "error");
+        inputValidationStyle(e, 'add', 'error');
       } else {
-        inputValidationStyle(e, "remove", "error");
+        inputValidationStyle(e, 'remove', 'error');
       }
     }
-    if (e.target.value === "") {
-      inputValidationStyle(e, "remove", "error");
+    if (e.target.value === '') {
+      inputValidationStyle(e, 'remove', 'error');
     }
   };
   const register = async () => {
@@ -58,14 +54,14 @@ function RegisterForm() {
     const { email, password, repeatPassword, privacyPolicy } = inputs;
     if (!email || !password || !repeatPassword || !privacyPolicy) {
       if (email && password && repeatPassword && !privacyPolicy) {
-        message.warn("Acepta nuestra política de privacidad");
+        message.warn('Acepta nuestra política de privacidad');
       } else {
-        message.warn("Todos los campos son obligatorios");
+        message.warn('Todos los campos son obligatorios');
       }
       setIsLoading(false);
     } else {
       if (password !== repeatPassword) {
-        message.warn("Las contraseñas tienen que ser iguales");
+        message.warn('Las contraseñas tienen que ser iguales');
         setIsLoading(false);
       } else {
         const result = await signUpApi(inputs);
@@ -86,22 +82,22 @@ function RegisterForm() {
   };
   const resetForm = () => {
     setInputs({
-      email: "",
-      password: "",
-      repeatPassword: "",
+      email: '',
+      password: '',
+      repeatPassword: '',
       privacyPolicy: false,
     });
-    const removeclassName: any = document.getElementsByClassName("ant-input");
+    const removeclassName: any = document.getElementsByClassName('ant-input');
     for (let i = 0; i < removeclassName.length; i++) {
-      removeclassName[i].classList.remove("form-validation-success");
-      removeclassName[i].classList.remove("form-validation-error");
+      removeclassName[i].classList.remove('form-validation-success');
+      removeclassName[i].classList.remove('form-validation-error');
     }
   };
   return (
     <Form className="register-form" onFinish={register} onChange={handleChangeForm}>
       <Form.Item>
         <Input
-          prefix={<UserOutlined style={{ color: "rgba(0,0,0,.25)" }} />}
+          prefix={<UserOutlined style={{ color: 'rgba(0,0,0,.25)' }} />}
           type="email"
           name="email"
           aria-label="Email"
@@ -113,7 +109,7 @@ function RegisterForm() {
       </Form.Item>
       <Form.Item>
         <Input
-          prefix={<LockOutlined style={{ color: "rgba(0,0,0,.25)" }} />}
+          prefix={<LockOutlined style={{ color: 'rgba(0,0,0,.25)' }} />}
           type="password"
           name="password"
           aria-label="Contraseña"
@@ -125,7 +121,7 @@ function RegisterForm() {
       </Form.Item>
       <Form.Item>
         <Input
-          prefix={<LockOutlined style={{ color: "rgba(0,0,0,.25)" }} />}
+          prefix={<LockOutlined style={{ color: 'rgba(0,0,0,.25)' }} />}
           type="password"
           name="repeatPassword"
           aria-label="Repetir contraseña"
@@ -136,23 +132,13 @@ function RegisterForm() {
         />
       </Form.Item>
       <Form.Item>
-        <Checkbox
-          type="checkbox"
-          name="privacyPolicy"
-          onChange={inputValidation}
-          checked={inputs.privacyPolicy}
-        >
+        <Checkbox type="checkbox" name="privacyPolicy" onChange={inputValidation} checked={inputs.privacyPolicy}>
           He leído y acepto la
           <Link to="/privacy-policy">&nbsp;política de privacidad.</Link>
         </Checkbox>
       </Form.Item>
       <Form.Item>
-        <Button
-          type="link"
-          htmlType="submit"
-          className="register-form__button"
-          loading={isLoading}
-        >
+        <Button type="link" htmlType="submit" className="register-form__button" loading={isLoading}>
           Crear cuenta
         </Button>
       </Form.Item>

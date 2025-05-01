@@ -1,7 +1,7 @@
-@import "scss/variables";
-@import "scss/mixins";
+@import 'scss/variables';
+@import 'scss/mixins';
 
-:root[data-theme="light"] {
+:root[data-theme='light'] {
   --t-menu-sider-web-bg: var(--bg-lightgrey);
   --t-menu-sider-web-item-color: var(--primary-color-dark);
   --t-menu-sider-web-item-hover-bg: var(--primary-bg-dark);
@@ -10,7 +10,7 @@
   --t-menu-sider-web-item-selected-color: var(--primary-color-light);
 }
 
-:root[data-theme="dark"] {
+:root[data-theme='dark'] {
   --t-menu-sider-web-bg: var(--primary-bg-dark);
   --t-menu-sider-web-item-color: #fff;
   --t-menu-sider-web-item-hover-bg: var(--primary-bg-light);

@@ -1,1 +1,1 @@
-export { default } from "./AdminTags";
+export { default } from './AdminTags';

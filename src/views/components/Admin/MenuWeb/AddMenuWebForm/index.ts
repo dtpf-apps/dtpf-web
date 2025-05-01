@@ -1,1 +1,1 @@
-export { default } from "./AddMenuWebForm";
+export { default } from './AddMenuWebForm';

@@ -1,3 +1,3 @@
 export function isDBValid() {
-  return "indexedDB" in window;
+  return 'indexedDB' in window;
 }

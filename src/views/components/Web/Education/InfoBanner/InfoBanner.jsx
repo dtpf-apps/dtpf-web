@@ -1,14 +1,14 @@
-import React, { useState, useEffect } from "react";
-import GetCoursesInfo from "dbIndexed/courses/GetCoursesInfo";
-import useConnection from "hooks/useConnection";
-import { COURSES_TECH, COURSES_HOURS } from "utils/constants";
-import { StorageValid } from "utils/validations";
-import TweenOne from "rc-tween-one";
-import Children from "rc-tween-one/lib/plugin/ChildrenPlugin.js";
-import BannerAnim, { Element } from "rc-banner-anim";
-import "rc-banner-anim/assets/index.css";
-import "./InfoBanner.scss";
-import Spin from "views/components/UI/Spin";
+import React, { useState, useEffect } from 'react';
+import GetCoursesInfo from 'dbIndexed/courses/GetCoursesInfo';
+import useConnection from 'hooks/useConnection';
+import { COURSES_TECH, COURSES_HOURS } from 'utils/constants';
+import { StorageValid } from 'utils/validations';
+import TweenOne from 'rc-tween-one';
+import Children from 'rc-tween-one/lib/plugin/ChildrenPlugin.js';
+import BannerAnim, { Element } from 'rc-banner-anim';
+import 'rc-banner-anim/assets/index.css';
+import './InfoBanner.scss';
+import Spin from 'views/components/UI/Spin';
 
 export default function InfoBanner() {
   TweenOne.plugins.push(Children);
@@ -40,9 +40,7 @@ export default function InfoBanner() {
           totalDuration += num;
           isMounted && setTotalDuration(totalDuration);
         });
-        StorageValid() &&
-          totalDuration > 0 &&
-          localStorage.setItem(COURSES_HOURS, totalDuration);
+        StorageValid() && totalDuration > 0 && localStorage.setItem(COURSES_HOURS, totalDuration);
       }
     }
     return () => {
@@ -64,38 +62,21 @@ export default function InfoBanner() {
             autoPlay
             autoPlaySpeed={3000}
             dragPlay={false}
-            type={["vertical", "across"]}
+            type={['vertical', 'across']}
           >
             <Element prefixCls="info-banner-elem" key="0">
-              <TweenOne
-                className="info-banner-title"
-                animation={{ y: 300, opacity: 0, type: "from" }}
-              >
-                <AnimationCountHours
-                  totalDuration={totalDuration}
-                  duration={duration}
-                />
+              <TweenOne className="info-banner-title" animation={{ y: 300, opacity: 0, type: 'from' }}>
+                <AnimationCountHours totalDuration={totalDuration} duration={duration} />
               </TweenOne>
-              <TweenOne
-                className="info-banner-text"
-                animation={{ y: 300, opacity: 0, type: "from", delay: 100 }}
-              >
+              <TweenOne className="info-banner-text" animation={{ y: 300, opacity: 0, type: 'from', delay: 100 }}>
                 Horas de estudio presenciales y online
               </TweenOne>
             </Element>
             <Element prefixCls="info-banner-elem" key="1">
-              <TweenOne
-                className="info-banner-title"
-                animation={{ y: 300, opacity: 0, type: "from" }}
-              >
-                {connectionStatus === 500 || !isNavigatorOnline
-                  ? courses.technologies
-                  : tech}
+              <TweenOne className="info-banner-title" animation={{ y: 300, opacity: 0, type: 'from' }}>
+                {connectionStatus === 500 || !isNavigatorOnline ? courses.technologies : tech}
               </TweenOne>
-              <TweenOne
-                className="info-banner-text"
-                animation={{ y: 300, opacity: 0, type: "from", delay: 100 }}
-              >
+              <TweenOne className="info-banner-text" animation={{ y: 300, opacity: 0, type: 'from', delay: 100 }}>
                 Tecnologías utilizadas
               </TweenOne>
             </Element>
@@ -124,11 +105,7 @@ function AnimationCountHours({ totalDuration, duration }) {
       isMounted = false;
     };
   }, [totalDuration]);
-  return (
-    <TweenOne animation={state && state.animation}>
-      {duration && Math.round(duration)}
-    </TweenOne>
-  );
+  return <TweenOne animation={state && state.animation}>{duration && Math.round(duration)}</TweenOne>;
 }
 
 function tecnologiesUsed(courses) {
@@ -147,8 +124,6 @@ function tecnologiesUsed(courses) {
       }
     }
   }
-  StorageValid() &&
-    tec.length > 0 &&
-    localStorage.setItem(COURSES_TECH, tec.length);
+  StorageValid() && tec.length > 0 && localStorage.setItem(COURSES_TECH, tec.length);
   return tec.length;
 }

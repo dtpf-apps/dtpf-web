@@ -1,8 +1,8 @@
-import React, { memo } from "react";
-import { useHistory } from "react-router-dom";
-import { Result, Button } from "antd";
-import { SmileOutlined } from "@ant-design/icons";
-import "./CommingSoon.scss";
+import React, { memo } from 'react';
+import { useHistory } from 'react-router-dom';
+import { Result, Button } from 'antd';
+import { SmileOutlined } from '@ant-design/icons';
+import './CommingSoon.scss';
 
 function CommingSoon() {
   const history = useHistory();

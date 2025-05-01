@@ -1,7 +1,7 @@
-@import "scss/variables";
-@import "scss/mixins";
+@import 'scss/variables';
+@import 'scss/mixins';
 
-:root[data-theme="light"] {
+:root[data-theme='light'] {
   --t-css-cube-side-1-bg: #cdd5df;
   --t-css-cube-side-2-bg: #445a7b;
   --t-css-cube-side-3-bg: #5d718d;
@@ -11,7 +11,7 @@
   --t-css-cube-sides-color: #fff;
 }
 
-:root[data-theme="dark"] {
+:root[data-theme='dark'] {
   --t-css-cube-side-1-bg: rgb(255, 238, 164);
   --t-css-cube-side-2-bg: rgb(255, 210, 95);
   --t-css-cube-side-3-bg: rgb(255, 209, 92);
@@ -38,7 +38,7 @@
     animation: cubeRotation 7s infinite;
   }
 
-  #css-3D-cube-infinite>div {
+  #css-3D-cube-infinite > div {
     position: absolute;
     -webkit-transition: all 1s ease-in-out;
     transition: all 1s ease-in-out;

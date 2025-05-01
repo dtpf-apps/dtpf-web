@@ -1,15 +1,12 @@
-import React from "react"
-import ProjectLayout from "../ProjectLayout"
-import PortfolioDTPFImage from "assets/img/projects/audity/audity.webp"
-import ModalImage1 from "assets/img/projects/audity/audityModalImage1.webp"
-import ModalImage2 from "assets/img/projects/audity/audityModalImage2.webp"
-import ModalImage3 from "assets/img/projects/audity/audityModalImage3.webp"
+import React from 'react';
+import ProjectLayout from '../ProjectLayout';
+import PortfolioDTPFImage from 'assets/img/projects/audity/audity.webp';
+import ModalImage1 from 'assets/img/projects/audity/audityModalImage1.webp';
+import ModalImage2 from 'assets/img/projects/audity/audityModalImage2.webp';
+import ModalImage3 from 'assets/img/projects/audity/audityModalImage3.webp';
 
-export default function Audity(props: {
-  align: string
-  innerWidth: number
-}) {
-  const { align, innerWidth } = props
+export default function Audity(props: { align: string; innerWidth: number }) {
+  const { align, innerWidth } = props;
   return (
     <ProjectLayout
       innerWidth={innerWidth}
@@ -43,26 +40,26 @@ export default function Audity(props: {
         y Lucia del Cacho.`,
         `Para más información:`,
         `・ Backend: https://github.com/Lucydct22/audity_node_app`,
-        `・ Frontend: https://github.com/Lucydct22/audity_react_app`
+        `・ Frontend: https://github.com/Lucydct22/audity_react_app`,
       ]}
       modalTags={[
-        "NodeJS",
-        "Express",
-        "MongoDB",
-        "Mongoose",
-        "React",
-        "JavaScript",
-        "TypeScript",
-        "JSX",
-        "SASS",
-        "Auth0",
-        "Cloudinary",
-        "Ant Design",
-        "MomentJS",
-        "Helmet",
-        "Google Analytics",
+        'NodeJS',
+        'Express',
+        'MongoDB',
+        'Mongoose',
+        'React',
+        'JavaScript',
+        'TypeScript',
+        'JSX',
+        'SASS',
+        'Auth0',
+        'Cloudinary',
+        'Ant Design',
+        'MomentJS',
+        'Helmet',
+        'Google Analytics',
       ]}
-      analyticTag='Audity'
+      analyticTag="Audity"
     />
-  )
+  );
 }

@@ -1,5 +1,5 @@
-@import "scss/variables";
-@import "scss/animations";
+@import 'scss/variables';
+@import 'scss/animations';
 
 .contact__info {
   display: flex;
@@ -67,15 +67,15 @@
     justify-content: center;
     margin-top: 10px;
 
-  .anticon {
+    .anticon {
       font-size: 2.2em;
-  
+
       &-mail {
         margin-right: 7px;
         @include fadeInfinite(0.8, 1, 1s);
         font-size: 2.9em;
       }
-  
+
       &-whats-app {
         margin: 0 7px;
         color: rgb(0, 210, 96);
@@ -83,7 +83,7 @@
         animation-delay: 200ms;
         font-size: 2.9em;
       }
-  
+
       &-phone {
         margin-right: 7px;
         @include fadeInfinite(0.8, 1, 1s);

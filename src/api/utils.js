@@ -1,5 +1,5 @@
-import { basePath, apiVersion } from "./utils/config";
-import { makeRequest } from "../api/utils/makeRequest";
+import { basePath, apiVersion } from './utils/config';
+import { makeRequest } from '../api/utils/makeRequest';
 
 export function connectionApi() {
   const url = `${basePath}/${apiVersion}/connection`;
@@ -8,7 +8,7 @@ export function connectionApi() {
 
 export function reloadMessagesApi(haveToReload) {
   const url = `${basePath}/${apiVersion}/reload-messages/${haveToReload}`;
-  return makeRequest(url, true, false, "POST");
+  return makeRequest(url, true, false, 'POST');
 }
 
 export function messagesStatusApi() {
@@ -23,5 +23,5 @@ export function getIndexedDBVersionApi() {
 
 export function updateIndexedDBVersionApi() {
   const url = `${basePath}/${apiVersion}/update-indexeddb-version`;
-  return makeRequest(url, true, true, "PUT");
+  return makeRequest(url, true, true, 'PUT');
 }

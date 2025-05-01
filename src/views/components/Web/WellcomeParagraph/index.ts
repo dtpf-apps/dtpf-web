@@ -1,1 +1,1 @@
-export { default } from "./WellcomeParagraph"
+export { default } from './WellcomeParagraph';

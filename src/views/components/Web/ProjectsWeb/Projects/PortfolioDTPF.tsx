@@ -1,15 +1,12 @@
-import React from "react"
-import ProjectLayout from "../ProjectLayout"
-import PortfolioDTPFImage from "assets/img/projects/dtpf/dtpf.jpg"
-import ModalImage1 from "assets/img/projects/dtpf/dtpfModalImage1.jpg"
-import ModalImage2 from "assets/img/projects/dtpf/dtpfModalImage2.jpg"
-import ModalImage3 from "assets/img/projects/dtpf/dtpfModalImage3.jpg"
+import React from 'react';
+import ProjectLayout from '../ProjectLayout';
+import PortfolioDTPFImage from 'assets/img/projects/dtpf/dtpf.jpg';
+import ModalImage1 from 'assets/img/projects/dtpf/dtpfModalImage1.jpg';
+import ModalImage2 from 'assets/img/projects/dtpf/dtpfModalImage2.jpg';
+import ModalImage3 from 'assets/img/projects/dtpf/dtpfModalImage3.jpg';
 
-export default function PortfolioDTPF(props: {
-  align: string
-  innerWidth: number
-}) {
-  const { align, innerWidth } = props
+export default function PortfolioDTPF(props: { align: string; innerWidth: number }) {
+  const { align, innerWidth } = props;
   return (
     <ProjectLayout
       innerWidth={innerWidth}
@@ -58,24 +55,24 @@ export default function PortfolioDTPF(props: {
         la experiencia de usuario.`,
       ]}
       modalTags={[
-        "NodeJS",
-        "Express",
-        "JWT",
-        "MongoDB",
-        "Mongoose",
-        "React",
-        "JavaScript",
-        "TypeScript",
-        "JSX",
-        "SASS",
-        "Ant Design",
-        "Socket.io",
-        "EmailJS",
-        "MomentJS",
-        "Helmet",
-        "Google Analytics",
+        'NodeJS',
+        'Express',
+        'JWT',
+        'MongoDB',
+        'Mongoose',
+        'React',
+        'JavaScript',
+        'TypeScript',
+        'JSX',
+        'SASS',
+        'Ant Design',
+        'Socket.io',
+        'EmailJS',
+        'MomentJS',
+        'Helmet',
+        'Google Analytics',
       ]}
-      analyticTag='PortfolioDTPF'
+      analyticTag="PortfolioDTPF"
     />
-  )
+  );
 }

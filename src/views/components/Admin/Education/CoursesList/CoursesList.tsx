@@ -1,12 +1,12 @@
-import React, { Suspense, lazy, memo } from "react";
-import { deleteCourseApi } from "api/education";
-import { Link } from "react-router-dom";
-import moment from "moment";
-import "moment/locale/es";
-import { List, Button, Modal, notification } from "antd";
-import { EyeOutlined, EditOutlined, DeleteOutlined } from "@ant-design/icons";
-import { getAccessTokenApi } from "api/endpoints/auth/auth.api";
-const Spin = lazy(() => import("views/components/UI/Spin"));
+import React, { Suspense, lazy, memo } from 'react';
+import { deleteCourseApi } from 'api/education';
+import { Link } from 'react-router-dom';
+import moment from 'moment';
+import 'moment/locale/es';
+import { List, Button, Modal, notification } from 'antd';
+import { EyeOutlined, EditOutlined, DeleteOutlined } from '@ant-design/icons';
+import { getAccessTokenApi } from 'api/endpoints/auth/auth.api';
+const Spin = lazy(() => import('views/components/UI/Spin'));
 const { confirm } = Modal;
 
 interface ICoursesListProps {
@@ -15,32 +15,27 @@ interface ICoursesListProps {
   editCourse: (course: any) => void;
 }
 
-function CoursesList({
-  courses,
-  setReloadCourses,
-  editCourse,
-}: ICoursesListProps) {
+function CoursesList({ courses, setReloadCourses, editCourse }: ICoursesListProps) {
   const deleteCourse = (course: any) => {
     const accessToken = getAccessTokenApi();
     confirm({
-      title: "Eliminando curso",
+      title: 'Eliminando curso',
       content: `¿Estas seguro de eliminar el curso ${course.title}?`,
-      okText: "Eliminar",
-      okType: "danger",
-      cancelText: "Cancelar",
+      okText: 'Eliminar',
+      okType: 'danger',
+      cancelText: 'Cancelar',
       onOk() {
         deleteCourseApi(accessToken, course._id)
           .then((response) => {
-            const typeNotification =
-              response.status === 200 ? "success" : "warning";
+            const typeNotification = response.status === 200 ? 'success' : 'warning';
             notification[typeNotification]({
               message: response.message,
             });
             setReloadCourses(true);
           })
           .catch(() => {
-            notification["error"]({
-              message: "Error del servidor.",
+            notification['error']({
+              message: 'Error del servidor.',
             });
           });
       },
@@ -56,13 +51,7 @@ function CoursesList({
       ) : (
         <List
           dataSource={courses.docs}
-          renderItem={(course) => (
-            <Course
-              course={course}
-              deleteCourse={deleteCourse}
-              editCourse={editCourse}
-            />
-          )}
+          renderItem={(course) => <Course course={course} deleteCourse={deleteCourse} editCourse={editCourse} />}
         />
       )}
     </div>

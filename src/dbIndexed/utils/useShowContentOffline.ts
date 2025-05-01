@@ -1,7 +1,7 @@
-import { useState, useEffect } from "react";
-import useConnection from "../../hooks/useConnection";
-import { DB_DTPF, VERSION } from "../config";
-import { getObjects } from "../utils/manageObjects";
+import { useState, useEffect } from 'react';
+import useConnection from '../../hooks/useConnection';
+import { DB_DTPF, VERSION } from '../config';
+import { getObjects } from '../utils/manageObjects';
 
 export default function useShowOfflineContent() {
   const { connectionStatus, isNavigatorOnline } = useConnection();
@@ -17,9 +17,7 @@ export default function useShowOfflineContent() {
     getObjects(db) ? setDatabaseExists(true) : setDatabaseExists(false);
   };
   useEffect(() => {
-    !databaseExists && (connectionStatus === 500 || !isNavigatorOnline)
-      ? setShowContent(true)
-      : setShowContent(false);
-  }, [databaseExists, connectionStatus, isNavigatorOnline]);  
+    !databaseExists && (connectionStatus === 500 || !isNavigatorOnline) ? setShowContent(true) : setShowContent(false);
+  }, [databaseExists, connectionStatus, isNavigatorOnline]);
   return showContent;
 }

@@ -1,10 +1,10 @@
-import React, { useState, useEffect, memo } from "react";
-import { Form, Input, Button, notification } from "antd";
-import { updateMenuApi } from "api/menu";
-import { notifDelay, notifDelayErr } from "utils/notifications";
-import { FontSizeOutlined, LinkOutlined } from "@ant-design/icons";
-import "./EditMenuWebForm.scss";
-import { getAccessTokenApi } from "api/endpoints/auth/auth.api";
+import React, { useState, useEffect, memo } from 'react';
+import { Form, Input, Button, notification } from 'antd';
+import { updateMenuApi } from 'api/menu';
+import { notifDelay, notifDelayErr } from 'utils/notifications';
+import { FontSizeOutlined, LinkOutlined } from '@ant-design/icons';
+import './EditMenuWebForm.scss';
+import { getAccessTokenApi } from 'api/endpoints/auth/auth.api';
 
 interface IEditMenuWebFormProps {
   setIsVisibleModal: React.Dispatch<React.SetStateAction<boolean>>;
@@ -21,37 +21,33 @@ function EditMenuWebForm({ setIsVisibleModal, setReloadMenuWeb, menu }: IEditMen
 
   const editMenu = () => {
     if (!menuWebData.title || !menuWebData.url) {
-      notification["error"]({
-        message: "Todos  los campos son obligatorios.",
-        duration: notifDelayErr
+      notification['error']({
+        message: 'Todos  los campos son obligatorios.',
+        duration: notifDelayErr,
       });
     } else {
       const accessToken = getAccessTokenApi();
       updateMenuApi(accessToken, menuWebData._id, menuWebData)
         .then((response) => {
-          notification["success"]({
+          notification['success']({
             message: response.message,
-            duration: notifDelay
+            duration: notifDelay,
           });
           setIsVisibleModal(false);
           setReloadMenuWeb(true);
         })
         .catch(() => {
-          notification["error"]({
-            message: "Error del servidor. Inténtelo más tarde.",
-            duration: notifDelayErr
+          notification['error']({
+            message: 'Error del servidor. Inténtelo más tarde.',
+            duration: notifDelayErr,
           });
         });
     }
   };
-  
+
   return (
     <div className="edit-menu-web-form">
-      <EditForm
-        menuWebData={menuWebData}
-        setMenuWebData={setMenuWebData}
-        editMenu={editMenu}
-      />
+      <EditForm menuWebData={menuWebData} setMenuWebData={setMenuWebData} editMenu={editMenu} />
     </div>
   );
 }
@@ -70,9 +66,7 @@ function EditForm({ menuWebData, setMenuWebData, editMenu }: IEditFormProps) {
           prefix={<FontSizeOutlined />}
           placeholder="Título"
           value={menuWebData.title}
-          onChange={(e) =>
-            setMenuWebData({ ...menuWebData, title: e.target.value })
-          }
+          onChange={(e) => setMenuWebData({ ...menuWebData, title: e.target.value })}
         />
       </Form.Item>
       <Form.Item>
@@ -80,9 +74,7 @@ function EditForm({ menuWebData, setMenuWebData, editMenu }: IEditFormProps) {
           prefix={<LinkOutlined />}
           placeholder="Url"
           value={menuWebData.url}
-          onChange={(e) =>
-            setMenuWebData({ ...menuWebData, url: e.target.value })
-          }
+          onChange={(e) => setMenuWebData({ ...menuWebData, url: e.target.value })}
         />
       </Form.Item>
       <Form.Item>
@@ -93,6 +85,5 @@ function EditForm({ menuWebData, setMenuWebData, editMenu }: IEditFormProps) {
     </Form>
   );
 }
-
 
 export default memo(EditMenuWebForm);

@@ -1,8 +1,8 @@
-:root[data-theme="light"] {
+:root[data-theme='light'] {
   --button-primary-bg: var(--primary-color);
   --button-primary-light-border: 1px solid var(--primary-color);
 }
-:root[data-theme="dark"] {
+:root[data-theme='dark'] {
   --button-primary-bg: var(--primary-color-extra-dark);
   --button-primary-light-border: 1px solid var(--color-lightgrey);
 }

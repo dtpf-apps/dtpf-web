@@ -1,8 +1,8 @@
-import React from "react";
-import { useNearScreen } from "hooks/useNearScreen";
-import "./ComplementaryEducation.scss";
-import { Col, Collapse } from "antd";
-import { CaretRightOutlined } from "@ant-design/icons";
+import React from 'react';
+import { useNearScreen } from 'hooks/useNearScreen';
+import './ComplementaryEducation.scss';
+import { Col, Collapse } from 'antd';
+import { CaretRightOutlined } from '@ant-design/icons';
 const { Panel } = Collapse;
 
 export default function ComplementaryEducation() {
@@ -16,30 +16,17 @@ export default function ComplementaryEducation() {
             <h2>Formación Complementaria</h2>
             <Col span={24} className="complementary-education__collapse">
               <Collapse
-                defaultActiveKey={["1"]}
-                expandIcon={({ isActive }) => (
-                  <CaretRightOutlined rotate={isActive ? 90 : 0} />
-                )}
+                defaultActiveKey={['1']}
+                expandIcon={({ isActive }) => <CaretRightOutlined rotate={isActive ? 90 : 0} />}
               >
                 <Panel header="2020" key="1">
                   <ul>
-                    <li>
-                      Master en Frameworks JavaScript: Angular, React, Vue - (26,5h)
-                    </li>
-                    <li>
-                      Curso “MERN Full Stack: MongoDB, Express, React y Node” -
-                      Udemy (33,5h)
-                    </li>
+                    <li>Master en Frameworks JavaScript: Angular, React, Vue - (26,5h)</li>
+                    <li>Curso “MERN Full Stack: MongoDB, Express, React y Node” - Udemy (33,5h)</li>
                     <li>Curso profesional de Git y GitHub – Platzi (6h)</li>
                     <li>Vim - Udemy (1,5h)</li>
-                    <li>
-                      Angular y NodeJS en producción - Configurar un servidor
-                      VPS - (2h)
-                    </li>
-                    <li>
-                      Curso “Master Full Stack: Angular, Node, Laravel y
-                      Symfony” - Udemy (34,5h)
-                    </li>
+                    <li>Angular y NodeJS en producción - Configurar un servidor VPS - (2h)</li>
+                    <li>Curso “Master Full Stack: Angular, Node, Laravel y Symfony” - Udemy (34,5h)</li>
                   </ul>
                 </Panel>
                 <Panel header="2019" key="2">

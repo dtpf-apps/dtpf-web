@@ -1,29 +1,14 @@
-import React, { useState, useEffect, useCallback, memo } from "react";
-import {
-  Row,
-  Col,
-  Form,
-  Input,
-  InputNumber,
-  Button,
-  Image,
-  DatePicker,
-  notification,
-} from "antd";
-import { useDropzone } from "react-dropzone";
-import AdminTags from "../AdminTags";
-import {
-  addCourseApi,
-  updateCourseApi,
-  getImageApi,
-  uploadImageApi,
-} from "api/education";
-import { LinkOutlined, FontSizeOutlined } from "@ant-design/icons";
-import moment from "moment";
-import { notifDelay, notifDelayErr } from "utils/notifications";
-import NoImage from "assets/img/png/no-image.png";
-import "./AddEditCoursesForm.scss";
-import { getAccessTokenApi } from "api/endpoints/auth/auth.api";
+import React, { useState, useEffect, useCallback, memo } from 'react';
+import { Row, Col, Form, Input, InputNumber, Button, Image, DatePicker, notification } from 'antd';
+import { useDropzone } from 'react-dropzone';
+import AdminTags from '../AdminTags';
+import { addCourseApi, updateCourseApi, getImageApi, uploadImageApi } from 'api/education';
+import { LinkOutlined, FontSizeOutlined } from '@ant-design/icons';
+import moment from 'moment';
+import { notifDelay, notifDelayErr } from 'utils/notifications';
+import NoImage from 'assets/img/png/no-image.png';
+import './AddEditCoursesForm.scss';
+import { getAccessTokenApi } from 'api/endpoints/auth/auth.api';
 const { TextArea } = Input;
 
 interface IAddEditCoursesFormProps {
@@ -99,9 +84,8 @@ function AddEditForm({
   const processCourse = () => {
     const { title, url, description, duration } = courseData;
     if (!title || !url || !description || !duration) {
-      notification["warning"]({
-        message:
-          "Los campos de título, url, descripción y duración son obligatorios.",
+      notification['warning']({
+        message: 'Los campos de título, url, descripción y duración son obligatorios.',
       });
     } else {
       if (!course) {
@@ -114,20 +98,20 @@ function AddEditForm({
 
   const updateCourse = async () => {
     let userUpdate = courseData;
-    if (typeof userUpdate.image === "object") {
+    if (typeof userUpdate.image === 'object') {
       await uploadImageApi(token, userUpdate.image, course._id).then((response) => {
         if (response.status === 200) {
           userUpdate.image = response.image;
           updateCourseApi(token, course._id, userUpdate).then((result) => {
             if (result.status === 200) {
-              notification["success"]({
+              notification['success']({
                 message: result.message,
                 duration: notifDelay,
               });
               setIsVisibleModal(false);
               setReloadCourses(true);
             } else {
-              notification["error"]({
+              notification['error']({
                 message: result.message,
                 duration: notifDelayErr,
               });
@@ -135,7 +119,7 @@ function AddEditForm({
             }
           });
         } else {
-          notification["error"]({
+          notification['error']({
             message: response.message,
             duration: notifDelay,
           });
@@ -147,23 +131,22 @@ function AddEditForm({
       await updateCourseApi(token, course._id, courseData)
         .then((response) => {
           if (response.status === 200) {
-            notification["success"]({
+            notification['success']({
               message: response.message,
             });
             setIsVisibleModal(false);
             setReloadCourses(true);
             setCourseData([]);
           } else {
-            const typeNotification =
-              response.status === 500 ? "error" : "warning";
+            const typeNotification = response.status === 500 ? 'error' : 'warning';
             notification[typeNotification]({
               message: response.message,
             });
           }
         })
         .catch(() => {
-          notification["error"]({
-            message: "Error del servidor.",
+          notification['error']({
+            message: 'Error del servidor.',
           });
         });
     }
@@ -173,11 +156,11 @@ function AddEditForm({
     await addCourseApi(token, courseData)
       .then((response) => {
         if (response.status !== 200) {
-          notification["warning"]({
+          notification['warning']({
             message: response.message,
           });
         } else {
-          notification["success"]({
+          notification['success']({
             message: response.message,
           });
           setIsVisibleModal(false);
@@ -186,8 +169,8 @@ function AddEditForm({
         }
       })
       .catch(() => {
-        notification["error"]({
-          message: "Error del servidor.",
+        notification['error']({
+          message: 'Error del servidor.',
         });
       });
   };
@@ -202,11 +185,7 @@ function AddEditForm({
 
   return (
     <>
-      <Form
-        className="add-edit-course-form"
-        layout="inline"
-        onFinish={processCourse}
-      >
+      <Form className="add-edit-course-form" layout="inline" onFinish={processCourse}>
         <Row className="add-edit-course-form-course">
           <Col span={24}>
             <Form.Item>
@@ -255,19 +234,19 @@ function AddEditForm({
           </Col>
           <Input.Group>
             <DatePicker
-              style={{ width: "70%" }}
+              style={{ width: '70%' }}
               format="DD/MM/YYYY HH:mm:ss"
               placeholder="Fecha de publicación"
               value={courseData.date && moment(courseData.date)}
               onChange={(e, value) =>
                 setCourseData({
                   ...courseData,
-                  date: moment(value, "DD/MM/YYYY HH:mm:ss").toISOString(),
+                  date: moment(value, 'DD/MM/YYYY HH:mm:ss').toISOString(),
                 })
               }
             />
             <InputNumber
-              style={{ width: "30%" }}
+              style={{ width: '30%' }}
               placeholder="Duración"
               value={courseData.duration}
               onChange={(e) =>
@@ -282,10 +261,8 @@ function AddEditForm({
             <TextArea
               rows={5}
               placeholder="Descripción"
-              value={courseData.description ? courseData.description : ""}
-              onChange={(e) =>
-                setCourseData({ ...courseData, description: e.target.value })
-              }
+              value={courseData.description ? courseData.description : ''}
+              onChange={(e) => setCourseData({ ...courseData, description: e.target.value })}
             ></TextArea>
           </Col>
           <Col span={24}>
@@ -302,23 +279,11 @@ function AddEditForm({
             />
           </Col>
         </Row>
-        <Button
-          type="primary"
-          htmlType="submit"
-          loading={proccessCourseState}
-          onClick={loading}
-          className="btn-submit"
-        >
-          {course ? "Actualizar curso" : "Crear curso"}
+        <Button type="primary" htmlType="submit" loading={proccessCourseState} onClick={loading} className="btn-submit">
+          {course ? 'Actualizar curso' : 'Crear curso'}
         </Button>
       </Form>
-      {course && (
-        <AdminTags
-          course={course}
-          courseData={courseData}
-          setReloadCourses={setReloadCourses}
-        />
-      )}
+      {course && <AdminTags course={course} courseData={courseData} setReloadCourses={setReloadCourses} />}
     </>
   );
 }
@@ -329,7 +294,7 @@ interface IUploadImageProps {
 }
 
 function UploadImage({ image, setImage }: IUploadImageProps) {
-  const [imageUrl, setImageUrl] = useState("");
+  const [imageUrl, setImageUrl] = useState('');
   let imageType: string = imageUrl;
   useEffect(() => {
     if (image) {
@@ -339,15 +304,15 @@ function UploadImage({ image, setImage }: IUploadImageProps) {
         setImageUrl(image);
       }
     } else {
-      setImageUrl("");
+      setImageUrl('');
     }
   }, [image]);
   const onDrop = useCallback(
     (acceptedFiles) => {
       const file = acceptedFiles[0];
       if (file === undefined) {
-        notification["error"]({
-          message: "Formato de imágen inválido.",
+        notification['error']({
+          message: 'Formato de imágen inválido.',
           duration: notifDelay,
         });
       } else {
@@ -357,7 +322,7 @@ function UploadImage({ image, setImage }: IUploadImageProps) {
     [setImage]
   );
   const { getRootProps, getInputProps, isDragActive } = useDropzone({
-    accept: "image/jpeg, image/png",
+    accept: 'image/jpeg, image/png',
     noKeyboard: true,
     onDrop,
   });
@@ -376,15 +341,15 @@ function UploadImage({ image, setImage }: IUploadImageProps) {
 
 function transformTextToUrl(text: string) {
   const url = text
-    .replace(/[:,()]/g, "")
-    .replace(/ /g, "-")
-    .replace(/ - /g, "-")
-    .replace(/---/g, "-")
-    .replace(/á/gi, "a")
-    .replace(/é/gi, "e")
-    .replace(/í/gi, "i")
-    .replace(/ó/gi, "o")
-    .replace(/ú/gi, "u")
+    .replace(/[:,()]/g, '')
+    .replace(/ /g, '-')
+    .replace(/ - /g, '-')
+    .replace(/---/g, '-')
+    .replace(/á/gi, 'a')
+    .replace(/é/gi, 'e')
+    .replace(/í/gi, 'i')
+    .replace(/ó/gi, 'o')
+    .replace(/ú/gi, 'u');
   return url.toLowerCase();
 }
 

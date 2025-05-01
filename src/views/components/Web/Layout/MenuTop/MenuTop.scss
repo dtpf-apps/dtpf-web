@@ -1,5 +1,5 @@
-@import "scss/variables";
-@import "scss/mixins";
+@import 'scss/variables';
+@import 'scss/mixins';
 
 .menu-top-web {
   background-color: var(--t-header-footer-bg);
@@ -8,14 +8,13 @@
   justify-content: flex-start;
 
   li:after {
-    border-bottom: none !important
+    border-bottom: none !important;
   }
 
   &__logo {
     margin-left: 20px;
 
     a {
-
       &:focus,
       &:active,
       &:focus {

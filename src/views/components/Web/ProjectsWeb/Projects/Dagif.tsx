@@ -1,15 +1,12 @@
-import React from "react"
-import ProjectLayout from "../ProjectLayout"
-import dagifImage from "assets/img/projects/dagif/dagif.webp"
-import ModalImage1 from "assets/img/projects/dagif/dagifModalImage1.webp"
-import ModalImage2 from "assets/img/projects/dagif/dagifModalImage2.webp"
-import ModalImage3 from "assets/img/projects/dagif/dagifModalImage3.webp"
+import React from 'react';
+import ProjectLayout from '../ProjectLayout';
+import dagifImage from 'assets/img/projects/dagif/dagif.webp';
+import ModalImage1 from 'assets/img/projects/dagif/dagifModalImage1.webp';
+import ModalImage2 from 'assets/img/projects/dagif/dagifModalImage2.webp';
+import ModalImage3 from 'assets/img/projects/dagif/dagifModalImage3.webp';
 
-export default function Dagif(props: {
-  align: string
-  innerWidth: number
-}) {
-  const { align, innerWidth } = props
+export default function Dagif(props: { align: string; innerWidth: number }) {
+  const { align, innerWidth } = props;
   return (
     <ProjectLayout
       innerWidth={innerWidth}
@@ -44,32 +41,32 @@ export default function Dagif(props: {
         actualización de estados de la aplicación.`,
         `Para más información:`,
         `・ Backend: https://github.com/DTPF/gif_challenge_node`,
-        `・ Frontend: https://github.com/DTPF/gif_challenge_react`
+        `・ Frontend: https://github.com/DTPF/gif_challenge_react`,
       ]}
       modalTags={[
-        "JavaScript",
-        "TypeScript",
-        "NodeJS",
-        "Express",
-        "JavaScript",
-        "MongoDB",
-        "Mongoose",
-        "Auth0",
-        "Helmet",
-        "Cors",
-        "i18next",
-        "Dotenv",
-        "SCSS",
-        "Ant Design",
-        "Flux",
-        "MVC",
-        "SOLID",
-        "PWA",
-        "Cloudinary",
-        "Git",
-        "GitHub",
+        'JavaScript',
+        'TypeScript',
+        'NodeJS',
+        'Express',
+        'JavaScript',
+        'MongoDB',
+        'Mongoose',
+        'Auth0',
+        'Helmet',
+        'Cors',
+        'i18next',
+        'Dotenv',
+        'SCSS',
+        'Ant Design',
+        'Flux',
+        'MVC',
+        'SOLID',
+        'PWA',
+        'Cloudinary',
+        'Git',
+        'GitHub',
       ]}
-      analyticTag='Dagif'
+      analyticTag="Dagif"
     />
-  )
+  );
 }

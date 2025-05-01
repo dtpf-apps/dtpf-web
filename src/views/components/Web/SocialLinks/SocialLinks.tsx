@@ -1,6 +1,6 @@
-import React from "react"
-import { LinkedinOutlined, GithubOutlined } from "@ant-design/icons"
-import "./SocialLinks.scss"
+import React from 'react';
+import { LinkedinOutlined, GithubOutlined } from '@ant-design/icons';
+import './SocialLinks.scss';
 
 export default function SocialLinks() {
   return (
@@ -13,13 +13,9 @@ export default function SocialLinks() {
       >
         <LinkedinOutlined />
       </a>
-      <a href="https://github.com/DTPF"
-        className="github"
-        target="_blank"
-        rel="noopener noreferrer"
-      >
+      <a href="https://github.com/DTPF" className="github" target="_blank" rel="noopener noreferrer">
         <GithubOutlined />
       </a>
     </div>
-  )
+  );
 }

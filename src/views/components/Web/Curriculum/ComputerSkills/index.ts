@@ -1,1 +1,1 @@
-export { default } from "./ComputerSkills"
+export { default } from './ComputerSkills';

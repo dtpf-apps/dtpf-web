@@ -1,11 +1,11 @@
-@import "scss/variables";
-@import "scss/mixins";
+@import 'scss/variables';
+@import 'scss/mixins';
 
-:root[data-theme="light"] {
+:root[data-theme='light'] {
   --t-courses-card-bg: var(--color-lightgrey);
   --t-courses-card-anticon-eye-color: var(--primary-color-dark);
 }
-:root[data-theme="dark"] {
+:root[data-theme='dark'] {
   --t-courses-card-bg: var(--primary-bg-dark);
   --t-courses-card-anticon-eye-color: #fff;
 }

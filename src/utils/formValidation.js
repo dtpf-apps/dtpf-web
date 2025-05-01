@@ -17,7 +17,8 @@ export function isNumberValidation(inputData) {
 }
 
 export function emailValidation(inputData) {
-  const emailValid = /^(?:[^<>()[\].,;:\s@"]+(\.[^<>()[\].,;:\s@"]+)*|"[^\n"]+")@(?:[^<>()[\].,;:\s@"]+\.)+[^<>()[\].,;:\s@"]{2,63}$/i;
+  const emailValid =
+    /^(?:[^<>()[\].,;:\s@"]+(\.[^<>()[\].,;:\s@"]+)*|"[^\n"]+")@(?:[^<>()[\].,;:\s@"]+\.)+[^<>()[\].,;:\s@"]{2,63}$/i;
   const resultValidation = emailValid.test(inputData);
   if (resultValidation) {
     return true;
@@ -37,9 +38,9 @@ export function isPhoneNumberValidation(inputData) {
 }
 
 export function inputValidationStyle(e, addOrRemove, className) {
-  if (addOrRemove === "add") {
+  if (addOrRemove === 'add') {
     return e.target.classList.add(`form-validation-${className}`);
-  } else if (addOrRemove === "remove") {
+  } else if (addOrRemove === 'remove') {
     return e.target.classList.remove(`form-validation-${className}`);
   } else {
     console.error(`${addOrRemove} in input.${e.target.name} is an invalid parameter`);

@@ -1,4 +1,4 @@
-import { testingRefreshToken } from "../../utils/constants";
+import { testingRefreshToken } from '../../utils/constants';
 import {
   addCourseApi,
   updateCourseApi,
@@ -10,10 +10,10 @@ import {
   deleteCourseApi,
   addTagApi,
   deleteTagApi,
-} from "../../api/education";
+} from '../../api/education';
 const TOKEN = testingRefreshToken;
 
-describe("Education API", () => {
+describe('Education API', () => {
   // it("Drop first course created if exists", async () => {
   //   await getCourseApi("curso-desde-api-test").then(async (data) => {
   //     expect(data.status).toBe(200);
@@ -51,7 +51,6 @@ describe("Education API", () => {
   //     expect(data.status).toBe(200);
   //   });
   // });
-
   // it("Update course image", async () => {
   //   await getCourseApi("curso-desde-api-test-updated").then((data) => {
   //     expect(data.status).toBe(200);
@@ -99,5 +98,4 @@ describe("Education API", () => {
   //     });
   //   });
   // });
-
 });

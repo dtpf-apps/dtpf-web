@@ -1,1 +1,1 @@
-declare module 'intersection-observer'
+declare module 'intersection-observer';

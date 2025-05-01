@@ -1,10 +1,10 @@
-@import "scss/index.scss";
+@import 'scss/index.scss';
 
-html[data-theme="light"] {
+html[data-theme='light'] {
   --t-courses-info-btn-next-prev-bg: #273b56ab;
   --t-courses-info-btn-next-prev-color: #fff;
 }
-html[data-theme="dark"] {
+html[data-theme='dark'] {
   --t-courses-info-btn-next-prev-bg: var(--secondary-bg-opacity-7);
   --t-courses-info-btn-next-prev-color: var(--primary-bg-dark);
 }
@@ -52,16 +52,16 @@ html[data-theme="dark"] {
       }
       &:active,
       &:focus,
+      &:hover {
+        background-color: $primary-color !important;
+        border: 1px solid $primary-color-dark;
+        color: #fff;
         &:hover {
-          background-color: $primary-color !important;
-          border: 1px solid $primary-color-dark;
-          color: #fff;
-          &:hover {
-            color: $primary-color;
-            border: 1px solid $primary-color;
-            background-color: $primary-color-light !important;
-          }
+          color: $primary-color;
+          border: 1px solid $primary-color;
+          background-color: $primary-color-light !important;
         }
+      }
     }
   }
   &__linkPrevMobile {
@@ -75,7 +75,7 @@ html[data-theme="dark"] {
     }
   }
   &__linkNextMobile {
-    right: 0px;  
+    right: 0px;
     border-top-right-radius: 0;
     border-bottom-right-radius: 0;
     button {

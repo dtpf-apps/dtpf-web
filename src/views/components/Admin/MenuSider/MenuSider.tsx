@@ -1,7 +1,7 @@
-import React, { useState, useEffect } from "react";
-import { getLastMessageApi } from "api/contact";
-import { Link, withRouter } from "react-router-dom";
-import { Layout, Menu, Tag, message } from "antd";
+import React, { useState, useEffect } from 'react';
+import { getLastMessageApi } from 'api/contact';
+import { Link, withRouter } from 'react-router-dom';
+import { Layout, Menu, Tag, message } from 'antd';
 import {
   HomeOutlined,
   UserOutlined,
@@ -9,21 +9,17 @@ import {
   ChromeOutlined,
   MessageOutlined,
   ReadOutlined,
-  SmileOutlined
-} from "@ant-design/icons";
-import "./MenuSider.scss";
-import addNotification from "react-push-notification";
-import sound from "assets/audio/sound.mp3";
-import soundOGG from "assets/audio/sound.ogg";
-import { getAccessTokenApi } from "api/endpoints/auth/auth.api";
+  SmileOutlined,
+} from '@ant-design/icons';
+import './MenuSider.scss';
+import addNotification from 'react-push-notification';
+import sound from 'assets/audio/sound.mp3';
+import soundOGG from 'assets/audio/sound.ogg';
+import { getAccessTokenApi } from 'api/endpoints/auth/auth.api';
 
 function MenuSider({ menuCollapsed, location, messagesUnreadLength }: any) {
   return (
-    <RenderMenuSider
-      messagesUnreadLength={messagesUnreadLength}
-      menuCollapsed={menuCollapsed}
-      location={location}
-    />
+    <RenderMenuSider messagesUnreadLength={messagesUnreadLength} menuCollapsed={menuCollapsed} location={location} />
   );
 }
 
@@ -40,7 +36,9 @@ function RenderMenuSider({ messagesUnreadLength, menuCollapsed, location }: IRen
     if (messagesUnreadLength !== undefined) {
       isMounted && setNewMessage(messagesUnreadLength);
     }
-    return () => { isMounted = false };
+    return () => {
+      isMounted = false;
+    };
   }, [newMessage, messagesUnreadLength]);
   return (
     <NextRender
@@ -63,7 +61,7 @@ function NextRender({ menuCollapsed, location, messagesUnreadLength, newMessage 
   const { Sider } = Layout;
 
   const playSound = () => {
-    const a: any = document.getElementById("sound");
+    const a: any = document.getElementById('sound');
     a.play();
   };
 
@@ -71,16 +69,12 @@ function NextRender({ menuCollapsed, location, messagesUnreadLength, newMessage 
     const token = getAccessTokenApi();
     getLastMessageApi(token).then((response) => {
       if (response.email) {
-        if (
-          newMessage &&
-          messagesUnreadLength &&
-          newMessage < messagesUnreadLength
-        ) {
+        if (newMessage && messagesUnreadLength && newMessage < messagesUnreadLength) {
           message.success(`Mensaje de ${response.email}`, 5);
           addNotification({
             title: `Mensaje de ${response.email}`,
             native: true,
-            duration: 5000
+            duration: 5000,
           });
           playSound();
         }
@@ -90,32 +84,22 @@ function NextRender({ menuCollapsed, location, messagesUnreadLength, newMessage 
 
   return (
     <>
-      <Sider
-        collapsible
-        collapsedWidth="0"
-        breakpoint="lg"
-        className="admin-sider"
-        collapsed={menuCollapsed}
-      >
-        <Menu
-          theme="dark"
-          mode="inline"
-          defaultSelectedKeys={[location.pathname]}
-        >
+      <Sider collapsible collapsedWidth="0" breakpoint="lg" className="admin-sider" collapsed={menuCollapsed}>
+        <Menu theme="dark" mode="inline" defaultSelectedKeys={[location.pathname]}>
           <Menu.Item key="/ad1988">
-            <Link to={"/ad1988"}>
+            <Link to={'/ad1988'}>
               <HomeOutlined />
               <span className="nav-text">Home</span>
             </Link>
           </Menu.Item>
           <Menu.Item key="/ad1988/users">
-            <Link to={"/ad1988/users"}>
+            <Link to={'/ad1988/users'}>
               <UserOutlined />
               <span className="nac-text">Usuarios</span>
             </Link>
           </Menu.Item>
           <Menu.Item key="/ad1988/menu">
-            <Link to={"/ad1988/menu"}>
+            <Link to={'/ad1988/menu'}>
               <MenuOutlined />
               <span className="nac-text">Menú</span>
             </Link>
@@ -124,11 +108,7 @@ function NextRender({ menuCollapsed, location, messagesUnreadLength, newMessage 
             <Link to="/ad1988/contact-messages">
               <MessageOutlined />
               <span className="nav-text">Mensajes</span>
-              {messagesUnreadLength > 0 ? (
-                <Tag className="admin-sider__tag">{messagesUnreadLength}</Tag>
-              ) : (
-                <></>
-              )}
+              {messagesUnreadLength > 0 ? <Tag className="admin-sider__tag">{messagesUnreadLength}</Tag> : <></>}
             </Link>
           </Menu.Item>
           <Menu.Item key="ad1988/education">
@@ -144,7 +124,7 @@ function NextRender({ menuCollapsed, location, messagesUnreadLength, newMessage 
             </Link>
           </Menu.Item>
           <Menu.Item key="/">
-            <Link to={"/"}>
+            <Link to={'/'}>
               <ChromeOutlined />
               <span className="nac-text">Web</span>
             </Link>

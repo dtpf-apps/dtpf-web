@@ -1,11 +1,11 @@
-import React from "react"
-import { Layout, Row, Col } from "antd"
-import { useHistory } from "react-router-dom"
-import "./Footer.scss"
+import React from 'react';
+import { Layout, Row, Col } from 'antd';
+import { useHistory } from 'react-router-dom';
+import './Footer.scss';
 
 export default function Footer() {
-  const { Footer } = Layout
-  const history = useHistory()
+  const { Footer } = Layout;
+  const history = useHistory();
   return (
     <Footer className="footer unselectable">
       <Row className="footer__content">
@@ -22,5 +22,5 @@ export default function Footer() {
         </Col>
       </Row>
     </Footer>
-  )
+  );
 }

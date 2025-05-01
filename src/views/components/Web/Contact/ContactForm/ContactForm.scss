@@ -1,13 +1,13 @@
-@import "scss/variables";
-@import "scss/mixins";
-@import "scss/animations";
+@import 'scss/variables';
+@import 'scss/mixins';
+@import 'scss/animations';
 
-:root[data-theme="light"] {
+:root[data-theme='light'] {
   --t-contact-checkbox-bg: var(--primary-color);
   --t-contact-checkbox-border: var(--primary-color);
   --t-contact-checkbox-link: var(--primary-color);
 }
-:root[data-theme="dark"] {
+:root[data-theme='dark'] {
   --t-contact-checkbox-bg: var(--primary-color-dark);
   --t-contact-checkbox-border: var(--color-lightgrey-medium);
   --t-contact-checkbox-link: var(--primary-color-dark);
@@ -55,8 +55,6 @@
       @media (min-width: $media-breakpoint-up-lg) {
         padding-bottom: 0 !important;
       }
-   
-      
     }
   }
   .ant-form-item {

@@ -1,5 +1,4 @@
 .list-users {
-
   &__header {
     display: flex;
     align-items: center;
@@ -9,12 +8,12 @@
     &-switch {
       display: flex;
       align-items: center;
-  
+
       > button {
         margin-right: 10px;
       }
     }
-  }  
+  }
 
   .users-active {
     background-color: #fff;

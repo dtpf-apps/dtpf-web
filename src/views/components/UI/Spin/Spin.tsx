@@ -1,6 +1,6 @@
-import React, { memo } from 'react'
-import { Spin as SpinAnt } from "antd";
-import { LoadingOutlined } from "@ant-design/icons";
+import React, { memo } from 'react';
+import { Spin as SpinAnt } from 'antd';
+import { LoadingOutlined } from '@ant-design/icons';
 
 function Spin(props: any) {
   const { className, paddingTop, height } = props;
@@ -10,15 +10,15 @@ function Spin(props: any) {
       indicator={antIcon}
       className={className}
       style={{
-        textAlign: "center",
-        width: "100%",
-        height: height ? height : "100vh",
-        padding: "20px",
-        paddingTop: paddingTop ? paddingTop : "200px",
-        color: "#5d718d"
+        textAlign: 'center',
+        width: '100%',
+        height: height ? height : '100vh',
+        padding: '20px',
+        paddingTop: paddingTop ? paddingTop : '200px',
+        color: '#5d718d',
       }}
     />
-  )
+  );
 }
 
-export default memo(Spin)
+export default memo(Spin);

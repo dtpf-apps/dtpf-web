@@ -1,1 +1,1 @@
-export { default } from "./ProjectsWeb"
+export { default } from './ProjectsWeb';

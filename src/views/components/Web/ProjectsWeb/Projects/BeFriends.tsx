@@ -1,15 +1,12 @@
-import React from "react"
-import ProjectLayout from "../ProjectLayout"
-import beFriendsImage from "assets/img/projects/beFriends/befriends.webp"
-import ModalImage1 from "assets/img/projects/beFriends/befriendsModalImage1.webp"
-import ModalImage2 from "assets/img/projects/beFriends/befriendsModalImage2.webp"
-import ModalImage3 from "assets/img/projects/beFriends/befriendsModalImage3.webp"
+import React from 'react';
+import ProjectLayout from '../ProjectLayout';
+import beFriendsImage from 'assets/img/projects/beFriends/befriends.webp';
+import ModalImage1 from 'assets/img/projects/beFriends/befriendsModalImage1.webp';
+import ModalImage2 from 'assets/img/projects/beFriends/befriendsModalImage2.webp';
+import ModalImage3 from 'assets/img/projects/beFriends/befriendsModalImage3.webp';
 
-export default function BeFriends(props: {
-  align: string
-  innerWidth: number
-}) {
-  const { align, innerWidth } = props
+export default function BeFriends(props: { align: string; innerWidth: number }) {
+  const { align, innerWidth } = props;
   return (
     <ProjectLayout
       innerWidth={innerWidth}
@@ -37,19 +34,10 @@ export default function BeFriends(props: {
         `・HTML5 y CSS3 para la maquetación.`,
         `・JavaScript para la interacción reactiva con la aplicación.`,
         `Para más información:`,
-        `・ Github: https://github.com/jesusfvj/beFriends`
+        `・ Github: https://github.com/jesusfvj/beFriends`,
       ]}
-      modalTags={[
-        "PHP",
-        "HTML5",
-        "CSS3",
-        "JavaScript",
-        "MVC",
-        "MySQL",
-        "Figma",
-        "Dia"
-      ]}
-      analyticTag='BeFriends'
+      modalTags={['PHP', 'HTML5', 'CSS3', 'JavaScript', 'MVC', 'MySQL', 'Figma', 'Dia']}
+      analyticTag="BeFriends"
     />
-  )
+  );
 }

@@ -1,12 +1,7 @@
-import { useRef, useEffect } from "react";
-import { isMobile as isMobileRDD } from "react-device-detect";
+import { useRef, useEffect } from 'react';
+import { isMobile as isMobileRDD } from 'react-device-detect';
 
-export default function useEventListener(
-  eventName,
-  handler,
-  isMobile,
-  element = window
-) {
+export default function useEventListener(eventName, handler, isMobile, element = window) {
   const savedHandler = useRef();
   useEffect(() => {
     savedHandler.current = handler;

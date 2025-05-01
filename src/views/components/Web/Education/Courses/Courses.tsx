@@ -1,13 +1,13 @@
-import React, { useState, useEffect } from "react";
-import { Link } from "react-router-dom";
-import { getImageApi } from "api/education";
-import { useNearScreen } from "hooks/useNearScreen";
-import { Row, Col, Card, Tag } from "antd";
-import { EyeOutlined } from "@ant-design/icons";
-import QueueAnim from "rc-queue-anim";
-import "./Courses.scss";
-import noImage from "assets/img/png/no-image-s.png";
-import Spin from "views/components/UI/Spin";
+import React, { useState, useEffect } from 'react';
+import { Link } from 'react-router-dom';
+import { getImageApi } from 'api/education';
+import { useNearScreen } from 'hooks/useNearScreen';
+import { Row, Col, Card, Tag } from 'antd';
+import { EyeOutlined } from '@ant-design/icons';
+import QueueAnim from 'rc-queue-anim';
+import './Courses.scss';
+import noImage from 'assets/img/png/no-image-s.png';
+import Spin from 'views/components/UI/Spin';
 
 export default function Courses(props: any) {
   const { courses, itemsPerPage, title, subtitle } = props;
@@ -23,14 +23,7 @@ export default function Courses(props: any) {
         <Row>
           {courses &&
             courses.slice(0, itemsPerPage).map((course: any) => (
-              <Col
-                key={course._id}
-                span={12}
-                md={8}
-                lg={8}
-                xl={6}
-                className="courses-list__courses"
-              >
+              <Col key={course._id} span={12} md={8} lg={8} xl={6} className="courses-list__courses">
                 <Course course={course} />
               </Col>
             ))}
@@ -44,7 +37,7 @@ function Course(props: any) {
   const { course } = props;
   const [isLoading, setIsLoading] = useState(true);
   const [show, el]: any = useNearScreen();
-  const [image, setImage] = useState("");
+  const [image, setImage] = useState('');
   const { Meta } = Card;
   useEffect(() => {
     let isMounted = true;
@@ -52,7 +45,7 @@ function Course(props: any) {
       getImageApi(course.image).then((response) => {
         if (response.url) {
           let filePath = response.url;
-          const fileName = filePath.split("/")[6];
+          const fileName = filePath.split('/')[6];
           const thumbnailName = `thumb_${fileName}`;
           const replaceName = filePath.replace(fileName, thumbnailName);
           if (isMounted) {
@@ -60,7 +53,7 @@ function Course(props: any) {
             setIsLoading(false);
           }
         } else {
-          setImage("");
+          setImage('');
           setIsLoading(false);
         }
       });
@@ -77,15 +70,10 @@ function Course(props: any) {
         <Spin paddingTop="150px" height="100%" />
       ) : (
         show && (
-          <QueueAnim type={"alpha"} duration={400} ease="easeInCubic">
+          <QueueAnim type={'alpha'} duration={400} ease="easeInCubic">
             <div key="course">
               <Link to={`/education/${course.url}`}>
-                <Card
-                  className="courses-list__card"
-                  cover={
-                    <img src={image ? image : noImage} alt={course.title} />
-                  }
-                >
+                <Card className="courses-list__card" cover={<img src={image ? image : noImage} alt={course.title} />}>
                   <Meta description={course.title} />
                   <span className="courses-list__edit">
                     <EyeOutlined />

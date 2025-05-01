@@ -1,14 +1,14 @@
-@import "./scss/variables";
-@import "./scss/mixins";
-@import "./scss/animations";
+@import './scss/variables';
+@import './scss/mixins';
+@import './scss/animations';
 
-:root[data-theme="light"] {
+:root[data-theme='light'] {
   --t-ant-message-notice-bg: var(--primary-bg-dark);
   --t-ant-message-notice-color: #fff;
   --t-offline-tag-alert-bg: var(--primary-bg-dark);
   --t-offline-tag-alert-color: #fff;
 }
-:root[data-theme="dark"] {
+:root[data-theme='dark'] {
   --t-ant-message-notice-bg: var(--primary-bg-light);
   --t-ant-message-notice-color: var(--primary-color-dark);
   --t-offline-tag-alert-bg: #cdd5df;

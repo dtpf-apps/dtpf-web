@@ -1,5 +1,5 @@
-import React, { useState, useEffect, createContext } from "react";
-import { connectionApi } from "../api/utils";
+import React, { useState, useEffect, createContext } from 'react';
+import { connectionApi } from '../api/utils';
 
 export const ConnectionContext = createContext();
 
@@ -23,12 +23,8 @@ export default function ConnectionProvider(props) {
       clearInterval(interval);
     };
   }, [timeToReload]);
-  
-  return (
-    <ConnectionContext.Provider value={connection}>
-      {children}
-    </ConnectionContext.Provider>
-  );
+
+  return <ConnectionContext.Provider value={connection}>{children}</ConnectionContext.Provider>;
 }
 
 function checkConnection(setConnection, setTimeToReload) {

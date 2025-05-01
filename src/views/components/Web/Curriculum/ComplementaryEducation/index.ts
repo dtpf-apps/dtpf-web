@@ -1,1 +1,1 @@
-export { default } from './ComplementaryEducation'
+export { default } from './ComplementaryEducation';

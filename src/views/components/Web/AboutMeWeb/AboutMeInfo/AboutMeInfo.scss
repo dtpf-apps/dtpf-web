@@ -1,57 +1,57 @@
-@import "scss/variables";
-@import "scss/mixins";
-@import "scss/animations";
+@import 'scss/variables';
+@import 'scss/mixins';
+@import 'scss/animations';
 
 .about-me-info {
-	margin: 0 auto;
-	min-height: 280px;
-	@include fadeIn();
+  margin: 0 auto;
+  min-height: 280px;
+  @include fadeIn();
 
-	@media (min-width: $media-breakpoint-up-md) {
-		padding-top: 30px;
-	}
+  @media (min-width: $media-breakpoint-up-md) {
+    padding-top: 30px;
+  }
 
-	@media (min-width: $media-breakpoint-up-lg) {
-		padding-top: 25px;
-	}
+  @media (min-width: $media-breakpoint-up-lg) {
+    padding-top: 25px;
+  }
 
-	&-content {
-		display: flex;
-		flex-direction: column;
-		align-items: center;
-		max-width: 750px;
-		margin: 0 auto;
+  &-content {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    max-width: 750px;
+    margin: 0 auto;
 
-		@media (min-width: $media-breakpoint-up-lg) {
-			flex-direction: row;
-		}
+    @media (min-width: $media-breakpoint-up-lg) {
+      flex-direction: row;
+    }
 
-		&-image {
-			margin: 0 auto;
+    &-image {
+      margin: 0 auto;
 
-			img {
-				width: 230px;
-				border-radius: 300px;
-				@include boxShadowLg();
-			}
-		}
+      img {
+        width: 230px;
+        border-radius: 300px;
+        @include boxShadowLg();
+      }
+    }
 
-		&-text1 {
-			display: flex;
-			align-items: center;
-			text-align: justify;
-			max-width: 500px;
-			margin: 0 auto;
-			padding: 0 20px;
-			@include p();
-			color: var(--t-primary-color);
-			padding-top: 20px;
-			margin-left: 25px;
+    &-text1 {
+      display: flex;
+      align-items: center;
+      text-align: justify;
+      max-width: 500px;
+      margin: 0 auto;
+      padding: 0 20px;
+      @include p();
+      color: var(--t-primary-color);
+      padding-top: 20px;
+      margin-left: 25px;
 
-			@media (min-width: $media-breakpoint-up-md) {
-				padding: 20px;
-				padding-left: 30px;
-			}
-		}
-	}
+      @media (min-width: $media-breakpoint-up-md) {
+        padding: 20px;
+        padding-left: 30px;
+      }
+    }
+  }
 }

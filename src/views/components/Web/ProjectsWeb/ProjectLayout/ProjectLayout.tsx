@@ -1,30 +1,30 @@
-import React, { useState } from "react"
-import { Row, Col, Button, Image as ImageAnt, Tag } from "antd"
-import QueueAnim from "rc-queue-anim"
-import Modal from "views/components/UI/Modal"
-import { gaEvent } from "utils/analytics.js"
-import useScrollToTop from "hooks/useScrollToTop"
-import { useNearScreen } from "hooks/useNearScreen"
-import "./ProjectLayout.scss"
+import React, { useState } from 'react';
+import { Row, Col, Button, Image as ImageAnt, Tag } from 'antd';
+import QueueAnim from 'rc-queue-anim';
+import Modal from 'views/components/UI/Modal';
+import { gaEvent } from 'utils/analytics.js';
+import useScrollToTop from 'hooks/useScrollToTop';
+import { useNearScreen } from 'hooks/useNearScreen';
+import './ProjectLayout.scss';
 
 export default function ProyectLayout(props: {
-  innerWidth: number
-  align: string
-  contentTitle: string
-  contentText: string
-  linkToWeb: string
-  image: string
-  imageAlt: string
-  modalTitle: string
-  modalTags: string[]
-  modalImage1: string
-  modalImage2: string
-  modalImage3: string
-  modalImageAlt: string
-  modalDate: string
-  modalIntroduction: string
-  modalText: string[]
-  analyticTag: string
+  innerWidth: number;
+  align: string;
+  contentTitle: string;
+  contentText: string;
+  linkToWeb: string;
+  image: string;
+  imageAlt: string;
+  modalTitle: string;
+  modalTags: string[];
+  modalImage1: string;
+  modalImage2: string;
+  modalImage3: string;
+  modalImageAlt: string;
+  modalDate: string;
+  modalIntroduction: string;
+  modalText: string[];
+  analyticTag: string;
 }) {
   const {
     innerWidth,
@@ -43,12 +43,12 @@ export default function ProyectLayout(props: {
     modalDate,
     modalIntroduction,
     modalText,
-    analyticTag
-  } = props
-  const [isVisibleModal, setIsVisibleModal] = useState(false)
-  const [show, el] = useNearScreen()
-  const ref = el as React.MutableRefObject<HTMLDivElement>
-  useScrollToTop()
+    analyticTag,
+  } = props;
+  const [isVisibleModal, setIsVisibleModal] = useState(false);
+  const [show, el] = useNearScreen();
+  const ref = el as React.MutableRefObject<HTMLDivElement>;
+  useScrollToTop();
   return (
     <>
       <Modal
@@ -71,7 +71,7 @@ export default function ProyectLayout(props: {
       </Modal>
       <div className="clearfix project-layout__use-near-screen" ref={ref}>
         {show && (
-          <Row className={"project-layout project-layout-" + align}>
+          <Row className={'project-layout project-layout-' + align}>
             {innerWidth <= 767 ? (
               <>
                 <Content
@@ -81,21 +81,13 @@ export default function ProyectLayout(props: {
                   linkToWeb={linkToWeb}
                   analyticTag={analyticTag}
                 />
-                <Image
-                  image={image}
-                  imageAlt={imageAlt}
-                  analyticTag={analyticTag}
-                />
+                <Image image={image} imageAlt={imageAlt} analyticTag={analyticTag} />
               </>
             ) : (
               <>
-                {align === "left" ? (
+                {align === 'left' ? (
                   <div style={{ display: 'flex', justifyContent: 'center' }}>
-                    <Image
-                      image={image}
-                      imageAlt={imageAlt}
-                      analyticTag={analyticTag}
-                    />
+                    <Image image={image} imageAlt={imageAlt} analyticTag={analyticTag} />
                     <Content
                       contentTitle={contentTitle}
                       contentText={contentText}
@@ -113,11 +105,7 @@ export default function ProyectLayout(props: {
                       linkToWeb={linkToWeb}
                       analyticTag={analyticTag}
                     />
-                    <Image
-                      image={image}
-                      imageAlt={imageAlt}
-                      analyticTag={analyticTag}
-                    />
+                    <Image image={image} imageAlt={imageAlt} analyticTag={analyticTag} />
                   </div>
                 )}
               </>
@@ -126,47 +114,43 @@ export default function ProyectLayout(props: {
         )}
       </div>
     </>
-  )
+  );
 }
 
-function Image(props: {
-  image: string
-  imageAlt: string
-  analyticTag: string
-}) {
-  const { image, imageAlt, analyticTag } = props
+function Image(props: { image: string; imageAlt: string; analyticTag: string }) {
+  const { image, imageAlt, analyticTag } = props;
   const clickProyectImage = () => {
-    gaEvent("project_image--" + analyticTag, "clicks", "UI Clicks", true)
-  }
+    gaEvent('project_image--' + analyticTag, 'clicks', 'UI Clicks', true);
+  };
   return (
     <Col span={24} md={12} className="project-layout__image">
-      <QueueAnim type={"alpha"} duration={250} ease="easeInCubic">
+      <QueueAnim type={'alpha'} duration={250} ease="easeInCubic">
         <div key="image" onClick={() => clickProyectImage}>
           <ImageAnt width="300" alt={imageAlt} src={image} />
         </div>
       </QueueAnim>
     </Col>
-  )
+  );
 }
 
 function Content(props: {
-  contentTitle: string
-  contentText: string
-  linkToWeb: string
-  analyticTag: string
-  setIsVisibleModal: React.Dispatch<boolean>
+  contentTitle: string;
+  contentText: string;
+  linkToWeb: string;
+  analyticTag: string;
+  setIsVisibleModal: React.Dispatch<boolean>;
 }) {
-  const { contentTitle, contentText, linkToWeb, analyticTag, setIsVisibleModal } = props
+  const { contentTitle, contentText, linkToWeb, analyticTag, setIsVisibleModal } = props;
   const clickProjectSeeMore = () => {
-    gaEvent("project_btn_see_more--" + analyticTag, "clicks", "UI Clicks", true)
-  }
+    gaEvent('project_btn_see_more--' + analyticTag, 'clicks', 'UI Clicks', true);
+  };
   const clickProjectGoToWeb = () => {
-    gaEvent("project_link_go_to_web--" + analyticTag, "clicks", "UI Clicks", true)
-  }
+    gaEvent('project_link_go_to_web--' + analyticTag, 'clicks', 'UI Clicks', true);
+  };
   return (
     <Col span={24} md={12} className="project-layout__content">
       <Col span={24} className="project-layout__content-text">
-        <QueueAnim type={"alpha"} duration={350} ease="easeInCubic">
+        <QueueAnim type={'alpha'} duration={350} ease="easeInCubic">
           <div className="project-layout__content-title" key="titleh2">
             <h2>{contentTitle}</h2>
           </div>
@@ -178,30 +162,37 @@ function Content(props: {
       <div className="project-layout__content--links">
         <Button
           onClick={() => {
-            clickProjectSeeMore()
-            setIsVisibleModal(true)
+            clickProjectSeeMore();
+            setIsVisibleModal(true);
           }}
         >
           Ver más
         </Button>
-        <a href={linkToWeb} onClick={() => { clickProjectGoToWeb() }} target="_blank" rel='noreferrer'>
+        <a
+          href={linkToWeb}
+          onClick={() => {
+            clickProjectGoToWeb();
+          }}
+          target="_blank"
+          rel="noreferrer"
+        >
           Ir a la web
         </a>
       </div>
     </Col>
-  )
+  );
 }
 
 function ModalContent(props: {
-  modalTags: string[]
-  modalImage1: string
-  modalImage2: string
-  modalImage3: string
-  modalImageAlt: string
-  modalDate: string
-  modalIntroduction: string
-  modalText: string[]
-  modalTitle: string
+  modalTags: string[];
+  modalImage1: string;
+  modalImage2: string;
+  modalImage3: string;
+  modalImageAlt: string;
+  modalDate: string;
+  modalIntroduction: string;
+  modalText: string[];
+  modalTitle: string;
 }) {
   const {
     modalTags,
@@ -213,39 +204,22 @@ function ModalContent(props: {
     modalIntroduction,
     modalText,
     modalTitle,
-  } = props
-  let gaModalTitle = modalTitle.replace(/[ ']/g, "")
+  } = props;
+  let gaModalTitle = modalTitle.replace(/[ ']/g, '');
   const clickProyectModalImage = (e: number) => {
-    gaEvent(
-      "click_project_modal_image_" + e + "_" + gaModalTitle,
-      "clicks",
-      "UI Clicks",
-      true
-    )
-  }
+    gaEvent('click_project_modal_image_' + e + '_' + gaModalTitle, 'clicks', 'UI Clicks', true);
+  };
   return (
     <Row className="project-layout__modal">
       <Row className="project-layout__modal-image">
         <Col span={8} onClick={() => clickProyectModalImage(1)}>
-          <ImageAnt
-            width="100%"
-            alt={modalImageAlt}
-            src={modalImage1}
-          ></ImageAnt>
+          <ImageAnt width="100%" alt={modalImageAlt} src={modalImage1}></ImageAnt>
         </Col>
         <Col span={8} onClick={() => clickProyectModalImage(2)}>
-          <ImageAnt
-            width="100%"
-            alt={modalImageAlt}
-            src={modalImage2}
-          ></ImageAnt>
+          <ImageAnt width="100%" alt={modalImageAlt} src={modalImage2}></ImageAnt>
         </Col>
         <Col span={8} onClick={() => clickProyectModalImage(3)}>
-          <ImageAnt
-            width="100%"
-            alt={modalImageAlt}
-            src={modalImage3}
-          ></ImageAnt>
+          <ImageAnt width="100%" alt={modalImageAlt} src={modalImage3}></ImageAnt>
         </Col>
       </Row>
       <div className="project-layout__modal-content">
@@ -263,21 +237,21 @@ function ModalContent(props: {
                   <span key={key + 2}>{text}</span>
                   <br key={key + 3}></br>
                 </div>
-              )
+              );
             })}
         </Col>
       </div>
       <Col span={24} className="project-layout__modal-tags">
         {modalTags &&
           modalTags.map((tag: string) => {
-            let tagToClassname = tag.replace(/[ .]/g, "")
+            let tagToClassname = tag.replace(/[ .]/g, '');
             return (
               <span key={tag} className={tagToClassname}>
                 <Tag>{tag}</Tag>
               </span>
-            )
+            );
           })}
       </Col>
     </Row>
-  )
+  );
 }

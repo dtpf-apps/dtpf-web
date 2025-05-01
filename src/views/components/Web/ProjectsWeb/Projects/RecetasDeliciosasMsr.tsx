@@ -1,15 +1,12 @@
-import React from "react"
-import ProjectLayout from "../ProjectLayout"
-import recetasDeliciosasImage from "assets/img/projects/recetasmsr/recetasmsr.jpg"
-import ModalImage1 from "assets/img/projects/recetasmsr/recetasmsrModalImage1.jpg"
-import ModalImage2 from "assets/img/projects/recetasmsr/recetasmsrModalImage2.jpg"
-import ModalImage3 from "assets/img/projects/recetasmsr/recetasmsrModalImage3.jpg"
+import React from 'react';
+import ProjectLayout from '../ProjectLayout';
+import recetasDeliciosasImage from 'assets/img/projects/recetasmsr/recetasmsr.jpg';
+import ModalImage1 from 'assets/img/projects/recetasmsr/recetasmsrModalImage1.jpg';
+import ModalImage2 from 'assets/img/projects/recetasmsr/recetasmsrModalImage2.jpg';
+import ModalImage3 from 'assets/img/projects/recetasmsr/recetasmsrModalImage3.jpg';
 
-export default function RecetasDeliciosasMsr(props: {
-  align: string
-  innerWidth: number
-}) {
-  const { align, innerWidth } = props
+export default function RecetasDeliciosasMsr(props: { align: string; innerWidth: number }) {
+  const { align, innerWidth } = props;
   return (
     <ProjectLayout
       innerWidth={innerWidth}
@@ -47,17 +44,8 @@ export default function RecetasDeliciosasMsr(props: {
         administrador para la gestión de contenido y de usuarios. Además, esta 
         adaptada para todos los dispositivos.`,
       ]}
-      modalTags={[
-        "PHP",
-        "Laravel",
-        "HTML5",
-        "CSS3",
-        "JavaScript",
-        "JQuery",
-        "MVC",
-        "MySQL",
-      ]}
-      analyticTag='RecetasMSR'
+      modalTags={['PHP', 'Laravel', 'HTML5', 'CSS3', 'JavaScript', 'JQuery', 'MVC', 'MySQL']}
+      analyticTag="RecetasMSR"
     />
-  )
+  );
 }

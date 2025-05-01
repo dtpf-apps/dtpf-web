@@ -1,5 +1,5 @@
-import { getCoursesApi } from "../../api/education";
-import { COURSES_INFO } from "../config";
+import { getCoursesApi } from '../../api/education';
+import { COURSES_INFO } from '../config';
 
 export function updateCoursesDBIndexed(db: any) {
   let coursesInfo = {
@@ -11,7 +11,7 @@ export function updateCoursesDBIndexed(db: any) {
   let sumItemsDuration = 0;
   getCoursesApi(1000, 1)
     .then((res) => {
-      if (res.message !== "Failed to fetch") {
+      if (res.message !== 'Failed to fetch') {
         if (res.courses.docs) {
           const itemsDuration: any = [];
           res.courses.docs.forEach((course: any) => {
@@ -30,7 +30,7 @@ export function updateCoursesDBIndexed(db: any) {
       }
     })
     .then(() => {
-      const transaction = db.transaction([COURSES_INFO], "readwrite");
+      const transaction = db.transaction([COURSES_INFO], 'readwrite');
       const store = transaction.objectStore(COURSES_INFO);
       store.put(coursesInfo);
     });

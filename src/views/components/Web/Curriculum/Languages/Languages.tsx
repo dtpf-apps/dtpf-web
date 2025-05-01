@@ -1,10 +1,10 @@
-import React from "react"
-import { useNearScreen } from "hooks/useNearScreen"
-import "./Languages.scss"
+import React from 'react';
+import { useNearScreen } from 'hooks/useNearScreen';
+import './Languages.scss';
 
 export default function Languages() {
-  const [show, el] = useNearScreen()
-  let ref: any = el
+  const [show, el] = useNearScreen();
+  let ref: any = el;
   return (
     <div className="languages">
       <div className="use-near-screen" ref={ref}>
@@ -24,5 +24,5 @@ export default function Languages() {
         )}
       </div>
     </div>
-  )
+  );
 }

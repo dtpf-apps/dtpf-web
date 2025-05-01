@@ -1,21 +1,12 @@
-import React, { useState, useEffect, useCallback, memo } from "react";
-import {
-  Avatar,
-  Form,
-  Input,
-  Select,
-  Button,
-  Row,
-  Col,
-  notification,
-} from "antd";
-import { useDropzone } from "react-dropzone";
-import NoAvatar from "assets/img/png/no-avatar.png";
-import { updateUserApi, uploadAvatarApi, getAvatarApi } from "api/user";
-import { notifDelay, notifDelayErr } from "utils/notifications";
-import { UserOutlined, LockOutlined } from "@ant-design/icons";
-import "./EditUserForm.scss";
-import { getAccessTokenApi } from "api/endpoints/auth/auth.api";
+import React, { useState, useEffect, useCallback, memo } from 'react';
+import { Avatar, Form, Input, Select, Button, Row, Col, notification } from 'antd';
+import { useDropzone } from 'react-dropzone';
+import NoAvatar from 'assets/img/png/no-avatar.png';
+import { updateUserApi, uploadAvatarApi, getAvatarApi } from 'api/user';
+import { notifDelay, notifDelayErr } from 'utils/notifications';
+import { UserOutlined, LockOutlined } from '@ant-design/icons';
+import './EditUserForm.scss';
+import { getAccessTokenApi } from 'api/endpoints/auth/auth.api';
 
 interface IEditUserFormProps {
   user: any;
@@ -23,11 +14,7 @@ interface IEditUserFormProps {
   setReloadUsers: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
-function EditUserForm({
-  user,
-  setIsVisibleModal,
-  setReloadUsers,
-}: IEditUserFormProps) {
+function EditUserForm({ user, setIsVisibleModal, setReloadUsers }: IEditUserFormProps) {
   const [avatar, setAvatar] = useState(null);
   const [userData, setUserData] = useState({});
   let avatarType: any = avatar;
@@ -94,8 +81,8 @@ function UploadAvatar(props: any) {
     (acceptedFiles) => {
       const file = acceptedFiles[0];
       if (file === undefined) {
-        notification["error"]({
-          message: "Formato de imágen inválido.",
+        notification['error']({
+          message: 'Formato de imágen inválido.',
           duration: notifDelay,
         });
       } else {
@@ -106,7 +93,7 @@ function UploadAvatar(props: any) {
   );
 
   const { getRootProps, getInputProps, isDragActive } = useDropzone({
-    accept: "image/jpeg, image/png",
+    accept: 'image/jpeg, image/png',
     noKeyboard: true,
     onDrop,
   });
@@ -131,13 +118,7 @@ interface IEditFormProps {
   setReloadUsers: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
-function EditForm({
-  user,
-  userData,
-  setUserData,
-  setIsVisibleModal,
-  setReloadUsers,
-}: IEditFormProps) {
+function EditForm({ user, userData, setUserData, setIsVisibleModal, setReloadUsers }: IEditFormProps) {
   const { Option } = Select;
 
   const updateUser = () => {
@@ -145,8 +126,8 @@ function EditForm({
     let userUpdate = userData;
     if (userUpdate.password || userUpdate.repeatPassword) {
       if (userUpdate.password !== userUpdate.repeatPassword) {
-        notification["error"]({
-          message: "Las contraseñas tienen que ser iguales.",
+        notification['error']({
+          message: 'Las contraseñas tienen que ser iguales.',
           duration: notifDelay,
         });
         return;
@@ -155,39 +136,39 @@ function EditForm({
       }
     }
     if (!userUpdate.name || !userUpdate.lastname || !userUpdate.email) {
-      notification["error"]({
-        message: "El nombre, apellidos y email son obligatorios.",
+      notification['error']({
+        message: 'El nombre, apellidos y email son obligatorios.',
         duration: notifDelay,
       });
       return;
     }
-    if (typeof userUpdate.avatar === "object") {
+    if (typeof userUpdate.avatar === 'object') {
       uploadAvatarApi(token, userUpdate.avatar, user._id).then((response) => {
         userUpdate.avatar = response.avatarName;
         if (response.avatarName !== undefined) {
           updateUserApi(token, userUpdate, user._id).then((result) => {
             if (result.status === 200) {
-              notification["success"]({
+              notification['success']({
                 message: result.message,
                 duration: notifDelay,
               });
               setIsVisibleModal(false);
               setReloadUsers(true);
             } else {
-              notification["error"]({
+              notification['error']({
                 message: result.message,
                 duration: notifDelayErr,
               });
-              notification["success"]({
-                message: "Avatar cambiado corretamente.",
+              notification['success']({
+                message: 'Avatar cambiado corretamente.',
                 duration: notifDelay,
               });
               setReloadUsers(true);
             }
           });
         } else {
-          notification["error"]({
-            message: "Extensiones admitidas: (.jpg, .jpeg, .png)",
+          notification['error']({
+            message: 'Extensiones admitidas: (.jpg, .jpeg, .png)',
             duration: notifDelay,
           });
           setIsVisibleModal(false);
@@ -196,14 +177,14 @@ function EditForm({
     } else {
       updateUserApi(token, userUpdate, user._id).then((result) => {
         if (result.status === 200) {
-          notification["success"]({
+          notification['success']({
             message: result.message,
             duration: notifDelay,
           });
           setIsVisibleModal(false);
           setReloadUsers(true);
         } else {
-          notification["error"]({
+          notification['error']({
             message: result.message,
             duration: notifDelay,
           });
@@ -221,9 +202,7 @@ function EditForm({
               prefix={<UserOutlined />}
               placeholder="Nombre"
               value={userData.name}
-              onChange={(e) =>
-                setUserData({ ...userData, name: e.target.value })
-              }
+              onChange={(e) => setUserData({ ...userData, name: e.target.value })}
             />
           </Form.Item>
         </Col>
@@ -233,9 +212,7 @@ function EditForm({
               prefix={<UserOutlined />}
               placeholder="Apellidos"
               value={userData.lastname}
-              onChange={(e) =>
-                setUserData({ ...userData, lastname: e.target.value })
-              }
+              onChange={(e) => setUserData({ ...userData, lastname: e.target.value })}
             />
           </Form.Item>
         </Col>
@@ -247,9 +224,7 @@ function EditForm({
               prefix={<UserOutlined />}
               placeholder="Correo electrónico"
               value={userData.email}
-              onChange={(e) =>
-                setUserData({ ...userData, email: e.target.value })
-              }
+              onChange={(e) => setUserData({ ...userData, email: e.target.value })}
             />
           </Form.Item>
         </Col>
@@ -274,9 +249,7 @@ function EditForm({
               prefix={<LockOutlined />}
               type="password"
               placeholder="Contraseña"
-              onChange={(e) =>
-                setUserData({ ...userData, password: e.target.value })
-              }
+              onChange={(e) => setUserData({ ...userData, password: e.target.value })}
             />
           </Form.Item>
         </Col>
@@ -286,9 +259,7 @@ function EditForm({
               prefix={<LockOutlined />}
               type="password"
               placeholder="Repetir Contraseña"
-              onChange={(e) =>
-                setUserData({ ...userData, repeatPassword: e.target.value })
-              }
+              onChange={(e) => setUserData({ ...userData, repeatPassword: e.target.value })}
             />
           </Form.Item>
         </Col>

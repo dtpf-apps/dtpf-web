@@ -1,6 +1,6 @@
-@import "scss/variables";
-@import "scss/tags";
-@import "scss/mixins";
+@import 'scss/variables';
+@import 'scss/tags';
+@import 'scss/mixins';
 
 .admin-tags {
   .tag-divider {
@@ -44,7 +44,7 @@
       > span {
         border-radius: 10px;
         &:hover {
-            cursor: pointer;
+          cursor: pointer;
         }
       }
     }

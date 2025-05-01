@@ -1,21 +1,18 @@
-import React, { memo, useState } from "react";
-import { Form, Input, Button, message } from "antd";
-import { UserOutlined, LockOutlined } from "@ant-design/icons";
-import { signInApi } from "api/user";
-import { ACCESS_TOKEN, REFRESH_TOKEN } from "utils/constants";
-import {
-  emailValidation,
-  inputValidationStyle,
-} from "utils/formValidation";
-import "./LoginForm.scss";
+import React, { memo, useState } from 'react';
+import { Form, Input, Button, message } from 'antd';
+import { UserOutlined, LockOutlined } from '@ant-design/icons';
+import { signInApi } from 'api/user';
+import { ACCESS_TOKEN, REFRESH_TOKEN } from 'utils/constants';
+import { emailValidation, inputValidationStyle } from 'utils/formValidation';
+import './LoginForm.scss';
 
 function LoginForm() {
   const [isLoading, setIsLoading] = useState(false);
   const [countLogin, setCountLogin] = useState(0);
   const [timeToLogin, setTimeToLogin] = useState(0);
   const [inputs, setInputs] = useState({
-    email: "",
-    password: "",
+    email: '',
+    password: '',
   });
   const handleChangeForm = (e: any) => {
     setInputs({
@@ -26,15 +23,15 @@ function LoginForm() {
   const inputValidation = (e: any) => {
     const { type } = e.target;
     const emailValid = emailValidation(e.target.value);
-    if (type === "email") {
+    if (type === 'email') {
       if (!emailValid) {
-        inputValidationStyle(e, "add", "error");
+        inputValidationStyle(e, 'add', 'error');
       } else {
-        inputValidationStyle(e, "remove", "error");
+        inputValidationStyle(e, 'remove', 'error');
       }
     }
-    if (e.target.value === "") {
-      inputValidationStyle(e, "remove", "error");
+    if (e.target.value === '') {
+      inputValidationStyle(e, 'remove', 'error');
     }
   };
   const login = () => {
@@ -52,7 +49,7 @@ function LoginForm() {
         const { accessToken, refreshToken } = result;
         localStorage.setItem(ACCESS_TOKEN, accessToken);
         localStorage.setItem(REFRESH_TOKEN, refreshToken);
-        window.location.href = "/ad1988";
+        window.location.href = '/ad1988';
       }
       setIsLoading(false);
     }, timeToLogin);
@@ -61,7 +58,7 @@ function LoginForm() {
     <Form className="login-form" onFinish={login} onChange={handleChangeForm}>
       <Form.Item>
         <Input
-          prefix={<UserOutlined style={{ color: "rgba(0,0,0,.25)" }} />}
+          prefix={<UserOutlined style={{ color: 'rgba(0,0,0,.25)' }} />}
           type="email"
           name="email"
           aria-label="Email"
@@ -72,7 +69,7 @@ function LoginForm() {
       </Form.Item>
       <Form.Item>
         <Input
-          prefix={<LockOutlined style={{ color: "rgba(0,0,0,.25)" }} />}
+          prefix={<LockOutlined style={{ color: 'rgba(0,0,0,.25)' }} />}
           type="password"
           name="password"
           aria-label="Contraseña"
@@ -82,12 +79,7 @@ function LoginForm() {
         />
       </Form.Item>
       <Form.Item>
-        <Button
-          type="link"
-          htmlType="submit"
-          className="login-form__button"
-          loading={isLoading}
-        >
+        <Button type="link" htmlType="submit" className="login-form__button" loading={isLoading}>
           Entrar
         </Button>
       </Form.Item>

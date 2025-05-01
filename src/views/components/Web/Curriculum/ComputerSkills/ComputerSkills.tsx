@@ -1,7 +1,7 @@
-import React from "react";
-import { useNearScreen } from "hooks/useNearScreen";
-import { Progress, Row, Col } from "antd";
-import "./ComputerSkills.scss";
+import React from 'react';
+import { useNearScreen } from 'hooks/useNearScreen';
+import { Progress, Row, Col } from 'antd';
+import './ComputerSkills.scss';
 
 export default function ComputerSkills() {
   const [show, el] = useNearScreen();
@@ -45,15 +45,15 @@ export default function ComputerSkills() {
 }
 
 function Skill(props: any) {
-  const { skill, percent, status = "normal" } = props;
+  const { skill, percent, status = 'normal' } = props;
   return (
     <div className="computer-skills__skill">
       {skill}
       <span className="computer-skills__skill-progress">
         <Progress
           strokeColor={{
-            from: "#5d718d",
-            to: "#273b56",
+            from: '#5d718d',
+            to: '#273b56',
           }}
           percent={percent}
           status={status}

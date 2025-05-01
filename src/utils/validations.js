@@ -1,3 +1,3 @@
 export function StorageValid() {
-  return typeof Storage !== "undefined";
+  return typeof Storage !== 'undefined';
 }

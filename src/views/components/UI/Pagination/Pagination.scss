@@ -1,14 +1,14 @@
-@import "scss/variables";
-@import "scss/mixins";
+@import 'scss/variables';
+@import 'scss/mixins';
 
-:root[data-theme="light"] {
+:root[data-theme='light'] {
   --t-pagination-desktop-bg: #fff;
   --t-pagination-desktop-bg-hover: var(--primary-color);
   --t-pagination-desktop-bg-selector: var(--primary-color-light);
   --t-pagination-desktop-color: var(--primary-color);
   --t-pagination-desktop-border: var(--primary-color);
 }
-:root[data-theme="dark"] {
+:root[data-theme='dark'] {
   --t-pagination-desktop-bg: var(--primary-color);
   --t-pagination-desktop-bg-hover: var(--primary-color-dark);
   --t-pagination-desktop-bg-selector: var(--primary-color-dark);

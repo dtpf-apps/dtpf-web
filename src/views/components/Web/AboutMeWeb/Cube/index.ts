@@ -1,1 +1,1 @@
-export { default } from "./Cube";
+export { default } from './Cube';

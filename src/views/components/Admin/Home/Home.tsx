@@ -1,20 +1,17 @@
-import React, { useState, useEffect, memo } from "react";
-import { useHistory } from "react-router-dom";
-import { checkUserLogin } from "providers/AuthProvider";
-import {
-  getIndexedDBVersionApi,
-  updateIndexedDBVersionApi,
-} from "api/utils";
-import { useCookies } from "react-cookie";
-import { Button, message, Modal } from "antd";
-import "./Home.scss";
+import React, { useState, useEffect, memo } from 'react';
+import { useHistory } from 'react-router-dom';
+import { checkUserLogin } from 'providers/AuthProvider';
+import { getIndexedDBVersionApi, updateIndexedDBVersionApi } from 'api/utils';
+import { useCookies } from 'react-cookie';
+import { Button, message, Modal } from 'antd';
+import './Home.scss';
 
 function Home(props: any) {
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const [cookies, setCookie, removeCookie] = useCookies();
   const history = useHistory();
   const deleteCookies = () => {
-    const getCookies = document.cookie.split(";");
+    const getCookies = document.cookie.split(';');
     if (getCookies.length > 1) {
       for (let i = 0; i < getCookies.length; i++) {
         removeCookie(getCookies[i]);
@@ -48,11 +45,11 @@ function RenderHome(props: any) {
   }, []);
   const showConfirm = () => {
     confirm({
-      title: "Actualizando IndexedDB",
+      title: 'Actualizando IndexedDB',
       content: `¿Estás seguro que quieres actualizar IndexedDB?`,
-      okText: "Actualizar",
-      okType: "primary",
-      cancelText: "Cancelar",
+      okText: 'Actualizar',
+      okType: 'primary',
+      cancelText: 'Cancelar',
       onOk() {
         updateIndexedDBVersionApi()
           .then((res) => {
@@ -64,7 +61,7 @@ function RenderHome(props: any) {
                 setIdbVersion(res.indexedDBVersion);
               }
             } else {
-              message.error("No hay respuesta al servidor.");
+              message.error('No hay respuesta al servidor.');
             }
           })
           .catch((err) => {
@@ -77,7 +74,7 @@ function RenderHome(props: any) {
     <div className="admin-home">
       <div className="admin-home__title">
         <h1>
-          {`Hola ${userData ? userData.user.name : "Anónimo"}
+          {`Hola ${userData ? userData.user.name : 'Anónimo'}
         ${userData && userData.user.lastname}`}
         </h1>
       </div>

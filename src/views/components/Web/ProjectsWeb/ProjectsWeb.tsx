@@ -1,25 +1,27 @@
-import React, { useState, useEffect } from "react"
-import RecetasDeliciosasMsr from "./Projects/RecetasDeliciosasMsr"
+import React, { useState, useEffect } from 'react';
+import RecetasDeliciosasMsr from './Projects/RecetasDeliciosasMsr';
 // import PortfolioDTPF from "./Projects/PortfolioDTPF"
-import Audity from "./Projects/Audity"
-import Dalist from "./Projects/Dalist"
+import Audity from './Projects/Audity';
+import Dalist from './Projects/Dalist';
 // import BeFriends from "./Projects/BeFriends"
-import Dagif from "./Projects/Dagif"
-import Amazen from "./Projects/Amazen"
-import "./ProjectsWeb.scss"
+import Dagif from './Projects/Dagif';
+import Amazen from './Projects/Amazen';
+import './ProjectsWeb.scss';
 
 export default function ProjectsWeb() {
-  const [innerWidth, setInnerWidth] = useState(window.innerWidth)
+  const [innerWidth, setInnerWidth] = useState(window.innerWidth);
   const reportWindowSize = () => {
-    setInnerWidth(window.innerWidth)
-  }
+    setInnerWidth(window.innerWidth);
+  };
   useEffect(() => {
-    let unmounted = false
+    let unmounted = false;
     if (!unmounted) {
-      window.onresize = reportWindowSize
+      window.onresize = reportWindowSize;
     }
-    return () => { unmounted = true }
-  }, []) 
+    return () => {
+      unmounted = true;
+    };
+  }, []);
   return (
     <div className="projects-web">
       <h1 className="projects-web__title">Proyectos</h1>
@@ -31,5 +33,5 @@ export default function ProjectsWeb() {
       <Amazen innerWidth={innerWidth} align="right" />
       <Dagif innerWidth={innerWidth} align="left" />
     </div>
-  )
+  );
 }

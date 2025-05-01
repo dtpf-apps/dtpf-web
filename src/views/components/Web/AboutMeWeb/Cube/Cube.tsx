@@ -1,17 +1,16 @@
-import React, { useEffect, useState, Suspense, lazy } from "react";
-import { getAboutMeInfoAPI } from "api/endpoints/aboutMe/aboutMe.api";
-import "./Cube.scss";
-import { IgetAboutMeInfoAPIResponseInfo } from "api/endpoints/aboutMe/brandUsers.response.interface";
-const Spin = lazy(() => import("views/components/UI/Spin"));
+import React, { useEffect, useState, Suspense, lazy } from 'react';
+import { getAboutMeInfoAPI } from 'api/endpoints/aboutMe/aboutMe.api';
+import './Cube.scss';
+import { IgetAboutMeInfoAPIResponseInfo } from 'api/endpoints/aboutMe/brandUsers.response.interface';
+const Spin = lazy(() => import('views/components/UI/Spin'));
 
 export default function Cube() {
-  const [cubeInfo, setCubeInfo] =
-    useState<IgetAboutMeInfoAPIResponseInfo | null>(null);
+  const [cubeInfo, setCubeInfo] = useState<IgetAboutMeInfoAPIResponseInfo | null>(null);
 
   useEffect(() => {
     let isMounted = true;
     (async () => {
-      const getAboutMeInfo = await getAboutMeInfoAPI({ key: "cube" });
+      const getAboutMeInfo = await getAboutMeInfoAPI({ key: 'cube' });
       isMounted && setCubeInfo(getAboutMeInfo.data.info);
     })();
     return () => {
@@ -32,11 +31,7 @@ export default function Cube() {
   return <RenderCube cubeInfo={cubeInfo} />;
 }
 
-function RenderCube({
-  cubeInfo,
-}: {
-  cubeInfo: IgetAboutMeInfoAPIResponseInfo;
-}) {
+function RenderCube({ cubeInfo }: { cubeInfo: IgetAboutMeInfoAPIResponseInfo }) {
   return (
     <div id="css-3D-cube">
       <div id="css-3D-cube-infinite">

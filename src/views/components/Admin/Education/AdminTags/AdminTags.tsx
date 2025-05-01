@@ -1,25 +1,15 @@
-import React, { useState, useEffect, Suspense, lazy, memo } from "react";
-import { getCourseApi, addTagApi, deleteTagApi } from "api/education";
-import {
-  Button,
-  Row,
-  Col,
-  Form,
-  Divider,
-  Input,
-  Tag,
-  Modal,
-  notification,
-} from "antd";
-import { notifDelay, notifDelayErr } from "utils/notifications";
-import { TagOutlined, PlusCircleOutlined } from "@ant-design/icons";
-import "./AdminTags.scss";
-import { getAccessTokenApi } from "api/endpoints/auth/auth.api";
-const Spin = lazy(() => import("views/components/UI/Spin"));
+import React, { useState, useEffect, Suspense, lazy, memo } from 'react';
+import { getCourseApi, addTagApi, deleteTagApi } from 'api/education';
+import { Button, Row, Col, Form, Divider, Input, Tag, Modal, notification } from 'antd';
+import { notifDelay, notifDelayErr } from 'utils/notifications';
+import { TagOutlined, PlusCircleOutlined } from '@ant-design/icons';
+import './AdminTags.scss';
+import { getAccessTokenApi } from 'api/endpoints/auth/auth.api';
+const Spin = lazy(() => import('views/components/UI/Spin'));
 const { confirm } = Modal;
 
 interface IAdminTagsProps {
-  course: { _id: string, url: string };
+  course: { _id: string; url: string };
   courseData: { _id: string };
   setReloadCourses: React.Dispatch<React.SetStateAction<boolean>>;
 }
@@ -46,31 +36,31 @@ function AdminTags({ course, courseData, setReloadCourses }: IAdminTagsProps) {
   const deleteTag = (tag: string) => {
     const token = getAccessTokenApi();
     confirm({
-      title: "Eliminando tag",
+      title: 'Eliminando tag',
       content: `¿Estas seguro de eliminar el tag ${tag}?`,
-      okText: "Eliminar",
-      okType: "danger",
-      cancelText: "Cancelar",
+      okText: 'Eliminar',
+      okType: 'danger',
+      cancelText: 'Cancelar',
       onOk() {
         deleteTagApi(token, courseData._id, { tags: [tag] })
           .then((response) => {
             if (response.status === 200) {
-              notification["success"]({
+              notification['success']({
                 message: `"${tag}" eliminado correctamente.`,
                 duration: notifDelay,
               });
               setReloadCourses(true);
               setReloadTags(true);
             } else {
-              notification["warning"]({
+              notification['warning']({
                 message: response.message,
                 duration: notifDelay,
               });
             }
           })
           .catch(() => {
-            notification["error"]({
-              message: "Error del servidor.",
+            notification['error']({
+              message: 'Error del servidor.',
             });
           });
       },
@@ -88,7 +78,7 @@ function AdminTags({ course, courseData, setReloadCourses }: IAdminTagsProps) {
           <Divider className="tag-divider">Tags</Divider>
           <Row className="admin-tags__tags">
             {tags.map((tag: any) => {
-              let tagToClassname = tag.replace(/[ .]/g, "");
+              let tagToClassname = tag.replace(/[ .]/g, '');
               return (
                 <Col key={tag} className={tagToClassname}>
                   <TagAnt tag={tag} deleteTag={deleteTag} />
@@ -122,25 +112,19 @@ function TagAnt({ tag, deleteTag }: ITagAntProps) {
 
 interface IAddTagFormProps {
   tag: any;
-  course: { _id: string, url: string };
+  course: { _id: string; url: string };
   setTag: (tag: any) => void;
   setReloadCourses: React.Dispatch<React.SetStateAction<boolean>>;
   setReloadTags: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
-function AddTagForm({
-  tag,
-  setTag,
-  course,
-  setReloadCourses,
-  setReloadTags,
-}: IAddTagFormProps) {
+function AddTagForm({ tag, setTag, course, setReloadCourses, setReloadTags }: IAddTagFormProps) {
   const addTag = () => {
     const token = getAccessTokenApi();
     addTagApi(token, course._id, tag)
       .then((response) => {
         if (response.status === 200) {
-          notification["success"]({
+          notification['success']({
             message: `"${tag.tags}" añadido correctamente.`,
             duration: notifDelay,
           });
@@ -148,15 +132,15 @@ function AddTagForm({
           setReloadTags(true);
           setTag([]);
         } else {
-          notification["warning"]({
+          notification['warning']({
             message: response.message,
             duration: notifDelayErr,
           });
         }
       })
       .catch(() => {
-        notification["error"]({
-          message: "Error del servidor.",
+        notification['error']({
+          message: 'Error del servidor.',
         });
       });
   };

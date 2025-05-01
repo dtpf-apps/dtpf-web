@@ -1,1 +1,1 @@
-export { default } from "./MenuWebList";
+export { default } from './MenuWebList';

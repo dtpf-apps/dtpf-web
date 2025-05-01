@@ -1,6 +1,6 @@
-import { useState, useEffect } from "react";
-import { DB_DTPF, VERSION, COURSES_INFO } from "../config";
-import { isDBValid } from "../utils/validations";
+import { useState, useEffect } from 'react';
+import { DB_DTPF, VERSION, COURSES_INFO } from '../config';
+import { isDBValid } from '../utils/validations';
 
 export default function useGetCoursesDBIndexed() {
   const [coursesData, setCoursesData] = useState({
@@ -29,7 +29,7 @@ export default function useGetCoursesDBIndexed() {
 
 const setCourses = (db: any, setCoursesData: any) => {
   if (db.objectStoreNames.contains(COURSES_INFO)) {
-    const transaction = db.transaction(COURSES_INFO, "readonly");
+    const transaction = db.transaction(COURSES_INFO, 'readonly');
     const objectStore = transaction.objectStore(COURSES_INFO);
     const request = objectStore.get(COURSES_INFO);
     request.onsuccess = function (e: any) {
@@ -39,7 +39,7 @@ const setCourses = (db: any, setCoursesData: any) => {
       });
     };
     request.onerror = function (e: any) {
-      console.log("onerror!", e);
+      console.log('onerror!', e);
     };
   } else {
     setCoursesData({

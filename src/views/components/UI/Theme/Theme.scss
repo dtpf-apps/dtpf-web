@@ -1,6 +1,6 @@
-@import "scss/variables";
-@import "scss/mixins";
-@import "scss/animations";
+@import 'scss/variables';
+@import 'scss/mixins';
+@import 'scss/animations';
 
 .layout__theme-switch {
   position: fixed;
@@ -21,7 +21,7 @@
     top: 4px;
   }
 
-  input[type="checkbox"] {
+  input[type='checkbox'] {
     height: 0;
     width: 0;
     visibility: hidden;
@@ -45,8 +45,8 @@
   }
 
   label:after {
-    content: "";
-    background-image: url("../../../../assets/img/png/sun.png");
+    content: '';
+    background-image: url('../../../../assets/img/png/sun.png');
     background-size: cover;
     width: 20px;
     height: 20px;
@@ -59,13 +59,13 @@
     transition: cubic-bezier(0.68, -0.55, 0.27, 01.55) 320ms;
   }
 
-  input:checked+label {
+  input:checked + label {
     background: var(--primary-bg);
   }
 
-  input:checked+label:after {
+  input:checked + label:after {
     left: calc(100% - 5px);
-    background-image: url("../../../../assets/img/png/moon.png");
+    background-image: url('../../../../assets/img/png/moon.png');
     -webkit-transform: translateX(-100%);
     -moz-transform: translateX(-100%);
     -ms-transform: translateX(-100%);

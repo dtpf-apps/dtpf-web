@@ -1,12 +1,12 @@
-import React, { memo } from "react";
-import { Modal as ModalAntd } from "antd";
+import React, { memo } from 'react';
+import { Modal as ModalAntd } from 'antd';
 
 interface IModalProps {
-  children: any
-  title: string
-  isVisible: boolean
-  setIsVisible: React.Dispatch<boolean>
-  className?: string | undefined
+  children: any;
+  title: string;
+  isVisible: boolean;
+  setIsVisible: React.Dispatch<boolean>;
+  className?: string | undefined;
 }
 
 function Modal({ children, title, isVisible, setIsVisible, className }: IModalProps) {

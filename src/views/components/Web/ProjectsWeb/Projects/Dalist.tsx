@@ -1,15 +1,12 @@
-import React from "react"
-import ProjectLayout from "../ProjectLayout"
-import audityImage from "assets/img/projects/dalist/dalist.webp"
-import ModalImage1 from "assets/img/projects/dalist/dalistModalImage1.webp"
-import ModalImage2 from "assets/img/projects/dalist/dalistModalImage2.webp"
-import ModalImage3 from "assets/img/projects/dalist/dalistModalImage3.webp"
+import React from 'react';
+import ProjectLayout from '../ProjectLayout';
+import audityImage from 'assets/img/projects/dalist/dalist.webp';
+import ModalImage1 from 'assets/img/projects/dalist/dalistModalImage1.webp';
+import ModalImage2 from 'assets/img/projects/dalist/dalistModalImage2.webp';
+import ModalImage3 from 'assets/img/projects/dalist/dalistModalImage3.webp';
 
-export default function Dalist(props: {
-  align: string
-  innerWidth: number
-}) {
-  const { align, innerWidth } = props
+export default function Dalist(props: { align: string; innerWidth: number }) {
+  const { align, innerWidth } = props;
   return (
     <ProjectLayout
       innerWidth={innerWidth}
@@ -43,29 +40,29 @@ export default function Dalist(props: {
         para el multiidioma, Swiper para los sliders de contenido, entre otras.`,
         `Para más información:`,
         `・ Backend: https://github.com/DTPF/wishlist-node`,
-        `・ Frontend: https://github.com/DTPF/wishlist-react`
+        `・ Frontend: https://github.com/DTPF/wishlist-react`,
       ]}
       modalTags={[
-        "JavaScript",
-        "TypeScript",
-        "NodeJS",
-        "Express",
-        "JavaScript",
-        "MongoDB",
-        "Mongoose",
-        "Auth0",
-        "Helmet",
-        "Cors",
-        "i18next",
-        "Dotenv",
-        "SCSS",
-        "Ant Design",
-        "PWA",
-        "Flux",
-        "MVC",
-        "SOLID",
+        'JavaScript',
+        'TypeScript',
+        'NodeJS',
+        'Express',
+        'JavaScript',
+        'MongoDB',
+        'Mongoose',
+        'Auth0',
+        'Helmet',
+        'Cors',
+        'i18next',
+        'Dotenv',
+        'SCSS',
+        'Ant Design',
+        'PWA',
+        'Flux',
+        'MVC',
+        'SOLID',
       ]}
-      analyticTag='Dalist'
+      analyticTag="Dalist"
     />
-  )
+  );
 }

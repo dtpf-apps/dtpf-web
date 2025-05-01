@@ -1,11 +1,11 @@
-import React, { memo } from "react";
-import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
-import routes from "./config/routes";
-import AuthProvider from "./providers/AuthProvider";
-import ConnectionProvider from "./providers/ConnectionProvider";
-import MainMenuProvider from "./providers/MainMenuProvider";
-import dbIndexed from "./dbIndexed";
-import "./App.scss";
+import React, { memo } from 'react';
+import { BrowserRouter as Router, Switch, Route } from 'react-router-dom';
+import routes from './config/routes';
+import AuthProvider from './providers/AuthProvider';
+import ConnectionProvider from './providers/ConnectionProvider';
+import MainMenuProvider from './providers/MainMenuProvider';
+import dbIndexed from './dbIndexed';
+import './App.scss';
 
 function App() {
   dbIndexed();
@@ -28,12 +28,7 @@ function App() {
 
 export default memo(App);
 
-function RouteWithSubRoutes(route: {
-  path: string;
-  exact: boolean;
-  routes: {};
-  component: any;
-}) {
+function RouteWithSubRoutes(route: { path: string; exact: boolean; routes: {}; component: any }) {
   return (
     <Route
       path={route.path}

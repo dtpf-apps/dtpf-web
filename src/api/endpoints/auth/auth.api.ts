@@ -1,7 +1,7 @@
-import { basePath, apiVersion } from "../../utils/config";
-import { ACCESS_TOKEN, REFRESH_TOKEN } from "../../../utils/constants";
-import jwtDecode from "jwt-decode";
-import { IrefreshAccessTokenApiResponse } from "./auth.response.interface";
+import { basePath, apiVersion } from '../../utils/config';
+import { ACCESS_TOKEN, REFRESH_TOKEN } from '../../../utils/constants';
+import jwtDecode from 'jwt-decode';
+import { IrefreshAccessTokenApiResponse } from './auth.response.interface';
 
 interface IjwtDecodePayload {
   exp: number;
@@ -9,7 +9,7 @@ interface IjwtDecodePayload {
 
 export function getAccessTokenApi() {
   const accessToken = localStorage.getItem(ACCESS_TOKEN);
-  if (!accessToken || accessToken === "null") {
+  if (!accessToken || accessToken === 'null') {
     return null;
   }
   return willExpireToken(accessToken) ? null : accessToken;
@@ -17,7 +17,7 @@ export function getAccessTokenApi() {
 
 export function getRefreshTokenApi() {
   const refreshToken = localStorage.getItem(REFRESH_TOKEN);
-  if (!refreshToken || refreshToken === "null") {
+  if (!refreshToken || refreshToken === 'null') {
     return null;
   }
   return willExpireToken(refreshToken) ? null : refreshToken;
@@ -29,16 +29,13 @@ export async function refreshAccessTokenApi({
   refreshToken: string;
 }): Promise<IrefreshAccessTokenApiResponse> {
   const params = {
-    method: "POST",
+    method: 'POST',
     headers: {
-      "Content-Type": "application/json",
+      'Content-Type': 'application/json',
     },
     body: JSON.stringify({ refreshToken }),
   };
-  const response = await fetch(
-    `${basePath}/${apiVersion}/refresh-access-token`,
-    params
-  );
+  const response = await fetch(`${basePath}/${apiVersion}/refresh-access-token`, params);
   const data = await response.json();
   return { response, data };
 }

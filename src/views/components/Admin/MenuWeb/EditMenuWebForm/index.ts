@@ -1,1 +1,1 @@
-export { default } from "./EditMenuWebForm";
+export { default } from './EditMenuWebForm';

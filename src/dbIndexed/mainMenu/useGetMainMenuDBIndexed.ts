@@ -1,6 +1,6 @@
-import { useState, useEffect } from "react";
-import { DB_DTPF, VERSION, MAIN_MENU } from "../config";
-import { isDBValid } from "../utils/validations";
+import { useState, useEffect } from 'react';
+import { DB_DTPF, VERSION, MAIN_MENU } from '../config';
+import { isDBValid } from '../utils/validations';
 
 export default function useGetMainMenuDBIndexed() {
   const [mainMenuData, setMainMenuData] = useState({
@@ -18,7 +18,7 @@ export default function useGetMainMenuDBIndexed() {
       setMenu(db, setMainMenuData);
     };
     openRequest.onerror = function (e: any) {
-      // If indexedDb version is lower than the current.. 
+      // If indexedDb version is lower than the current..
       if (e.target.error.code === 0) {
         indexedDB.deleteDatabase(DB_DTPF);
         window.location.reload();
@@ -30,7 +30,7 @@ export default function useGetMainMenuDBIndexed() {
 
 const setMenu = (db: any, setMainMenuData: any) => {
   if (db.objectStoreNames.contains(MAIN_MENU)) {
-    const transaction = db.transaction(MAIN_MENU, "readonly");
+    const transaction = db.transaction(MAIN_MENU, 'readonly');
     const objectStore = transaction.objectStore(MAIN_MENU);
     const request = objectStore.get(MAIN_MENU);
     request.onsuccess = function (e: any) {
@@ -40,7 +40,7 @@ const setMenu = (db: any, setMainMenuData: any) => {
       });
     };
     request.onerror = function (e: any) {
-      console.log("onerror!", e);
+      console.log('onerror!', e);
     };
   } else {
     setMainMenuData({

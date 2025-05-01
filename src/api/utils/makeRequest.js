@@ -5,7 +5,7 @@ export async function makeRequest(
   headerMethod = null,
   headerToken = null,
   bodyData = null,
-  contentType = "application/json"
+  contentType = 'application/json'
 ) {
   function getParam() {
     if (!contentType) {
@@ -21,7 +21,7 @@ export async function makeRequest(
         method: headerMethod,
         headers: {
           Authorization: headerToken,
-          "Content-type": contentType,
+          'Content-type': contentType,
         },
         body: bodyData,
       };

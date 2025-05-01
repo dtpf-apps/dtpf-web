@@ -1,15 +1,13 @@
-import React, { useState, useEffect, Suspense, lazy } from "react";
-import { Button } from "antd";
-import { withRouter } from "react-router-dom";
-import queryString from "query-string";
-import { getCoursesApi } from "api/education";
-import "./Education.scss";
-const Modal = lazy(() => import("views/components/UI/Modal"));
-const PaginationAnt = lazy(() => import("views/components/UI/Pagination"));
-const CoursesList = lazy(() => import("./CoursesList"));
-const AddEditCoursesForm = lazy(
-  () => import("./AddEditCoursesForm")
-);
+import React, { useState, useEffect, Suspense, lazy } from 'react';
+import { Button } from 'antd';
+import { withRouter } from 'react-router-dom';
+import queryString from 'query-string';
+import { getCoursesApi } from 'api/education';
+import './Education.scss';
+const Modal = lazy(() => import('views/components/UI/Modal'));
+const PaginationAnt = lazy(() => import('views/components/UI/Pagination'));
+const CoursesList = lazy(() => import('./CoursesList'));
+const AddEditCoursesForm = lazy(() => import('./AddEditCoursesForm'));
 
 interface ICoursesProps {
   location: any;
@@ -22,7 +20,7 @@ function Courses({ location, history }: ICoursesProps) {
   const [itemsPerPage, setItemsPerPage] = useState(10);
   const [reloadCourses, setReloadCourses] = useState(false);
   const [isVisibleModal, setIsVisibleModal] = useState(false);
-  const [modalTitle, setModalTitle] = useState("");
+  const [modalTitle, setModalTitle] = useState('');
   const [modalContent, setModalContent] = useState(null);
 
   useEffect(() => {
@@ -61,11 +59,7 @@ function Courses({ location, history }: ICoursesProps) {
         />
       )}
       <Suspense fallback={<></>}>
-        <Modal
-          title={modalTitle}
-          isVisible={isVisibleModal}
-          setIsVisible={setIsVisibleModal}
-        >
+        <Modal title={modalTitle} isVisible={isVisibleModal} setIsVisible={setIsVisibleModal}>
           {modalContent}
         </Modal>
       </Suspense>
@@ -80,23 +74,13 @@ interface IAddCourseProps {
   setReloadCourses: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
-function AddCourse({
-  setIsVisibleModal,
-  setModalTitle,
-  setModalContent,
-  setReloadCourses,
-}: IAddCourseProps) {
-  
+function AddCourse({ setIsVisibleModal, setModalTitle, setModalContent, setReloadCourses }: IAddCourseProps) {
   const addCourse = () => {
     setIsVisibleModal(true);
-    setModalTitle("Creando nueva Formación");
+    setModalTitle('Creando nueva Formación');
     setModalContent(
       <Suspense fallback={<></>}>
-        <AddEditCoursesForm
-          setIsVisibleModal={setIsVisibleModal}
-          setReloadCourses={setReloadCourses}
-          course={null}
-        />
+        <AddEditCoursesForm setIsVisibleModal={setIsVisibleModal} setReloadCourses={setReloadCourses} course={null} />
       </Suspense>
     );
   };
@@ -125,27 +109,18 @@ function RenderListCourses({
   setModalContent,
   setReloadCourses,
 }: IRenderListCoursesProps) {
-  
   const editCourse = (course: any) => {
     setIsVisibleModal(true);
-    setModalTitle("Editar Curso");
+    setModalTitle('Editar Curso');
     setModalContent(
       <Suspense fallback={<></>}>
-        <AddEditCoursesForm
-          setIsVisibleModal={setIsVisibleModal}
-          setReloadCourses={setReloadCourses}
-          course={course}
-        />
+        <AddEditCoursesForm setIsVisibleModal={setIsVisibleModal} setReloadCourses={setReloadCourses} course={course} />
       </Suspense>
     );
   };
   return (
     <Suspense fallback={<></>}>
-      <CoursesList
-        courses={courses}
-        setReloadCourses={setReloadCourses}
-        editCourse={editCourse}
-      />
+      <CoursesList courses={courses} setReloadCourses={setReloadCourses} editCourse={editCourse} />
     </Suspense>
   );
 }

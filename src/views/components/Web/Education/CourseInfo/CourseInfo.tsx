@@ -1,25 +1,16 @@
-import React, { useState, useEffect, Suspense, lazy } from "react";
-import { Link } from "react-router-dom";
-import {
-  getCourseApi,
-  getImageApi,
-  getPrevCourseApi,
-  getNextCourseApi,
-} from "api/education";
-import useScrollToTop from "hooks/useScrollToTop";
-import moment from "moment";
-import "moment/locale/es";
-import { Row, Col, Image, Tag, Button } from "antd";
-import {
-  ArrowLeftOutlined,
-  ArrowRightOutlined,
-  LinkOutlined,
-} from "@ant-design/icons";
-import "./CourseInfo.scss";
-import noImage from "assets/img/png/no-image.png";
-const Spin = lazy(() => import("views/components/UI/Spin"))
-const Helmet = lazy(() => import("views/components/Helmet"));
-const Error = lazy(() => import("views/pages/Errors"));
+import React, { useState, useEffect, Suspense, lazy } from 'react';
+import { Link } from 'react-router-dom';
+import { getCourseApi, getImageApi, getPrevCourseApi, getNextCourseApi } from 'api/education';
+import useScrollToTop from 'hooks/useScrollToTop';
+import moment from 'moment';
+import 'moment/locale/es';
+import { Row, Col, Image, Tag, Button } from 'antd';
+import { ArrowLeftOutlined, ArrowRightOutlined, LinkOutlined } from '@ant-design/icons';
+import './CourseInfo.scss';
+import noImage from 'assets/img/png/no-image.png';
+const Spin = lazy(() => import('views/components/UI/Spin'));
+const Helmet = lazy(() => import('views/components/Helmet'));
+const Error = lazy(() => import('views/pages/Errors'));
 
 export default function CourseInfo(props: any) {
   const { url, courses } = props;
@@ -28,10 +19,7 @@ export default function CourseInfo(props: any) {
   useScrollToTop();
   useEffect(() => {
     let isMounted = true;
-    const offlineCourse =
-      courses &&
-      courses.docs &&
-      courses.docs.find((course: any) => course.url === url);
+    const offlineCourse = courses && courses.docs && courses.docs.find((course: any) => course.url === url);
     getCourseApi(url).then((response) => {
       if (response.status === 200) {
         if (isMounted) {
@@ -72,7 +60,7 @@ export default function CourseInfo(props: any) {
 
 function Course(props: any) {
   const { course, courses } = props;
-  const [image, setImage] = useState("");
+  const [image, setImage] = useState('');
   const [prevCourse, setPrevCourse] = useState(null);
   const [nextCourse, setNextCourse] = useState(null);
   const [isLoading, setIsLoading] = useState(true);
@@ -127,12 +115,12 @@ function Course(props: any) {
             setImage(response.url);
           }
         } else {
-          setImage("");
+          setImage('');
         }
         setIsLoading(false);
       });
     } else {
-      setImage("");
+      setImage('');
       setIsLoading(false);
     }
     return () => {
@@ -148,20 +136,14 @@ function Course(props: any) {
       ) : (
         <>
           <Suspense fallback={<></>}>
-            <Helmet
-              titleHelmet={`Formación | ${course.title}`}
-              contentHelmet={course.title}
-            />
+            <Helmet titleHelmet={`Formación | ${course.title}`} contentHelmet={course.title} />
           </Suspense>
           <Links prevCourse={prevCourse} nextCourse={nextCourse} />
           <Col span={24} className="course-info__title">
             <h1>{course.title}</h1>
           </Col>
           <div className="course-info__image">
-            <Image
-              src={image ? image : noImage}
-              alt={course && "Imágen de " + course.title}
-            ></Image>
+            <Image src={image ? image : noImage} alt={course && 'Imágen de ' + course.title}></Image>
           </div>
           <Row className="course-info__info">
             <Col span={12} className="course-info__info-duration">
@@ -181,11 +163,7 @@ function Course(props: any) {
             <Col span={24} className="course-info__button-link">
               {course && course.link && (
                 <Button>
-                  <a
-                    href={course.link}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                  >
+                  <a href={course.link} target="_blank" rel="noopener noreferrer">
                     <LinkOutlined />
                     Enlace a Certificación
                   </a>
@@ -230,7 +208,7 @@ function Tags(props: any) {
   const [tags, setTags] = useState([]);
   useEffect(() => {
     let isMounted = true;
-    isMounted && setTags(course.tags)
+    isMounted && setTags(course.tags);
     return () => {
       isMounted = false;
     };
@@ -239,7 +217,7 @@ function Tags(props: any) {
     <div className="course-info__tags-div">
       {tags &&
         tags.map((tag: string) => {
-          const tagToClassname = tag.replace(/[ .]/g, "");
+          const tagToClassname = tag.replace(/[ .]/g, '');
           return (
             <span key={tag} className={tagToClassname}>
               <Tag>{tag}</Tag>

@@ -1,10 +1,10 @@
-import React, { useState } from "react";
-import { useNearScreen } from "hooks/useNearScreen";
-import { Row, Col, Collapse } from "antd";
-import Modal from "views/components/UI/Modal";
-import { LeftCircleTwoTone, FilePdfOutlined } from "@ant-design/icons";
-import memoriaRecetasPDF from "assets/pdf/memoria-proyecto-final.pdf";
-import "./Education.scss";
+import React, { useState } from 'react';
+import { useNearScreen } from 'hooks/useNearScreen';
+import { Row, Col, Collapse } from 'antd';
+import Modal from 'views/components/UI/Modal';
+import { LeftCircleTwoTone, FilePdfOutlined } from '@ant-design/icons';
+import memoriaRecetasPDF from 'assets/pdf/memoria-proyecto-final.pdf';
+import './Education.scss';
 
 const { Panel } = Collapse;
 
@@ -23,10 +23,7 @@ export default function Education() {
         <AdministrativoN1 />
         <GraduadoEscolar />
       </Row>
-      <ModalPDF
-        isVisibleModal={isVisibleModal}
-        setIsVisibleModal={setIsVisibleModal}
-      />
+      <ModalPDF isVisibleModal={isVisibleModal} setIsVisibleModal={setIsVisibleModal} />
     </>
   );
 }
@@ -46,8 +43,7 @@ function ModalPDF(props) {
           <a href="../../../../assets/pdf/memoria-proyecto-final.pdf" download>
             &nbsp;descarga&nbsp;
           </a>
-          el PDF para ver la memoria de proyecto final de Recetas Deliciosas
-          MSR's.
+          el PDF para ver la memoria de proyecto final de Recetas Deliciosas MSR's.
         </p>
       </object>
     </Modal>
@@ -63,14 +59,10 @@ function MasterDesarrolloSoftware() {
         <Col span={24} className="education__collapse">
           <Collapse
             accordion
-            expandIconPosition={"right"}
-            defaultActiveKey={["1"]}
+            expandIconPosition={'right'}
+            defaultActiveKey={['1']}
             expandIcon={({ isActive }) => (
-              <LeftCircleTwoTone
-                twoToneColor="#5d718d"
-                style={{ fontSize: "26px" }}
-                rotate={isActive ? -90 : 0}
-              />
+              <LeftCircleTwoTone twoToneColor="#5d718d" style={{ fontSize: '26px' }} rotate={isActive ? -90 : 0} />
             )}
           >
             <Panel header="MÁSTER EN DESARROLLO DE SOFTWARE" key="1">
@@ -82,14 +74,10 @@ function MasterDesarrolloSoftware() {
                 <li>Live coding y pair programming</li>
                 <li>Desarrollo de Soft Skills</li>
                 <li>Metodólogias AGILE</li>
-                <li>
-                  HTML5, CSS3, Javascript, JSON y LocalStorage, GIT, REST APIs,
-                  Bootstrap
-                </li>
+                <li>HTML5, CSS3, Javascript, JSON y LocalStorage, GIT, REST APIs, Bootstrap</li>
                 <li>PHP, MySQL, OOP, MVC PATTERN</li>
                 <li>
-                  React.js, React Testing Library, Jest, Node.js, Express, MongoDB,
-                  Mongoose, Firebase, Docker, Laravel
+                  React.js, React Testing Library, Jest, Node.js, Express, MongoDB, Mongoose, Firebase, Docker, Laravel
                 </li>
               </ul>
             </Panel>
@@ -110,49 +98,28 @@ function DesarrolloAppFPN3(props) {
         <Col span={24} className="education__collapse">
           <Collapse
             accordion
-            expandIconPosition={"right"}
-            expandIcon={({ isActive }) => (
-              <LeftCircleTwoTone
-                twoToneColor="#5d718d"
-                rotate={isActive ? -90 : 0}
-              />
-            )}
+            expandIconPosition={'right'}
+            expandIcon={({ isActive }) => <LeftCircleTwoTone twoToneColor="#5d718d" rotate={isActive ? -90 : 0} />}
           >
-            <Panel
-              header="FP2 – DESARROLLO DE APLICACIONES WEB"
-              key="1"
-            >
+            <Panel header="FP2 – DESARROLLO DE APLICACIONES WEB" key="1">
               <h3>Marzo 2019 - Julio 2020</h3>
               <h4>Muévete Formación</h4>
               <p>Programación web en el entorno cliente</p>
               <ul>
-                <li>
-                  Elaboración de documentos web mediante lenguajes de marca.
-                </li>
-                <li>
-                  Desarrollo y reutilización de componentes software y
-                  multimedia mediante lenguajes de guión.
-                </li>
-                <li>
-                  Aplicaciones técnicas de usabilidad y accesibilidad en el
-                  entorno cliente.
-                </li>
+                <li>Elaboración de documentos web mediante lenguajes de marca.</li>
+                <li>Desarrollo y reutilización de componentes software y multimedia mediante lenguajes de guión.</li>
+                <li>Aplicaciones técnicas de usabilidad y accesibilidad en el entorno cliente.</li>
               </ul>
               <p>Programación web en el entorno servidor</p>
               <ul>
                 <li>Desarrollo de aplicaciones web en el entorno servidor.</li>
-                <li>
-                  Acceso a datos en aplicaciones web del entorno servidor.
-                </li>
+                <li>Acceso a datos en aplicaciones web del entorno servidor.</li>
                 <li>Desarrollo de aplicaciones web distribuidas.</li>
               </ul>
               <p>Implantación de aplicaciones web en entorno internet</p>
               <p>
-                Realización de proyecto final:{" "}
-                <span
-                  className="education__pdf"
-                  onClick={() => setIsVisibleModal(true)}
-                >
+                Realización de proyecto final:{' '}
+                <span className="education__pdf" onClick={() => setIsVisibleModal(true)}>
                   Memoria de proyecto <FilePdfOutlined />
                 </span>
               </p>
@@ -173,13 +140,9 @@ function CompetenciasClaveN3() {
         <Col span={24} className="education__collapse">
           <Collapse
             accordion
-            expandIconPosition={"right"}
+            expandIconPosition={'right'}
             expandIcon={({ isActive }) => (
-              <LeftCircleTwoTone
-                twoToneColor="#5d718d"
-                style={{ fontSize: "26px" }}
-                rotate={isActive ? -90 : 0}
-              />
+              <LeftCircleTwoTone twoToneColor="#5d718d" style={{ fontSize: '26px' }} rotate={isActive ? -90 : 0} />
             )}
           >
             <Panel header="PRUEBA DE COMPETENCIAS CLAVE – NIVEL 3" key="1">
@@ -207,13 +170,9 @@ function HerramientasWebN3() {
         <Col span={24} className="education__collapse">
           <Collapse
             accordion
-            expandIconPosition={"right"}
+            expandIconPosition={'right'}
             expandIcon={({ isActive }) => (
-              <LeftCircleTwoTone
-                twoToneColor="#5d718d"
-                style={{ fontSize: "26px" }}
-                rotate={isActive ? -90 : 0}
-              />
+              <LeftCircleTwoTone twoToneColor="#5d718d" style={{ fontSize: '26px' }} rotate={isActive ? -90 : 0} />
             )}
           >
             <Panel header="FP1 – HERRAMIENTAS WEB" key="1">
@@ -221,14 +180,9 @@ function HerramientasWebN3() {
               <h4>Muévete Formación</h4>
               <ul>
                 <li>Diseño y Maquetación de páginas web con mockups.</li>
-                <li>
-                  Creación y puesta en producción de página web con Wordpress.
-                </li>
+                <li>Creación y puesta en producción de página web con Wordpress.</li>
                 <li>Introducción a HTML5</li>
-                <li>
-                  Introducción a CSS3, aplicándolo a temas hijos creados en
-                  Wordpress.
-                </li>
+                <li>Introducción a CSS3, aplicándolo a temas hijos creados en Wordpress.</li>
                 <li>Posicionamiento web: SEO y SEM.</li>
                 <li>Plan de Marketing Digital de una empresa.</li>
                 <li>Creación de presupuestos para páginas web.</li>
@@ -251,25 +205,15 @@ function AdministrativoN1() {
         <Col span={24} className="education__collapse">
           <Collapse
             accordion
-            expandIconPosition={"right"}
+            expandIconPosition={'right'}
             expandIcon={({ isActive }) => (
-              <LeftCircleTwoTone
-                twoToneColor="#5d718d"
-                style={{ fontSize: "26px" }}
-                rotate={isActive ? -90 : 0}
-              />
+              <LeftCircleTwoTone twoToneColor="#5d718d" style={{ fontSize: '26px' }} rotate={isActive ? -90 : 0} />
             )}
           >
-            <Panel
-              header="FP1 – PROGRAMA DE CUALIFICACIÓN PROFESIONAL INICIAL DE ADMINISTRATIVO"
-              key="1"
-            >
+            <Panel header="FP1 – PROGRAMA DE CUALIFICACIÓN PROFESIONAL INICIAL DE ADMINISTRATIVO" key="1">
               <h3>2006</h3>
               <h4>IFOC</h4>
-              <p>
-                Formación profesional de Auxiliar de Administrativo de nivel
-                básico
-              </p>
+              <p>Formación profesional de Auxiliar de Administrativo de nivel básico</p>
             </Panel>
           </Collapse>
         </Col>
@@ -287,13 +231,9 @@ function GraduadoEscolar() {
         <Col span={24} className="education__collapse">
           <Collapse
             accordion
-            expandIconPosition={"right"}
+            expandIconPosition={'right'}
             expandIcon={({ isActive }) => (
-              <LeftCircleTwoTone
-                twoToneColor="#5d718d"
-                style={{ fontSize: "26px" }}
-                rotate={isActive ? -90 : 0}
-              />
+              <LeftCircleTwoTone twoToneColor="#5d718d" style={{ fontSize: '26px' }} rotate={isActive ? -90 : 0} />
             )}
           >
             <Panel header="GRADUADO ESCOLAR – ESO" key="1">

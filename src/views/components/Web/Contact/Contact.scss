@@ -1,11 +1,11 @@
-@import "scss/variables";
-@import "scss/mixins";
-@import "scss/animations";
+@import 'scss/variables';
+@import 'scss/mixins';
+@import 'scss/animations';
 
-:root[data-theme="light"] {
+:root[data-theme='light'] {
   --t-contact-map-image-opacity: transparent;
 }
-:root[data-theme="dark"] {
+:root[data-theme='dark'] {
   --t-contact-map-image-opacity: rgba(0, 0, 0, 0.3);
 }
 .contact {
@@ -17,7 +17,7 @@
     color: var(--t-primary-color-dark);
   }
   #contact-map-desktop-image {
-    background-image: url("../../../../assets/img/jpg/mapa-desktop-contacto.jpg");
+    background-image: url('../../../../assets/img/jpg/mapa-desktop-contacto.jpg');
     padding: 500px 100px;
     max-width: 1000px;
     margin-bottom: 20px;
@@ -30,7 +30,7 @@
     }
   }
   #contact-map-mobile-image {
-    background-image: url("../../../../assets/img/jpg/mapa-mobile-contacto.jpg");
+    background-image: url('../../../../assets/img/jpg/mapa-mobile-contacto.jpg');
     padding: 300px 100px;
     margin-bottom: 20px;
   }
@@ -51,7 +51,7 @@
     }
   }
   #contact-map-desktop-image:before {
-    content: "";
+    content: '';
     position: absolute;
     top: 0;
     bottom: 0;
@@ -64,7 +64,7 @@
     }
   }
   #contact-map-mobile-image:before {
-    content: "";
+    content: '';
     position: absolute;
     top: 0;
     bottom: 0;

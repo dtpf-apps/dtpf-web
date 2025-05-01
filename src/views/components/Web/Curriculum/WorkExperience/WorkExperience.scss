@@ -1,12 +1,12 @@
-@import "scss/variables";
-@import "scss/mixins";
-@import "scss/animations";
+@import 'scss/variables';
+@import 'scss/mixins';
+@import 'scss/animations';
 
-:root[data-theme="light"] {
+:root[data-theme='light'] {
   --t-curriculum-ant-collapse-bg: rgba(192, 192, 192, 0.1);
 }
 
-:root[data-theme="dark"] {
+:root[data-theme='dark'] {
   --t-curriculum-ant-collapse-bg: var(--primary-bg-light);
 }
 .curriculum {
@@ -35,7 +35,7 @@
       width: 50%;
       padding-top: 10px !important;
       &::after {
-        content: "";
+        content: '';
         position: absolute;
         width: 25px;
         height: 25px;
@@ -55,7 +55,7 @@
       max-width: 1200px;
       margin: 0 auto;
       &::after {
-        content: "";
+        content: '';
         position: absolute;
         width: 7px;
         background-color: var(--t-white-lightgrey-bg);
@@ -73,7 +73,7 @@
     .left {
       left: 0;
       &::before {
-        content: " ";
+        content: ' ';
         height: 0;
         position: absolute;
         top: 18px;
@@ -88,7 +88,7 @@
     .right {
       left: 50%;
       &::before {
-        content: " ";
+        content: ' ';
         height: 0;
         position: absolute;
         top: 18px;

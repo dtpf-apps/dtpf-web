@@ -1,15 +1,11 @@
-import React, { useState } from "react";
-import { Form, Input, Select, Button, Row, Col, notification } from "antd";
-import { signUpAdminApi } from "api/user";
-import { notifDelay, notifDelayErr } from "utils/notifications";
-import {
-  UserOutlined,
-  MailOutlined,
-  LockOutlined
-} from "@ant-design/icons";
+import React, { useState } from 'react';
+import { Form, Input, Select, Button, Row, Col, notification } from 'antd';
+import { signUpAdminApi } from 'api/user';
+import { notifDelay, notifDelayErr } from 'utils/notifications';
+import { UserOutlined, MailOutlined, LockOutlined } from '@ant-design/icons';
 
-import "./AddUserForm.scss";
-import { getAccessTokenApi } from "api/endpoints/auth/auth.api";
+import './AddUserForm.scss';
+import { getAccessTokenApi } from 'api/endpoints/auth/auth.api';
 
 interface IAddUserFormProps {
   setIsVisibleModal: React.Dispatch<React.SetStateAction<boolean>>;
@@ -52,43 +48,43 @@ function AddForm({ userData, setUserData, setIsVisibleModal, setReloadUsers }: I
       !userData.password ||
       !userData.repeatPassword
     ) {
-      notification["error"]({
-        message: "Todos los campos son obligatorios.",
-        duration: notifDelayErr
+      notification['error']({
+        message: 'Todos los campos son obligatorios.',
+        duration: notifDelayErr,
       });
     } else if (userData.password !== userData.repeatPassword) {
-      notification["error"]({
-        message: "Las contraseñas tienen que ser iguales.",
-        duration: notifDelayErr
+      notification['error']({
+        message: 'Las contraseñas tienen que ser iguales.',
+        duration: notifDelayErr,
       });
     } else {
       const accessToken = getAccessTokenApi();
       signUpAdminApi(accessToken, userData)
         .then((response) => {
           if (response.status === 200) {
-            notification["success"]({
+            notification['success']({
               message: response.message,
-              duration: notifDelay
+              duration: notifDelay,
             });
             setIsVisibleModal(false);
             setReloadUsers(true);
             setUserData({});
           } else {
-            notification["error"]({
+            notification['error']({
               message: response.message,
-              duration: notifDelayErr
+              duration: notifDelayErr,
             });
           }
         })
         .catch((err) => {
-          notification["error"]({
+          notification['error']({
             message: err.message,
-            duration: notifDelayErr
+            duration: notifDelayErr,
           });
         });
     }
   };
-  
+
   return (
     <Form className="form-add" onFinish={addUser}>
       <Row gutter={24}>
@@ -98,9 +94,7 @@ function AddForm({ userData, setUserData, setIsVisibleModal, setReloadUsers }: I
               prefix={<UserOutlined />}
               placeholder="Nombre"
               value={userData.name}
-              onChange={(e) =>
-                setUserData({ ...userData, name: e.target.value })
-              }
+              onChange={(e) => setUserData({ ...userData, name: e.target.value })}
             />
           </Form.Item>
         </Col>
@@ -110,9 +104,7 @@ function AddForm({ userData, setUserData, setIsVisibleModal, setReloadUsers }: I
               prefix={<UserOutlined />}
               placeholder="Apellidos"
               value={userData.lastname}
-              onChange={(e) =>
-                setUserData({ ...userData, lastname: e.target.value })
-              }
+              onChange={(e) => setUserData({ ...userData, lastname: e.target.value })}
             />
           </Form.Item>
         </Col>
@@ -124,18 +116,13 @@ function AddForm({ userData, setUserData, setIsVisibleModal, setReloadUsers }: I
               prefix={<MailOutlined />}
               placeholder="Correo electrónico"
               value={userData.email}
-              onChange={(e) =>
-                setUserData({ ...userData, email: e.target.value })
-              }
+              onChange={(e) => setUserData({ ...userData, email: e.target.value })}
             />
           </Form.Item>
         </Col>
         <Col span={12}>
           <Form.Item>
-            <Select
-              placeholder="Selecciona ur rol"
-              onChange={(e) => setUserData({ ...userData, role: e })}
-            >
+            <Select placeholder="Selecciona ur rol" onChange={(e) => setUserData({ ...userData, role: e })}>
               <Option value="admin">Administrador</Option>
               <Option value="editor">Editor</Option>
               <Option value="reviewer">Revisor</Option>
@@ -151,9 +138,7 @@ function AddForm({ userData, setUserData, setIsVisibleModal, setReloadUsers }: I
               type="password"
               placeholder="Contraseña"
               value={userData.password}
-              onChange={(e) =>
-                setUserData({ ...userData, password: e.target.value })
-              }
+              onChange={(e) => setUserData({ ...userData, password: e.target.value })}
             />
           </Form.Item>
         </Col>
@@ -164,9 +149,7 @@ function AddForm({ userData, setUserData, setIsVisibleModal, setReloadUsers }: I
               type="password"
               placeholder="Repetir contraseña"
               value={userData.repeatPassword}
-              onChange={(e) =>
-                setUserData({ ...userData, repeatPassword: e.target.value })
-              }
+              onChange={(e) => setUserData({ ...userData, repeatPassword: e.target.value })}
             />
           </Form.Item>
         </Col>

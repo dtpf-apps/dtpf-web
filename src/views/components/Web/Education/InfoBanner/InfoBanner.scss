@@ -1,11 +1,11 @@
-@import "scss/variables";
-@import "scss/mixins";
+@import 'scss/variables';
+@import 'scss/mixins';
 
-:root[data-theme="light"] {
+:root[data-theme='light'] {
   --t-info-banner-bg: #bbcaddb0;
   --t-info-banner-text: var(--primary-color);
 }
-:root[data-theme="dark"] {
+:root[data-theme='dark'] {
   --t-info-banner-bg: var(--secondary-bg-opacity-7);
   --t-info-banner-text: var(--primary-color-medium-dark);
 }

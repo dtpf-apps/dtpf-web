@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect } from 'react';
 
 export default function useRandomNumber(min: number, max: number) {
   const number = random(min, max);
@@ -6,7 +6,7 @@ export default function useRandomNumber(min: number, max: number) {
   useEffect(() => {
     setRandomNumber(number);
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);  
+  }, []);
   return randomNumber;
 }
 

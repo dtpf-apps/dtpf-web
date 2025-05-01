@@ -1,4 +1,4 @@
-import { TResponseAPI } from "interfaces/general.interface";
+import { TResponseAPI } from 'interfaces/general.interface';
 
 // getAboutMeInfoAPI ////////////////////////////////////////////////
 export interface IrefreshAccessTokenApiResponse extends TResponseAPI {

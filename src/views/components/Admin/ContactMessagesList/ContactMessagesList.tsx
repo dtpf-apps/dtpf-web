@@ -1,24 +1,14 @@
-import React, { useState, useEffect, memo } from "react";
-import {
-  Switch,
-  List,
-  Button,
-  Modal as ModalDelete,
-  message as messageAnt,
-} from "antd";
-import Modal from "views/components/UI/Modal";
-import useMessagesStatus from "hooks/useMessagesStatus";
-import {
-  getMessagesUnreadApi,
-  checkMessageApi,
-  deleteContactMessageApi,
-} from "api/contact";
-import { reloadMessagesApi } from "api/utils";
-import { CheckOutlined, DeleteOutlined } from "@ant-design/icons";
-import "./ContactMessagesList.scss";
-import moment from "moment";
-import "moment/locale/es";
-import { getAccessTokenApi } from "api/endpoints/auth/auth.api";
+import React, { useState, useEffect, memo } from 'react';
+import { Switch, List, Button, Modal as ModalDelete, message as messageAnt } from 'antd';
+import Modal from 'views/components/UI/Modal';
+import useMessagesStatus from 'hooks/useMessagesStatus';
+import { getMessagesUnreadApi, checkMessageApi, deleteContactMessageApi } from 'api/contact';
+import { reloadMessagesApi } from 'api/utils';
+import { CheckOutlined, DeleteOutlined } from '@ant-design/icons';
+import './ContactMessagesList.scss';
+import moment from 'moment';
+import 'moment/locale/es';
+import { getAccessTokenApi } from 'api/endpoints/auth/auth.api';
 const { confirm } = ModalDelete;
 
 interface IContactMessagesListProps {
@@ -29,7 +19,7 @@ interface IContactMessagesListProps {
 function ContactMessagesList({ reloadMessages, setReloadMessages }: IContactMessagesListProps) {
   const [viewMessagesUnread, setViewMessagesUnread] = useState(true);
   const [isVisibleModal, setIsVisibleModal] = useState(false);
-  const [modalTitle] = useState("");
+  const [modalTitle] = useState('');
   const [modalContent] = useState(null);
   const { messagesStatus, setMessagesStatus } = useMessagesStatus();
   const [messagesUnread, setMessagesUnread] = useState([]);
@@ -66,25 +56,15 @@ function ContactMessagesList({ reloadMessages, setReloadMessages }: IContactMess
             defaultChecked
             onChange={() => setViewMessagesUnread(!viewMessagesUnread)}
           />
-          <span>{viewMessagesUnread ? "No leídos" : "Leídos"}</span>
+          <span>{viewMessagesUnread ? 'No leídos' : 'Leídos'}</span>
         </div>
       </div>
       {viewMessagesUnread ? (
-        <MessagesUnread
-          messagesUnread={messagesUnread}
-          setReloadMessages={setReloadMessages}
-        />
+        <MessagesUnread messagesUnread={messagesUnread} setReloadMessages={setReloadMessages} />
       ) : (
-        <MessagesRead
-          messagesRead={messagesRead}
-          setReloadMessages={setReloadMessages}
-        />
+        <MessagesRead messagesRead={messagesRead} setReloadMessages={setReloadMessages} />
       )}
-      <Modal
-        title={modalTitle}
-        isVisible={isVisibleModal}
-        setIsVisible={setIsVisibleModal}
-      >
+      <Modal title={modalTitle} isVisible={isVisibleModal} setIsVisible={setIsVisibleModal}>
         {modalContent}
       </Modal>
     </div>
@@ -102,12 +82,7 @@ function MessagesUnread({ messagesUnread, setReloadMessages }: IMessagesUnreadPr
       className="messages-unread"
       itemLayout="horizontal"
       dataSource={messagesUnread}
-      renderItem={(message: any) => (
-        <MessageUnread
-          message={message}
-          setReloadMessages={setReloadMessages}
-        />
-      )}
+      renderItem={(message: any) => <MessageUnread message={message} setReloadMessages={setReloadMessages} />}
     />
   );
 }
@@ -141,15 +116,12 @@ function MessageUnread({ message, setReloadMessages }: IMessageUnreadProps) {
       ]}
     >
       <List.Item.Meta
-        title={`${message.name ? message.name : "Anónimo"} - Hace ${message && moment(message.date).fromNow(true)
-          }`}
+        title={`${message.name ? message.name : 'Anónimo'} - Hace ${message && moment(message.date).fromNow(true)}`}
         description={
           <div>
             <em>{message.email}</em>
             <div>{message.phone_number}</div>
-            {message.subject !== "Sin asunto" && message.subject && (
-              <div>Asunto: {message.subject}</div>
-            )}
+            {message.subject !== 'Sin asunto' && message.subject && <div>Asunto: {message.subject}</div>}
             <p>{message.message}</p>
           </div>
         }
@@ -169,9 +141,7 @@ function MessagesRead({ messagesRead, setReloadMessages }: IMessagesReadProps) {
       className="messages-read"
       itemLayout="horizontal"
       dataSource={messagesRead}
-      renderItem={(message: any) => (
-        <MessageRead message={message} setReloadMessages={setReloadMessages} />
-      )}
+      renderItem={(message: any) => <MessageRead message={message} setReloadMessages={setReloadMessages} />}
     />
   );
 }
@@ -182,7 +152,6 @@ interface IMessageReadProps {
 }
 
 function MessageRead({ message, setReloadMessages }: IMessageReadProps) {
-
   const checkMessage = () => {
     const accessToken = getAccessTokenApi();
     checkMessageApi(accessToken, message._id, false)
@@ -198,11 +167,11 @@ function MessageRead({ message, setReloadMessages }: IMessageReadProps) {
   const showDeleteConfirm = () => {
     const accessToken = getAccessTokenApi();
     confirm({
-      title: "Eliminando mensaje",
+      title: 'Eliminando mensaje',
       content: `¿Estás seguro que quieres eliminar el mensaje de ${message.email}?`,
-      okText: "Eliminar",
-      okType: "danger",
-      cancelText: "Cancelar",
+      okText: 'Eliminar',
+      okType: 'danger',
+      cancelText: 'Cancelar',
       onOk() {
         deleteContactMessageApi(accessToken, message._id)
           .then((response) => {
@@ -219,7 +188,7 @@ function MessageRead({ message, setReloadMessages }: IMessageReadProps) {
       },
     });
   };
-  
+
   return (
     <List.Item
       actions={[
@@ -232,15 +201,12 @@ function MessageRead({ message, setReloadMessages }: IMessageReadProps) {
       ]}
     >
       <List.Item.Meta
-        title={`${message.name ? message.name : "Anónimo"} - Hace ${message && moment(message.date).fromNow(true)
-          }`}
+        title={`${message.name ? message.name : 'Anónimo'} - Hace ${message && moment(message.date).fromNow(true)}`}
         description={
           <div>
             <em>{message.email}</em>
             <div>{message.phone_number}</div>
-            {message.subject !== "Sin asunto" && message.subject && (
-              <div>Asunto: {message.subject}</div>
-            )}
+            {message.subject !== 'Sin asunto' && message.subject && <div>Asunto: {message.subject}</div>}
             <p>{message.message}</p>
           </div>
         }
