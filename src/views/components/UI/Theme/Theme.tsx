@@ -1,5 +1,5 @@
 import React from 'react';
-import { gaEvent } from '../../../../utils/analytics.js';
+import { gaEvent } from 'utils/analytics';
 import './Theme.scss';
 
 function Theme() {

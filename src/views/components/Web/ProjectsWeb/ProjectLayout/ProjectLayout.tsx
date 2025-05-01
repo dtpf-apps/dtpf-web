@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { Row, Col, Button, Image as ImageAnt, Tag } from 'antd';
 import QueueAnim from 'rc-queue-anim';
 import Modal from 'views/components/UI/Modal';
-import { gaEvent } from 'utils/analytics.js';
+import { gaEvent } from 'utils/analytics';
 import useScrollToTop from 'hooks/useScrollToTop';
 import { useNearScreen } from 'hooks/useNearScreen';
 import './ProjectLayout.scss';

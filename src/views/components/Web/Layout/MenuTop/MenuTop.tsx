@@ -2,7 +2,7 @@ import React, { useContext } from 'react';
 import { NavLink, withRouter } from 'react-router-dom';
 import { AuthContext } from 'providers/AuthProvider';
 import GetMainMenu from 'dbIndexed/mainMenu/GetMainMenu';
-import { gaEvent } from 'utils/analytics.js';
+import { gaEvent } from 'utils/analytics';
 import { Menu, Button } from 'antd';
 import Logo from 'assets/img/png/logo128.png';
 import { MenuOutlined, CloseCircleOutlined } from '@ant-design/icons';

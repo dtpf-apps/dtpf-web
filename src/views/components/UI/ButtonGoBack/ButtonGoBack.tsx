@@ -1,7 +1,7 @@
 import React, { memo } from 'react';
 import { Button } from 'antd';
 import { LeftOutlined } from '@ant-design/icons';
-import { gaEvent } from 'utils/analytics.js';
+import { gaEvent } from 'utils/analytics';
 import './ButtonGoBack.scss';
 
 function ButtonGoBack(props: any) {

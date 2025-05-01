@@ -1,4 +1,4 @@
-export function minLenghtValidation(inputData, minLength) {
+export function minLenghtValidation(inputData: string, minLength: number) {
   if (inputData?.length >= minLength) {
     return true;
   } else {
@@ -6,7 +6,7 @@ export function minLenghtValidation(inputData, minLength) {
   }
 }
 
-export function isNumberValidation(inputData) {
+export function isNumberValidation(inputData: string) {
   const isNumber = /^\d+$/;
   const resultValidation = isNumber.test(inputData);
   if (resultValidation) {
@@ -16,7 +16,7 @@ export function isNumberValidation(inputData) {
   }
 }
 
-export function emailValidation(inputData) {
+export function emailValidation(inputData: string) {
   const emailValid =
     /^(?:[^<>()[\].,;:\s@"]+(\.[^<>()[\].,;:\s@"]+)*|"[^\n"]+")@(?:[^<>()[\].,;:\s@"]+\.)+[^<>()[\].,;:\s@"]{2,63}$/i;
   const resultValidation = emailValid.test(inputData);
@@ -27,7 +27,7 @@ export function emailValidation(inputData) {
   }
 }
 
-export function isPhoneNumberValidation(inputData) {
+export function isPhoneNumberValidation(inputData: string) {
   const isPhoneNumber = /^[+]*[(]{0,1}[0-9]{1,4}[)]{0,1}[-\s./0-9]*$/g;
   const resultValidation = isPhoneNumber.test(inputData);
   if (resultValidation) {
@@ -37,7 +37,7 @@ export function isPhoneNumberValidation(inputData) {
   }
 }
 
-export function inputValidationStyle(e, addOrRemove, className) {
+export function inputValidationStyle(e: any, addOrRemove: 'add' | 'remove', className: string) {
   if (addOrRemove === 'add') {
     return e.target.classList.add(`form-validation-${className}`);
   } else if (addOrRemove === 'remove') {

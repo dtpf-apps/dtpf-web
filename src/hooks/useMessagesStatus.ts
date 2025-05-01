@@ -3,6 +3,7 @@ import { messagesStatusApi } from '../api/utils';
 
 export default function useMessagesStatus() {
   const [messagesStatus, setMessagesStatus] = useState(false);
+
   useEffect(() => {
     let unmounted = false;
     messagesStatusApi().then((response) => {
@@ -14,6 +15,7 @@ export default function useMessagesStatus() {
       unmounted = true;
     };
   }, []);
+
   useEffect(() => {
     let unmounted = false;
     const interval = setInterval(() => {
@@ -28,5 +30,6 @@ export default function useMessagesStatus() {
       clearInterval(interval);
     };
   }, []);
+
   return { messagesStatus, setMessagesStatus };
 }

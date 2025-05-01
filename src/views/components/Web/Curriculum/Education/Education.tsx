@@ -28,7 +28,7 @@ export default function Education() {
   );
 }
 
-function ModalPDF(props) {
+function ModalPDF(props: any) {
   const { isVisibleModal, setIsVisibleModal } = props;
   return (
     <Modal
@@ -52,7 +52,7 @@ function ModalPDF(props) {
 
 function MasterDesarrolloSoftware() {
   const [show, el] = useNearScreen();
-  const ref = el;
+  const ref: any = el;
   return (
     <div className="use-near-screen" ref={ref}>
       {show && (
@@ -88,10 +88,10 @@ function MasterDesarrolloSoftware() {
   );
 }
 
-function DesarrolloAppFPN3(props) {
+function DesarrolloAppFPN3(props: any) {
   const { setIsVisibleModal } = props;
   const [show, el] = useNearScreen();
-  const ref = el;
+  const ref: any = el;
   return (
     <div className="use-near-screen" ref={ref}>
       {show && (
@@ -133,7 +133,7 @@ function DesarrolloAppFPN3(props) {
 
 function CompetenciasClaveN3() {
   const [show, el] = useNearScreen();
-  const ref = el;
+  const ref: any = el;
   return (
     <div className="use-near-screen" ref={ref}>
       {show && (
@@ -163,7 +163,7 @@ function CompetenciasClaveN3() {
 
 function HerramientasWebN3() {
   const [show, el] = useNearScreen();
-  const ref = el;
+  const ref: any = el;
   return (
     <div className="use-near-screen" ref={ref}>
       {show && (
@@ -198,7 +198,7 @@ function HerramientasWebN3() {
 
 function AdministrativoN1() {
   const [show, el] = useNearScreen();
-  const ref = el;
+  const ref: any = el;
   return (
     <div className="use-near-screen" ref={ref}>
       {show && (
@@ -224,7 +224,7 @@ function AdministrativoN1() {
 
 function GraduadoEscolar() {
   const [show, el] = useNearScreen();
-  const ref = el;
+  const ref: any = el;
   return (
     <div className="use-near-screen" ref={ref}>
       {show && (

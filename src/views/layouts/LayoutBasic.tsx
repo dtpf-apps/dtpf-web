@@ -1,7 +1,7 @@
 import React, { memo, useState } from 'react';
 import useConnection from 'hooks/useConnection';
 import useShowContentOffline from 'dbIndexed/utils/useShowContentOffline';
-import { gaEvent } from 'utils/analytics.js';
+import { gaEvent } from 'utils/analytics';
 import { BackTop, Tag, Alert } from 'antd';
 import { StopOutlined } from '@ant-design/icons';
 import './LayoutBasic.scss';
@@ -16,9 +16,11 @@ function LayoutBasic(props: any) {
   const { connectionStatus, isNavigatorOnline } = useConnection();
   const showContentOffline = useShowContentOffline();
   const [menuCollapsed, setMenuCollapsed] = useState(true);
+
   const gaClickBackTop = () => {
     gaEvent('click_back_top', 'clicks', 'UI Clicks', true);
   };
+
   return (
     <>
       <RenderLayoutBasic routes={routes} menuCollapsed={menuCollapsed} setMenuCollapsed={setMenuCollapsed} />
@@ -47,9 +49,11 @@ export default memo(LayoutBasic);
 
 function RenderLayoutBasic(props: any) {
   const { routes, menuCollapsed, setMenuCollapsed } = props;
+
   const closeMenu = () => {
     !menuCollapsed && setMenuCollapsed(true);
   };
+
   return (
     <div className="layout-basic">
       <div className="layout-basic__header-box"></div>

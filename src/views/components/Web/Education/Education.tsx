@@ -20,6 +20,7 @@ export default function Education(props: any) {
   const [itemsPerPage, setItemsPerPage] = useState(12);
   const courses = GetCoursesInfo(connectionStatus === 500 || !isNavigatorOnline ? 1000 : itemsPerPage);
   useScrollToTop();
+
   return (
     <RenderEducation
       url={url}
@@ -35,7 +36,8 @@ export default function Education(props: any) {
 function RenderEducation(props: any) {
   const { url, location, history, courses, itemsPerPage, setItemsPerPage } = props;
   const title = 'Todos los cursos';
-  const subtitle = 'Cursos realizados online y ' + 'presenciales para mi preparación al mundo de IT';
+  const subtitle = 'Cursos realizados online y presenciales para mi preparación al mundo de IT';
+
   return (
     <>
       {!url ? (
