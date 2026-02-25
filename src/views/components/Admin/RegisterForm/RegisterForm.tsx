@@ -1,19 +1,23 @@
 import React, { memo, useState } from 'react';
 import { Link } from 'react-router-dom';
-import { Form, Input, Button, Checkbox, message } from 'antd';
+import { Form, Input, Button, Checkbox, message, notification } from 'antd';
 import { UserOutlined, LockOutlined } from '@ant-design/icons';
 import { minLenghtValidation, emailValidation, inputValidationStyle } from 'utils/formValidation';
-import { signUpApi } from 'api/user';
 import './RegisterForm.scss';
+import { signUpAPI } from 'api/endpoints/user/user';
+import { notifDelayErr } from 'utils/notifications';
 
 function RegisterForm() {
   const [isLoading, setIsLoading] = useState(false);
   const [inputs, setInputs] = useState({
+    name: '',
+    lastname: '',
     email: '',
     password: '',
     repeatPassword: '',
     privacyPolicy: false,
   });
+
   const handleChangeForm = (e: any) => {
     if (e.target.name === 'privacyPolicy') {
       setInputs({
@@ -27,7 +31,8 @@ function RegisterForm() {
       });
     }
   };
-  const inputValidation = (e: any) => {
+
+  const inputValidation = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { type } = e.target;
     const emailValid = emailValidation(e.target.value);
     const passwordMinLength = minLenghtValidation(e.target.value, 8);
@@ -49,6 +54,7 @@ function RegisterForm() {
       inputValidationStyle(e, 'remove', 'error');
     }
   };
+
   const register = async () => {
     setIsLoading(true);
     const { email, password, repeatPassword, privacyPolicy } = inputs;
@@ -64,37 +70,83 @@ function RegisterForm() {
         message.warn('Las contraseñas tienen que ser iguales');
         setIsLoading(false);
       } else {
-        const result = await signUpApi(inputs);
-        if (result.status === 200) {
-          message.success(result.message);
-          setIsLoading(false);
-          resetForm();
-        } else {
-          if (result.status === 500) {
-            message.error(result.message);
+        try {
+          const signUp = await signUpAPI({
+            body: {
+              name: inputs.name,
+              lastname: inputs.lastname,
+              email,
+              password,
+              repeatPassword,
+            },
+          });
+          if (signUp.response.status === 200) {
+            message.success(signUp.data.message);
+            setIsLoading(false);
+            resetForm();
           } else {
-            message.warn(result.message);
+            if (signUp.response.status === 500) {
+              message.error(signUp.data.message);
+            } else {
+              message.warn(signUp.data.message);
+            }
+            setIsLoading(false);
           }
+        } catch (error) {
+          notification['error']({
+            message: 'Error de conexión',
+            duration: notifDelayErr,
+          });
+          setIsLoading(false);
+        } finally {
           setIsLoading(false);
         }
       }
     }
   };
+
   const resetForm = () => {
     setInputs({
+      name: '',
+      lastname: '',
       email: '',
       password: '',
       repeatPassword: '',
       privacyPolicy: false,
     });
-    const removeclassName: any = document.getElementsByClassName('ant-input');
+    const removeclassName = document.getElementsByClassName('ant-input');
     for (let i = 0; i < removeclassName.length; i++) {
       removeclassName[i].classList.remove('form-validation-success');
       removeclassName[i].classList.remove('form-validation-error');
     }
   };
+
   return (
     <Form className="register-form" onFinish={register} onChange={handleChangeForm}>
+      <Form.Item>
+        <Input
+          prefix={<UserOutlined style={{ color: 'rgba(0,0,0,.25)' }} />}
+          type="text"
+          name="name"
+          aria-label="Nombre"
+          placeholder="Nombre"
+          className="register-form__input"
+          onChange={inputValidation}
+          value={inputs.name}
+        />
+      </Form.Item>
+      <Form.Item>
+        <Input
+          prefix={<UserOutlined style={{ color: 'rgba(0,0,0,.25)' }} />}
+          type="text"
+          name="lastname"
+          aria-label="Apellido"
+          placeholder="Apellido"
+          className="register-form__input"
+          onChange={inputValidation}
+          value={inputs.lastname}
+        />
+      </Form.Item>
       <Form.Item>
         <Input
           prefix={<UserOutlined style={{ color: 'rgba(0,0,0,.25)' }} />}
@@ -132,7 +184,7 @@ function RegisterForm() {
         />
       </Form.Item>
       <Form.Item>
-        <Checkbox type="checkbox" name="privacyPolicy" onChange={inputValidation} checked={inputs.privacyPolicy}>
+        <Checkbox type="checkbox" name="privacyPolicy" checked={inputs.privacyPolicy}>
           He leído y acepto la
           <Link to="/privacy-policy">&nbsp;política de privacidad.</Link>
         </Checkbox>

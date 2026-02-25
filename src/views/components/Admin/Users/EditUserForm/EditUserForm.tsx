@@ -2,41 +2,58 @@ import React, { useState, useEffect, useCallback, memo } from 'react';
 import { Avatar, Form, Input, Select, Button, Row, Col, notification } from 'antd';
 import { useDropzone } from 'react-dropzone';
 import NoAvatar from 'assets/img/png/no-avatar.png';
-import { updateUserApi, uploadAvatarApi, getAvatarApi } from 'api/user';
 import { notifDelay, notifDelayErr } from 'utils/notifications';
 import { UserOutlined, LockOutlined } from '@ant-design/icons';
 import './EditUserForm.scss';
 import { getAccessTokenApi } from 'api/endpoints/auth/auth.api';
+import { getAvatarAPI, updateUserAPI, uploadAvatarAPI } from 'api/endpoints/user/user';
+import { IUserResponse } from 'api/endpoints/user/user.response.interface';
 
 interface IEditUserFormProps {
-  user: any;
+  user: IUserResponse;
   setIsVisibleModal: React.Dispatch<React.SetStateAction<boolean>>;
   setReloadUsers: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
 function EditUserForm({ user, setIsVisibleModal, setReloadUsers }: IEditUserFormProps) {
-  const [avatar, setAvatar] = useState(null);
-  const [userData, setUserData] = useState({});
+  const [avatar, setAvatar] = useState<string | null>(null);
+  const [userData, setUserData] = useState<Partial<IUserResponse & { password: string; repeatPassword: string }>>({
+    name: '',
+    lastname: '',
+    email: '',
+    role: 'admin',
+    avatar: '',
+    password: '',
+    repeatPassword: '',
+  });
   let avatarType: any = avatar;
 
-  useEffect(() => {
-    setUserData({
-      name: user.name,
-      lastname: user.lastname,
-      email: user.email,
-      role: user.role,
-      avatar: user.avatar,
-    });
-  }, [user]);
+  console.log({ userData });
+
+  // useEffect(() => {
+  //   setUserData({
+  //     ...userData,
+  //     name: user.name,
+  //     lastname: user.lastname,
+  //     email: user.email,
+  //     role: user.role,
+  //     avatar: user.avatar,
+  //   });
+  // }, [user]);
 
   useEffect(() => {
-    if (user.avatar) {
-      getAvatarApi(user.avatar).then((response) => {
-        setAvatar(response.url);
-      });
-    } else {
-      setAvatar(null);
-    }
+    let IsMounted = true;
+    (async () => {
+      if (!IsMounted || !user.avatar) return;
+      try {
+        const getAvatar = await getAvatarAPI({ avatar: user.avatar });
+        if (getAvatar.response?.status === 200) {
+          setAvatar(getAvatar.response.url);
+        }
+      } catch (error) {
+        console.error('Error al obtener el avatar', error);
+      }
+    })();
   }, [user]);
 
   useEffect(() => {
@@ -111,28 +128,33 @@ function UploadAvatar(props: any) {
 }
 
 interface IEditFormProps {
-  user: any;
-  userData: any;
-  setUserData: any;
+  user: IUserResponse;
+  userData: Partial<IUserResponse & { password: string; repeatPassword: string }>;
+  setUserData: React.Dispatch<
+    React.SetStateAction<Partial<IUserResponse & { password: string; repeatPassword: string }>>
+  >;
   setIsVisibleModal: React.Dispatch<React.SetStateAction<boolean>>;
   setReloadUsers: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
 function EditForm({ user, userData, setUserData, setIsVisibleModal, setReloadUsers }: IEditFormProps) {
   const { Option } = Select;
+  const [form] = Form.useForm();
 
-  const updateUser = () => {
+  const updateUser = async () => {
     const token = getAccessTokenApi();
+    if (!token) return;
     let userUpdate = userData;
+    // console.log(userUpdate.password, userUpdate.repeatPassword);
     if (userUpdate.password || userUpdate.repeatPassword) {
       if (userUpdate.password !== userUpdate.repeatPassword) {
         notification['error']({
-          message: 'Las contraseñas tienen que ser iguales.',
+          message: 'Las contraseñas tienen que seeeer igualessssss.',
           duration: notifDelay,
         });
         return;
       } else {
-        delete userUpdate.repeatPassword;
+        // delete userUpdate.repeatPassword;
       }
     }
     if (!userUpdate.name || !userUpdate.lastname || !userUpdate.email) {
@@ -143,20 +165,22 @@ function EditForm({ user, userData, setUserData, setIsVisibleModal, setReloadUse
       return;
     }
     if (typeof userUpdate.avatar === 'object') {
-      uploadAvatarApi(token, userUpdate.avatar, user._id).then((response) => {
-        userUpdate.avatar = response.avatarName;
-        if (response.avatarName !== undefined) {
-          updateUserApi(token, userUpdate, user._id).then((result) => {
-            if (result.status === 200) {
+      try {
+        const uploadAvatar = await uploadAvatarAPI({ token, avatar: userUpdate.avatar, userId: user._id });
+        if (uploadAvatar.response.status !== 200) return;
+        userUpdate.avatar = uploadAvatar.data.avatarName;
+        if (uploadAvatar.data.avatarName !== undefined) {
+          updateUserAPI({ token, user: userUpdate, userId: user._id }).then((result) => {
+            if (result.response.status === 200) {
               notification['success']({
-                message: result.message,
+                message: result.data.message,
                 duration: notifDelay,
               });
               setIsVisibleModal(false);
               setReloadUsers(true);
             } else {
               notification['error']({
-                message: result.message,
+                message: result.data.message,
                 duration: notifDelayErr,
               });
               notification['success']({
@@ -173,19 +197,25 @@ function EditForm({ user, userData, setUserData, setIsVisibleModal, setReloadUse
           });
           setIsVisibleModal(false);
         }
-      });
+      } catch (error) {
+        notification['error']({
+          message: 'Error al subir la imagen.',
+          duration: notifDelay,
+        });
+        return;
+      }
     } else {
-      updateUserApi(token, userUpdate, user._id).then((result) => {
-        if (result.status === 200) {
+      updateUserAPI({ token, user: userUpdate, userId: user._id }).then((result) => {
+        if (result.response.status === 200) {
           notification['success']({
-            message: result.message,
+            message: result.data.message,
             duration: notifDelay,
           });
           setIsVisibleModal(false);
           setReloadUsers(true);
         } else {
           notification['error']({
-            message: result.message,
+            message: result.data.message,
             duration: notifDelay,
           });
         }
@@ -194,15 +224,17 @@ function EditForm({ user, userData, setUserData, setIsVisibleModal, setReloadUse
   };
 
   return (
-    <Form className="form-edit" onFinish={updateUser}>
+    <Form className="form-edit" onFinish={updateUser} form={form}>
       <Row gutter={24}>
         <Col span={12}>
-          <Form.Item>
+          <Form.Item initialValue={user.name}>
             <Input
+              name="name"
               prefix={<UserOutlined />}
               placeholder="Nombre"
-              value={userData.name}
-              onChange={(e) => setUserData({ ...userData, name: e.target.value })}
+              defaultValue={user.name}
+              // value={userData.name}
+              // onChange={(e) => setUserData({ ...userData, name: e.target.value })}
             />
           </Form.Item>
         </Col>

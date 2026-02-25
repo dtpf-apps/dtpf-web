@@ -4,11 +4,13 @@ import NoAvatar from 'assets/img/png/no-avatar.png';
 import Modal from 'views/components/UI/Modal';
 import EditUserForm from '../EditUserForm';
 import AddUserForm from '../AddUserForm';
-import { getAvatarApi, activateUserApi, deleteUserApi, getUsersActiveApi } from 'api/user';
+import { activateUserApi, deleteUserApi } from 'api/user';
 import { notifDelay, notifDelayErr } from 'utils/notifications';
 import { EditOutlined, StopOutlined, DeleteOutlined, CheckOutlined } from '@ant-design/icons';
 import './ListUsers.scss';
 import { getAccessTokenApi } from 'api/endpoints/auth/auth.api';
+import { getAvatarAPI, getUsersAPI } from 'api/endpoints/user/user';
+import { IUserResponse } from 'api/endpoints/user/user.response.interface';
 const { confirm } = ModalDelete;
 
 interface IListUsersProps {
@@ -19,23 +21,31 @@ interface IListUsersProps {
 function ListUsers({ reloadUsers, setReloadUsers }: IListUsersProps) {
   const [modalTitle, setModalTitle] = useState('');
   const [modalContent, setModalContent] = useState(null);
-  const [usersActive, setUsersActive] = useState([]);
-  const [usersInactive, setUsersInactive] = useState([]);
+  const [usersActive, setUsersActive] = useState<Array<IUserResponse>>([]);
+  const [usersInactive, setUsersInactive] = useState<Array<IUserResponse>>([]);
   const token = getAccessTokenApi();
 
   useEffect(() => {
     let isMounted = true;
-    getUsersActiveApi(token, true).then((response) => {
-      isMounted && setUsersActive(response.users);
-    });
-    getUsersActiveApi(token, false).then((response) => {
-      isMounted && setUsersInactive(response.users);
-    });
+    if (!token || !isMounted) return;
+    (async () => {
+      try {
+        const getUsers = await getUsersAPI({ token });
+        if (getUsers.data.users.length > 0) {
+          setUsersActive(getUsers.data.users.filter((user) => user.active === true));
+          setUsersInactive(getUsers.data.users.filter((user) => user.active === false));
+        }
+      } catch (error) {
+        notification['error']({
+          message: 'Error al cargar los usuarios',
+          duration: notifDelayErr,
+        });
+      }
+    })();
     return () => {
       isMounted = false;
     };
-    // eslint-disable-next-line
-  }, [reloadUsers]);
+  }, [reloadUsers, token]);
 
   return (
     <div className="list-users">
@@ -53,8 +63,8 @@ function ListUsers({ reloadUsers, setReloadUsers }: IListUsersProps) {
 }
 
 interface IRenderListUsersProps {
-  usersActive: any[];
-  usersInactive: any[];
+  usersActive: IUserResponse[];
+  usersInactive: IUserResponse[];
   setModalTitle: React.Dispatch<React.SetStateAction<string>>;
   setModalContent: React.Dispatch<React.SetStateAction<any>>;
   setReloadUsers: React.Dispatch<React.SetStateAction<boolean>>;
@@ -115,7 +125,7 @@ function RenderListUsers({
 }
 
 interface IUsersActiveProps {
-  usersActive: any[];
+  usersActive: IUserResponse[];
   setIsVisibleModal: React.Dispatch<React.SetStateAction<boolean>>;
   setModalTitle: React.Dispatch<React.SetStateAction<string>>;
   setModalContent: React.Dispatch<React.SetStateAction<any>>;
@@ -146,27 +156,29 @@ function UsersActive({
 }
 
 interface IUserActiveProps {
-  user: any;
+  user: IUserResponse;
   editUser: (user: any) => void;
   setReloadUsers: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
 function UserActive({ user, editUser, setReloadUsers }: IUserActiveProps) {
-  const [avatar, setAvatar] = useState('');
+  const [avatar, setAvatar] = useState<string | null>(null);
 
   useEffect(() => {
-    let unmounted = false;
-    if (user.avatar) {
-      getAvatarApi(user.avatar).then((response) => {
-        if (!unmounted) {
-          setAvatar(response.url);
+    let isMounted = true;
+    (async () => {
+      if (!isMounted || !user.avatar) return;
+      try {
+        const getAvatar = await getAvatarAPI({ avatar: user.avatar });
+        if (getAvatar.response?.status === 200) {
+          setAvatar(getAvatar.response.url);
         }
-      });
-    } else {
-      setAvatar('');
-    }
+      } catch (error) {
+        console.log('Error al obtener el avatar', error);
+      }
+    })();
     return () => {
-      unmounted = true;
+      isMounted = false;
     };
   }, [user]);
 
@@ -256,7 +268,7 @@ function UserActive({ user, editUser, setReloadUsers }: IUserActiveProps) {
 }
 
 interface IUsersInactiveProps {
-  usersInactive: any[];
+  usersInactive: IUserResponse[];
   setReloadUsers: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
@@ -272,26 +284,28 @@ function UsersInactive({ usersInactive, setReloadUsers }: IUsersInactiveProps) {
 }
 
 interface IUserInactiveProps {
-  user: any;
+  user: IUserResponse;
   setReloadUsers: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
 function UserInactive({ user, setReloadUsers }: IUserInactiveProps) {
-  const [avatar, setAvatar] = useState('');
+  const [avatar, setAvatar] = useState<string | null>(null);
 
   useEffect(() => {
-    let unmounted = false;
-    if (user.avatar) {
-      getAvatarApi(user.avatar).then((response) => {
-        if (!unmounted) {
-          setAvatar(response.url);
+    let isMounted = true;
+    (async () => {
+      if (!isMounted || !user.avatar) return;
+      try {
+        const getAvatar = await getAvatarAPI({ avatar: user.avatar });
+        if (getAvatar.response?.status === 200) {
+          setAvatar(getAvatar.response.url);
         }
-      });
-    } else {
-      setAvatar('');
-    }
+      } catch (error) {
+        console.log('Error al obtener el avatar', error);
+      }
+    })();
     return () => {
-      unmounted = true;
+      isMounted = false;
     };
   }, [user]);
 

@@ -1,10 +1,11 @@
 import React, { memo, useState } from 'react';
-import { Form, Input, Button, message } from 'antd';
+import { Form, Input, Button, message, notification } from 'antd';
 import { UserOutlined, LockOutlined } from '@ant-design/icons';
-import { signInApi } from 'api/user';
 import { ACCESS_TOKEN, REFRESH_TOKEN } from 'utils/constants';
 import { emailValidation, inputValidationStyle } from 'utils/formValidation';
 import './LoginForm.scss';
+import { signInAPI } from 'api/endpoints/user/user';
+import { notifDelayErr } from 'utils/notifications';
 
 function LoginForm() {
   const [isLoading, setIsLoading] = useState(false);
@@ -14,12 +15,14 @@ function LoginForm() {
     email: '',
     password: '',
   });
+
   const handleChangeForm = (e: any) => {
     setInputs({
       ...inputs,
       [e.target.name]: e.target.value,
     });
   };
+
   const inputValidation = (e: any) => {
     const { type } = e.target;
     const emailValid = emailValidation(e.target.value);
@@ -34,6 +37,7 @@ function LoginForm() {
       inputValidationStyle(e, 'remove', 'error');
     }
   };
+
   const login = () => {
     if (countLogin > 10) {
       setTimeToLogin(30000);
@@ -42,18 +46,28 @@ function LoginForm() {
     setTimeout(async function () {
       let count = countLogin;
       setCountLogin(count + 1);
-      const result = await signInApi(inputs);
-      if (result.message) {
-        message.error(result.message);
-      } else {
-        const { accessToken, refreshToken } = result;
-        localStorage.setItem(ACCESS_TOKEN, accessToken);
-        localStorage.setItem(REFRESH_TOKEN, refreshToken);
-        window.location.href = '/ad1988';
+      try {
+        const signIn = await signInAPI({ body: inputs });
+        if (signIn.data.message) {
+          message.error(signIn.data.message);
+        } else {
+          const { accessToken, refreshToken } = signIn.data;
+          localStorage.setItem(ACCESS_TOKEN, accessToken);
+          localStorage.setItem(REFRESH_TOKEN, refreshToken);
+          window.location.href = '/ad1988';
+        }
+      } catch (error) {
+        notification['error']({
+          message: 'Error de conexión',
+          duration: notifDelayErr,
+        });
+        setIsLoading(false);
+      } finally {
+        setIsLoading(false);
       }
-      setIsLoading(false);
     }, timeToLogin);
   };
+
   return (
     <Form className="login-form" onFinish={login} onChange={handleChangeForm}>
       <Form.Item>
