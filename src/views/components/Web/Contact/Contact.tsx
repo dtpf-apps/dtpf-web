@@ -24,7 +24,11 @@ export default function Contact() {
       <h1 className="contact__title">Contacto</h1>
       <ContactInfo innerWidth={innerWidth} />
       <ContactForm />
-      {innerWidth <= 650 ? <div id="contact-map-mobile-image"></div> : <div id="contact-map-desktop-image"></div>}
+      {innerWidth <= 650 ? (
+        <div id="contact-map-mobile-image"></div>
+      ) : (
+        <div id="contact-map-desktop-image"></div>
+      )}
     </div>
   );
 }

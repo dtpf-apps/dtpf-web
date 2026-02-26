@@ -1,4 +1,9 @@
-import { connectionApi, reloadMessagesTrueApi, reloadMessagesFalseApi, messagesStatusApi } from '../../api/utils';
+import {
+  connectionApi,
+  reloadMessagesTrueApi,
+  reloadMessagesFalseApi,
+  messagesStatusApi,
+} from '../../api/utils';
 
 describe('Utils API', () => {
   it('Checking connection', async () => {

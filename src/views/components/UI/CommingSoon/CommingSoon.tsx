@@ -1,12 +1,12 @@
 import React, { memo } from 'react';
-import { useHistory } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import { Result, Button } from 'antd';
 import { SmileOutlined } from '@ant-design/icons';
 import './CommingSoon.scss';
 
 function CommingSoon() {
-  const history = useHistory();
-  const goBack = history.goBack;
+  const navigate = useNavigate();
+  const goBack = () => navigate(-1);
   return (
     <div className="result-ant">
       <Result

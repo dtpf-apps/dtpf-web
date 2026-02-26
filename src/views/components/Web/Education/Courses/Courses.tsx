@@ -73,7 +73,10 @@ function Course(props: any) {
           <QueueAnim type={'alpha'} duration={400} ease="easeInCubic">
             <div key="course">
               <Link to={`/education/${course.url}`}>
-                <Card className="courses-list__card" cover={<img src={image ? image : noImage} alt={course.title} />}>
+                <Card
+                  className="courses-list__card"
+                  cover={<img src={image ? image : noImage} alt={course.title} />}
+                >
                   <Meta description={course.title} />
                   <span className="courses-list__edit">
                     <EyeOutlined />

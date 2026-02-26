@@ -73,7 +73,11 @@ function AddForm({ menuWebData, setMenuWebData, setIsVisibleModal, setReloadMenu
   };
 
   const selectBefore = (
-    <Select placeholder="http://" style={{ width: 100 }} onChange={(e) => setMenuWebData({ ...menuWebData, http: e })}>
+    <Select
+      placeholder="http://"
+      style={{ width: 100 }}
+      onChange={(e) => setMenuWebData({ ...menuWebData, http: e })}
+    >
       <Option value="http://">http://</Option>
       <Option value="https://">https://</Option>
     </Select>

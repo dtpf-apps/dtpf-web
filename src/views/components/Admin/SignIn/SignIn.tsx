@@ -1,6 +1,6 @@
 import React, { memo } from 'react';
 import { Layout, Tabs } from 'antd';
-import { Redirect } from 'react-router-dom';
+import { Navigate } from 'react-router-dom';
 import Logo from 'assets/img/png/logo256.png';
 import './SignIn.scss';
 import LoginForm from '../LoginForm';
@@ -9,10 +9,9 @@ import { getAccessTokenApi } from 'api/endpoints/auth/auth.api';
 
 function SignIn() {
   const { Content } = Layout;
-  const { TabPane } = Tabs;
 
   if (getAccessTokenApi()) {
-    return <Redirect to="/ad1988" />;
+    return <Navigate to="/ad1988" replace />;
   }
 
   return (
@@ -22,14 +21,13 @@ function SignIn() {
           <img src={Logo} alt="David T. Pizarro Frick" />
         </h1>
         <div className="sign-in__content-tabs">
-          <Tabs type="card">
-            <TabPane tab={<span>Entrar</span>} key="1">
-              <LoginForm />
-            </TabPane>
-            <TabPane tab={<span>Nuevo usuario</span>} key="2">
-              <RegisterForm />
-            </TabPane>
-          </Tabs>
+          <Tabs
+            type="card"
+            items={[
+              { key: '1', label: 'Entrar', children: <LoginForm /> },
+              { key: '2', label: 'Nuevo usuario', children: <RegisterForm /> },
+            ]}
+          />
         </div>
       </Content>
     </Layout>

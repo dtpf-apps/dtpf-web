@@ -1,13 +1,11 @@
 import React from 'react';
-import ReactDOM from 'react-dom';
-import 'antd/dist/antd.min.css';
+import { createRoot } from 'react-dom/client';
 import './index.scss';
 import App from './App';
-// import reportWebVitals from "./reportWebVitals";
 import * as serviceWorkerRegistration from './serviceWorkerRegistration';
 import { message } from 'antd';
 
-ReactDOM.render(<App />, document.getElementById('root'));
+createRoot(document.getElementById('root')!).render(<App />);
 // reportWebVitals(console.log);
 serviceWorkerRegistration.register({
   onUpdate: (registration: any) => {

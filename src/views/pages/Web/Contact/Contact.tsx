@@ -1,14 +1,18 @@
 import React, { Suspense, lazy, memo } from 'react';
+import { useNavigate } from 'react-router-dom';
 const Helmet = lazy(() => import('views/components/Helmet'));
 const ContactPage = lazy(() => import('views/components/Web/Contact'));
 const ButtonGoBack = lazy(() => import('views/components/UI/ButtonGoBack'));
 
-function Contact(props: { history: { goBack: () => void } }) {
-  const { history } = props;
+function Contact() {
+  const navigate = useNavigate();
   return (
     <Suspense fallback={<></>}>
-      <Helmet titleHelmet="DTPF | Contacto" contentHelmet="Página para contactar con David T. Pizarro Frick" />
-      <ButtonGoBack goBack={history.goBack} eventGoBack="contacto" />
+      <Helmet
+        titleHelmet="DTPF | Contacto"
+        contentHelmet="Página para contactar con David T. Pizarro Frick"
+      />
+      <ButtonGoBack goBack={() => navigate(-1)} eventGoBack="contacto" />
       <ContactPage />
     </Suspense>
   );

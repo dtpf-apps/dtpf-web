@@ -5,20 +5,19 @@ export function useNearScreen() {
   const [show, setShow] = useState(false);
   useEffect(() => {
     let isMounted = true;
-    Promise.resolve(
-      typeof window.IntersectionObserver !== 'undefined' ? window.IntersectionObserver : import('intersection-observer')
-    ).then(() => {
-      const observer = new window.IntersectionObserver(function (entries) {
-        const { isIntersecting } = entries[0];
-        if (isIntersecting) {
-          isMounted && setShow(true);
-          observer.disconnect();
-        }
-      });
-      isMounted && observer.observe(el.current);
+    const observer = new IntersectionObserver(function (entries) {
+      const { isIntersecting } = entries[0];
+      if (isIntersecting) {
+        isMounted && setShow(true);
+        observer.disconnect();
+      }
     });
+    if (el.current) {
+      observer.observe(el.current);
+    }
     return () => {
       isMounted = false;
+      observer.disconnect();
     };
   }, [el]);
 

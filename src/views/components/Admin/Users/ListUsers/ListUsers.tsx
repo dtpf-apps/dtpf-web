@@ -142,7 +142,9 @@ function UsersActive({
   const editUser = (user: any) => {
     setIsVisibleModal(true);
     setModalTitle(`Editar ${user.name ? user.name : '...'} ${user.lastname ? user.lastname : '...'}`);
-    setModalContent(<EditUserForm user={user} setIsVisibleModal={setIsVisibleModal} setReloadUsers={setReloadUsers} />);
+    setModalContent(
+      <EditUserForm user={user} setIsVisibleModal={setIsVisibleModal} setReloadUsers={setReloadUsers} />
+    );
   };
 
   return (

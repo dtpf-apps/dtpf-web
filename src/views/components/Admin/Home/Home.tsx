@@ -1,5 +1,5 @@
 import React, { useState, useEffect, memo } from 'react';
-import { useHistory } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import { checkUserLogin } from 'providers/AuthProvider';
 import { getIndexedDBVersionApi, updateIndexedDBVersionApi } from 'api/utils';
 import { useCookies } from 'react-cookie';
@@ -9,7 +9,7 @@ import './Home.scss';
 function Home(props: any) {
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const [cookies, setCookie, removeCookie] = useCookies();
-  const history = useHistory();
+  const navigate = useNavigate();
   const deleteCookies = () => {
     const getCookies = document.cookie.split(';');
     if (getCookies.length > 1) {
@@ -17,7 +17,7 @@ function Home(props: any) {
         removeCookie(getCookies[i]);
       }
     }
-    history.go(0);
+    navigate(0);
   };
   const [user, setUser] = useState(null);
   useEffect(() => {
@@ -55,7 +55,7 @@ function RenderHome(props: any) {
           .then((res) => {
             if (res) {
               if (res.status !== 200) {
-                message.warn(res.message);
+                message.warning(res.message);
               } else {
                 message.success(res.message);
                 setIdbVersion(res.indexedDBVersion);

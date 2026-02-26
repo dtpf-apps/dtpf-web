@@ -2,12 +2,16 @@ import React, { useState, useEffect, Suspense, lazy } from 'react';
 import { Link } from 'react-router-dom';
 import { getCourseApi, getImageApi, getPrevCourseApi, getNextCourseApi } from 'api/education';
 import useScrollToTop from 'hooks/useScrollToTop';
-import moment from 'moment';
-import 'moment/locale/es';
+import dayjs from 'dayjs';
+import relativeTime from 'dayjs/plugin/relativeTime';
+import 'dayjs/locale/es';
 import { Row, Col, Image, Tag, Button } from 'antd';
 import { ArrowLeftOutlined, ArrowRightOutlined, LinkOutlined } from '@ant-design/icons';
 import './CourseInfo.scss';
 import noImage from 'assets/img/png/no-image.png';
+
+dayjs.extend(relativeTime);
+dayjs.locale('es');
 const Spin = lazy(() => import('views/components/UI/Spin'));
 const Helmet = lazy(() => import('views/components/Helmet'));
 const Error = lazy(() => import('views/pages/Errors'));
@@ -150,7 +154,7 @@ function Course(props: any) {
               {course && course.duration}&nbsp;horas
             </Col>
             <Col span={12} className="course-info__info-date">
-              Hace&nbsp;{course && moment(course.date).fromNow(true)}
+              Hace&nbsp;{course && dayjs(course.date).fromNow(true)}
             </Col>
           </Row>
           <Col className="course-info__description">

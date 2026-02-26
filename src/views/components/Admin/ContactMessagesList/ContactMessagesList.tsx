@@ -6,9 +6,13 @@ import { getMessagesUnreadApi, checkMessageApi, deleteContactMessageApi } from '
 import { reloadMessagesApi } from 'api/utils';
 import { CheckOutlined, DeleteOutlined } from '@ant-design/icons';
 import './ContactMessagesList.scss';
-import moment from 'moment';
-import 'moment/locale/es';
+import dayjs from 'dayjs';
+import relativeTime from 'dayjs/plugin/relativeTime';
+import 'dayjs/locale/es';
 import { getAccessTokenApi } from 'api/endpoints/auth/auth.api';
+
+dayjs.extend(relativeTime);
+dayjs.locale('es');
 const { confirm } = ModalDelete;
 
 interface IContactMessagesListProps {
@@ -116,7 +120,7 @@ function MessageUnread({ message, setReloadMessages }: IMessageUnreadProps) {
       ]}
     >
       <List.Item.Meta
-        title={`${message.name ? message.name : 'Anónimo'} - Hace ${message && moment(message.date).fromNow(true)}`}
+        title={`${message.name ? message.name : 'Anónimo'} - Hace ${message && dayjs(message.date).fromNow(true)}`}
         description={
           <div>
             <em>{message.email}</em>
@@ -201,7 +205,7 @@ function MessageRead({ message, setReloadMessages }: IMessageReadProps) {
       ]}
     >
       <List.Item.Meta
-        title={`${message.name ? message.name : 'Anónimo'} - Hace ${message && moment(message.date).fromNow(true)}`}
+        title={`${message.name ? message.name : 'Anónimo'} - Hace ${message && dayjs(message.date).fromNow(true)}`}
         description={
           <div>
             <em>{message.email}</em>

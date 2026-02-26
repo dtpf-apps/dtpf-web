@@ -1,12 +1,11 @@
 import { useState, useEffect } from 'react';
 import { getCoursesApi } from '../api/education';
-import queryString from 'query-string';
 import useConnection from './useConnection';
 
 export function useGetCourses(itemsPerPage: number, location: any) {
   const [courses, setCourses] = useState([]);
   const { connectionStatus, isNavigatorOnline } = useConnection();
-  const { page = 1 } = queryString.parse(location.search);
+  const page = new URLSearchParams(location.search).get('page') ?? '1';
 
   useEffect(() => {
     let isMounted = true;

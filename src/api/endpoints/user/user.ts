@@ -97,11 +97,11 @@ export async function getAvatarAPI({ avatar }: { avatar: string }): Promise<Iget
 export async function updateUserAPI({
   token,
   user,
-  userId
+  userId,
 }: {
-  token: string,
-  user: Partial<IUserResponse & { password: string; repeatPassword: string }>,
-  userId: string
+  token: string;
+  user: Partial<IUserResponse & { password: string; repeatPassword: string }>;
+  userId: string;
 }): Promise<IupdateUserAPIResponse> {
   const params = {
     method: 'PUT',

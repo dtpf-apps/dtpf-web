@@ -1,12 +1,12 @@
 import React, { Suspense, lazy, memo } from 'react';
-import { useHistory } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 const Helmet = lazy(() => import('views/components/Helmet'));
 const Error404 = lazy(() => import('views/components/Error/Error404'));
 const Error500 = lazy(() => import('views/components/Error/Error500'));
 
-function Error(props: { title?: string; subtitle?: string; status: number }) {
+function Error(props: { title?: string; subtitle?: string; status?: number }) {
   const { title, subtitle, status } = props;
-  const history = useHistory();
+  const navigate = useNavigate();
   return (
     <Suspense fallback={<></>}>
       <Helmet
@@ -14,7 +14,7 @@ function Error(props: { title?: string; subtitle?: string; status: number }) {
         contentHelmet={title ? title : 'Recurso no encontrado.'}
       />
       {!status || status === 404 ? (
-        <Error404 title={title} subtitle={subtitle} history={history} />
+        <Error404 title={title} subtitle={subtitle} goBack={() => navigate(-1)} />
       ) : (
         <Error500 title={title} subtitle={subtitle} />
       )}

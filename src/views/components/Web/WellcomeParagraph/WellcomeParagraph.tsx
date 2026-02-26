@@ -46,8 +46,8 @@ export default function WellcomeParagraph() {
           <span className="wellcome-paragraph__text-dinamic-word">{`${arrayWords[randomNum]}`}</span>
           {'}'}!`
         </span>{' '}
-        Me dedico a crear y mantener páginas y aplicaciones web. Aquí puedes encontrar mi formación y experiencia así
-        como los proyectos en los que he trabajado.
+        Me dedico a crear y mantener páginas y aplicaciones web. Aquí puedes encontrar mi formación y
+        experiencia así como los proyectos en los que he trabajado.
       </p>
     </div>
   );

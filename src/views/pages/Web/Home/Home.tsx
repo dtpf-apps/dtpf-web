@@ -14,7 +14,10 @@ function Home() {
   useScrollToTop();
   return (
     <>
-      <Helmet titleHelmet="DTPF | Página principal" contentHelmet="Página principal de David T. Pizarro Frick" />
+      <Helmet
+        titleHelmet="DTPF | Página principal"
+        contentHelmet="Página principal de David T. Pizarro Frick"
+      />
       <div className="home">
         <MainTitle />
         {connectionStatus === 200 && (

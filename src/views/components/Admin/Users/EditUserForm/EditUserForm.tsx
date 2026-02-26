@@ -17,7 +17,9 @@ interface IEditUserFormProps {
 
 function EditUserForm({ user, setIsVisibleModal, setReloadUsers }: IEditUserFormProps) {
   const [avatar, setAvatar] = useState<string | null>(null);
-  const [userData, setUserData] = useState<Partial<IUserResponse & { password: string; repeatPassword: string }>>({
+  const [userData, setUserData] = useState<
+    Partial<IUserResponse & { password: string; repeatPassword: string }>
+  >({
     name: '',
     lastname: '',
     email: '',
@@ -95,7 +97,7 @@ function UploadAvatar(props: any) {
   }, [avatar]);
 
   const onDrop = useCallback(
-    (acceptedFiles) => {
+    (acceptedFiles: File[]) => {
       const file = acceptedFiles[0];
       if (file === undefined) {
         notification['error']({
@@ -110,7 +112,7 @@ function UploadAvatar(props: any) {
   );
 
   const { getRootProps, getInputProps, isDragActive } = useDropzone({
-    accept: 'image/jpeg, image/png',
+    accept: { 'image/jpeg': [], 'image/png': [] },
     noKeyboard: true,
     onDrop,
   });

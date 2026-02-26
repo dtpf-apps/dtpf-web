@@ -1,11 +1,11 @@
 import { useState, useEffect } from 'react';
-import socketIOClient from 'socket.io-client';
+import { io } from 'socket.io-client';
 import { ENDPOINT } from '../../config/url';
 
 export default function useMessagesUnreadLength() {
   const [messagesUnreadLength, setMessagesUnreadLength] = useState(null);
   useEffect(() => {
-    const socket = socketIOClient(ENDPOINT);
+    const socket = io(ENDPOINT);
     socket.on('getMessagesLength', (data: any) => {
       setMessagesUnreadLength(data);
     });

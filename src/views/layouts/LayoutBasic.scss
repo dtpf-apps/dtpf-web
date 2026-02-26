@@ -17,13 +17,9 @@
 }
 
 .layout-basic {
-  background-repeat: no-repeat;
-  background-position: 1% 1%;
-  background-size: cover;
-  -webkit-background-size: cover;
-  -moz-background-size: cover;
-  -o-background-size: cover;
-  background-attachment: fixed;
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
   background: linear-gradient(
     90deg,
     var(--t-layout-basic-bg-primary-G2) 0%,
@@ -45,10 +41,6 @@
     @media (min-width: $media-breakpoint-up-lg) {
       height: 66px;
     }
-
-    @media (min-width: $media-breakpoint-up-xl) {
-      height: 71px;
-    }
   }
 
   &__header {
@@ -58,7 +50,7 @@
 
     .ant-menu-horizontal {
       border-bottom: 0 !important;
-      border-top: 2px solid var(--t-layout-basic-border-top);
+      border-top: none;
       height: 56px;
 
       @media (min-width: $media-breakpoint-up-md) {
@@ -68,40 +60,22 @@
       @media (min-width: $media-breakpoint-up-lg) {
         height: 66px;
       }
-
-      @media (min-width: $media-breakpoint-up-xl) {
-        height: 71px;
-      }
     }
   }
 
   &__content {
-    min-height: 100vh;
+    flex: 1;
     padding-top: 60px;
-    min-height: calc(100vh - 82px);
 
     @media (min-width: $media-breakpoint-up-sm) {
       margin: 0 auto;
       padding-top: 100px;
-    }
-
-    @media (max-height: 950px) {
-      min-height: calc(100vh - 82px);
-    }
-
-    @media (max-height: 767px) {
-      min-height: calc(100vh - 106px);
-    }
-
-    @media (max-height: 575px) {
-      min-height: calc(100vh - 101px);
     }
   }
 
   &__footer {
     font-weight: bold;
     @include boxShadowXl();
-    min-height: 70px;
 
     @media (min-width: $media-breakpoint-up-xxl) {
       width: 90vw;

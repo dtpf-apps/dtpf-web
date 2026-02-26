@@ -7,6 +7,17 @@
   align-items: center;
   justify-content: flex-start;
 
+  .ant-menu {
+    flex: 1;
+    background: transparent;
+    border-bottom: none;
+
+    .ant-menu-item {
+      display: flex;
+      align-items: center;
+    }
+  }
+
   li:after {
     border-bottom: none !important;
   }
@@ -23,6 +34,7 @@
     }
 
     img {
+      display: block;
       margin: 0;
       padding: 7px 0;
       height: 55px;
@@ -34,10 +46,6 @@
       @media (min-width: $media-breakpoint-up-lg) {
         height: 65px;
       }
-
-      @media (min-width: $media-breakpoint-up-xl) {
-        height: 70px;
-      }
     }
   }
 
@@ -45,9 +53,12 @@
     a {
       color: #fff !important;
       font-weight: bold;
+      line-height: 1.4;
+      padding-bottom: 2px;
+      border-bottom: 2px solid transparent;
 
       &:hover {
-        border-bottom: 1px solid $primary-color-light !important;
+        border-bottom-color: $primary-color-light !important;
       }
     }
 
@@ -61,12 +72,11 @@
 
     &.ant-menu-item-selected {
       a {
-        border-bottom: 1px solid $primary-color-light !important;
+        border-bottom-color: $primary-color-light !important;
 
         &:focus,
-        &:active,
-        &:focus {
-          border-bottom: 1px solid $primary-color-light !important;
+        &:active {
+          border-bottom-color: $primary-color-light !important;
         }
       }
     }

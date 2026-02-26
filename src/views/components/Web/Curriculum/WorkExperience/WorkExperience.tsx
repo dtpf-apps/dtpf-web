@@ -47,21 +47,22 @@ function Hub4Retail(props: { position: string }) {
             >
               <Panel header="Hub4Retail" key="1" className="work-collapse-panel">
                 <p className="work-collapse-panel__text">
-                  Actualmente desarrollando el frontend de una plataforma SaaS especializada en conectar marcas y
-                  multimarcas del sector de la moda, generando valor a las empresas mediante el intercambio y
-                  explotación de datos.
+                  Actualmente desarrollando el frontend de una plataforma SaaS especializada en conectar
+                  marcas y multimarcas del sector de la moda, generando valor a las empresas mediante el
+                  intercambio y explotación de datos.
                   <br />
                   <br />
-                  En este proyecto he estado involucrado en distintas fases, desde el análisis de la arquitectura
-                  inicial, hasta la decisión de las tencologías a emplear o la toma de decisiones en aspectos
-                  relacionados con el frontend y la coordinación con el elquipo de backend y data.
+                  En este proyecto he estado involucrado en distintas fases, desde el análisis de la
+                  arquitectura inicial, hasta la decisión de las tencologías a emplear o la toma de decisiones
+                  en aspectos relacionados con el frontend y la coordinación con el elquipo de backend y data.
                   <br />
                   <br />
-                  La plataforma se encuentra operativa, dando servicios a más de 20 empresas destacadas en el sector,
-                  como Lacoste, Levis, Camper, Ecoalf, Wow Concept y The Fashion Hunter, entre otras.
+                  La plataforma se encuentra operativa, dando servicios a más de 20 empresas destacadas en el
+                  sector, como Lacoste, Levis, Camper, Ecoalf, Wow Concept y The Fashion Hunter, entre otras.
                   <br />
                   <br />
-                  Tecnologías: <b>HTML5</b>, <b>CSS3</b>, <b>SCSS</b>, <b>Javascript</b>, <b>Typescript</b>, React.
+                  Tecnologías: <b>HTML5</b>, <b>CSS3</b>, <b>SCSS</b>, <b>Javascript</b>, <b>Typescript</b>,
+                  React.
                   <b>js</b>, Ant <b>Design</b>, <b>Testing</b>, CI/
                   <b>CD</b>, <b>Git</b>, <b>Bitbucket</b>, <b>Agile</b>,<b>Scrum</b>, <b>Postman</b>, Auth0.
                 </p>
@@ -96,17 +97,18 @@ function DesarrolladorFullStackPalmira(props: { position: string }) {
             >
               <Panel header="Palmira" key="1" className="work-collapse-panel">
                 <p className="work-collapse-panel__text">
-                  ・Crear interfaces de usuario interactivas y atractivas utilizando tecnologías como HTML, CSS y
-                  JavaScript, y la librería de React Native.
+                  ・Crear interfaces de usuario interactivas y atractivas utilizando tecnologías como HTML,
+                  CSS y JavaScript, y la librería de React Native.
                   <br />
-                  ・Implementar lógica de negocio, manejar solicitudes del cliente y asegurar el rendimiento y la
-                  seguridad del sistema utilizando tecnologías del lado del servidor como Node.js y Express.
+                  ・Implementar lógica de negocio, manejar solicitudes del cliente y asegurar el rendimiento y
+                  la seguridad del sistema utilizando tecnologías del lado del servidor como Node.js y
+                  Express.
                   <br />
-                  ・Diseñar y gestionar bases de datos NoSQL, optimizando consultas y garantizando la integridad de los
-                  datos.
+                  ・Diseñar y gestionar bases de datos NoSQL, optimizando consultas y garantizando la
+                  integridad de los datos.
                   <br />
-                  ・Desarrollar y mantener APIs para permitir la comunicación eficiente entre diferentes componentes de
-                  la aplicación y servicios externos.
+                  ・Desarrollar y mantener APIs para permitir la comunicación eficiente entre diferentes
+                  componentes de la aplicación y servicios externos.
                   <br />
                   ・Resolver problemas y depurar errores en todas las capas de la aplicación, asegurando un
                   funcionamiento fluido y sin problemas.
@@ -114,12 +116,13 @@ function DesarrolladorFullStackPalmira(props: { position: string }) {
                   ・Colaborar estrechamente con otros miembros del equipo de desarrollo, participando en la
                   planificación y gestión de proyectos.
                   <br />
-                  ・Mantenerse actualizado sobre las últimas tendencias y mejores prácticas en el campo del desarrollo
-                  web y de aplicaciones.
+                  ・Mantenerse actualizado sobre las últimas tendencias y mejores prácticas en el campo del
+                  desarrollo web y de aplicaciones.
                   <br />
                   <br />
-                  Tecnologías: <b>Javascript</b>, <b>Typescript</b>, <b>MongoDB</b>, Express, <b>React Native</b>,{' '}
-                  <b>NodeJS</b>, HTML5, CSS3, <b>SCSS</b>,<b> Git</b>, <b>GitHub</b>, Postman.
+                  Tecnologías: <b>Javascript</b>, <b>Typescript</b>, <b>MongoDB</b>, Express,{' '}
+                  <b>React Native</b>, <b>NodeJS</b>, HTML5, CSS3, <b>SCSS</b>,<b> Git</b>, <b>GitHub</b>,
+                  Postman.
                 </p>
               </Panel>
             </Collapse>
@@ -152,17 +155,17 @@ function DesarrolladorFullStackAssembler(props: { position: string }) {
             >
               <Panel header="Assembler Institute of Technology" key="1" className="work-collapse-panel">
                 <p className="work-collapse-panel__text">
-                  Trabajando como desarrollador full-stack aplicando las últimas tecnologías con metodologías como{' '}
-                  <b>Peer Learning</b>, <b>Pair Programming</b> y <b>Live Coding</b>.
+                  Trabajando como desarrollador full-stack aplicando las últimas tecnologías con metodologías
+                  como <b>Peer Learning</b>, <b>Pair Programming</b> y <b>Live Coding</b>.
                   <br />
                   <br />
-                  ・Máster intensivo con más de 1200 horas de proyectos orientados al mundo real basados en metodologías
-                  ágiles.
+                  ・Máster intensivo con más de 1200 horas de proyectos orientados al mundo real basados en
+                  metodologías ágiles.
                   <br />
-                  ・Más de 30 proyectos en el mundo real realizados con un enfoque profundo en las pilas <b>
-                    MERN
-                  </b> y <b>LAMP</b> aplicando principios <b>SOLID</b>.<br />
-                  ・Trabajando en proyectos reales aplicando prácticas de código limpio y patrones de escalabilidad.
+                  ・Más de 30 proyectos en el mundo real realizados con un enfoque profundo en las pilas{' '}
+                  <b>MERN</b> y <b>LAMP</b> aplicando principios <b>SOLID</b>.<br />
+                  ・Trabajando en proyectos reales aplicando prácticas de código limpio y patrones de
+                  escalabilidad.
                   <br />
                   ・Utilizando técnicas de desarrollo <b>Agile</b> (<b>Kaban</b>, <b>Scrum</b>).
                   <br />
@@ -172,14 +175,14 @@ function DesarrolladorFullStackAssembler(props: { position: string }) {
                   <a href="https://audity.dtpf.es" target="_blank" rel="noreferrer">
                     <b>Audity</b>(Clon Spotify)
                   </a>
-                  : <b>React</b>, <b>Typescript</b>, <b>NodeJS</b>, Express, <b>MongoDB</b>, <b>SASS</b>, Auth0,
-                  Ant-Design, Workbox, Google Analytics.
+                  : <b>React</b>, <b>Typescript</b>, <b>NodeJS</b>, Express, <b>MongoDB</b>, <b>SASS</b>,
+                  Auth0, Ant-Design, Workbox, Google Analytics.
                   <br />・
                   <a href="https://dalist.dtpf.es" target="_blank" rel="noreferrer">
                     <b>Dalist</b>(Bloc de notas)
                   </a>
-                  : <b>React</b>, <b>Typescript</b>, <b>NodeJS</b>, Express, <b>MongoDB</b>, <b>SASS</b>, Auth0,
-                  Ant-Design.
+                  : <b>React</b>, <b>Typescript</b>, <b>NodeJS</b>, Express, <b>MongoDB</b>, <b>SASS</b>,
+                  Auth0, Ant-Design.
                   <br />・
                   <a href="https://amazen.dtpf.es" target="_blank" rel="noreferrer">
                     <b>Amazén</b>(Clon Amazon)
@@ -193,8 +196,8 @@ function DesarrolladorFullStackAssembler(props: { position: string }) {
                   <br />
                   <br />
                   Tecnologías: <b>Javascript</b>, <b>Typescript</b>, <b>MongoDB</b>, Express, <b>React</b>,{' '}
-                  <b>NodeJS</b>, HTML5, CSS3, <b>SASS</b>, Ant-Design, MySQL, <b>PHP</b>, <b>Git</b>, <b>GitHub</b>,
-                  Postman, Figma.
+                  <b>NodeJS</b>, HTML5, CSS3, <b>SASS</b>, Ant-Design, MySQL, <b>PHP</b>, <b>Git</b>,{' '}
+                  <b>GitHub</b>, Postman, Figma.
                 </p>
               </Panel>
             </Collapse>

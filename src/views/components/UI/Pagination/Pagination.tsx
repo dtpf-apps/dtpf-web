@@ -1,39 +1,35 @@
 import React, { memo, useCallback, useEffect } from 'react';
+import { useLocation, useNavigate } from 'react-router-dom';
 import { Pagination as PaginationAntd } from 'antd';
 import useScrollToTop from 'hooks/useScrollToTop';
 import './Pagination.scss';
 
 function Pagination(props: any) {
-  const { courses, location, history, itemsPerPage, setItemsPerPage } = props;
+  const { courses, itemsPerPage, setItemsPerPage } = props;
+  const location = useLocation();
+  const navigate = useNavigate();
   const currentPage = parseInt(courses.page);
-  useScrollToTop(location);
+  useScrollToTop();
   useEffect(() => {
     if (courses.page === 1 && courses.limit === 10) {
-      history.push(location.pathname);
+      navigate(location.pathname, { replace: true });
     } else {
-      history.push(`${location.pathname}?limit=${courses.limit}&page=${courses.page}`);
+      navigate(`${location.pathname}?limit=${courses.limit}&page=${courses.page}`, { replace: true });
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [courses]);
-  // const onChangePage = (newPage: number) => {
-  //   history.push(`${location.pathname}?limit=${courses.limit}&page=${newPage}`);
-  // };
   const onChangePage = useCallback(
     (newPage: number) => {
-      history.push(`${location.pathname}?limit=${courses.limit}&page=${newPage}`);
+      navigate(`${location.pathname}?limit=${courses.limit}&page=${newPage}`);
     },
-    [history, location.pathname, courses.limit]
+    [navigate, location.pathname, courses.limit]
   );
-  // const onShowSizeChange = (current: any, pageSize: any) => {
-  //   history.push(`${location.pathname}?limit=${pageSize}&page=${current}`);
-  //   setItemsPerPage(pageSize);
-  // };
   const onShowSizeChange = useCallback(
     (current: any, pageSize: any) => {
-      history.push(`${location.pathname}?limit=${pageSize}&page=${current}`);
+      navigate(`${location.pathname}?limit=${pageSize}&page=${current}`);
       setItemsPerPage(pageSize);
     },
-    [history, location.pathname, setItemsPerPage]
+    [navigate, location.pathname, setItemsPerPage]
   );
   return (
     <PaginationAntd

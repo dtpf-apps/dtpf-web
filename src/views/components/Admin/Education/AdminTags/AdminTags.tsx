@@ -1,6 +1,6 @@
 import React, { useState, useEffect, Suspense, lazy, memo } from 'react';
 import { getCourseApi, addTagApi, deleteTagApi } from 'api/education';
-import { Button, Row, Col, Form, Divider, Input, Tag, Modal, notification } from 'antd';
+import { Button, Row, Col, Form, Divider, Input, Tag, Modal, notification, Space } from 'antd';
 import { notifDelay, notifDelayErr } from 'utils/notifications';
 import { TagOutlined, PlusCircleOutlined } from '@ant-design/icons';
 import './AdminTags.scss';
@@ -147,7 +147,7 @@ function AddTagForm({ tag, setTag, course, setReloadCourses, setReloadTags }: IA
   return (
     <div className="admin-tags__add-tag-form">
       <Form layout="inline" onFinish={addTag}>
-        <Input.Group>
+        <Space.Compact>
           <Input
             prefix={<TagOutlined />}
             placeholder="Añadir Tag"
@@ -157,7 +157,7 @@ function AddTagForm({ tag, setTag, course, setReloadCourses, setReloadTags }: IA
           <Button type="primary" htmlType="submit" className="btn-submit">
             <PlusCircleOutlined />
           </Button>
-        </Input.Group>
+        </Space.Compact>
       </Form>
     </div>
   );

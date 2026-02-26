@@ -60,14 +60,14 @@ function RegisterForm() {
     const { email, password, repeatPassword, privacyPolicy } = inputs;
     if (!email || !password || !repeatPassword || !privacyPolicy) {
       if (email && password && repeatPassword && !privacyPolicy) {
-        message.warn('Acepta nuestra política de privacidad');
+        message.warning('Acepta nuestra política de privacidad');
       } else {
-        message.warn('Todos los campos son obligatorios');
+        message.warning('Todos los campos son obligatorios');
       }
       setIsLoading(false);
     } else {
       if (password !== repeatPassword) {
-        message.warn('Las contraseñas tienen que ser iguales');
+        message.warning('Las contraseñas tienen que ser iguales');
         setIsLoading(false);
       } else {
         try {
@@ -88,7 +88,7 @@ function RegisterForm() {
             if (signUp.response.status === 500) {
               message.error(signUp.data.message);
             } else {
-              message.warn(signUp.data.message);
+              message.warning(signUp.data.message);
             }
             setIsLoading(false);
           }

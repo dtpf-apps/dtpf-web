@@ -1,5 +1,5 @@
 import React, { memo } from 'react';
-import { Helmet as ReactHelmet } from 'react-helmet';
+import { Helmet as ReactHelmet } from 'react-helmet-async';
 
 function Helmet(props: { titleHelmet: string; contentHelmet: string }) {
   const { titleHelmet, contentHelmet } = props;

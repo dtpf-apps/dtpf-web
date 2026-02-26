@@ -2,6 +2,8 @@
 
 .menu-top {
   display: flex;
+  align-items: center;
+  height: 100%;
 
   button {
     color: $font-light;
@@ -18,6 +20,7 @@
 
   &__left {
     &-logo {
+      display: block;
       height: 40px;
       padding-left: 20px;
       padding-right: 25px;

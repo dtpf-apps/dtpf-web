@@ -1,7 +1,4 @@
-/// <reference types="react-scripts" />
-declare module 'react/jsx-runtime' {
-  export default any;
-}
+/// <reference types="vite/client" />
 declare module 'react-cookie-consent' {
   export default any;
 }

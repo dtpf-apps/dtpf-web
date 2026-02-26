@@ -1,6 +1,6 @@
 import { basePath, apiVersion } from '../../utils/config';
 import { ACCESS_TOKEN, REFRESH_TOKEN } from '../../../utils/constants';
-import jwtDecode from 'jwt-decode';
+import { jwtDecode } from 'jwt-decode';
 import { IrefreshAccessTokenApiResponse } from './auth.response.interface';
 
 interface IjwtDecodePayload {

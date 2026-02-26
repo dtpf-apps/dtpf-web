@@ -68,7 +68,10 @@ export default function InfoBanner() {
               <TweenOne className="info-banner-title" animation={{ y: 300, opacity: 0, type: 'from' }}>
                 <AnimationCountHours totalDuration={totalDuration} duration={duration} />
               </TweenOne>
-              <TweenOne className="info-banner-text" animation={{ y: 300, opacity: 0, type: 'from', delay: 100 }}>
+              <TweenOne
+                className="info-banner-text"
+                animation={{ y: 300, opacity: 0, type: 'from', delay: 100 }}
+              >
                 Horas de estudio presenciales y online
               </TweenOne>
             </Element>
@@ -76,7 +79,10 @@ export default function InfoBanner() {
               <TweenOne className="info-banner-title" animation={{ y: 300, opacity: 0, type: 'from' }}>
                 {connectionStatus === 500 || !isNavigatorOnline ? courses.technologies : tech}
               </TweenOne>
-              <TweenOne className="info-banner-text" animation={{ y: 300, opacity: 0, type: 'from', delay: 100 }}>
+              <TweenOne
+                className="info-banner-text"
+                animation={{ y: 300, opacity: 0, type: 'from', delay: 100 }}
+              >
                 Tecnologías utilizadas
               </TweenOne>
             </Element>

@@ -1,14 +1,17 @@
 import React, { useState, useEffect, useCallback, memo } from 'react';
-import { Row, Col, Form, Input, InputNumber, Button, Image, DatePicker, notification } from 'antd';
+import { Row, Col, Form, Input, InputNumber, Button, Image, DatePicker, notification, Space } from 'antd';
 import { useDropzone } from 'react-dropzone';
 import AdminTags from '../AdminTags';
 import { addCourseApi, updateCourseApi, getImageApi, uploadImageApi } from 'api/education';
 import { LinkOutlined, FontSizeOutlined } from '@ant-design/icons';
-import moment from 'moment';
+import dayjs from 'dayjs';
+import customParseFormat from 'dayjs/plugin/customParseFormat';
 import { notifDelay, notifDelayErr } from 'utils/notifications';
 import NoImage from 'assets/img/png/no-image.png';
 import './AddEditCoursesForm.scss';
 import { getAccessTokenApi } from 'api/endpoints/auth/auth.api';
+
+dayjs.extend(customParseFormat);
 const { TextArea } = Input;
 
 interface IAddEditCoursesFormProps {
@@ -232,16 +235,16 @@ function AddEditForm({
               />
             </Form.Item>
           </Col>
-          <Input.Group>
+          <Space.Compact style={{ width: '100%' }}>
             <DatePicker
               style={{ width: '70%' }}
               format="DD/MM/YYYY HH:mm:ss"
               placeholder="Fecha de publicación"
-              value={courseData.date && moment(courseData.date)}
-              onChange={(e, value) =>
+              value={courseData.date && dayjs(courseData.date)}
+              onChange={(_e, value) =>
                 setCourseData({
                   ...courseData,
-                  date: moment(value, 'DD/MM/YYYY HH:mm:ss').toISOString(),
+                  date: dayjs(value as string, 'DD/MM/YYYY HH:mm:ss').toISOString(),
                 })
               }
             />
@@ -256,7 +259,7 @@ function AddEditForm({
                 })
               }
             />
-          </Input.Group>
+          </Space.Compact>
           <Col span={24}>
             <TextArea
               rows={5}
@@ -279,7 +282,13 @@ function AddEditForm({
             />
           </Col>
         </Row>
-        <Button type="primary" htmlType="submit" loading={proccessCourseState} onClick={loading} className="btn-submit">
+        <Button
+          type="primary"
+          htmlType="submit"
+          loading={proccessCourseState}
+          onClick={loading}
+          className="btn-submit"
+        >
           {course ? 'Actualizar curso' : 'Crear curso'}
         </Button>
       </Form>
@@ -308,7 +317,7 @@ function UploadImage({ image, setImage }: IUploadImageProps) {
     }
   }, [image]);
   const onDrop = useCallback(
-    (acceptedFiles) => {
+    (acceptedFiles: File[]) => {
       const file = acceptedFiles[0];
       if (file === undefined) {
         notification['error']({
@@ -322,7 +331,7 @@ function UploadImage({ image, setImage }: IUploadImageProps) {
     [setImage]
   );
   const { getRootProps, getInputProps, isDragActive } = useDropzone({
-    accept: 'image/jpeg, image/png',
+    accept: { 'image/jpeg': [], 'image/png': [] },
     noKeyboard: true,
     onDrop,
   });

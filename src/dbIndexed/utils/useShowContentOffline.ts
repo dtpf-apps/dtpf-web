@@ -17,7 +17,9 @@ export default function useShowOfflineContent() {
     getObjects(db) ? setDatabaseExists(true) : setDatabaseExists(false);
   };
   useEffect(() => {
-    !databaseExists && (connectionStatus === 500 || !isNavigatorOnline) ? setShowContent(true) : setShowContent(false);
+    !databaseExists && (connectionStatus === 500 || !isNavigatorOnline)
+      ? setShowContent(true)
+      : setShowContent(false);
   }, [databaseExists, connectionStatus, isNavigatorOnline]);
   return showContent;
 }

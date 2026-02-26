@@ -135,7 +135,9 @@ function AddMenuWebModal(props: any) {
   const addMenuWebModal = () => {
     setIsVisibleModal(true);
     setModalTitle('Creando nuevo menú');
-    setModalContent(<AddMenuWebForm setIsVisibleModal={setIsVisibleModal} setReloadMenuWeb={setReloadMenuWeb} />);
+    setModalContent(
+      <AddMenuWebForm setIsVisibleModal={setIsVisibleModal} setReloadMenuWeb={setReloadMenuWeb} />
+    );
   };
   return (
     <div className="menu-web-list__header">
@@ -169,7 +171,11 @@ function MenuItem({
     setIsVisibleModal(true);
     setModalTitle(`Editando menu: ${menu.title}`);
     setModalContent(
-      <EditMenuWebForm setIsVisibleModal={setIsVisibleModal} setReloadMenuWeb={setReloadMenuWeb} menu={menu} />
+      <EditMenuWebForm
+        setIsVisibleModal={setIsVisibleModal}
+        setReloadMenuWeb={setReloadMenuWeb}
+        menu={menu}
+      />
     );
   };
 

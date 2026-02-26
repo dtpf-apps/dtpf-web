@@ -13,7 +13,7 @@ import {
   inputValidationStyle,
 } from 'utils/formValidation';
 import { RedoOutlined } from '@ant-design/icons';
-import emailjs from 'emailjs-com';
+import emailjs from '@emailjs/browser';
 
 export default function ContactForm() {
   const { TextArea } = Input;
@@ -133,31 +133,31 @@ export default function ContactForm() {
     const messageIsNumber = isNumberValidation(messageTrim);
     ////////// END VALIDATIONS
     if (!email && !message) {
-      messageAnt.warn('El email y el mensaje son obligatorios.');
+      messageAnt.warning('El email y el mensaje son obligatorios.');
     } else if (nameIsNumber) {
-      messageAnt.warn(`Seguro que te llamas ${name}??`);
+      messageAnt.warning(`Seguro que te llamas ${name}??`);
     } else if (name && !nameMinLength) {
-      messageAnt.warn('El nombre requiere un mínimo de 3 carácteres.');
+      messageAnt.warning('El nombre requiere un mínimo de 3 carácteres.');
     } else if (!email) {
-      messageAnt.warn('El email es obligatorio.');
+      messageAnt.warning('El email es obligatorio.');
     } else if (!emailValid) {
-      messageAnt.warn('El email no es correcto.');
+      messageAnt.warning('El email no es correcto.');
     } else if (containsSpamWords === true) {
-      messageAnt.warn('Lo siento, no estoy interesado en este tipo de servicios.');
+      messageAnt.warning('Lo siento, no estoy interesado en este tipo de servicios.');
     } else if (phone_number && !phoneValid) {
-      messageAnt.warn('El número de teléfono no es correcto.');
+      messageAnt.warning('El número de teléfono no es correcto.');
     } else if (!message) {
-      messageAnt.warn('El mensaje es obligatorio.');
+      messageAnt.warning('El mensaje es obligatorio.');
     } else if (subject && !subjectMinLength) {
-      messageAnt.warn('El asunto requiere un mínimo de 3 carácteres.');
+      messageAnt.warning('El asunto requiere un mínimo de 3 carácteres.');
     } else if (subjectIsNumber) {
-      messageAnt.warn('El asunto no pueden ser todo números...');
+      messageAnt.warning('El asunto no pueden ser todo números...');
     } else if (messageIsNumber) {
-      messageAnt.warn('El mensaje no pueden ser todo números...');
+      messageAnt.warning('El mensaje no pueden ser todo números...');
     } else if (!messageMinLength) {
-      messageAnt.warn('El mensaje requiere un mínimo de 10 carácteres.');
+      messageAnt.warning('El mensaje requiere un mínimo de 10 carácteres.');
     } else if (!privacyPolicy) {
-      messageAnt.warn('Acepta la política de privacidad.');
+      messageAnt.warning('Acepta la política de privacidad.');
     } else {
       await subscribeContactApi(finalData).then(async (response) => {
         if (response.status === 200) {
@@ -191,9 +191,9 @@ export default function ContactForm() {
           if (response.message === 'Failed to fetch') {
             messageAnt
               .error('No se ha podido enviar el mensaje.', 2)
-              .then(() => messageAnt.warn('Comprueba tu conexión a internet.'));
+              .then(() => messageAnt.warning('Comprueba tu conexión a internet.'));
           } else {
-            messageAnt.warn(response.message);
+            messageAnt.warning(response.message);
           }
         }
       });
@@ -222,13 +222,25 @@ export default function ContactForm() {
               <span>*&nbsp;</span>Email
             </div>
             <Form.Item>
-              <Input type="email" name="email" aria-label="Email" value={inputs.email} onInput={inputValidation} />
+              <Input
+                type="email"
+                name="email"
+                aria-label="Email"
+                value={inputs.email}
+                onInput={inputValidation}
+              />
             </Form.Item>
           </div>
           <div className="contact__form-item">
             <div className="contact__form-item-label">Nombre</div>
             <Form.Item>
-              <Input type="text" name="name" aria-label="Nombre" value={inputs.name} onInput={inputValidation} />
+              <Input
+                type="text"
+                name="name"
+                aria-label="Nombre"
+                value={inputs.name}
+                onInput={inputValidation}
+              />
             </Form.Item>
           </div>
           <div className="contact__form-item">
@@ -246,7 +258,13 @@ export default function ContactForm() {
           <div className="contact__form-item">
             <div className="contact__form-item-label">Asunto</div>
             <Form.Item>
-              <Input type="text" name="subject" aria-label="Asunto" value={inputs.subject} onInput={inputValidation} />
+              <Input
+                type="text"
+                name="subject"
+                aria-label="Asunto"
+                value={inputs.subject}
+                onInput={inputValidation}
+              />
             </Form.Item>
           </div>
         </Col>

@@ -1,7 +1,6 @@
 import React, { useState, useEffect, Suspense, lazy } from 'react';
 import { Button } from 'antd';
-import { withRouter } from 'react-router-dom';
-import queryString from 'query-string';
+import { useLocation } from 'react-router-dom';
 import { getCoursesApi } from 'api/education';
 import './Education.scss';
 const Modal = lazy(() => import('views/components/UI/Modal'));
@@ -9,14 +8,10 @@ const PaginationAnt = lazy(() => import('views/components/UI/Pagination'));
 const CoursesList = lazy(() => import('./CoursesList'));
 const AddEditCoursesForm = lazy(() => import('./AddEditCoursesForm'));
 
-interface ICoursesProps {
-  location: any;
-  history: any;
-}
-
-function Courses({ location, history }: ICoursesProps) {
+function Courses() {
+  const location = useLocation();
   const [courses, setCourses] = useState(null);
-  const { page = 1 } = queryString.parse(location.search);
+  const page = new URLSearchParams(location.search).get('page') ?? '1';
   const [itemsPerPage, setItemsPerPage] = useState(10);
   const [reloadCourses, setReloadCourses] = useState(false);
   const [isVisibleModal, setIsVisibleModal] = useState(false);
@@ -50,13 +45,7 @@ function Courses({ location, history }: ICoursesProps) {
         setReloadCourses={setReloadCourses}
       />
       {courses && (
-        <Pagination
-          courses={courses}
-          location={location}
-          history={history}
-          itemsPerPage={itemsPerPage}
-          setItemsPerPage={setItemsPerPage}
-        />
+        <Pagination courses={courses} itemsPerPage={itemsPerPage} setItemsPerPage={setItemsPerPage} />
       )}
       <Suspense fallback={<></>}>
         <Modal title={modalTitle} isVisible={isVisibleModal} setIsVisible={setIsVisibleModal}>
@@ -80,7 +69,11 @@ function AddCourse({ setIsVisibleModal, setModalTitle, setModalContent, setReloa
     setModalTitle('Creando nueva Formación');
     setModalContent(
       <Suspense fallback={<></>}>
-        <AddEditCoursesForm setIsVisibleModal={setIsVisibleModal} setReloadCourses={setReloadCourses} course={null} />
+        <AddEditCoursesForm
+          setIsVisibleModal={setIsVisibleModal}
+          setReloadCourses={setReloadCourses}
+          course={null}
+        />
       </Suspense>
     );
   };
@@ -114,7 +107,11 @@ function RenderListCourses({
     setModalTitle('Editar Curso');
     setModalContent(
       <Suspense fallback={<></>}>
-        <AddEditCoursesForm setIsVisibleModal={setIsVisibleModal} setReloadCourses={setReloadCourses} course={course} />
+        <AddEditCoursesForm
+          setIsVisibleModal={setIsVisibleModal}
+          setReloadCourses={setReloadCourses}
+          course={course}
+        />
       </Suspense>
     );
   };
@@ -127,28 +124,20 @@ function RenderListCourses({
 
 interface IPaginationProps {
   courses: any;
-  location: any;
-  history: any;
   itemsPerPage: number;
   setItemsPerPage: React.Dispatch<React.SetStateAction<number>>;
 }
 
-function Pagination({ courses, location, history, itemsPerPage, setItemsPerPage }: IPaginationProps) {
+function Pagination({ courses, itemsPerPage, setItemsPerPage }: IPaginationProps) {
   return (
     <>
       {(courses?.totalPages > 1 || itemsPerPage === courses?.totalDocs) && (
         <Suspense fallback={<></>}>
-          <PaginationAnt
-            courses={courses}
-            location={location}
-            history={history}
-            itemsPerPage={itemsPerPage}
-            setItemsPerPage={setItemsPerPage}
-          />
+          <PaginationAnt courses={courses} itemsPerPage={itemsPerPage} setItemsPerPage={setItemsPerPage} />
         </Suspense>
       )}
     </>
   );
 }
 
-export default withRouter(Courses);
+export default Courses;

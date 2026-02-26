@@ -1,5 +1,4 @@
 import React, { useEffect, useState, Suspense, lazy } from 'react';
-import { withRouter } from 'react-router-dom';
 import { getAboutMeInfoAPI, updateAboutMeInfoAPI } from 'api/endpoints/aboutMe/aboutMe.api';
 import { Form, Input, Button, notification, Divider } from 'antd';
 import { notifDelay, notifDelayErr } from 'utils/notifications';
@@ -229,4 +228,4 @@ function AboutMe({ mainInfo, setMainInfo, cubeInfo, setCubeInfo, setReloadAboutM
   );
 }
 
-export default withRouter(AboutMeAdmin);
+export default AboutMeAdmin;

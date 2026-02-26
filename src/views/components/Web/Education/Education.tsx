@@ -10,12 +10,8 @@ import InfoBanner from './InfoBanner';
 const Pagination = lazy(() => import('views/components/UI/Pagination'));
 const CourseInfo = lazy(() => import('./CourseInfo'));
 
-export default function Education(props: any) {
-  const { location, history } = props;
-  interface URL {
-    url: string;
-  }
-  const { url } = useParams<URL>();
+export default function Education() {
+  const { url } = useParams<{ url: string }>();
   const { connectionStatus, isNavigatorOnline } = useConnection();
   const [itemsPerPage, setItemsPerPage] = useState(12);
   const courses = GetCoursesInfo(connectionStatus === 500 || !isNavigatorOnline ? 1000 : itemsPerPage);
@@ -24,8 +20,6 @@ export default function Education(props: any) {
   return (
     <RenderEducation
       url={url}
-      location={location}
-      history={history}
       courses={courses}
       itemsPerPage={connectionStatus === 500 || !isNavigatorOnline ? 1000 : itemsPerPage}
       setItemsPerPage={setItemsPerPage}
@@ -34,7 +28,7 @@ export default function Education(props: any) {
 }
 
 function RenderEducation(props: any) {
-  const { url, location, history, courses, itemsPerPage, setItemsPerPage } = props;
+  const { url, courses, itemsPerPage, setItemsPerPage } = props;
   const title = 'Todos los cursos';
   const subtitle = 'Cursos realizados online y presenciales para mi preparación al mundo de IT';
 
@@ -52,8 +46,6 @@ function RenderEducation(props: any) {
                 title={title}
                 subtitle={subtitle}
                 courses={courses && courses.docs}
-                location={location}
-                history={history}
               />
             </Col>
             <div className="div"></div>
@@ -63,8 +55,6 @@ function RenderEducation(props: any) {
                   <Suspense fallback={<></>}>
                     <Pagination
                       courses={courses}
-                      location={location}
-                      history={history}
                       itemsPerPage={itemsPerPage}
                       setItemsPerPage={setItemsPerPage}
                     />

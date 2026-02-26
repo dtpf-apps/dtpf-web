@@ -62,7 +62,11 @@ function MasterDesarrolloSoftware() {
             expandIconPosition={'right'}
             defaultActiveKey={['1']}
             expandIcon={({ isActive }) => (
-              <LeftCircleTwoTone twoToneColor="#5d718d" style={{ fontSize: '26px' }} rotate={isActive ? -90 : 0} />
+              <LeftCircleTwoTone
+                twoToneColor="#5d718d"
+                style={{ fontSize: '26px' }}
+                rotate={isActive ? -90 : 0}
+              />
             )}
           >
             <Panel header="MÁSTER EN DESARROLLO DE SOFTWARE" key="1">
@@ -77,7 +81,8 @@ function MasterDesarrolloSoftware() {
                 <li>HTML5, CSS3, Javascript, JSON y LocalStorage, GIT, REST APIs, Bootstrap</li>
                 <li>PHP, MySQL, OOP, MVC PATTERN</li>
                 <li>
-                  React.js, React Testing Library, Jest, Node.js, Express, MongoDB, Mongoose, Firebase, Docker, Laravel
+                  React.js, React Testing Library, Jest, Node.js, Express, MongoDB, Mongoose, Firebase,
+                  Docker, Laravel
                 </li>
               </ul>
             </Panel>
@@ -99,7 +104,9 @@ function DesarrolloAppFPN3(props: any) {
           <Collapse
             accordion
             expandIconPosition={'right'}
-            expandIcon={({ isActive }) => <LeftCircleTwoTone twoToneColor="#5d718d" rotate={isActive ? -90 : 0} />}
+            expandIcon={({ isActive }) => (
+              <LeftCircleTwoTone twoToneColor="#5d718d" rotate={isActive ? -90 : 0} />
+            )}
           >
             <Panel header="FP2 – DESARROLLO DE APLICACIONES WEB" key="1">
               <h3>Marzo 2019 - Julio 2020</h3>
@@ -107,7 +114,9 @@ function DesarrolloAppFPN3(props: any) {
               <p>Programación web en el entorno cliente</p>
               <ul>
                 <li>Elaboración de documentos web mediante lenguajes de marca.</li>
-                <li>Desarrollo y reutilización de componentes software y multimedia mediante lenguajes de guión.</li>
+                <li>
+                  Desarrollo y reutilización de componentes software y multimedia mediante lenguajes de guión.
+                </li>
                 <li>Aplicaciones técnicas de usabilidad y accesibilidad en el entorno cliente.</li>
               </ul>
               <p>Programación web en el entorno servidor</p>
@@ -142,7 +151,11 @@ function CompetenciasClaveN3() {
             accordion
             expandIconPosition={'right'}
             expandIcon={({ isActive }) => (
-              <LeftCircleTwoTone twoToneColor="#5d718d" style={{ fontSize: '26px' }} rotate={isActive ? -90 : 0} />
+              <LeftCircleTwoTone
+                twoToneColor="#5d718d"
+                style={{ fontSize: '26px' }}
+                rotate={isActive ? -90 : 0}
+              />
             )}
           >
             <Panel header="PRUEBA DE COMPETENCIAS CLAVE – NIVEL 3" key="1">
@@ -172,7 +185,11 @@ function HerramientasWebN3() {
             accordion
             expandIconPosition={'right'}
             expandIcon={({ isActive }) => (
-              <LeftCircleTwoTone twoToneColor="#5d718d" style={{ fontSize: '26px' }} rotate={isActive ? -90 : 0} />
+              <LeftCircleTwoTone
+                twoToneColor="#5d718d"
+                style={{ fontSize: '26px' }}
+                rotate={isActive ? -90 : 0}
+              />
             )}
           >
             <Panel header="FP1 – HERRAMIENTAS WEB" key="1">
@@ -207,7 +224,11 @@ function AdministrativoN1() {
             accordion
             expandIconPosition={'right'}
             expandIcon={({ isActive }) => (
-              <LeftCircleTwoTone twoToneColor="#5d718d" style={{ fontSize: '26px' }} rotate={isActive ? -90 : 0} />
+              <LeftCircleTwoTone
+                twoToneColor="#5d718d"
+                style={{ fontSize: '26px' }}
+                rotate={isActive ? -90 : 0}
+              />
             )}
           >
             <Panel header="FP1 – PROGRAMA DE CUALIFICACIÓN PROFESIONAL INICIAL DE ADMINISTRATIVO" key="1">
@@ -233,7 +254,11 @@ function GraduadoEscolar() {
             accordion
             expandIconPosition={'right'}
             expandIcon={({ isActive }) => (
-              <LeftCircleTwoTone twoToneColor="#5d718d" style={{ fontSize: '26px' }} rotate={isActive ? -90 : 0} />
+              <LeftCircleTwoTone
+                twoToneColor="#5d718d"
+                style={{ fontSize: '26px' }}
+                rotate={isActive ? -90 : 0}
+              />
             )}
           >
             <Panel header="GRADUADO ESCOLAR – ESO" key="1">

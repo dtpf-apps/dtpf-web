@@ -1,7 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import { getLastMessageApi } from 'api/contact';
-import { Link, withRouter } from 'react-router-dom';
+import { Link, useLocation } from 'react-router-dom';
 import { Layout, Menu, Tag, message } from 'antd';
+import type { MenuProps } from 'antd';
 import {
   HomeOutlined,
   UserOutlined,
@@ -17,9 +18,14 @@ import sound from 'assets/audio/sound.mp3';
 import soundOGG from 'assets/audio/sound.ogg';
 import { getAccessTokenApi } from 'api/endpoints/auth/auth.api';
 
-function MenuSider({ menuCollapsed, location, messagesUnreadLength }: any) {
+function MenuSider({ menuCollapsed, messagesUnreadLength }: any) {
+  const location = useLocation();
   return (
-    <RenderMenuSider messagesUnreadLength={messagesUnreadLength} menuCollapsed={menuCollapsed} location={location} />
+    <RenderMenuSider
+      messagesUnreadLength={messagesUnreadLength}
+      menuCollapsed={menuCollapsed}
+      location={location}
+    />
   );
 }
 
@@ -82,54 +88,53 @@ function NextRender({ menuCollapsed, location, messagesUnreadLength, newMessage 
     });
   }, [messagesUnreadLength, newMessage]);
 
+  const menuItems: MenuProps['items'] = [
+    {
+      key: '/ad1988',
+      icon: <HomeOutlined />,
+      label: <Link to="/ad1988">Home</Link>,
+    },
+    {
+      key: '/ad1988/users',
+      icon: <UserOutlined />,
+      label: <Link to="/ad1988/users">Usuarios</Link>,
+    },
+    {
+      key: '/ad1988/menu',
+      icon: <MenuOutlined />,
+      label: <Link to="/ad1988/menu">Menú</Link>,
+    },
+    {
+      key: 'ad1988/contact-messages',
+      icon: <MessageOutlined />,
+      label: (
+        <Link to="/ad1988/contact-messages">
+          Mensajes
+          {messagesUnreadLength > 0 && <Tag className="admin-sider__tag">{messagesUnreadLength}</Tag>}
+        </Link>
+      ),
+    },
+    {
+      key: 'ad1988/education',
+      icon: <ReadOutlined />,
+      label: <Link to="/ad1988/education">Formación</Link>,
+    },
+    {
+      key: 'ad1988/about-me',
+      icon: <SmileOutlined />,
+      label: <Link to="/ad1988/about-me">Sobre Mi</Link>,
+    },
+    {
+      key: '/',
+      icon: <ChromeOutlined />,
+      label: <Link to="/">Web</Link>,
+    },
+  ];
+
   return (
     <>
       <Sider collapsible collapsedWidth="0" breakpoint="lg" className="admin-sider" collapsed={menuCollapsed}>
-        <Menu theme="dark" mode="inline" defaultSelectedKeys={[location.pathname]}>
-          <Menu.Item key="/ad1988">
-            <Link to={'/ad1988'}>
-              <HomeOutlined />
-              <span className="nav-text">Home</span>
-            </Link>
-          </Menu.Item>
-          <Menu.Item key="/ad1988/users">
-            <Link to={'/ad1988/users'}>
-              <UserOutlined />
-              <span className="nac-text">Usuarios</span>
-            </Link>
-          </Menu.Item>
-          <Menu.Item key="/ad1988/menu">
-            <Link to={'/ad1988/menu'}>
-              <MenuOutlined />
-              <span className="nac-text">Menú</span>
-            </Link>
-          </Menu.Item>
-          <Menu.Item key="ad1988/contact-messages">
-            <Link to="/ad1988/contact-messages">
-              <MessageOutlined />
-              <span className="nav-text">Mensajes</span>
-              {messagesUnreadLength > 0 ? <Tag className="admin-sider__tag">{messagesUnreadLength}</Tag> : <></>}
-            </Link>
-          </Menu.Item>
-          <Menu.Item key="ad1988/education">
-            <Link to="/ad1988/education">
-              <ReadOutlined />
-              <span className="nav-text">Formación</span>
-            </Link>
-          </Menu.Item>
-          <Menu.Item key="ad1988/about-me">
-            <Link to="/ad1988/about-me">
-              <SmileOutlined />
-              <span className="nav-text">Sobre Mi</span>
-            </Link>
-          </Menu.Item>
-          <Menu.Item key="/">
-            <Link to={'/'}>
-              <ChromeOutlined />
-              <span className="nac-text">Web</span>
-            </Link>
-          </Menu.Item>
-        </Menu>
+        <Menu theme="dark" mode="inline" defaultSelectedKeys={[location.pathname]} items={menuItems} />
       </Sider>
       <audio id="sound" preload="auto">
         <source src={sound} type="audio/mp3" />
@@ -140,4 +145,4 @@ function NextRender({ menuCollapsed, location, messagesUnreadLength, newMessage 
   );
 }
 
-export default withRouter(MenuSider);
+export default MenuSider;

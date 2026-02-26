@@ -1,11 +1,15 @@
 import React, { Suspense, lazy, memo } from 'react';
 import { deleteCourseApi } from 'api/education';
 import { Link } from 'react-router-dom';
-import moment from 'moment';
-import 'moment/locale/es';
+import dayjs from 'dayjs';
+import relativeTime from 'dayjs/plugin/relativeTime';
+import 'dayjs/locale/es';
 import { List, Button, Modal, notification } from 'antd';
 import { EyeOutlined, EditOutlined, DeleteOutlined } from '@ant-design/icons';
 import { getAccessTokenApi } from 'api/endpoints/auth/auth.api';
+
+dayjs.extend(relativeTime);
+dayjs.locale('es');
 const Spin = lazy(() => import('views/components/UI/Spin'));
 const { confirm } = Modal;
 
@@ -51,7 +55,9 @@ function CoursesList({ courses, setReloadCourses, editCourse }: ICoursesListProp
       ) : (
         <List
           dataSource={courses.docs}
-          renderItem={(course) => <Course course={course} deleteCourse={deleteCourse} editCourse={editCourse} />}
+          renderItem={(course) => (
+            <Course course={course} deleteCourse={deleteCourse} editCourse={editCourse} />
+          )}
         />
       )}
     </div>
@@ -65,7 +71,7 @@ interface ICourseProps {
 }
 
 function Course({ course, deleteCourse, editCourse }: ICourseProps) {
-  const date = `Hace ${course && moment(course.date).fromNow(true)}`;
+  const date = `Hace ${course && dayjs(course.date).fromNow(true)}`;
 
   return (
     <List.Item
