@@ -59,7 +59,7 @@ function MasterDesarrolloSoftware() {
         <Col span={24} className="education__collapse">
           <Collapse
             accordion
-            expandIconPosition={'right'}
+            expandIconPosition={'end'}
             defaultActiveKey={['1']}
             expandIcon={({ isActive }) => (
               <LeftCircleTwoTone
@@ -103,7 +103,7 @@ function DesarrolloAppFPN3(props: any) {
         <Col span={24} className="education__collapse">
           <Collapse
             accordion
-            expandIconPosition={'right'}
+            expandIconPosition={'end'}
             expandIcon={({ isActive }) => (
               <LeftCircleTwoTone twoToneColor="#5d718d" rotate={isActive ? -90 : 0} />
             )}
@@ -149,7 +149,7 @@ function CompetenciasClaveN3() {
         <Col span={24} className="education__collapse">
           <Collapse
             accordion
-            expandIconPosition={'right'}
+            expandIconPosition={'end'}
             expandIcon={({ isActive }) => (
               <LeftCircleTwoTone
                 twoToneColor="#5d718d"
@@ -183,7 +183,7 @@ function HerramientasWebN3() {
         <Col span={24} className="education__collapse">
           <Collapse
             accordion
-            expandIconPosition={'right'}
+            expandIconPosition={'end'}
             expandIcon={({ isActive }) => (
               <LeftCircleTwoTone
                 twoToneColor="#5d718d"
@@ -222,7 +222,7 @@ function AdministrativoN1() {
         <Col span={24} className="education__collapse">
           <Collapse
             accordion
-            expandIconPosition={'right'}
+            expandIconPosition={'end'}
             expandIcon={({ isActive }) => (
               <LeftCircleTwoTone
                 twoToneColor="#5d718d"
@@ -252,7 +252,7 @@ function GraduadoEscolar() {
         <Col span={24} className="education__collapse">
           <Collapse
             accordion
-            expandIconPosition={'right'}
+            expandIconPosition={'end'}
             expandIcon={({ isActive }) => (
               <LeftCircleTwoTone
                 twoToneColor="#5d718d"
