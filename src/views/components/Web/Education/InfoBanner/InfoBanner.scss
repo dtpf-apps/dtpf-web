@@ -13,8 +13,11 @@
   min-height: 165px;
   background-color: var(--t-info-banner-bg);
   margin-bottom: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 20px 0;
   &-elem {
-    margin-top: 15px;
     text-align: center;
   }
   &-title {
