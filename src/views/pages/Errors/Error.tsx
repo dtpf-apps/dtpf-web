@@ -1,5 +1,5 @@
 import React, { Suspense, lazy, memo } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router';
 const Helmet = lazy(() => import('views/components/Helmet'));
 const Error404 = lazy(() => import('views/components/Error/Error404'));
 const Error500 = lazy(() => import('views/components/Error/Error500'));

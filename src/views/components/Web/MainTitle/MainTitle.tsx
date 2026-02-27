@@ -2,33 +2,31 @@ import { memo } from 'react';
 import { motion, type Variants, type Easing } from 'motion/react';
 import './MainTitle.scss';
 
-const EASE_LINEAR: Easing = 'linear';
+const EASE_SMOOTH: Easing = [0.25, 0.1, 0.25, 1];
 
 function MainTitle() {
   const charVariants: Variants = {
-    hidden: { opacity: 0, x: 20 },
     visible: (i: number) => ({
       opacity: 1,
       x: 0,
-      transition: { delay: i * 0.03, duration: 0.05, ease: EASE_LINEAR },
+      transition: { delay: i * 0.06, duration: 0.6, ease: EASE_SMOOTH },
     }),
   };
 
   const renderChars = (text: string, direction: 'left' | 'right') => {
-    const chars = text.replace(/\u00a0/g, '\u00a0').split('');
-    const ordered = direction === 'left' ? chars : [...chars].reverse();
-    return ordered.map((char, i) => {
-      const index = direction === 'left' ? i : chars.length - 1 - i;
+    const chars = text.split('');
+    return chars.map((char, i) => {
+      const delayIndex = direction === 'left' ? i : chars.length - 1 - i;
       return (
         <motion.span
-          key={index}
-          custom={i}
+          key={i}
+          custom={delayIndex}
           variants={charVariants}
-          initial="hidden"
+          initial={{ opacity: 0, x: direction === 'left' ? 30 : -30 }}
           animate="visible"
           style={{ display: 'inline-block', whiteSpace: 'pre' }}
         >
-          {chars[direction === 'left' ? i : chars.length - 1 - i]}
+          {char}
         </motion.span>
       );
     });
@@ -44,20 +42,20 @@ function MainTitle() {
             className="combined-bar"
             initial={{ width: 0, x: 50 }}
             animate={{ width: '100%', x: 0 }}
-            transition={{ delay: 0.2, duration: 0.4, ease: EASE_LINEAR }}
+            transition={{ delay: 0.4, duration: 0.8, ease: EASE_SMOOTH }}
           />
           <motion.div
             className="content"
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.4, duration: 0.3 }}
+            transition={{ delay: 0.8, duration: 0.6, ease: EASE_SMOOTH }}
           >
             {'Desarrollador Full Stack'.split('').map((char, i) => (
               <motion.span
                 key={i}
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}
-                transition={{ delay: 0.4 + i * 0.005, duration: 0.05 }}
+                transition={{ delay: 0.8 + i * 0.025, duration: 0.3, ease: EASE_SMOOTH }}
                 style={{ display: 'inline-block', whiteSpace: 'pre' }}
               >
                 {char}

@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Link } from 'react-router-dom';
+import { Link } from 'react-router';
 import { getImageApi } from 'api/education';
 import { useNearScreen } from 'hooks/useNearScreen';
 import { Row, Col, Card, Tag } from 'antd';

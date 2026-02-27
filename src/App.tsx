@@ -1,5 +1,5 @@
 import React, { memo } from 'react';
-import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import { BrowserRouter as Router, Routes, Route } from 'react-router';
 import { HelmetProvider } from 'react-helmet-async';
 import { CookiesProvider } from 'react-cookie';
 import AuthProvider from './providers/AuthProvider';

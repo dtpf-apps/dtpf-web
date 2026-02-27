@@ -1,6 +1,6 @@
 import React, { useState, useEffect, Suspense, lazy } from 'react';
 import { Button } from 'antd';
-import { useLocation } from 'react-router-dom';
+import { useLocation } from 'react-router';
 import { getCoursesApi } from 'api/education';
 import './Education.scss';
 const Modal = lazy(() => import('views/components/UI/Modal'));

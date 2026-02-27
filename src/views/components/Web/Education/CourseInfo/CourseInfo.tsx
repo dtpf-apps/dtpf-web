@@ -1,5 +1,5 @@
 import React, { useState, useEffect, Suspense, lazy } from 'react';
-import { Link } from 'react-router-dom';
+import { Link } from 'react-router';
 import { getCourseApi, getImageApi, getPrevCourseApi, getNextCourseApi } from 'api/education';
 import useScrollToTop from 'hooks/useScrollToTop';
 import dayjs from 'dayjs';

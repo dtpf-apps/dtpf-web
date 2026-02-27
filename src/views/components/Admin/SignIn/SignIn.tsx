@@ -1,6 +1,6 @@
 import React, { memo } from 'react';
 import { Layout, Tabs } from 'antd';
-import { Navigate } from 'react-router-dom';
+import { Navigate } from 'react-router';
 import Logo from 'assets/img/png/logo256.png';
 import './SignIn.scss';
 import LoginForm from '../LoginForm';

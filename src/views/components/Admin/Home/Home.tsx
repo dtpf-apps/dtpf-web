@@ -1,5 +1,5 @@
 import React, { useState, useEffect, memo } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router';
 import { checkUserLogin } from 'providers/AuthProvider';
 import { getIndexedDBVersionApi, updateIndexedDBVersionApi } from 'api/utils';
 import { useCookies } from 'react-cookie';

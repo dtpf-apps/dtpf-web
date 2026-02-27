@@ -1,5 +1,5 @@
 import React, { memo, useState } from 'react';
-import { Link } from 'react-router-dom';
+import { Link } from 'react-router';
 import { Form, Input, Button, Checkbox, message, notification } from 'antd';
 import { UserOutlined, LockOutlined } from '@ant-design/icons';
 import { minLenghtValidation, emailValidation, inputValidationStyle } from 'utils/formValidation';

@@ -1,5 +1,5 @@
 import React, { memo, useState } from 'react';
-import { Outlet } from 'react-router-dom';
+import { Outlet } from 'react-router';
 import useConnection from 'hooks/useConnection';
 import useShowContentOffline from 'dbIndexed/utils/useShowContentOffline';
 import { gaEvent } from 'utils/analytics';

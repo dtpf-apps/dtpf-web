@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { getLastMessageApi } from 'api/contact';
-import { Link, useLocation } from 'react-router-dom';
+import { Link, useLocation } from 'react-router';
 import { Layout, Menu, Tag, message } from 'antd';
 import type { MenuProps } from 'antd';
 import {

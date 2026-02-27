@@ -1,5 +1,5 @@
 import React, { memo } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router';
 import { Result, Button } from 'antd';
 import { SmileOutlined } from '@ant-design/icons';
 import './CommingSoon.scss';

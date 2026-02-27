@@ -1,5 +1,5 @@
 import React, { memo, useCallback } from 'react';
-import { useNavigate, Link } from 'react-router-dom';
+import { useNavigate, Link } from 'react-router';
 import CookieConsent from 'react-cookie-consent';
 import gtag from 'utils/gtag';
 import './CookiesConsent.scss';

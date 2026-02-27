@@ -1,6 +1,6 @@
 /* eslint-disable no-template-curly-in-string */
 import React, { useState } from 'react';
-import { Link } from 'react-router-dom';
+import { Link } from 'react-router';
 import { Row, Col, Form as FormAnt, Input, Checkbox, Button, message as msg } from 'antd';
 import './ContactForm.scss';
 import { subscribeContactApi } from 'api/contact';

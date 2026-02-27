@@ -1,5 +1,5 @@
 import React, { useContext } from 'react';
-import { NavLink, useLocation } from 'react-router-dom';
+import { NavLink, useLocation } from 'react-router';
 import { AuthContext } from 'providers/AuthProvider';
 import GetMainMenu from 'dbIndexed/mainMenu/GetMainMenu';
 import { gaEvent } from 'utils/analytics';

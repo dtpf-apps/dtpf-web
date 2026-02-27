@@ -23,7 +23,7 @@
     "react-dropzone": "^14.3.5",
     "react-helmet-async": "^2.0.5",
     "react-push-notification": "^1.5.4",
-    "react-router-dom": "^6.28.0",
+    "react-router": "~7.13.1",
     "socket.io-client": "^4.8.0",
     "workbox-background-sync": "^7.4.0",
     "workbox-broadcast-update": "^7.4.0",

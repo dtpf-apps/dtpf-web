@@ -1,6 +1,6 @@
 import React, { Suspense, lazy, memo } from 'react';
 import { deleteCourseApi } from 'api/education';
-import { Link } from 'react-router-dom';
+import { Link } from 'react-router';
 import dayjs from 'dayjs';
 import relativeTime from 'dayjs/plugin/relativeTime';
 import 'dayjs/locale/es';

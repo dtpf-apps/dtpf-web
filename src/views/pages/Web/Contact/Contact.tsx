@@ -1,5 +1,5 @@
 import React, { Suspense, lazy, memo } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router';
 const Helmet = lazy(() => import('views/components/Helmet'));
 const ContactPage = lazy(() => import('views/components/Web/Contact'));
 const ButtonGoBack = lazy(() => import('views/components/UI/ButtonGoBack'));

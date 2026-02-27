@@ -1,5 +1,5 @@
 import React, { memo, useCallback, useEffect } from 'react';
-import { useLocation, useNavigate } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router';
 import { Pagination as PaginationAntd } from 'antd';
 import useScrollToTop from 'hooks/useScrollToTop';
 import './Pagination.scss';

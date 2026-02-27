@@ -1,5 +1,5 @@
 import React, { Suspense, lazy, memo } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router';
 import './Education.scss';
 const Helmet = lazy(() => import('views/components/Helmet'));
 const EducationWeb = lazy(() => import('views/components/Web/Education'));

@@ -1,5 +1,5 @@
 import React, { useState, Suspense, lazy, memo } from 'react';
-import { Navigate, Outlet } from 'react-router-dom';
+import { Navigate, Outlet } from 'react-router';
 import { Layout, Tag } from 'antd';
 import useAuth from 'hooks/useAuth';
 import useConnection from '../../hooks/useConnection';

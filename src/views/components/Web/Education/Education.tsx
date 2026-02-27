@@ -2,7 +2,7 @@ import React, { useState, Suspense, lazy } from 'react';
 import GetCoursesInfo from 'dbIndexed/courses/GetCoursesInfo';
 import useScrollToTop from 'hooks/useScrollToTop';
 import useConnection from 'hooks/useConnection';
-import { useParams } from 'react-router-dom';
+import { useParams } from 'react-router';
 import { Row, Col } from 'antd';
 import './Education.scss';
 import Courses from './Courses';
