@@ -7,7 +7,7 @@ export default function useEventListener(
   isMobile: boolean,
   element = window
 ) {
-  const savedHandler: any = useRef();
+  const savedHandler: any = useRef(undefined);
 
   useEffect(() => {
     savedHandler.current = handler;

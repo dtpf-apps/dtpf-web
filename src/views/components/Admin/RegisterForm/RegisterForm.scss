@@ -1,3 +1,4 @@
+@use 'sass:math';
 @import 'scss/variables';
 
 .register-form {
@@ -25,26 +26,26 @@
     .ant-input-prefix {
       padding-left: 5px;
       i {
-        font-size: 0em + 22px / $font-size-sm;
+        font-size: 0em + math.div(22px, $font-size-sm);
       }
     }
 
     input {
-      font-size: 0em + 20px / $font-size-sm;
+      font-size: 0em + math.div(20px, $font-size-sm);
       padding: 7px 7px 7px 14px !important;
       &:focus {
         border-color: $primary-color;
         box-shadow: none;
       }
       @media (min-width: $media-breakpoint-up-md) {
-        font-size: 0em + 21px / $font-size-sm;
+        font-size: 0em + math.div(21px, $font-size-sm);
       }
     }
   }
 
   &__button {
     width: 100%;
-    font-size: 0em + 22px / $font-size-sm;
+    font-size: 0em + math.div(22px, $font-size-sm);
     background-color: $primary-color;
     color: $font-light;
     height: 42px;

@@ -1,7 +1,7 @@
-import React, { useState, useEffect, useRef } from 'react';
+import { useState, useEffect, useRef } from 'react';
 
 export function useNearScreen() {
-  const el = useRef() as React.MutableRefObject<HTMLDivElement>;
+  const el = useRef<HTMLDivElement>(null);
   const [show, setShow] = useState(false);
   useEffect(() => {
     let isMounted = true;
