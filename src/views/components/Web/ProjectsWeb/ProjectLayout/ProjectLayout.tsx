@@ -1,11 +1,19 @@
 import React, { useState } from 'react';
 import { Row, Col, Button, Image as ImageAnt, Tag } from 'antd';
-import QueueAnim from 'rc-queue-anim';
+import { motion, type Easing } from 'motion/react';
 import Modal from 'views/components/UI/Modal';
 import { gaEvent } from 'utils/analytics';
 import useScrollToTop from 'hooks/useScrollToTop';
 import { useNearScreen } from 'hooks/useNearScreen';
 import './ProjectLayout.scss';
+
+const EASE_IN: Easing = 'easeIn';
+
+const fadeIn = {
+  initial: { opacity: 0 },
+  animate: { opacity: 1 },
+  transition: { duration: 0.25, ease: EASE_IN },
+};
 
 export default function ProyectLayout(props: {
   innerWidth: number;
@@ -124,11 +132,11 @@ function Image(props: { image: string; imageAlt: string; analyticTag: string }) 
   };
   return (
     <Col span={24} md={12} className="project-layout__image">
-      <QueueAnim type={'alpha'} duration={250} ease="easeInCubic">
-        <div key="image" onClick={() => clickProyectImage}>
+      <motion.div {...fadeIn}>
+        <div onClick={() => clickProyectImage}>
           <ImageAnt width="300" alt={imageAlt} src={image} />
         </div>
-      </QueueAnim>
+      </motion.div>
     </Col>
   );
 }
@@ -150,14 +158,14 @@ function Content(props: {
   return (
     <Col span={24} md={12} className="project-layout__content">
       <Col span={24} className="project-layout__content-text">
-        <QueueAnim type={'alpha'} duration={350} ease="easeInCubic">
-          <div className="project-layout__content-title" key="titleh2">
+        <motion.div {...fadeIn} transition={{ duration: 0.35, ease: EASE_IN }}>
+          <div className="project-layout__content-title">
             <h2>{contentTitle}</h2>
           </div>
-          <div className="project-layout__content-paragraph" key="titleP">
+          <div className="project-layout__content-paragraph">
             <p>{contentText}</p>
           </div>
-        </QueueAnim>
+        </motion.div>
       </Col>
       <div className="project-layout__content--links">
         <Button

@@ -4,7 +4,9 @@ import { getImageApi } from 'api/education';
 import { useNearScreen } from 'hooks/useNearScreen';
 import { Row, Col, Card, Tag } from 'antd';
 import { EyeOutlined } from '@ant-design/icons';
-import QueueAnim from 'rc-queue-anim';
+import { motion, type Easing } from 'motion/react';
+
+const EASE_IN: Easing = 'easeIn';
 import './Courses.scss';
 import noImage from 'assets/img/png/no-image-s.png';
 import Spin from 'views/components/UI/Spin';
@@ -70,29 +72,31 @@ function Course(props: any) {
         <Spin paddingTop="150px" height="100%" />
       ) : (
         show && (
-          <QueueAnim type={'alpha'} duration={400} ease="easeInCubic">
-            <div key="course">
-              <Link to={`/education/${course.url}`}>
-                <Card
-                  className="courses-list__card"
-                  cover={<img src={image ? image : noImage} alt={course.title} />}
-                >
-                  <Meta description={course.title} />
-                  <span className="courses-list__edit">
-                    <EyeOutlined />
-                  </span>
-                  <div className="courses-list__tags">
-                    <Tag className="courses-list__hours">
-                      <b>{course.duration}</b> h
-                    </Tag>
-                    <Tag className="courses-list__tecnologies">
-                      <b>{course.tags.length}</b> tech
-                    </Tag>
-                  </div>
-                </Card>
-              </Link>
-            </div>
-          </QueueAnim>
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ duration: 0.4, ease: EASE_IN }}
+          >
+            <Link to={`/education/${course.url}`}>
+              <Card
+                className="courses-list__card"
+                cover={<img src={image ? image : noImage} alt={course.title} />}
+              >
+                <Meta description={course.title} />
+                <span className="courses-list__edit">
+                  <EyeOutlined />
+                </span>
+                <div className="courses-list__tags">
+                  <Tag className="courses-list__hours">
+                    <b>{course.duration}</b> h
+                  </Tag>
+                  <Tag className="courses-list__tecnologies">
+                    <b>{course.tags.length}</b> tech
+                  </Tag>
+                </div>
+              </Card>
+            </Link>
+          </motion.div>
         )
       )}
     </div>

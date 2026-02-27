@@ -1,13 +1,29 @@
 import React, { useState, useEffect, memo } from 'react';
 import { Switch, List, Button, Modal as ModalAntd, notification } from 'antd';
+import {
+  DndContext,
+  closestCenter,
+  KeyboardSensor,
+  PointerSensor,
+  useSensor,
+  useSensors,
+  DragEndEvent,
+} from '@dnd-kit/core';
+import {
+  arrayMove,
+  SortableContext,
+  sortableKeyboardCoordinates,
+  useSortable,
+  verticalListSortingStrategy,
+} from '@dnd-kit/sortable';
+import { CSS } from '@dnd-kit/utilities';
 import Modal from 'views/components/UI/Modal';
 import { getMenuApi, updateMenuApi, activateMenuApi, deleteMenuApi } from 'api/menu';
 import { notifDelay, notifDelayErr } from 'utils/notifications';
 import AddMenuWebForm from '../AddMenuWebForm';
 import EditMenuWebForm from '../EditMenuWebForm';
-import { EditOutlined, DeleteOutlined } from '@ant-design/icons';
+import { EditOutlined, DeleteOutlined, HolderOutlined } from '@ant-design/icons';
 import './MenuWebList.scss';
-import DragSortableList from 'react-drag-sortable';
 import { getAccessTokenApi } from 'api/endpoints/auth/auth.api';
 const { confirm } = ModalAntd;
 
@@ -17,51 +33,31 @@ interface IMenuWebListProps {
 }
 
 function MenuWebList({ reloadMenuWeb, setReloadMenuWeb }: IMenuWebListProps) {
-  const [listItems, setListItems] = useState<any[]>([]);
   const [isVisibleModal, setIsVisibleModal] = useState(false);
   const [modalTitle, setModalTitle] = useState('');
   const [modalContent, setModalContent] = useState<React.ReactNode | null>(null);
-  const [menu, setMenu] = useState<any[] | null>(null);
+  const [menu, setMenu] = useState<any[]>([]);
+
+  const sensors = useSensors(
+    useSensor(PointerSensor),
+    useSensor(KeyboardSensor, { coordinateGetter: sortableKeyboardCoordinates })
+  );
 
   useEffect(() => {
     let isMounted = true;
     getMenuApi().then((response) => {
-      isMounted && setMenu(response.menu);
+      if (isMounted && response.menu) {
+        setMenu(response.menu);
+      }
     });
     return () => {
       isMounted = false;
     };
   }, [reloadMenuWeb]);
 
-  useEffect(() => {
-    let isMounted = true;
-    const listItemsArray: Array<{ content: React.ReactNode }> = [];
-    menu &&
-      menu.forEach((item) => {
-        listItemsArray.push({
-          content: (
-            <MenuItem
-              item={item}
-              activateMenu={activateMenu}
-              deleteMenu={deleteMenu}
-              setIsVisibleModal={setIsVisibleModal}
-              setModalTitle={setModalTitle}
-              setModalContent={setModalContent}
-              setReloadMenuWeb={setReloadMenuWeb}
-            />
-          ),
-        });
-      });
-    isMounted && setListItems(listItemsArray);
-    return () => {
-      isMounted = false;
-    };
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [menu]);
-
-  const activateMenu = (menu: any, status: any) => {
+  const activateMenu = (menuItem: any, status: any) => {
     const accessToken = getAccessTokenApi();
-    activateMenuApi(accessToken, menu._id, status).then((response) => {
+    activateMenuApi(accessToken, menuItem._id, status).then((response) => {
       if (status === true) {
         notification['success']({
           message: response.message,
@@ -76,25 +72,31 @@ function MenuWebList({ reloadMenuWeb, setReloadMenuWeb }: IMenuWebListProps) {
     });
   };
 
-  const onSort = (sortedList: any[], dropEvent: any) => {
+  const handleDragEnd = (event: DragEndEvent) => {
+    const { active, over } = event;
+    if (!over || active.id === over.id) return;
+
+    const oldIndex = menu.findIndex((item) => item._id === active.id);
+    const newIndex = menu.findIndex((item) => item._id === over.id);
+    const reordered = arrayMove(menu, oldIndex, newIndex);
+    setMenu(reordered);
+
     const accessToken = getAccessTokenApi();
-    sortedList.forEach((item) => {
-      const { _id } = item.content.props.item;
-      const order = item.rank;
-      updateMenuApi(accessToken, _id, { order });
+    reordered.forEach((item, index) => {
+      updateMenuApi(accessToken, item._id, { order: index });
     });
   };
 
-  const deleteMenu = (menu: any) => {
+  const deleteMenu = (menuItem: any) => {
     const accessToken = getAccessTokenApi();
     confirm({
       title: 'Eliminando menú',
-      content: `¿Estás seguro que quieres eliminar el menú ${menu.title}?`,
+      content: `¿Estás seguro que quieres eliminar el menú ${menuItem.title}?`,
       okText: 'Eliminar',
       okType: 'danger',
       cancelText: 'Cancelar',
       onOk() {
-        deleteMenuApi(accessToken, menu._id)
+        deleteMenuApi(accessToken, menuItem._id)
           .then((response) => {
             notification['success']({
               message: response.message,
@@ -121,7 +123,22 @@ function MenuWebList({ reloadMenuWeb, setReloadMenuWeb }: IMenuWebListProps) {
         setReloadMenuWeb={setReloadMenuWeb}
       />
       <div className="menu-web-list__items">
-        <DragSortableList items={listItems} onSort={onSort} type="vertical" />
+        <DndContext sensors={sensors} collisionDetection={closestCenter} onDragEnd={handleDragEnd}>
+          <SortableContext items={menu.map((item) => item._id)} strategy={verticalListSortingStrategy}>
+            {menu.map((item) => (
+              <SortableMenuItem
+                key={item._id}
+                item={item}
+                activateMenu={activateMenu}
+                deleteMenu={deleteMenu}
+                setIsVisibleModal={setIsVisibleModal}
+                setModalTitle={setModalTitle}
+                setModalContent={setModalContent}
+                setReloadMenuWeb={setReloadMenuWeb}
+              />
+            ))}
+          </SortableContext>
+        </DndContext>
       </div>
       <Modal title={modalTitle} isVisible={isVisibleModal} setIsVisible={setIsVisibleModal}>
         {modalContent}
@@ -148,7 +165,7 @@ function AddMenuWebModal(props: any) {
   );
 }
 
-interface IMenuItemProps {
+interface ISortableMenuItemProps {
   item: any;
   activateMenu: (menu: any, status: any) => void;
   deleteMenu: (menu: any) => void;
@@ -158,7 +175,7 @@ interface IMenuItemProps {
   setReloadMenuWeb: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
-function MenuItem({
+function SortableMenuItem({
   item,
   activateMenu,
   deleteMenu,
@@ -166,7 +183,14 @@ function MenuItem({
   setModalTitle,
   setModalContent,
   setReloadMenuWeb,
-}: IMenuItemProps) {
+}: ISortableMenuItemProps) {
+  const { attributes, listeners, setNodeRef, transform, transition } = useSortable({ id: item._id });
+
+  const style = {
+    transform: CSS.Transform.toString(transform),
+    transition,
+  };
+
   const editMenuWebModal = (menu: any) => {
     setIsVisibleModal(true);
     setModalTitle(`Editando menu: ${menu.title}`);
@@ -180,24 +204,29 @@ function MenuItem({
   };
 
   return (
-    <List.Item
-      actions={[
-        <Switch
-          defaultChecked={item.active}
-          checkedChildren="on"
-          unCheckedChildren="off"
-          onChange={(e) => activateMenu(item, e)}
-        />,
-        <Button type="primary" onClick={() => editMenuWebModal(item)}>
-          <EditOutlined />
-        </Button>,
-        <Button type="primary" danger onClick={() => deleteMenu(item)}>
-          <DeleteOutlined />
-        </Button>,
-      ]}
-    >
-      <List.Item.Meta title={item.title} description={item.url} />
-    </List.Item>
+    <div ref={setNodeRef} style={style}>
+      <List.Item
+        actions={[
+          <span {...attributes} {...listeners} style={{ cursor: 'grab' }}>
+            <HolderOutlined />
+          </span>,
+          <Switch
+            defaultChecked={item.active}
+            checkedChildren="on"
+            unCheckedChildren="off"
+            onChange={(e) => activateMenu(item, e)}
+          />,
+          <Button type="primary" onClick={() => editMenuWebModal(item)}>
+            <EditOutlined />
+          </Button>,
+          <Button type="primary" danger onClick={() => deleteMenu(item)}>
+            <DeleteOutlined />
+          </Button>,
+        ]}
+      >
+        <List.Item.Meta title={item.title} description={item.url} />
+      </List.Item>
+    </div>
   );
 }
 
