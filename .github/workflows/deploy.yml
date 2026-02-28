@@ -1,0 +1,60 @@
+name: Deploy Frontend
+
+on:
+  push:
+    branches: [main, dev]
+
+env:
+  APP_SERVER: dtpf@10.5.0.165
+  APP_SERVER_PORT: 22
+  SERVICE_NAME: dtpf
+
+jobs:
+  deploy:
+    runs-on: self-hosted
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+
+      - name: Install pnpm
+        run: corepack enable && corepack prepare pnpm@latest --activate
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: Build
+        run: pnpm build
+        env:
+          NODE_OPTIONS: '--max-old-space-size=4096'
+          VITE_PUBLIC_URL: ${{ secrets.VITE_PUBLIC_URL }}
+
+      - name: Determine environment
+        id: env
+        run: |
+          if [ "${{ github.ref_name }}" = "main" ]; then
+            echo "target=production" >> $GITHUB_OUTPUT
+          else
+            echo "target=staging" >> $GITHUB_OUTPUT
+          fi
+
+      - name: Deploy to server
+        run: |
+          TARGET="${{ steps.env.outputs.target }}"
+          DEPLOY_DIR="/html/${{ env.SERVICE_NAME }}/$TARGET"
+          SSH_CMD="ssh -o StrictHostKeyChecking=no -p ${{ env.APP_SERVER_PORT }} ${{ env.APP_SERVER }}"
+
+          # Rotate client → client_old on server
+          $SSH_CMD "
+            if [ -d $DEPLOY_DIR/client_old ]; then rm -rf $DEPLOY_DIR/client_old; fi
+            if [ -d $DEPLOY_DIR/client ]; then mv $DEPLOY_DIR/client $DEPLOY_DIR/client_old; fi
+          "
+
+          # Send build artifacts (Vite outputs to dist/)
+          rsync -az --delete \
+            -e "ssh -o StrictHostKeyChecking=no -p ${{ env.APP_SERVER_PORT }}" \
+            dist/ ${{ env.APP_SERVER }}:$DEPLOY_DIR/client/
+
+          echo "✓ Frontend deployed to $TARGET"
