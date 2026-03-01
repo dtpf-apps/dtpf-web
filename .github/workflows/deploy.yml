@@ -4,6 +4,10 @@ on:
   push:
     branches: [main, dev]
 
+concurrency:
+  group: ${{ github.repository }}-${{ github.ref }}
+  cancel-in-progress: true
+
 env:
   APP_SERVER: dtpf@10.5.0.165
   APP_SERVER_PORT: 22
@@ -15,12 +19,13 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
+      - name: Install pnpm
+        run: corepack enable && corepack prepare pnpm@latest --activate
+
       - uses: actions/setup-node@v4
         with:
           node-version: 22
-
-      - name: Install pnpm
-        run: corepack enable && corepack prepare pnpm@latest --activate
+          cache: 'pnpm'
 
       - name: Install dependencies
         run: pnpm install --frozen-lockfile
@@ -44,15 +49,8 @@ jobs:
         run: |
           TARGET="${{ steps.env.outputs.target }}"
           DEPLOY_DIR="/html/${{ env.SERVICE_NAME }}/$TARGET"
-          SSH_CMD="ssh -o StrictHostKeyChecking=no -p ${{ env.APP_SERVER_PORT }} ${{ env.APP_SERVER }}"
 
-          # Rotate client → client_old on server
-          $SSH_CMD "
-            if [ -d $DEPLOY_DIR/client_old ]; then rm -rf $DEPLOY_DIR/client_old; fi
-            if [ -d $DEPLOY_DIR/client ]; then mv $DEPLOY_DIR/client $DEPLOY_DIR/client_old; fi
-          "
-
-          # Send build artifacts (Vite outputs to dist/)
+          # Send build artifacts
           rsync -az --delete \
             -e "ssh -o StrictHostKeyChecking=no -p ${{ env.APP_SERVER_PORT }}" \
             dist/ ${{ env.APP_SERVER }}:$DEPLOY_DIR/client/
