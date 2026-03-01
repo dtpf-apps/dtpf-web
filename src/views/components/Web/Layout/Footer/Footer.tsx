@@ -16,7 +16,7 @@ export default function Footer() {
             </Col>
             <Col span={24} md={2} xl={4} />
             <Col span={24} md={11} xl={10} aria-hidden="true">
-              Desarrollador Full Stack | 2020-2023
+              Desarrollador Full Stack | 2020-{new Date().getFullYear()}
             </Col>
           </Row>
         </Col>
