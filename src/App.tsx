@@ -2,7 +2,7 @@ import React, { memo } from 'react';
 import { BrowserRouter as Router, Routes, Route } from 'react-router';
 import { HelmetProvider } from 'react-helmet-async';
 import { CookiesProvider } from 'react-cookie';
-import AuthProvider from './providers/AuthProvider';
+import { DauthProvider } from 'dauth-context-react';
 import ConnectionProvider from './providers/ConnectionProvider';
 import MainMenuProvider from './providers/MainMenuProvider';
 import dbIndexed from './dbIndexed';
@@ -15,7 +15,6 @@ import LayoutBasic from './views/layouts/LayoutBasic';
 // Admin Pages
 import AdminHome from './views/pages/Admin';
 import AdminSignIn from './views/pages/Admin/SignIn';
-import AdminUsers from './views/pages/Admin/Users';
 import AdminMenuWeb from './views/pages/Admin/MenuWeb';
 import AdminContactMessages from './views/pages/Admin/ContactMessages';
 import AdminEducation from './views/pages/Admin/Education';
@@ -36,7 +35,10 @@ function App() {
   return (
     <CookiesProvider>
       <HelmetProvider>
-        <AuthProvider>
+        <DauthProvider
+          domainName={import.meta.env.VITE_DAUTH_DOMAIN_NAME || 'dtpf'}
+          dauthUrl={import.meta.env.VITE_DAUTH_URL || undefined}
+        >
           <ConnectionProvider>
             <MainMenuProvider>
               <Router>
@@ -44,7 +46,6 @@ function App() {
                 <Route path="/ad1988/login" element={<AdminSignIn />} />
                 <Route path="/ad1988/*" element={<LayoutAdmin />}>
                   <Route index element={<AdminHome />} />
-                  <Route path="users" element={<AdminUsers />} />
                   <Route path="menu" element={<AdminMenuWeb />} />
                   <Route path="contact-messages" element={<AdminContactMessages />} />
                   <Route path="education" element={<AdminEducation />} />
@@ -64,7 +65,7 @@ function App() {
               </Router>
             </MainMenuProvider>
           </ConnectionProvider>
-        </AuthProvider>
+        </DauthProvider>
       </HelmetProvider>
     </CookiesProvider>
   );

@@ -26,12 +26,12 @@ importers:
       antd:
         specifier: ~6.3.1
         version: 6.3.1(date-fns@2.30.0)(moment@2.30.1)(react-dom@19.2.4(react@19.2.4))(react@19.2.4)
+      dauth-context-react:
+        specifier: ^4.0.3
+        version: 4.0.3(react@19.2.4)
       dayjs:
         specifier: ^1.11.19
         version: 1.11.19
-      jwt-decode:
-        specifier: ^4.0.0
-        version: 4.0.0
       motion:
         specifier: ^12.34.3
         version: 12.34.3(react-dom@19.2.4(react@19.2.4))(react@19.2.4)
@@ -1873,6 +1873,12 @@ packages:
     resolution: {integrity: sha512-fnULvOpxnC5/Vg3NCiWelDsLiUc9bRwAPs/+LfTLNvetFCtCTN+yQz15C/fs4AwX1R9K5GLtLfn8QW+dWisaAw==}
     engines: {node: '>=0.11'}
 
+  dauth-context-react@4.0.3:
+    resolution: {integrity: sha512-n83qV7Na36Tz/XJyPhMrBuwEfXc77+16/Ig4CBfIwsK5+M+Ils7yT4+2AgoNzMrC1BdAq1IXJcaytu8nAH+zRA==}
+    engines: {node: '>=18'}
+    peerDependencies:
+      react: '>=16'
+
   dayjs@1.11.19:
     resolution: {integrity: sha512-t5EcLVS6QPBNqM2z8fakk/NKel+Xzshgt8FFKAn+qwlD1pzZWxh0nVCrvFK7ZDb6XucZeF9z8C7CBWTRIVApAw==}
 
@@ -2330,10 +2336,6 @@ packages:
   jsonpointer@5.0.1:
     resolution: {integrity: sha512-p/nXbhSEcu3pZRdkW1OfJhpsVtW1gd4Wa1fnQc9YLiTfAjn0312eMKimbdIQzuZl9aa9xUGaRlP9T/CJE/ditQ==}
     engines: {node: '>=0.10.0'}
-
-  jwt-decode@4.0.0:
-    resolution: {integrity: sha512-+KJGIyHgkGuIq3IEBNftfhW/LfWhXUIY6OmyVWjliu5KH1y0fw7VQ8YndE2O4qZdMSd9SqbnC8GOcZEy0Om7sA==}
-    engines: {node: '>=18'}
 
   leven@3.1.0:
     resolution: {integrity: sha512-qsda+H8jTaUaN/x5vzW2rzc+8Rw4TAQ/4KjB46IwK5VH+IlVeeeje/EoZRpiXvIqjFgK84QffqPztGI3VBLG1A==}
@@ -4900,6 +4902,10 @@ snapshots:
       '@babel/runtime': 7.28.6
     optional: true
 
+  dauth-context-react@4.0.3(react@19.2.4):
+    dependencies:
+      react: 19.2.4
+
   dayjs@1.11.19: {}
 
   debug@4.4.3:
@@ -5432,8 +5438,6 @@ snapshots:
       graceful-fs: 4.2.11
 
   jsonpointer@5.0.1: {}
-
-  jwt-decode@4.0.0: {}
 
   leven@3.1.0: {}
 

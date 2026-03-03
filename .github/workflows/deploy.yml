@@ -30,20 +30,24 @@ jobs:
       - name: Install dependencies
         run: pnpm install --frozen-lockfile
 
-      - name: Build
-        run: pnpm build
-        env:
-          NODE_OPTIONS: '--max-old-space-size=4096'
-          VITE_PUBLIC_URL: ${{ secrets.VITE_PUBLIC_URL }}
-
       - name: Determine environment
         id: env
         run: |
           if [ "${{ github.ref_name }}" = "main" ]; then
             echo "target=production" >> $GITHUB_OUTPUT
+            echo "dauth_url=${{ secrets.VITE_DAUTH_URL_PROD }}" >> $GITHUB_OUTPUT
           else
             echo "target=staging" >> $GITHUB_OUTPUT
+            echo "dauth_url=${{ secrets.VITE_DAUTH_URL }}" >> $GITHUB_OUTPUT
           fi
+
+      - name: Build
+        run: pnpm build
+        env:
+          NODE_OPTIONS: '--max-old-space-size=4096'
+          VITE_PUBLIC_URL: ${{ secrets.VITE_PUBLIC_URL }}
+          VITE_DAUTH_DOMAIN_NAME: ${{ secrets.VITE_DAUTH_DOMAIN_NAME }}
+          VITE_DAUTH_URL: ${{ steps.env.outputs.dauth_url }}
 
       - name: Deploy to server
         run: |

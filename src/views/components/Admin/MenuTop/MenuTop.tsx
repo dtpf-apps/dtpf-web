@@ -4,7 +4,7 @@ import Logo from 'assets/img/png/logo128.png';
 import { URL } from 'config/url';
 import { MenuUnfoldOutlined, MenuFoldOutlined, PoweroffOutlined } from '@ant-design/icons';
 import './MenuTop.scss';
-import { logout } from 'api/endpoints/auth/auth.api';
+import { useDauth } from 'dauth-context-react';
 
 interface IMenuTopProps {
   menuCollapsed: boolean;
@@ -12,9 +12,9 @@ interface IMenuTopProps {
 }
 
 function MenuTop({ menuCollapsed, setMenuCollapsed }: IMenuTopProps) {
+  const { logout } = useDauth();
   const logoutUser = () => {
     logout();
-    window.location.reload();
   };
 
   const reload = () => {

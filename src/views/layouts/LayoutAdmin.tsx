@@ -12,11 +12,11 @@ const MenuSider = lazy(() => import('views/components/Admin/MenuSider'));
 
 function LayoutAdmin() {
   const { connectionStatus, isNavigatorOnline } = useConnection();
-  const { user, isLoading } = useAuth();
-  if (!user && !isLoading) {
+  const { isAuthenticated, isLoading } = useAuth();
+  if (!isAuthenticated && !isLoading) {
     return <Navigate to="/ad1988/login" replace />;
   }
-  if (user && !isLoading) {
+  if (isAuthenticated && !isLoading) {
     return (
       <>
         <RenderLayoutAdmin connectionStatus={connectionStatus} />

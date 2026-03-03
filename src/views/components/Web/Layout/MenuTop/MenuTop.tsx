@@ -1,6 +1,6 @@
-import React, { useContext } from 'react';
+import React from 'react';
 import { NavLink, useLocation } from 'react-router';
-import { AuthContext } from 'providers/AuthProvider';
+import { useDauth } from 'dauth-context-react';
 import GetMainMenu from 'dbIndexed/mainMenu/GetMainMenu';
 import { gaEvent } from 'utils/analytics';
 import { Menu, Button } from 'antd';
@@ -25,7 +25,7 @@ function MenuTop(props: any) {
 
 function RenderMenu(props: any) {
   const { menuCollapsed, setMenuCollapsed, location, mainMenu } = props;
-  const { user } = useContext(AuthContext);
+  const { user } = useDauth();
   const clickMenuIcon = () => {
     gaEvent('click_menu_mobile_icon', 'clicks', 'UI Clicks', true);
   };

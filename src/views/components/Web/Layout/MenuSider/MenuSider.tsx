@@ -1,6 +1,6 @@
-import React, { useContext } from 'react';
+import React from 'react';
 import { Link, useLocation } from 'react-router';
-import { AuthContext } from 'providers/AuthProvider';
+import { useDauth } from 'dauth-context-react';
 import GetMainMenu from 'dbIndexed/mainMenu/GetMainMenu';
 import SocialLinks from 'views/components/Web/SocialLinks';
 import { Layout, Menu } from 'antd';
@@ -24,7 +24,7 @@ function MenuSider(props: any) {
 function RenderMenuSider(props: any) {
   const { menuCollapsed, setMenuCollapsed, location, mainMenu } = props;
   const { Sider } = Layout;
-  const { user } = useContext(AuthContext);
+  const { user } = useDauth();
 
   const menuItems: MenuProps['items'] = [
     { key: '/', label: <Link to="/">Inicio</Link>, className: 'menu-sider-web__item' },

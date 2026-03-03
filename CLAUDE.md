@@ -6,6 +6,8 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 Personal portfolio website (dtpf.es) with a public-facing site and an admin panel. Built with React 19, TypeScript 5.9, Ant Design 6, and SCSS. Uses Vite 7 with `@vitejs/plugin-react-swc`. Package manager: **pnpm**. Requires **Node.js 22.12+**.
 
+**Authentication** is handled externally by **dauth** via `dauth-context-react` (`DauthProvider` + `useDauth()` hook). There is no local auth logic — all user identity comes from dauth (passwordless: magic link + passkey).
+
 ## Commands
 
 ```bash
@@ -23,28 +25,34 @@ Note: Test files exist in `src/__tests__/api/` (Jest) but no test script is curr
 
 React Router v7 (`Routes`, `Route`, `Outlet`, `Navigate`, `useNavigate` — all from `react-router`). Routes defined directly in `src/App.tsx` with two nested layout branches:
 - **Public** (`/*`) via `LayoutBasic` (uses `Outlet`) -- Home, Education (with `/education/:url` detail), Curriculum, Contact, Privacy Policy
-- **Admin** (`/ad1988/*`) via `LayoutAdmin` (uses `Outlet`) -- Home, Users, Menu, Contact Messages, Education, About Me
-- **Admin Sign In** (`/ad1988/login`) -- rendered outside `LayoutAdmin` (standalone route)
-
-Note: `src/config/routes.ts` exists with a legacy static route config but is **not imported or used** anywhere -- dead code from the v5 migration.
+- **Admin** (`/ad1988/*`) via `LayoutAdmin` (uses `Outlet`) -- Home, Menu, Contact Messages, Education, About Me
+- **Admin Sign In** (`/ad1988/login`) -- rendered outside `LayoutAdmin` (standalone route). Redirects to dauth login via `loginWithRedirect()`.
 
 ### State Management
 
-Context-based (no Redux). Three providers in `src/providers/` (all JavaScript, not TypeScript):
-- **AuthProvider** -- JWT auth with access/refresh tokens in localStorage, auto-refresh on expiry via `jwt-decode`
-- **ConnectionProvider** -- Monitors `navigator.onLine` and backend connectivity with polling (2s when offline, 30s when online)
-- **MainMenuProvider** -- Fetches and caches the navigation menu, re-fetches on connection status change
+Context-based (no Redux). Three providers:
+- **DauthProvider** (from `dauth-context-react`) -- Wraps the app in `src/App.tsx`. Configured with `domainName` and `dauthUrl` props. Handles auth code exchange, token storage (`dauth_state` / `dauth_refresh_token` in localStorage), and user session.
+- **ConnectionProvider** (`src/providers/`) -- Monitors `navigator.onLine` and backend connectivity with polling (2s when offline, 30s when online)
+- **MainMenuProvider** (`src/providers/`) -- Fetches and caches the navigation menu, re-fetches on connection status change
+
+### Auth Flow
+
+1. User visits `/ad1988/login` → `SignIn` component calls `loginWithRedirect()` → redirects to dauth
+2. User authenticates in dauth (magic link or passkey) → dauth redirects back with `?code=` authorization code
+3. `DauthProvider` detects the code, exchanges it for tokens via `POST /exchange-code`
+4. Tokens stored in localStorage. `useDauth()` provides `user`, `isAuthenticated`, `isLoading`, `logout`, `loginWithRedirect`
 
 ### API Layer
 
 Fetch-based HTTP calls. Base path configured in `src/api/utils/config.ts` (localhost:3998 in dev, same-origin in prod). Localhost detection in `src/utils/isLocalhost.ts` also matches `192.168.1.x` addresses.
 
-**New pattern** (TypeScript, in `src/api/endpoints/`): Typed request/response interfaces per domain. Three endpoint directories:
-- `auth/` -- auth.api.ts + auth.response.interface.ts
-- `user/` -- user.ts + user.response.interface.ts + brandUsers.response.interface.ts
+**Token retrieval**: `src/api/endpoints/auth/auth.api.ts` exports `getAccessTokenApi()` which reads the access token from dauth's `dauth_state` localStorage key. All protected API calls use this function.
+
+**Typed endpoints** (TypeScript, in `src/api/endpoints/`):
+- `auth/` -- auth.api.ts (getAccessTokenApi only)
 - `aboutMe/` -- aboutMe.api.ts
 
-**Legacy pattern** (JavaScript, in `src/api/`): Plain JS files (contact.js, education.js, menu.js, user.js, utils.js). Being migrated to the new TS endpoint structure.
+**Legacy endpoints** (JavaScript, in `src/api/`): Plain JS files (contact.js, education.js, menu.js, user.js, utils.js). Being migrated to the new TS endpoint structure.
 
 Shared request utility: `src/api/utils/makeRequest.js`
 
@@ -67,11 +75,10 @@ import { useAuth } from 'hooks/useAuth';
 - Structure: `ComponentName/ComponentName.tsx` + `.scss` + `index.ts` (barrel export)
 - Components wrapped with `memo()` for performance
 - Forms use Ant Design `Form` component with validation
-- User roles: `'admin' | 'editor' | 'reviewer'`
 
 ### Custom Hooks (`src/hooks/`)
 
-- `useAuth` -- Access AuthContext
+- `useAuth` -- Wrapper around `useDauth()` from dauth-context-react. Returns `{ user, isLoading, isAuthenticated }`
 - `useConnection` -- Access ConnectionContext
 - `useGetCourses` -- Fetch and cache courses
 - `useGetMainMenu` -- Access MainMenuContext
@@ -96,7 +103,7 @@ Socket.io client v4 (`socket.io-client`) in `src/webSockets/hooks/` -- `useMessa
 
 ### Tests
 
-Jest + React Testing Library test files exist in `src/__tests__/api/` (auth, contact, education, menu, user, utils) but **no test runner is configured** in `package.json` after the Vite migration. Tests are not runnable without adding a test framework (e.g., Vitest).
+Jest + React Testing Library test files exist in `src/__tests__/api/` but **no test runner is configured** in `package.json` after the Vite migration. Tests are not runnable without adding a test framework (e.g., Vitest).
 
 ### UI Components (`src/views/components/UI/`)
 
@@ -117,7 +124,9 @@ The codebase is actively migrating from JS to TS. When modifying files:
 
 ## Environment Variables
 
-Single environment variable in `.env`:
-- `VITE_PUBLIC_URL` -- Public URL for the site (e.g., `https://dtpf.es`). Used via `import.meta.env.VITE_PUBLIC_URL`.
+Variables in `.env`:
+- `VITE_PUBLIC_URL` -- Public URL for the site (e.g., `https://dtpf.es`)
+- `VITE_DAUTH_DOMAIN_NAME` -- Dauth domain name (e.g., `dtpf`)
+- `VITE_DAUTH_URL` -- Dauth frontend URL (e.g., `http://localhost:4012`)
 
 API endpoint configuration is handled in code (`src/api/utils/config.ts` and `src/config/url.ts`) based on localhost detection, not environment variables.

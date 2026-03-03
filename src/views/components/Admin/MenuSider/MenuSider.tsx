@@ -5,7 +5,6 @@ import { Layout, Menu, Tag, message } from 'antd';
 import type { MenuProps } from 'antd';
 import {
   HomeOutlined,
-  UserOutlined,
   MenuOutlined,
   ChromeOutlined,
   MessageOutlined,
@@ -93,11 +92,6 @@ function NextRender({ menuCollapsed, location, messagesUnreadLength, newMessage 
       key: '/ad1988',
       icon: <HomeOutlined />,
       label: <Link to="/ad1988">Home</Link>,
-    },
-    {
-      key: '/ad1988/users',
-      icon: <UserOutlined />,
-      label: <Link to="/ad1988/users">Usuarios</Link>,
     },
     {
       key: '/ad1988/menu',

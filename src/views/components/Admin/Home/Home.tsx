@@ -1,15 +1,16 @@
 import React, { useState, useEffect, memo } from 'react';
 import { useNavigate } from 'react-router';
-import { checkUserLogin } from 'providers/AuthProvider';
+import { useDauth } from 'dauth-context-react';
 import { getIndexedDBVersionApi, updateIndexedDBVersionApi } from 'api/utils';
 import { useCookies } from 'react-cookie';
 import { Button, message, Modal } from 'antd';
 import './Home.scss';
 
-function Home(props: any) {
+function Home() {
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const [cookies, setCookie, removeCookie] = useCookies();
   const navigate = useNavigate();
+  const { user } = useDauth();
   const deleteCookies = () => {
     const getCookies = document.cookie.split(';');
     if (getCookies.length > 1) {
@@ -19,19 +20,11 @@ function Home(props: any) {
     }
     navigate(0);
   };
-  const [user, setUser] = useState(null);
-  useEffect(() => {
-    let isMounted = true;
-    isMounted && checkUserLogin(setUser);
-    return () => {
-      isMounted = false;
-    };
-  }, []);
-  return <RenderHome userData={user} deleteCookies={deleteCookies} />;
+  return <RenderHome user={user} deleteCookies={deleteCookies} />;
 }
 
 function RenderHome(props: any) {
-  const { deleteCookies, userData } = props;
+  const { deleteCookies, user } = props;
   const [idbVersion, setIdbVersion] = useState(null);
   const { confirm } = Modal;
   useEffect(() => {
@@ -74,8 +67,8 @@ function RenderHome(props: any) {
     <div className="admin-home">
       <div className="admin-home__title">
         <h1>
-          {`Hola ${userData ? userData.user.name : 'Anónimo'}
-        ${userData && userData.user.lastname}`}
+          {`Hola ${user ? user.name : 'Anónimo'}
+        ${user ? user.lastname : ''}`}
         </h1>
       </div>
       <div className="admin-home__cookies">

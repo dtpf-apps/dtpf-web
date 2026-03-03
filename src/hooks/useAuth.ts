@@ -1,5 +1,6 @@
-import { useContext } from 'react';
-import { AuthContext } from '../providers/AuthProvider';
+import { useDauth } from 'dauth-context-react';
 
-// eslint-disable-next-line import/no-anonymous-default-export
-export default () => useContext(AuthContext);
+export default function useAuth() {
+  const { user, isLoading, isAuthenticated } = useDauth();
+  return { user, isLoading, isAuthenticated };
+}
