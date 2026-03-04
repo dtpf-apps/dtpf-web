@@ -3,32 +3,24 @@ export async function makeRequest(
   params = null,
   responseToJson = true,
   headerMethod = null,
-  headerToken = null,
+  _headerToken = null,
   bodyData = null,
   contentType = 'application/json'
 ) {
   function getParam() {
-    if (!contentType) {
-      return {
-        method: headerMethod,
-        headers: {
-          Authorization: headerToken,
-        },
-        body: bodyData,
-      };
-    } else {
-      return {
-        method: headerMethod,
-        headers: {
-          Authorization: headerToken,
-          'Content-type': contentType,
-        },
-        body: bodyData,
-      };
+    const headers = {};
+    if (contentType) {
+      headers['Content-type'] = contentType;
     }
+    return {
+      method: headerMethod,
+      headers,
+      credentials: 'include',
+      body: bodyData,
+    };
   }
   try {
-    const response = await fetch(url, params && getParam());
+    const response = await fetch(url, params ? getParam() : { credentials: 'include' });
     if (responseToJson) {
       const result = await response.json();
       return result;

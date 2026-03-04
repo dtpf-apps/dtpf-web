@@ -15,7 +15,6 @@ import './MenuSider.scss';
 import addNotification from 'react-push-notification';
 import sound from 'assets/audio/sound.mp3';
 import soundOGG from 'assets/audio/sound.ogg';
-import { getAccessTokenApi } from 'api/endpoints/auth/auth.api';
 
 function MenuSider({ menuCollapsed, messagesUnreadLength }: any) {
   const location = useLocation();
@@ -71,8 +70,7 @@ function NextRender({ menuCollapsed, location, messagesUnreadLength, newMessage 
   };
 
   useEffect(() => {
-    const token = getAccessTokenApi();
-    getLastMessageApi(token).then((response) => {
+    getLastMessageApi().then((response) => {
       if (response.email) {
         if (newMessage && messagesUnreadLength && newMessage < messagesUnreadLength) {
           message.success(`Mensaje de ${response.email}`, 5);

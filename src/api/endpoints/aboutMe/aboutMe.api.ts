@@ -6,11 +6,12 @@ import {
 } from './brandUsers.response.interface';
 
 export async function getAboutMeInfoAPI({ key }: { key: string }): Promise<IgetAboutMeInfoAPIResponse> {
-  const params = {
+  const params: RequestInit = {
     method: 'GET',
     headers: {
       'Content-Type': 'application/json',
     },
+    credentials: 'include',
   };
   const response = await fetch(`${basePath}/${apiVersion}/get-about-me-info/${key}`, params);
   const data = await response.json();
@@ -20,18 +21,16 @@ export async function getAboutMeInfoAPI({ key }: { key: string }): Promise<IgetA
 export async function updateAboutMeInfoAPI({
   newData,
   key,
-  token,
 }: {
   newData: IgetAboutMeInfoAPIResponseInfo;
   key: string;
-  token: string;
 }): Promise<IupdateAboutMeInfoAPIResponse> {
-  const params = {
+  const params: RequestInit = {
     method: 'PUT',
     headers: {
-      Authorization: token,
       'Content-Type': 'application/json',
     },
+    credentials: 'include',
     body: JSON.stringify(newData),
   };
   const response = await fetch(`${basePath}/${apiVersion}/update-about-me-info/${key}`, params);

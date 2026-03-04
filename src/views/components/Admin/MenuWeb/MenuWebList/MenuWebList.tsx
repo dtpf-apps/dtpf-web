@@ -24,7 +24,6 @@ import AddMenuWebForm from '../AddMenuWebForm';
 import EditMenuWebForm from '../EditMenuWebForm';
 import { EditOutlined, DeleteOutlined, HolderOutlined } from '@ant-design/icons';
 import './MenuWebList.scss';
-import { getAccessTokenApi } from 'api/endpoints/auth/auth.api';
 const { confirm } = ModalAntd;
 
 interface IMenuWebListProps {
@@ -56,8 +55,7 @@ function MenuWebList({ reloadMenuWeb, setReloadMenuWeb }: IMenuWebListProps) {
   }, [reloadMenuWeb]);
 
   const activateMenu = (menuItem: any, status: any) => {
-    const accessToken = getAccessTokenApi();
-    activateMenuApi(accessToken, menuItem._id, status).then((response) => {
+    activateMenuApi(menuItem._id, status).then((response) => {
       if (status === true) {
         notification['success']({
           message: response.message,
@@ -81,14 +79,12 @@ function MenuWebList({ reloadMenuWeb, setReloadMenuWeb }: IMenuWebListProps) {
     const reordered = arrayMove(menu, oldIndex, newIndex);
     setMenu(reordered);
 
-    const accessToken = getAccessTokenApi();
     reordered.forEach((item, index) => {
-      updateMenuApi(accessToken, item._id, { order: index });
+      updateMenuApi(item._id, { order: index });
     });
   };
 
   const deleteMenu = (menuItem: any) => {
-    const accessToken = getAccessTokenApi();
     confirm({
       title: 'Eliminando menú',
       content: `¿Estás seguro que quieres eliminar el menú ${menuItem.title}?`,
@@ -96,7 +92,7 @@ function MenuWebList({ reloadMenuWeb, setReloadMenuWeb }: IMenuWebListProps) {
       okType: 'danger',
       cancelText: 'Cancelar',
       onOk() {
-        deleteMenuApi(accessToken, menuItem._id)
+        deleteMenuApi(menuItem._id)
           .then((response) => {
             notification['success']({
               message: response.message,

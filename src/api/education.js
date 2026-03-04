@@ -1,14 +1,14 @@
 import { basePath, apiVersion } from './utils/config';
 import { makeRequest } from '../api/utils/makeRequest';
 
-export function addCourseApi(token, course) {
+export function addCourseApi(course) {
   const url = `${basePath}/${apiVersion}/add-course`;
-  return makeRequest(url, true, true, 'POST', token, JSON.stringify(course));
+  return makeRequest(url, true, true, 'POST', null, JSON.stringify(course));
 }
 
-export function updateCourseApi(token, id, data) {
+export function updateCourseApi(id, data) {
   const url = `${basePath}/${apiVersion}/update-course/${id}`;
-  return makeRequest(url, true, true, 'PUT', token, JSON.stringify(data), 'application/json');
+  return makeRequest(url, true, true, 'PUT', null, JSON.stringify(data), 'application/json');
 }
 
 export function getCoursesApi(limit, page) {
@@ -31,11 +31,11 @@ export function getNextCourseApi(urlCourse) {
   return makeRequest(url);
 }
 
-export function uploadImageApi(token, image, courseId) {
+export function uploadImageApi(image, courseId) {
   const url = `${basePath}/${apiVersion}/upload-image/${courseId}`;
   const formData = new FormData();
   formData.append('image', image);
-  return makeRequest(url, true, true, 'PUT', token, formData, null);
+  return makeRequest(url, true, true, 'PUT', null, formData, null);
 }
 
 export function getImageApi(imageName) {
@@ -43,17 +43,17 @@ export function getImageApi(imageName) {
   return makeRequest(url, null, false);
 }
 
-export function deleteCourseApi(token, id) {
+export function deleteCourseApi(id) {
   const url = `${basePath}/${apiVersion}/delete-course/${id}`;
-  return makeRequest(url, true, true, 'DELETE', token);
+  return makeRequest(url, true, true, 'DELETE');
 }
 
-export function addTagApi(token, id, data) {
+export function addTagApi(id, data) {
   const url = `${basePath}/${apiVersion}/add-tag/${id}`;
-  return makeRequest(url, true, true, 'PUT', token, JSON.stringify(data));
+  return makeRequest(url, true, true, 'PUT', null, JSON.stringify(data));
 }
 
-export function deleteTagApi(token, id, data) {
+export function deleteTagApi(id, data) {
   const url = `${basePath}/${apiVersion}/delete-tag/${id}`;
-  return makeRequest(url, true, true, 'DELETE', token, JSON.stringify(data));
+  return makeRequest(url, true, true, 'DELETE', null, JSON.stringify(data));
 }

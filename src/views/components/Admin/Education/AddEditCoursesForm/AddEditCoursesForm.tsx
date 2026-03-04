@@ -9,7 +9,6 @@ import customParseFormat from 'dayjs/plugin/customParseFormat';
 import { notifDelay, notifDelayErr } from 'utils/notifications';
 import NoImage from 'assets/img/png/no-image.png';
 import './AddEditCoursesForm.scss';
-import { getAccessTokenApi } from 'api/endpoints/auth/auth.api';
 
 dayjs.extend(customParseFormat);
 const { TextArea } = Input;
@@ -75,7 +74,6 @@ function AddEditForm({
   setIsVisibleModal,
 }: IAddEditFormProps) {
   const [proccessCourseState, setProccessCourseState] = useState(false);
-  const token = getAccessTokenApi();
 
   useEffect(() => {
     if (image) {
@@ -102,10 +100,10 @@ function AddEditForm({
   const updateCourse = async () => {
     let userUpdate = courseData;
     if (typeof userUpdate.image === 'object') {
-      await uploadImageApi(token, userUpdate.image, course._id).then((response) => {
+      await uploadImageApi(userUpdate.image, course._id).then((response) => {
         if (response.status === 200) {
           userUpdate.image = response.image;
-          updateCourseApi(token, course._id, userUpdate).then((result) => {
+          updateCourseApi(course._id, userUpdate).then((result) => {
             if (result.status === 200) {
               notification['success']({
                 message: result.message,
@@ -131,7 +129,7 @@ function AddEditForm({
         }
       });
     } else {
-      await updateCourseApi(token, course._id, courseData)
+      await updateCourseApi(course._id, courseData)
         .then((response) => {
           if (response.status === 200) {
             notification['success']({
@@ -156,7 +154,7 @@ function AddEditForm({
   };
 
   const addCourse = async () => {
-    await addCourseApi(token, courseData)
+    await addCourseApi(courseData)
       .then((response) => {
         if (response.status !== 200) {
           notification['warning']({

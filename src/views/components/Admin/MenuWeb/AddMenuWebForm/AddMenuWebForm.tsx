@@ -4,7 +4,6 @@ import { addMenuApi } from 'api/menu';
 import { notifDelay, notifDelayErr } from 'utils/notifications';
 import { FontSizeOutlined } from '@ant-design/icons';
 import './AddMenuWebForm.scss';
-import { getAccessTokenApi } from 'api/endpoints/auth/auth.api';
 
 interface IAddMenuWebFormProps {
   setIsVisibleModal: React.Dispatch<React.SetStateAction<boolean>>;
@@ -49,10 +48,9 @@ function AddForm({ menuWebData, setMenuWebData, setIsVisibleModal, setReloadMenu
         duration: notifDelayErr,
       });
     } else {
-      const accessToken = getAccessTokenApi();
       finalData.active = false;
       finalData.order = 1000;
-      addMenuApi(accessToken, finalData)
+      addMenuApi(finalData)
         .then((response) => {
           notification['success']({
             message: response.message,

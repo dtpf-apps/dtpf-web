@@ -4,7 +4,6 @@ import { Form, Input, Button, notification, Divider } from 'antd';
 import { notifDelay, notifDelayErr } from 'utils/notifications';
 import './AboutMeAdmin.scss';
 import { IgetAboutMeInfoAPIResponseInfo } from 'api/endpoints/aboutMe/brandUsers.response.interface';
-import { getAccessTokenApi } from 'api/endpoints/auth/auth.api';
 const Spin = lazy(() => import('views/components/UI/Spin'));
 
 function AboutMeAdmin(props: any) {
@@ -53,16 +52,13 @@ type TAboutMeProps = {
 };
 
 function AboutMe({ mainInfo, setMainInfo, cubeInfo, setCubeInfo, setReloadAboutMeAdmin }: TAboutMeProps) {
-  const token = getAccessTokenApi();
   const { TextArea } = Input;
 
   const onFinishUpdateMainInfo = async () => {
-    if (!token) return;
     try {
       const updateAboutMeInfo = await updateAboutMeInfoAPI({
         newData: mainInfo,
         key: 'mainInfo',
-        token,
       });
 
       if (updateAboutMeInfo.response.status === 200) {
@@ -90,12 +86,10 @@ function AboutMe({ mainInfo, setMainInfo, cubeInfo, setCubeInfo, setReloadAboutM
   };
 
   const onFinishUpdateCubeInfo = async () => {
-    if (!token) return;
     try {
       const updateAboutMeCube = await updateAboutMeInfoAPI({
         newData: cubeInfo,
         key: 'cube',
-        token,
       });
 
       if (updateAboutMeCube.response.status === 200) {

@@ -6,7 +6,6 @@ import relativeTime from 'dayjs/plugin/relativeTime';
 import 'dayjs/locale/es';
 import { List, Button, Modal, notification } from 'antd';
 import { EyeOutlined, EditOutlined, DeleteOutlined } from '@ant-design/icons';
-import { getAccessTokenApi } from 'api/endpoints/auth/auth.api';
 
 dayjs.extend(relativeTime);
 dayjs.locale('es');
@@ -21,7 +20,6 @@ interface ICoursesListProps {
 
 function CoursesList({ courses, setReloadCourses, editCourse }: ICoursesListProps) {
   const deleteCourse = (course: any) => {
-    const accessToken = getAccessTokenApi();
     confirm({
       title: 'Eliminando curso',
       content: `¿Estas seguro de eliminar el curso ${course.title}?`,
@@ -29,7 +27,7 @@ function CoursesList({ courses, setReloadCourses, editCourse }: ICoursesListProp
       okType: 'danger',
       cancelText: 'Cancelar',
       onOk() {
-        deleteCourseApi(accessToken, course._id)
+        deleteCourseApi(course._id)
           .then((response) => {
             const typeNotification = response.status === 200 ? 'success' : 'warning';
             notification[typeNotification]({

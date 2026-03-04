@@ -1,13 +1,13 @@
 import { basePath, apiVersion } from '../../utils/config';
 import { IgetUsersAPIResponse, IUserResponse, IupdateUserAPIResponse } from './user.response.interface';
 
-export async function getUsersAPI({ token }: { token: string }): Promise<IgetUsersAPIResponse> {
-  const params = {
+export async function getUsersAPI(): Promise<IgetUsersAPIResponse> {
+  const params: RequestInit = {
     method: 'GET',
     headers: {
-      Authorization: token,
       'Content-Type': 'application/json',
     },
+    credentials: 'include',
   };
   const response = await fetch(`${basePath}/${apiVersion}/users`, params);
   const data = await response.json();
@@ -15,20 +15,18 @@ export async function getUsersAPI({ token }: { token: string }): Promise<IgetUse
 }
 
 export async function updateUserAPI({
-  token,
   user,
   userId,
 }: {
-  token: string;
   user: Partial<IUserResponse>;
   userId: string;
 }): Promise<IupdateUserAPIResponse> {
-  const params = {
+  const params: RequestInit = {
     method: 'PUT',
     headers: {
-      Authorization: token,
       'Content-Type': 'application/json',
     },
+    credentials: 'include',
     body: JSON.stringify(user),
   };
   const response = await fetch(`${basePath}/${apiVersion}/update-user/${userId}`, params);
@@ -36,13 +34,13 @@ export async function updateUserAPI({
   return { response, data };
 }
 
-export async function deleteUserApi(token: string, userId: string) {
-  const params = {
+export async function deleteUserApi(userId: string) {
+  const params: RequestInit = {
     method: 'DELETE',
     headers: {
-      Authorization: token,
       'Content-Type': 'application/json',
     },
+    credentials: 'include',
   };
   const response = await fetch(`${basePath}/${apiVersion}/delete-user/${userId}`, params);
   const data = await response.json();

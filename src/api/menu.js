@@ -6,22 +6,22 @@ export function getMenuApi() {
   return makeRequest(url);
 }
 
-export function updateMenuApi(token, menuId, data) {
+export function updateMenuApi(menuId, data) {
   const url = `${basePath}/${apiVersion}/update-menu/${menuId}`;
-  return makeRequest(url, true, true, 'PUT', token, JSON.stringify(data));
+  return makeRequest(url, true, true, 'PUT', null, JSON.stringify(data));
 }
 
-export function activateMenuApi(token, menuId, status) {
+export function activateMenuApi(menuId, status) {
   const url = `${basePath}/${apiVersion}/activate-menu/${menuId}`;
-  return makeRequest(url, true, true, 'PUT', token, JSON.stringify({ active: status }));
+  return makeRequest(url, true, true, 'PUT', null, JSON.stringify({ active: status }));
 }
 
-export function addMenuApi(token, menu) {
+export function addMenuApi(menu) {
   const url = `${basePath}/${apiVersion}/add-menu`;
-  return makeRequest(url, true, true, 'POST', token, JSON.stringify(menu));
+  return makeRequest(url, true, true, 'POST', null, JSON.stringify(menu));
 }
 
-export function deleteMenuApi(token, menuId) {
+export function deleteMenuApi(menuId) {
   const url = `${basePath}/${apiVersion}/delete-menu/${menuId}`;
-  return makeRequest(url, true, true, 'DELETE', token);
+  return makeRequest(url, true, true, 'DELETE');
 }

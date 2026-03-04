@@ -4,7 +4,6 @@ import { Button, Row, Col, Form, Divider, Input, Tag, Modal, notification, Space
 import { notifDelay, notifDelayErr } from 'utils/notifications';
 import { TagOutlined, PlusCircleOutlined } from '@ant-design/icons';
 import './AdminTags.scss';
-import { getAccessTokenApi } from 'api/endpoints/auth/auth.api';
 const Spin = lazy(() => import('views/components/UI/Spin'));
 const { confirm } = Modal;
 
@@ -34,7 +33,6 @@ function AdminTags({ course, courseData, setReloadCourses }: IAdminTagsProps) {
   }, [course, reloadTags, tag]);
 
   const deleteTag = (tag: string) => {
-    const token = getAccessTokenApi();
     confirm({
       title: 'Eliminando tag',
       content: `¿Estas seguro de eliminar el tag ${tag}?`,
@@ -42,7 +40,7 @@ function AdminTags({ course, courseData, setReloadCourses }: IAdminTagsProps) {
       okType: 'danger',
       cancelText: 'Cancelar',
       onOk() {
-        deleteTagApi(token, courseData._id, { tags: [tag] })
+        deleteTagApi(courseData._id, { tags: [tag] })
           .then((response) => {
             if (response.status === 200) {
               notification['success']({
@@ -120,8 +118,7 @@ interface IAddTagFormProps {
 
 function AddTagForm({ tag, setTag, course, setReloadCourses, setReloadTags }: IAddTagFormProps) {
   const addTag = () => {
-    const token = getAccessTokenApi();
-    addTagApi(token, course._id, tag)
+    addTagApi(course._id, tag)
       .then((response) => {
         if (response.status === 200) {
           notification['success']({

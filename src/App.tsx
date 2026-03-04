@@ -5,6 +5,7 @@ import { CookiesProvider } from 'react-cookie';
 import { DauthProvider } from 'dauth-context-react';
 import ConnectionProvider from './providers/ConnectionProvider';
 import MainMenuProvider from './providers/MainMenuProvider';
+import { isLocalhost } from './utils/isLocalhost';
 import dbIndexed from './dbIndexed';
 import './App.scss';
 
@@ -38,6 +39,11 @@ function App() {
         <DauthProvider
           domainName={import.meta.env.VITE_DAUTH_DOMAIN_NAME || 'dtpf'}
           dauthUrl={import.meta.env.VITE_DAUTH_URL || undefined}
+          authProxyPath={
+            isLocalhost
+              ? `${window.location.protocol}//${window.location.hostname}:3998/api/auth`
+              : undefined
+          }
         >
           <ConnectionProvider>
             <MainMenuProvider>

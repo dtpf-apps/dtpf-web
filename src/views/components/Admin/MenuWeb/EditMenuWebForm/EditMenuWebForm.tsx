@@ -4,7 +4,6 @@ import { updateMenuApi } from 'api/menu';
 import { notifDelay, notifDelayErr } from 'utils/notifications';
 import { FontSizeOutlined, LinkOutlined } from '@ant-design/icons';
 import './EditMenuWebForm.scss';
-import { getAccessTokenApi } from 'api/endpoints/auth/auth.api';
 
 interface IEditMenuWebFormProps {
   setIsVisibleModal: React.Dispatch<React.SetStateAction<boolean>>;
@@ -26,8 +25,7 @@ function EditMenuWebForm({ setIsVisibleModal, setReloadMenuWeb, menu }: IEditMen
         duration: notifDelayErr,
       });
     } else {
-      const accessToken = getAccessTokenApi();
-      updateMenuApi(accessToken, menuWebData._id, menuWebData)
+      updateMenuApi(menuWebData._id, menuWebData)
         .then((response) => {
           notification['success']({
             message: response.message,

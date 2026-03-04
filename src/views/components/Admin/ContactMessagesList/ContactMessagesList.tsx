@@ -9,7 +9,6 @@ import './ContactMessagesList.scss';
 import dayjs from 'dayjs';
 import relativeTime from 'dayjs/plugin/relativeTime';
 import 'dayjs/locale/es';
-import { getAccessTokenApi } from 'api/endpoints/auth/auth.api';
 
 dayjs.extend(relativeTime);
 dayjs.locale('es');
@@ -28,7 +27,6 @@ function ContactMessagesList({ reloadMessages, setReloadMessages }: IContactMess
   const { messagesStatus, setMessagesStatus } = useMessagesStatus();
   const [messagesUnread, setMessagesUnread] = useState([]);
   const [messagesRead, setMessagesRead] = useState([]);
-  const token = getAccessTokenApi();
 
   useEffect(() => {
     let isMounted = true;
@@ -38,10 +36,10 @@ function ContactMessagesList({ reloadMessages, setReloadMessages }: IContactMess
         setMessagesStatus(false);
       }
     });
-    getMessagesUnreadApi(token, false).then((response) => {
+    getMessagesUnreadApi(false).then((response) => {
       isMounted && setMessagesUnread(response.messages);
     });
-    getMessagesUnreadApi(token, true).then((response) => {
+    getMessagesUnreadApi(true).then((response) => {
       isMounted && setMessagesRead(response.messages);
     });
     return () => {
@@ -98,9 +96,8 @@ interface IMessageUnreadProps {
 
 function MessageUnread({ message, setReloadMessages }: IMessageUnreadProps) {
   const checkMessage = () => {
-    const accessToken = getAccessTokenApi();
     reloadMessagesApi(true).then(() => {
-      checkMessageApi(accessToken, message._id, true)
+      checkMessageApi(message._id, true)
         .then((response) => {
           messageAnt.success(response.message);
           setReloadMessages(true);
@@ -157,8 +154,7 @@ interface IMessageReadProps {
 
 function MessageRead({ message, setReloadMessages }: IMessageReadProps) {
   const checkMessage = () => {
-    const accessToken = getAccessTokenApi();
-    checkMessageApi(accessToken, message._id, false)
+    checkMessageApi(message._id, false)
       .then((response) => {
         messageAnt.success(response.message);
         setReloadMessages(true);
@@ -169,7 +165,6 @@ function MessageRead({ message, setReloadMessages }: IMessageReadProps) {
   };
 
   const showDeleteConfirm = () => {
-    const accessToken = getAccessTokenApi();
     confirm({
       title: 'Eliminando mensaje',
       content: `¿Estás seguro que quieres eliminar el mensaje de ${message.email}?`,
@@ -177,7 +172,7 @@ function MessageRead({ message, setReloadMessages }: IMessageReadProps) {
       okType: 'danger',
       cancelText: 'Cancelar',
       onOk() {
-        deleteContactMessageApi(accessToken, message._id)
+        deleteContactMessageApi(message._id)
           .then((response) => {
             if (response.status === 200) {
               messageAnt.success(response.message);
