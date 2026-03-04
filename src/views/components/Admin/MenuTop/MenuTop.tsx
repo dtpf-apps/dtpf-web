@@ -1,8 +1,14 @@
 import React, { memo } from 'react';
-import { Button } from 'antd';
+import { Button, Popover } from 'antd';
 import Logo from 'assets/img/png/logo128.png';
 import { URL } from 'config/url';
-import { MenuUnfoldOutlined, MenuFoldOutlined, PoweroffOutlined } from '@ant-design/icons';
+import {
+  MenuUnfoldOutlined,
+  MenuFoldOutlined,
+  UserOutlined,
+  EditOutlined,
+  LogoutOutlined,
+} from '@ant-design/icons';
 import './MenuTop.scss';
 import { useDauth } from 'dauth-context-react';
 
@@ -12,14 +18,22 @@ interface IMenuTopProps {
 }
 
 function MenuTop({ menuCollapsed, setMenuCollapsed }: IMenuTopProps) {
-  const { logout } = useDauth();
-  const logoutUser = () => {
-    logout();
-  };
+  const { user, logout, updateUserWithRedirect } = useDauth();
 
   const reload = () => {
     window.location.href = URL + 'ad1988';
   };
+
+  const popoverContent = (
+    <div className="menu-top__popover">
+      <Button type="text" icon={<EditOutlined />} onClick={updateUserWithRedirect} block>
+        Editar perfil
+      </Button>
+      <Button type="text" icon={<LogoutOutlined />} onClick={logout} danger block>
+        Cerrar sesión
+      </Button>
+    </div>
+  );
 
   return (
     <div className="menu-top">
@@ -32,9 +46,11 @@ function MenuTop({ menuCollapsed, setMenuCollapsed }: IMenuTopProps) {
         </div>
       </div>
       <div className="menu-top__right">
-        <Button type="link" onClick={logoutUser}>
-          <PoweroffOutlined />
-        </Button>
+        <Popover content={popoverContent} trigger="click" placement="bottomRight">
+          <Button type="link" className="menu-top__right-user">
+            <UserOutlined />
+          </Button>
+        </Popover>
       </div>
     </div>
   );

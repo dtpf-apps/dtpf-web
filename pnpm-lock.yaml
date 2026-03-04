@@ -4,6 +4,9 @@ settings:
   autoInstallPeers: true
   excludeLinksFromLockfile: false
 
+overrides:
+  dauth-context-react: link:../../dauth/npm/dauth-context-react
+
 importers:
 
   .:
@@ -27,8 +30,8 @@ importers:
         specifier: ~6.3.1
         version: 6.3.1(date-fns@2.30.0)(moment@2.30.1)(react-dom@19.2.4(react@19.2.4))(react@19.2.4)
       dauth-context-react:
-        specifier: ^4.0.3
-        version: 4.0.3(react@19.2.4)
+        specifier: 4.0.4
+        version: 4.0.4(react@19.2.4)
       dayjs:
         specifier: ^1.11.19
         version: 1.11.19
@@ -1873,8 +1876,8 @@ packages:
     resolution: {integrity: sha512-fnULvOpxnC5/Vg3NCiWelDsLiUc9bRwAPs/+LfTLNvetFCtCTN+yQz15C/fs4AwX1R9K5GLtLfn8QW+dWisaAw==}
     engines: {node: '>=0.11'}
 
-  dauth-context-react@4.0.3:
-    resolution: {integrity: sha512-n83qV7Na36Tz/XJyPhMrBuwEfXc77+16/Ig4CBfIwsK5+M+Ils7yT4+2AgoNzMrC1BdAq1IXJcaytu8nAH+zRA==}
+  dauth-context-react@4.0.4:
+    resolution: {integrity: sha512-fA8TFpbgtTAGDrourZuVfatbxH8gXAaamNABb6QMCwwypbkjkXKz93NoLjpjrmFp40KcrW7CTA8w696OsWvTPQ==}
     engines: {node: '>=18'}
     peerDependencies:
       react: '>=16'
@@ -4902,7 +4905,7 @@ snapshots:
       '@babel/runtime': 7.28.6
     optional: true
 
-  dauth-context-react@4.0.3(react@19.2.4):
+  dauth-context-react@4.0.4(react@19.2.4):
     dependencies:
       react: 19.2.4
 

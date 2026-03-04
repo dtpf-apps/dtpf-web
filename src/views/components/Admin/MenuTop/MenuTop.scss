@@ -36,5 +36,13 @@
   &__right {
     position: absolute;
     right: 5px;
+    top: 2px;
+  }
+
+  &__popover {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    min-width: 160px;
   }
 }

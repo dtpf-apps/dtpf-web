@@ -12,7 +12,7 @@
     "@dnd-kit/utilities": "^3.2.2",
     "@emailjs/browser": "^4.4.1",
     "antd": "~6.3.1",
-    "dauth-context-react": "^4.0.3",
+    "dauth-context-react": "4.0.4",
     "dayjs": "^1.11.19",
     "motion": "^12.34.3",
     "react": "~19.2.4",
