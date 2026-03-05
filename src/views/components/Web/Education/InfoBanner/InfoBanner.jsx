@@ -60,7 +60,7 @@ function InfoBanner() {
   }, [totalDuration]);
 
   const techLS = StorageValid() && localStorage.getItem(COURSES_TECH);
-  const tech = techLS ? techLS : tecnologiesUsed(courses);
+  const tech = techLS ? techLS : courses ? tecnologiesUsed(courses) : 0;
 
   return (
     <>

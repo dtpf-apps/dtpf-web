@@ -92,7 +92,7 @@ function Course(props: any) {
           isMounted && setPrevCourse(data.prevCourse);
         } else {
           const coursesUrl = [];
-          if (courses.docs) {
+          if (courses?.docs) {
             for (let i = 0; i < courses.docs.length; i++) {
               coursesUrl.push(courses.docs[i].url);
             }
@@ -107,7 +107,7 @@ function Course(props: any) {
           isMounted && setNextCourse(data.nextCourse);
         } else {
           const coursesUrl = [];
-          if (courses.docs) {
+          if (courses?.docs) {
             for (let i = 0; i < courses.docs.length; i++) {
               coursesUrl.push(courses.docs[i].url);
             }
