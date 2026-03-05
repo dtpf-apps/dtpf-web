@@ -7,7 +7,7 @@ export default function GetCoursesInfo(itemsPerPage: number) {
   const { connectionStatus, isNavigatorOnline } = useConnection();
   const courses = useGetCourses(itemsPerPage, window.location);
   const coursesDataIndexed = useGetCoursesDBIndexed();
-  const [coursesDB, setCoursesDB] = useState({});
+  const [coursesDB, setCoursesDB] = useState<any>({});
   useEffect(() => {
     connectionStatus === 500 || !isNavigatorOnline
       ? setCoursesDB(coursesDataIndexed.coursesInfoIndexed)

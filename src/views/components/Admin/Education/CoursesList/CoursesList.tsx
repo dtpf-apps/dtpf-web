@@ -1,10 +1,10 @@
 import React, { Suspense, lazy, memo } from 'react';
-import { deleteCourseApi } from 'api/education';
 import { Link } from 'react-router';
+import useContextEducation from 'hooks/contexts/useContextEducation';
 import dayjs from 'dayjs';
 import relativeTime from 'dayjs/plugin/relativeTime';
 import 'dayjs/locale/es';
-import { List, Button, Modal, notification } from 'antd';
+import { List, Button, Modal } from 'antd';
 import { EyeOutlined, EditOutlined, DeleteOutlined } from '@ant-design/icons';
 
 dayjs.extend(relativeTime);
@@ -13,13 +13,13 @@ const Spin = lazy(() => import('views/components/UI/Spin'));
 const { confirm } = Modal;
 
 interface ICoursesListProps {
-  courses: any;
-  setReloadCourses: (reload: boolean) => void;
   editCourse: (course: any) => void;
 }
 
-function CoursesList({ courses, setReloadCourses, editCourse }: ICoursesListProps) {
-  const deleteCourse = (course: any) => {
+function CoursesList({ editCourse }: ICoursesListProps) {
+  const { courses, deleteCourse } = useContextEducation();
+
+  const handleDeleteCourse = (course: any) => {
     confirm({
       title: 'Eliminando curso',
       content: `¿Estas seguro de eliminar el curso ${course.title}?`,
@@ -27,19 +27,7 @@ function CoursesList({ courses, setReloadCourses, editCourse }: ICoursesListProp
       okType: 'danger',
       cancelText: 'Cancelar',
       onOk() {
-        deleteCourseApi(course._id)
-          .then((response) => {
-            const typeNotification = response.status === 200 ? 'success' : 'warning';
-            notification[typeNotification]({
-              message: response.message,
-            });
-            setReloadCourses(true);
-          })
-          .catch(() => {
-            notification['error']({
-              message: 'Error del servidor.',
-            });
-          });
+        deleteCourse(course._id);
       },
     });
   };
@@ -54,7 +42,7 @@ function CoursesList({ courses, setReloadCourses, editCourse }: ICoursesListProp
         <List
           dataSource={courses.docs}
           renderItem={(course) => (
-            <Course course={course} deleteCourse={deleteCourse} editCourse={editCourse} />
+            <Course course={course} deleteCourse={handleDeleteCourse} editCourse={editCourse} />
           )}
         />
       )}

@@ -3,8 +3,7 @@ import React, { useState } from 'react';
 import { Link } from 'react-router';
 import { Row, Col, Form as FormAnt, Input, Checkbox, Button, message as msg } from 'antd';
 import './ContactForm.scss';
-import { subscribeContactApi } from 'api/contact';
-import { reloadMessagesApi } from 'api/utils';
+import useContextContact from 'hooks/contexts/useContextContact';
 import {
   emailValidation,
   minLenghtValidation,
@@ -16,6 +15,7 @@ import { RedoOutlined } from '@ant-design/icons';
 import emailjs from '@emailjs/browser';
 
 export default function ContactForm() {
+  const { submitContact } = useContextContact();
   const { TextArea } = Input;
   const Form: any = FormAnt;
   const messageAnt: any = msg;
@@ -159,44 +159,32 @@ export default function ContactForm() {
     } else if (!privacyPolicy) {
       messageAnt.warning('Acepta la política de privacidad.');
     } else {
-      await subscribeContactApi(finalData).then(async (response) => {
-        if (response.status === 200) {
-          emailjs.send('contact-email-2365', 'template_2uj79vj', finalData, 'iboAXgpflV9a6wRRG').then(
-            (response) => {
-              console.log(`%c${response.text}`, 'color: green');
-            },
-            (err) => {
-              console.log('FAILED...', err);
-            }
-          );
-          await reloadMessagesApi(true);
-          for (let i = 0; i < removeclassName.length; i++) {
-            removeclassName[i].classList.remove('form-validation-success');
-            removeclassName[i].classList.remove('form-validation-error');
+      const success = await submitContact(finalData);
+      if (success) {
+        emailjs.send('contact-email-2365', 'template_2uj79vj', finalData, 'iboAXgpflV9a6wRRG').then(
+          (response) => {
+            console.log(`%c${response.text}`, 'color: green');
+          },
+          (err) => {
+            console.log('FAILED...', err);
           }
-          setInputs({
-            name: '',
-            email: '',
-            phone_number: '',
-            subject: '',
-            message: '',
-            privacyPolicy: false,
-          });
-          messageAnt
-            .success('Enviado correctamente!!', 1.5)
-            .then(() => messageAnt.info('Contestaré lo antes posible!!', 2.5));
-        } else if (response.status === 500) {
-          messageAnt.error(response.message);
-        } else {
-          if (response.message === 'Failed to fetch') {
-            messageAnt
-              .error('No se ha podido enviar el mensaje.', 2)
-              .then(() => messageAnt.warning('Comprueba tu conexión a internet.'));
-          } else {
-            messageAnt.warning(response.message);
-          }
+        );
+        for (let i = 0; i < removeclassName.length; i++) {
+          removeclassName[i].classList.remove('form-validation-success');
+          removeclassName[i].classList.remove('form-validation-error');
         }
-      });
+        setInputs({
+          name: '',
+          email: '',
+          phone_number: '',
+          subject: '',
+          message: '',
+          privacyPolicy: false,
+        });
+        messageAnt
+          .success('Enviado correctamente!!', 1.5)
+          .then(() => messageAnt.info('Contestaré lo antes posible!!', 2.5));
+      }
     }
   };
   const resetForm = () => {

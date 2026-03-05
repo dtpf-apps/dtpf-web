@@ -1,7 +1,7 @@
 import React, { useState, useEffect, Suspense, lazy } from 'react';
 import { Button } from 'antd';
 import { useLocation } from 'react-router';
-import { getCoursesApi } from 'api/education';
+import useContextEducation from 'hooks/contexts/useContextEducation';
 import './Education.scss';
 const Modal = lazy(() => import('views/components/UI/Modal'));
 const PaginationAnt = lazy(() => import('views/components/UI/Pagination'));
@@ -10,24 +10,16 @@ const AddEditCoursesForm = lazy(() => import('./AddEditCoursesForm'));
 
 function Courses() {
   const location = useLocation();
-  const [courses, setCourses] = useState(null);
+  const { courses, getCourses } = useContextEducation();
   const page = new URLSearchParams(location.search).get('page') ?? '1';
   const [itemsPerPage, setItemsPerPage] = useState(10);
-  const [reloadCourses, setReloadCourses] = useState(false);
   const [isVisibleModal, setIsVisibleModal] = useState(false);
   const [modalTitle, setModalTitle] = useState('');
-  const [modalContent, setModalContent] = useState(null);
+  const [modalContent, setModalContent] = useState<React.ReactNode>(null);
 
   useEffect(() => {
-    let isMounted = true;
-    getCoursesApi(itemsPerPage, page).then((response) => {
-      isMounted && setCourses(response.courses);
-    });
-    setReloadCourses(false);
-    return () => {
-      isMounted = false;
-    };
-  }, [page, reloadCourses, itemsPerPage]);
+    getCourses(itemsPerPage, Number(page));
+  }, [page, itemsPerPage, getCourses]);
 
   return (
     <div className="admin-courses">
@@ -35,14 +27,11 @@ function Courses() {
         setIsVisibleModal={setIsVisibleModal}
         setModalTitle={setModalTitle}
         setModalContent={setModalContent}
-        setReloadCourses={setReloadCourses}
       />
       <RenderListCourses
-        courses={courses}
         setIsVisibleModal={setIsVisibleModal}
         setModalTitle={setModalTitle}
         setModalContent={setModalContent}
-        setReloadCourses={setReloadCourses}
       />
       {courses && (
         <Pagination courses={courses} itemsPerPage={itemsPerPage} setItemsPerPage={setItemsPerPage} />
@@ -59,21 +48,16 @@ function Courses() {
 interface IAddCourseProps {
   setIsVisibleModal: React.Dispatch<React.SetStateAction<boolean>>;
   setModalTitle: React.Dispatch<React.SetStateAction<string>>;
-  setModalContent: React.Dispatch<React.SetStateAction<any>>;
-  setReloadCourses: React.Dispatch<React.SetStateAction<boolean>>;
+  setModalContent: React.Dispatch<React.SetStateAction<React.ReactNode>>;
 }
 
-function AddCourse({ setIsVisibleModal, setModalTitle, setModalContent, setReloadCourses }: IAddCourseProps) {
+function AddCourse({ setIsVisibleModal, setModalTitle, setModalContent }: IAddCourseProps) {
   const addCourse = () => {
     setIsVisibleModal(true);
     setModalTitle('Creando nueva Formación');
     setModalContent(
       <Suspense fallback={<></>}>
-        <AddEditCoursesForm
-          setIsVisibleModal={setIsVisibleModal}
-          setReloadCourses={setReloadCourses}
-          course={null}
-        />
+        <AddEditCoursesForm setIsVisibleModal={setIsVisibleModal} course={null} />
       </Suspense>
     );
   };
@@ -88,36 +72,24 @@ function AddCourse({ setIsVisibleModal, setModalTitle, setModalContent, setReloa
 }
 
 interface IRenderListCoursesProps {
-  courses: any;
   setIsVisibleModal: React.Dispatch<React.SetStateAction<boolean>>;
   setModalTitle: React.Dispatch<React.SetStateAction<string>>;
-  setModalContent: React.Dispatch<React.SetStateAction<any>>;
-  setReloadCourses: React.Dispatch<React.SetStateAction<boolean>>;
+  setModalContent: React.Dispatch<React.SetStateAction<React.ReactNode>>;
 }
 
-function RenderListCourses({
-  courses,
-  setIsVisibleModal,
-  setModalTitle,
-  setModalContent,
-  setReloadCourses,
-}: IRenderListCoursesProps) {
+function RenderListCourses({ setIsVisibleModal, setModalTitle, setModalContent }: IRenderListCoursesProps) {
   const editCourse = (course: any) => {
     setIsVisibleModal(true);
     setModalTitle('Editar Curso');
     setModalContent(
       <Suspense fallback={<></>}>
-        <AddEditCoursesForm
-          setIsVisibleModal={setIsVisibleModal}
-          setReloadCourses={setReloadCourses}
-          course={course}
-        />
+        <AddEditCoursesForm setIsVisibleModal={setIsVisibleModal} course={course} />
       </Suspense>
     );
   };
   return (
     <Suspense fallback={<></>}>
-      <CoursesList courses={courses} setReloadCourses={setReloadCourses} editCourse={editCourse} />
+      <CoursesList editCourse={editCourse} />
     </Suspense>
   );
 }

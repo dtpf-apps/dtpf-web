@@ -1,30 +1,14 @@
-import React, { useEffect, useState, Suspense, lazy } from 'react';
-import { getAboutMeInfoAPI, updateAboutMeInfoAPI } from 'api/endpoints/aboutMe/aboutMe.api';
-import { Form, Input, Button, notification, Divider } from 'antd';
-import { notifDelay, notifDelayErr } from 'utils/notifications';
+import React, { useState, Suspense, lazy } from 'react';
+import { Form, Input, Button, Divider } from 'antd';
+import useContextAboutMe from 'hooks/contexts/useContextAboutMe';
+import { IAboutMeInfo } from 'api/endpoints/aboutMe/aboutMe.response.interface';
 import './AboutMeAdmin.scss';
-import { IgetAboutMeInfoAPIResponseInfo } from 'api/endpoints/aboutMe/brandUsers.response.interface';
 const Spin = lazy(() => import('views/components/UI/Spin'));
 
-function AboutMeAdmin(props: any) {
-  const { reloadAboutMeAdmin, setReloadAboutMeAdmin } = props;
-  const [mainInfo, setMainInfo] = useState<IgetAboutMeInfoAPIResponseInfo | null>(null);
-  const [cubeInfo, setCubeInfo] = useState<IgetAboutMeInfoAPIResponseInfo | null>(null);
+function AboutMeAdmin() {
+  const { mainInfo, cubeInfo, isLoading, updateMainInfo, updateCubeInfo } = useContextAboutMe();
 
-  useEffect(() => {
-    let isMounted = true;
-    (async () => {
-      const getAboutMeInfo = await getAboutMeInfoAPI({ key: 'mainInfo' });
-      isMounted && setMainInfo(getAboutMeInfo.data.info);
-      const getAboutMeCubeInfo = await getAboutMeInfoAPI({ key: 'cube' });
-      isMounted && setCubeInfo(getAboutMeCubeInfo.data.info);
-    })();
-    return () => {
-      isMounted = false;
-    };
-  }, [reloadAboutMeAdmin]);
-
-  if (!mainInfo || !cubeInfo) {
+  if (isLoading || !mainInfo || !cubeInfo) {
     return (
       <Suspense fallback={<></>}>
         <Spin />
@@ -33,92 +17,33 @@ function AboutMeAdmin(props: any) {
   }
 
   return (
-    <AboutMe
+    <AboutMeForm
       mainInfo={mainInfo}
-      setMainInfo={setMainInfo}
       cubeInfo={cubeInfo}
-      setCubeInfo={setCubeInfo}
-      setReloadAboutMeAdmin={setReloadAboutMeAdmin}
+      updateMainInfo={updateMainInfo}
+      updateCubeInfo={updateCubeInfo}
     />
   );
 }
 
-type TAboutMeProps = {
-  mainInfo: IgetAboutMeInfoAPIResponseInfo;
-  setMainInfo: (info: IgetAboutMeInfoAPIResponseInfo) => void;
-  cubeInfo: IgetAboutMeInfoAPIResponseInfo;
-  setCubeInfo: (info: IgetAboutMeInfoAPIResponseInfo) => void;
-  setReloadAboutMeAdmin: (reload: boolean) => void;
-};
-
-function AboutMe({ mainInfo, setMainInfo, cubeInfo, setCubeInfo, setReloadAboutMeAdmin }: TAboutMeProps) {
+function AboutMeForm({
+  mainInfo: initialMainInfo,
+  cubeInfo: initialCubeInfo,
+  updateMainInfo,
+  updateCubeInfo,
+}: {
+  mainInfo: IAboutMeInfo;
+  cubeInfo: IAboutMeInfo;
+  updateMainInfo: (data: IAboutMeInfo) => Promise<boolean>;
+  updateCubeInfo: (data: IAboutMeInfo) => Promise<boolean>;
+}) {
   const { TextArea } = Input;
-
-  const onFinishUpdateMainInfo = async () => {
-    try {
-      const updateAboutMeInfo = await updateAboutMeInfoAPI({
-        newData: mainInfo,
-        key: 'mainInfo',
-      });
-
-      if (updateAboutMeInfo.response.status === 200) {
-        notification['success']({
-          message: updateAboutMeInfo.data.message,
-          duration: notifDelay,
-        });
-        setReloadAboutMeAdmin(true);
-      } else {
-        notification['error']({
-          message: updateAboutMeInfo.data.message,
-          duration: notifDelayErr,
-        });
-        setReloadAboutMeAdmin(false);
-      }
-    } catch (error) {
-      console.error('Error updating main info:', error);
-      notification['error']({
-        message: 'Error del servidor',
-        duration: notifDelayErr,
-      });
-      setReloadAboutMeAdmin(false);
-      return;
-    }
-  };
-
-  const onFinishUpdateCubeInfo = async () => {
-    try {
-      const updateAboutMeCube = await updateAboutMeInfoAPI({
-        newData: cubeInfo,
-        key: 'cube',
-      });
-
-      if (updateAboutMeCube.response.status === 200) {
-        notification['success']({
-          message: updateAboutMeCube.data.message,
-          duration: notifDelay,
-        });
-        setReloadAboutMeAdmin(true);
-      } else {
-        notification['error']({
-          message: updateAboutMeCube.data.message,
-          duration: notifDelayErr,
-        });
-        setReloadAboutMeAdmin(false);
-      }
-    } catch (error) {
-      console.error('Error updating cube info:', error);
-      notification['error']({
-        message: 'Error del servidor',
-        duration: notifDelayErr,
-      });
-      setReloadAboutMeAdmin(false);
-      return;
-    }
-  };
+  const [mainInfo, setMainInfo] = useState(initialMainInfo);
+  const [cubeInfo, setCubeInfo] = useState(initialCubeInfo);
 
   return (
     <div>
-      <Form className="about_me-form-main" layout="inline" onFinish={onFinishUpdateMainInfo}>
+      <Form className="about_me-form-main" layout="inline" onFinish={() => updateMainInfo(mainInfo)}>
         <h1>Información Principal</h1>
         <Form.Item>
           <TextArea
@@ -138,7 +63,7 @@ function AboutMe({ mainInfo, setMainInfo, cubeInfo, setCubeInfo, setReloadAboutM
         </Button>
       </Form>
       <Divider />
-      <Form className="about_me-form-cube" layout="inline" onFinish={onFinishUpdateCubeInfo}>
+      <Form className="about_me-form-cube" layout="inline" onFinish={() => updateCubeInfo(cubeInfo)}>
         <div>
           <h1>Cubo</h1>
           <Form.Item>

@@ -1,39 +1,24 @@
-import { basePath, apiVersion } from '../../utils/config';
+import { fetchAPI, apiUrl } from '../../utils/fetchHelper';
 import {
-  IgetAboutMeInfoAPIResponse,
-  IgetAboutMeInfoAPIResponseInfo,
-  IupdateAboutMeInfoAPIResponse,
-} from './brandUsers.response.interface';
+  IGetAboutMeInfoResponse,
+  IAboutMeInfo,
+  IUpdateAboutMeInfoResponse,
+} from './aboutMe.response.interface';
 
-export async function getAboutMeInfoAPI({ key }: { key: string }): Promise<IgetAboutMeInfoAPIResponse> {
-  const params: RequestInit = {
-    method: 'GET',
-    headers: {
-      'Content-Type': 'application/json',
-    },
-    credentials: 'include',
-  };
-  const response = await fetch(`${basePath}/${apiVersion}/get-about-me-info/${key}`, params);
-  const data = await response.json();
-  return { response, data };
+export async function getAboutMeInfoAPI({ key }: { key: string }): Promise<IGetAboutMeInfoResponse> {
+  return fetchAPI<IGetAboutMeInfoResponse['data']>(apiUrl(`get-about-me-info/${key}`));
 }
 
 export async function updateAboutMeInfoAPI({
   newData,
   key,
 }: {
-  newData: IgetAboutMeInfoAPIResponseInfo;
+  newData: IAboutMeInfo;
   key: string;
-}): Promise<IupdateAboutMeInfoAPIResponse> {
-  const params: RequestInit = {
+}): Promise<IUpdateAboutMeInfoResponse> {
+  return fetchAPI<IUpdateAboutMeInfoResponse['data']>(apiUrl(`update-about-me-info/${key}`), {
     method: 'PUT',
-    headers: {
-      'Content-Type': 'application/json',
-    },
-    credentials: 'include',
+    headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify(newData),
-  };
-  const response = await fetch(`${basePath}/${apiVersion}/update-about-me-info/${key}`, params);
-  const data = await response.json();
-  return { response, data };
+  });
 }

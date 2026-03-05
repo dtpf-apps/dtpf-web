@@ -1,72 +1,29 @@
 import React, { memo, useState } from 'react';
 import { Form, Input, Button, Select, notification } from 'antd';
-import { addMenuApi } from 'api/menu';
-import { notifDelay, notifDelayErr } from 'utils/notifications';
+import useContextMenu from 'hooks/contexts/useContextMenu';
+import { notifDelayErr } from 'utils/notifications';
 import { FontSizeOutlined } from '@ant-design/icons';
 import './AddMenuWebForm.scss';
 
 interface IAddMenuWebFormProps {
   setIsVisibleModal: React.Dispatch<React.SetStateAction<boolean>>;
-  setReloadMenuWeb: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
-function AddMenuWebForm({ setIsVisibleModal, setReloadMenuWeb }: IAddMenuWebFormProps) {
-  const [menuWebData, setMenuWebData] = useState({});
-
-  return (
-    <div className="add-menu-web-form">
-      <AddForm
-        menuWebData={menuWebData}
-        setMenuWebData={setMenuWebData}
-        setIsVisibleModal={setIsVisibleModal}
-        setReloadMenuWeb={setReloadMenuWeb}
-      />
-    </div>
-  );
-}
-
-export default memo(AddMenuWebForm);
-
-interface IAddFormProps {
-  menuWebData: any;
-  setMenuWebData: (data: any) => void;
-  setIsVisibleModal: React.Dispatch<React.SetStateAction<boolean>>;
-  setReloadMenuWeb: React.Dispatch<React.SetStateAction<boolean>>;
-}
-
-function AddForm({ menuWebData, setMenuWebData, setIsVisibleModal, setReloadMenuWeb }: IAddFormProps) {
+function AddMenuWebForm({ setIsVisibleModal }: IAddMenuWebFormProps) {
+  const { addMenu } = useContextMenu();
+  const [menuWebData, setMenuWebData] = useState<Record<string, string>>({});
   const { Option } = Select;
 
-  const addMenu = () => {
-    let finalData: any = {
-      title: menuWebData.title,
-      url: (menuWebData.http ? menuWebData.http : 'http://') + menuWebData.url,
-    };
-    if (!finalData.title || !finalData.url || !menuWebData.url) {
-      notification['error']({
-        message: 'Todos los campos son obligatorios.',
-        duration: notifDelayErr,
-      });
-    } else {
-      finalData.active = false;
-      finalData.order = 1000;
-      addMenuApi(finalData)
-        .then((response) => {
-          notification['success']({
-            message: response.message,
-            duration: notifDelay,
-          });
-          setIsVisibleModal(false);
-          setReloadMenuWeb(true);
-          setMenuWebData({});
-          finalData = {};
-        })
-        .catch(() => {
-          notification['error']({
-            message: 'Error del servidor.',
-            duration: notifDelayErr,
-          });
-        });
+  const handleAddMenu = async () => {
+    const url = (menuWebData.http || 'http://') + menuWebData.url;
+    if (!menuWebData.title || !menuWebData.url) {
+      notification.error({ message: 'Todos los campos son obligatorios.', duration: notifDelayErr });
+      return;
+    }
+    const success = await addMenu({ title: menuWebData.title, url, active: false, order: 1000 });
+    if (success) {
+      setIsVisibleModal(false);
+      setMenuWebData({});
     }
   };
 
@@ -74,7 +31,7 @@ function AddForm({ menuWebData, setMenuWebData, setIsVisibleModal, setReloadMenu
     <Select
       placeholder="http://"
       style={{ width: 100 }}
-      onChange={(e) => setMenuWebData({ ...menuWebData, http: e })}
+      onChange={(e: string) => setMenuWebData({ ...menuWebData, http: e })}
     >
       <Option value="http://">http://</Option>
       <Option value="https://">https://</Option>
@@ -82,28 +39,32 @@ function AddForm({ menuWebData, setMenuWebData, setIsVisibleModal, setReloadMenu
   );
 
   return (
-    <Form className="form-add" onFinish={addMenu}>
-      <Form.Item>
-        <Input
-          prefix={<FontSizeOutlined />}
-          placeholder="Título"
-          value={menuWebData.title}
-          onChange={(e) => setMenuWebData({ ...menuWebData, title: e.target.value })}
-        />
-      </Form.Item>
-      <Form.Item>
-        <Input
-          addonBefore={selectBefore}
-          placeholder="URL"
-          value={menuWebData.url}
-          onChange={(e) => setMenuWebData({ ...menuWebData, url: e.target.value })}
-        />
-      </Form.Item>
-      <Form.Item>
-        <Button type="primary" htmlType="submit" className="btn-submit">
-          Crear menú
-        </Button>
-      </Form.Item>
-    </Form>
+    <div className="add-menu-web-form">
+      <Form className="form-add" onFinish={handleAddMenu}>
+        <Form.Item>
+          <Input
+            prefix={<FontSizeOutlined />}
+            placeholder="Título"
+            value={menuWebData.title}
+            onChange={(e) => setMenuWebData({ ...menuWebData, title: e.target.value })}
+          />
+        </Form.Item>
+        <Form.Item>
+          <Input
+            addonBefore={selectBefore}
+            placeholder="URL"
+            value={menuWebData.url}
+            onChange={(e) => setMenuWebData({ ...menuWebData, url: e.target.value })}
+          />
+        </Form.Item>
+        <Form.Item>
+          <Button type="primary" htmlType="submit" className="btn-submit">
+            Crear menú
+          </Button>
+        </Form.Item>
+      </Form>
+    </div>
   );
 }
+
+export default memo(AddMenuWebForm);

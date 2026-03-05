@@ -1,28 +1,11 @@
-import { useEffect, useState } from 'react';
-import { getAboutMeInfoAPI } from 'api/endpoints/aboutMe/aboutMe.api';
+import useContextAboutMe from 'hooks/contexts/useContextAboutMe';
 import Spin from 'views/components/UI/Spin/Spin';
 import image from 'assets/img/png/yo.png';
 import { Image } from 'antd';
 import './AboutMeInfo.scss';
-import { IgetAboutMeInfoAPIResponseInfo } from 'api/endpoints/aboutMe/brandUsers.response.interface';
 
 export default function AboutMeInfo() {
-  const [mainInfo, setMainInfo] = useState<IgetAboutMeInfoAPIResponseInfo | null>(null);
-
-  useEffect(() => {
-    let isMounted = true;
-    (async () => {
-      try {
-        const getAboutMeInfo = await getAboutMeInfoAPI({ key: 'mainInfo' });
-        isMounted && setMainInfo(getAboutMeInfo.data.info);
-      } catch (error) {
-        console.error('Error fetching About Me Info:', error);
-      }
-    })();
-    return () => {
-      isMounted = false;
-    };
-  }, []);
+  const { mainInfo } = useContextAboutMe();
 
   return !mainInfo || !mainInfo.content1 ? (
     <Spin />

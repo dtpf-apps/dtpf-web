@@ -1,17 +1,24 @@
 import { useState, useEffect } from 'react';
-import { getCoursesApi } from '../api/education';
+import { getCoursesAPI } from 'api/endpoints/education/education.api';
+import { ICoursesPage } from 'api/endpoints/education/education.response.interface';
 import useConnection from './useConnection';
 
 export function useGetCourses(itemsPerPage: number, location: any) {
-  const [courses, setCourses] = useState([]);
+  const [courses, setCourses] = useState<ICoursesPage | null>(null);
   const { connectionStatus, isNavigatorOnline } = useConnection();
   const page = new URLSearchParams(location.search).get('page') ?? '1';
 
   useEffect(() => {
     let isMounted = true;
-    getCoursesApi(itemsPerPage, page).then((response) => {
-      isMounted && setCourses(response.courses);
-    });
+    getCoursesAPI({ limit: itemsPerPage, page: Number(page) })
+      .then(({ response, data }) => {
+        if (response.status === 200 && data.courses) {
+          isMounted && setCourses(data.courses);
+        }
+      })
+      .catch(() => {
+        // Network error — courses remain null, offline fallback handles it
+      });
     return () => {
       isMounted = false;
     };

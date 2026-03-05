@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { getLastMessageApi } from 'api/contact';
+import { getLastMessageAPI } from 'api/endpoints/contact/contact.api';
 import { Link, useLocation } from 'react-router';
 import { Layout, Menu, Tag, message } from 'antd';
 import type { MenuProps } from 'antd';
@@ -70,12 +70,12 @@ function NextRender({ menuCollapsed, location, messagesUnreadLength, newMessage 
   };
 
   useEffect(() => {
-    getLastMessageApi().then((response) => {
-      if (response.email) {
+    getLastMessageAPI().then(({ data }) => {
+      if (data.email) {
         if (newMessage && messagesUnreadLength && newMessage < messagesUnreadLength) {
-          message.success(`Mensaje de ${response.email}`, 5);
+          message.success(`Mensaje de ${data.email}`, 5);
           addNotification({
-            title: `Mensaje de ${response.email}`,
+            title: `Mensaje de ${data.email}`,
             native: true,
             duration: 5000,
           });

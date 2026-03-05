@@ -1,32 +1,30 @@
-import { getCoursesApi } from '../../api/education';
+import { getCoursesAPI } from 'api/endpoints/education/education.api';
 import { COURSES_INFO } from '../config';
 
 export function updateCoursesDBIndexed(db: any) {
-  let coursesInfo = {
+  let coursesInfo: any = {
     coursesInfo: COURSES_INFO,
     docs: [],
     duration: 0,
     technologies: 0,
   };
   let sumItemsDuration = 0;
-  getCoursesApi(1000, 1)
-    .then((res) => {
-      if (res.message !== 'Failed to fetch') {
-        if (res.courses.docs) {
-          const itemsDuration: any = [];
-          res.courses.docs.forEach((course: any) => {
-            itemsDuration.push(course.duration);
-          });
-          itemsDuration.forEach((num: any) => {
-            sumItemsDuration += num;
-          });
-          coursesInfo = {
-            coursesInfo: COURSES_INFO,
-            docs: res.courses.docs,
-            duration: sumItemsDuration,
-            technologies: tecnologiesUsed(res.courses),
-          };
-        }
+  getCoursesAPI({ limit: 1000, page: 1 })
+    .then(({ data }) => {
+      if (data.courses?.docs) {
+        const itemsDuration: any = [];
+        data.courses.docs.forEach((course: any) => {
+          itemsDuration.push(course.duration);
+        });
+        itemsDuration.forEach((num: any) => {
+          sumItemsDuration += num;
+        });
+        coursesInfo = {
+          coursesInfo: COURSES_INFO,
+          docs: data.courses.docs,
+          duration: sumItemsDuration,
+          technologies: tecnologiesUsed(data.courses),
+        };
       }
     })
     .then(() => {

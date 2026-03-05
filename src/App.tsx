@@ -3,8 +3,11 @@ import { BrowserRouter as Router, Routes, Route } from 'react-router';
 import { HelmetProvider } from 'react-helmet-async';
 import { CookiesProvider } from 'react-cookie';
 import { DauthProvider } from 'dauth-context-react';
-import ConnectionProvider from './providers/ConnectionProvider';
-import MainMenuProvider from './providers/MainMenuProvider';
+import ConnectionProvider from './contexts/connection/ConnectionProvider';
+import MenuProvider from './contexts/menu/MenuProvider';
+import AboutMeProvider from './contexts/aboutMe/AboutMeProvider';
+import ContactProvider from './contexts/contact/ContactProvider';
+import EducationProvider from './contexts/education/EducationProvider';
 import { isLocalhost } from './utils/isLocalhost';
 import dbIndexed from './dbIndexed';
 import './App.scss';
@@ -40,36 +43,40 @@ function App() {
           domainName={import.meta.env.VITE_DAUTH_DOMAIN_NAME || 'dtpf'}
           dauthUrl={import.meta.env.VITE_DAUTH_URL || undefined}
           authProxyPath={
-            isLocalhost
-              ? `${window.location.protocol}//${window.location.hostname}:3998/api/auth`
-              : undefined
+            isLocalhost ? `${window.location.protocol}//${window.location.hostname}:3998/api/auth` : undefined
           }
         >
           <ConnectionProvider>
-            <MainMenuProvider>
-              <Router>
-              <Routes>
-                <Route path="/ad1988/login" element={<AdminSignIn />} />
-                <Route path="/ad1988/*" element={<LayoutAdmin />}>
-                  <Route index element={<AdminHome />} />
-                  <Route path="menu" element={<AdminMenuWeb />} />
-                  <Route path="contact-messages" element={<AdminContactMessages />} />
-                  <Route path="education" element={<AdminEducation />} />
-                  <Route path="about-me" element={<AdminAboutMe />} />
-                  <Route path="*" element={<Errors />} />
-                </Route>
-                <Route path="/*" element={<LayoutBasic />}>
-                  <Route index element={<Home />} />
-                  <Route path="education" element={<Education />} />
-                  <Route path="education/:url" element={<Education />} />
-                  <Route path="curriculum" element={<Curriculum />} />
-                  <Route path="contact" element={<Contact />} />
-                  <Route path="privacy-policy" element={<PrivacyPolicy />} />
-                  <Route path="*" element={<Errors />} />
-                </Route>
-              </Routes>
-              </Router>
-            </MainMenuProvider>
+            <MenuProvider>
+              <AboutMeProvider>
+                <ContactProvider>
+                  <EducationProvider>
+                    <Router>
+                      <Routes>
+                        <Route path="/ad1988/login" element={<AdminSignIn />} />
+                        <Route path="/ad1988/*" element={<LayoutAdmin />}>
+                          <Route index element={<AdminHome />} />
+                          <Route path="menu" element={<AdminMenuWeb />} />
+                          <Route path="contact-messages" element={<AdminContactMessages />} />
+                          <Route path="education" element={<AdminEducation />} />
+                          <Route path="about-me" element={<AdminAboutMe />} />
+                          <Route path="*" element={<Errors />} />
+                        </Route>
+                        <Route path="/*" element={<LayoutBasic />}>
+                          <Route index element={<Home />} />
+                          <Route path="education" element={<Education />} />
+                          <Route path="education/:url" element={<Education />} />
+                          <Route path="curriculum" element={<Curriculum />} />
+                          <Route path="contact" element={<Contact />} />
+                          <Route path="privacy-policy" element={<PrivacyPolicy />} />
+                          <Route path="*" element={<Errors />} />
+                        </Route>
+                      </Routes>
+                    </Router>
+                  </EducationProvider>
+                </ContactProvider>
+              </AboutMeProvider>
+            </MenuProvider>
           </ConnectionProvider>
         </DauthProvider>
       </HelmetProvider>

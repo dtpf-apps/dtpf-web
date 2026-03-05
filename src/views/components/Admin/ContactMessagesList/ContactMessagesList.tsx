@@ -1,9 +1,8 @@
 import React, { useState, useEffect, memo } from 'react';
-import { Switch, List, Button, Modal as ModalDelete, message as messageAnt } from 'antd';
-import Modal from 'views/components/UI/Modal';
-import useMessagesStatus from 'hooks/useMessagesStatus';
-import { getMessagesUnreadApi, checkMessageApi, deleteContactMessageApi } from 'api/contact';
-import { reloadMessagesApi } from 'api/utils';
+import { Switch, List, Button, Modal as ModalDelete } from 'antd';
+import useContextContact from 'hooks/contexts/useContextContact';
+import { IContactMessage } from 'api/endpoints/contact/contact.response.interface';
+import { reloadMessagesAPI, messagesStatusAPI } from 'api/endpoints/contact/contact.api';
 import { CheckOutlined, DeleteOutlined } from '@ant-design/icons';
 import './ContactMessagesList.scss';
 import dayjs from 'dayjs';
@@ -14,39 +13,25 @@ dayjs.extend(relativeTime);
 dayjs.locale('es');
 const { confirm } = ModalDelete;
 
-interface IContactMessagesListProps {
-  reloadMessages: boolean;
-  setReloadMessages: React.Dispatch<React.SetStateAction<boolean>>;
-}
-
-function ContactMessagesList({ reloadMessages, setReloadMessages }: IContactMessagesListProps) {
+function ContactMessagesList() {
+  const { unreadMessages, readMessages, loadMessages, checkMessage, deleteMessage } = useContextContact();
   const [viewMessagesUnread, setViewMessagesUnread] = useState(true);
-  const [isVisibleModal, setIsVisibleModal] = useState(false);
-  const [modalTitle] = useState('');
-  const [modalContent] = useState(null);
-  const { messagesStatus, setMessagesStatus } = useMessagesStatus();
-  const [messagesUnread, setMessagesUnread] = useState([]);
-  const [messagesRead, setMessagesRead] = useState([]);
 
+  // Load messages on mount and poll for new ones
   useEffect(() => {
-    let isMounted = true;
-    reloadMessagesApi(false).then(() => {
-      if (isMounted) {
-        setReloadMessages(false);
-        setMessagesStatus(false);
+    reloadMessagesAPI({ haveToReload: false });
+    loadMessages();
+
+    const interval = setInterval(async () => {
+      const statusFetch = await messagesStatusAPI();
+      if (statusFetch.response.status === 200 && statusFetch.data.messagesStatus) {
+        loadMessages();
       }
-    });
-    getMessagesUnreadApi(false).then((response) => {
-      isMounted && setMessagesUnread(response.messages);
-    });
-    getMessagesUnreadApi(true).then((response) => {
-      isMounted && setMessagesRead(response.messages);
-    });
-    return () => {
-      isMounted = false;
-    };
+    }, 1000);
+
+    return () => clearInterval(interval);
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [messagesStatus, reloadMessages]);
+  }, []);
 
   return (
     <div className="messages-contact">
@@ -62,155 +47,103 @@ function ContactMessagesList({ reloadMessages, setReloadMessages }: IContactMess
         </div>
       </div>
       {viewMessagesUnread ? (
-        <MessagesUnread messagesUnread={messagesUnread} setReloadMessages={setReloadMessages} />
+        <MessagesUnread messages={unreadMessages} checkMessage={checkMessage} />
       ) : (
-        <MessagesRead messagesRead={messagesRead} setReloadMessages={setReloadMessages} />
+        <MessagesRead messages={readMessages} checkMessage={checkMessage} deleteMessage={deleteMessage} />
       )}
-      <Modal title={modalTitle} isVisible={isVisibleModal} setIsVisible={setIsVisibleModal}>
-        {modalContent}
-      </Modal>
     </div>
   );
 }
 
-interface IMessagesUnreadProps {
-  messagesUnread: any[];
-  setReloadMessages: React.Dispatch<React.SetStateAction<boolean>>;
-}
-
-function MessagesUnread({ messagesUnread, setReloadMessages }: IMessagesUnreadProps) {
+function MessagesUnread({
+  messages,
+  checkMessage,
+}: {
+  messages: IContactMessage[];
+  checkMessage: (messageId: string, readed: boolean) => Promise<boolean>;
+}) {
   return (
     <List
       className="messages-unread"
       itemLayout="horizontal"
-      dataSource={messagesUnread}
-      renderItem={(message: any) => <MessageUnread message={message} setReloadMessages={setReloadMessages} />}
+      dataSource={messages}
+      renderItem={(msg: IContactMessage) => (
+        <List.Item
+          actions={[
+            <Button type="primary" onClick={() => checkMessage(msg._id, true)}>
+              <CheckOutlined />
+            </Button>,
+          ]}
+        >
+          <List.Item.Meta
+            title={`${msg.name || 'Anónimo'} - Hace ${dayjs(msg.date).fromNow(true)}`}
+            description={
+              <div>
+                <em>{msg.email}</em>
+                <div>{msg.phone_number}</div>
+                {msg.subject !== 'Sin asunto' && msg.subject && <div>Asunto: {msg.subject}</div>}
+                <p>{msg.message}</p>
+              </div>
+            }
+          />
+        </List.Item>
+      )}
     />
   );
 }
 
-interface IMessageUnreadProps {
-  message: any;
-  setReloadMessages: React.Dispatch<React.SetStateAction<boolean>>;
-}
-
-function MessageUnread({ message, setReloadMessages }: IMessageUnreadProps) {
-  const checkMessage = () => {
-    reloadMessagesApi(true).then(() => {
-      checkMessageApi(message._id, true)
-        .then((response) => {
-          messageAnt.success(response.message);
-          setReloadMessages(true);
-        })
-        .catch((err) => {
-          messageAnt.error(err.message);
-        });
-    });
-  };
-
-  return (
-    <List.Item
-      actions={[
-        <Button type="primary" onClick={checkMessage}>
-          <CheckOutlined />
-        </Button>,
-      ]}
-    >
-      <List.Item.Meta
-        title={`${message.name ? message.name : 'Anónimo'} - Hace ${message && dayjs(message.date).fromNow(true)}`}
-        description={
-          <div>
-            <em>{message.email}</em>
-            <div>{message.phone_number}</div>
-            {message.subject !== 'Sin asunto' && message.subject && <div>Asunto: {message.subject}</div>}
-            <p>{message.message}</p>
-          </div>
-        }
-      />
-    </List.Item>
-  );
-}
-
-interface IMessagesReadProps {
-  messagesRead: any[];
-  setReloadMessages: React.Dispatch<React.SetStateAction<boolean>>;
-}
-
-function MessagesRead({ messagesRead, setReloadMessages }: IMessagesReadProps) {
-  return (
-    <List
-      className="messages-read"
-      itemLayout="horizontal"
-      dataSource={messagesRead}
-      renderItem={(message: any) => <MessageRead message={message} setReloadMessages={setReloadMessages} />}
-    />
-  );
-}
-
-interface IMessageReadProps {
-  message: any;
-  setReloadMessages: React.Dispatch<React.SetStateAction<boolean>>;
-}
-
-function MessageRead({ message, setReloadMessages }: IMessageReadProps) {
-  const checkMessage = () => {
-    checkMessageApi(message._id, false)
-      .then((response) => {
-        messageAnt.success(response.message);
-        setReloadMessages(true);
-      })
-      .catch((err) => {
-        messageAnt.error(err.message);
-      });
-  };
-
-  const showDeleteConfirm = () => {
+function MessagesRead({
+  messages,
+  checkMessage,
+  deleteMessage,
+}: {
+  messages: IContactMessage[];
+  checkMessage: (messageId: string, readed: boolean) => Promise<boolean>;
+  deleteMessage: (messageId: string) => Promise<boolean>;
+}) {
+  const handleDelete = (msg: IContactMessage) => {
     confirm({
       title: 'Eliminando mensaje',
-      content: `¿Estás seguro que quieres eliminar el mensaje de ${message.email}?`,
+      content: `¿Estás seguro que quieres eliminar el mensaje de ${msg.email}?`,
       okText: 'Eliminar',
       okType: 'danger',
       cancelText: 'Cancelar',
       onOk() {
-        deleteContactMessageApi(message._id)
-          .then((response) => {
-            if (response.status === 200) {
-              messageAnt.success(response.message);
-            } else {
-              messageAnt.warning(response.message);
-            }
-            setReloadMessages(true);
-          })
-          .catch((err) => {
-            messageAnt.error(err.message);
-          });
+        deleteMessage(msg._id);
       },
     });
   };
 
   return (
-    <List.Item
-      actions={[
-        <Button type="primary" onClick={checkMessage}>
-          <CheckOutlined />
-        </Button>,
-        <Button type="primary" danger onClick={showDeleteConfirm}>
-          <DeleteOutlined />
-        </Button>,
-      ]}
-    >
-      <List.Item.Meta
-        title={`${message.name ? message.name : 'Anónimo'} - Hace ${message && dayjs(message.date).fromNow(true)}`}
-        description={
-          <div>
-            <em>{message.email}</em>
-            <div>{message.phone_number}</div>
-            {message.subject !== 'Sin asunto' && message.subject && <div>Asunto: {message.subject}</div>}
-            <p>{message.message}</p>
-          </div>
-        }
-      />
-    </List.Item>
+    <List
+      className="messages-read"
+      itemLayout="horizontal"
+      dataSource={messages}
+      renderItem={(msg: IContactMessage) => (
+        <List.Item
+          actions={[
+            <Button type="primary" onClick={() => checkMessage(msg._id, false)}>
+              <CheckOutlined />
+            </Button>,
+            <Button type="primary" danger onClick={() => handleDelete(msg)}>
+              <DeleteOutlined />
+            </Button>,
+          ]}
+        >
+          <List.Item.Meta
+            title={`${msg.name || 'Anónimo'} - Hace ${dayjs(msg.date).fromNow(true)}`}
+            description={
+              <div>
+                <em>{msg.email}</em>
+                <div>{msg.phone_number}</div>
+                {msg.subject !== 'Sin asunto' && msg.subject && <div>Asunto: {msg.subject}</div>}
+                <p>{msg.message}</p>
+              </div>
+            }
+          />
+        </List.Item>
+      )}
+    />
   );
 }
 

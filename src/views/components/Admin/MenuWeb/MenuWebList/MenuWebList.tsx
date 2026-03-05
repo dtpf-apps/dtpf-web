@@ -1,5 +1,5 @@
-import React, { useState, useEffect, memo } from 'react';
-import { Switch, List, Button, Modal as ModalAntd, notification } from 'antd';
+import React, { useState, memo } from 'react';
+import { Switch, List, Button, Modal as ModalAntd } from 'antd';
 import {
   DndContext,
   closestCenter,
@@ -18,73 +18,50 @@ import {
 } from '@dnd-kit/sortable';
 import { CSS } from '@dnd-kit/utilities';
 import Modal from 'views/components/UI/Modal';
-import { getMenuApi, updateMenuApi, activateMenuApi, deleteMenuApi } from 'api/menu';
-import { notifDelay, notifDelayErr } from 'utils/notifications';
+import useContextMenu from 'hooks/contexts/useContextMenu';
+import { IMenuItem } from 'api/endpoints/menu/menu.response.interface';
 import AddMenuWebForm from '../AddMenuWebForm';
 import EditMenuWebForm from '../EditMenuWebForm';
 import { EditOutlined, DeleteOutlined, HolderOutlined } from '@ant-design/icons';
 import './MenuWebList.scss';
 const { confirm } = ModalAntd;
 
-interface IMenuWebListProps {
-  reloadMenuWeb: boolean;
-  setReloadMenuWeb: React.Dispatch<React.SetStateAction<boolean>>;
-}
-
-function MenuWebList({ reloadMenuWeb, setReloadMenuWeb }: IMenuWebListProps) {
+function MenuWebList() {
+  const { menus, activateMenu, deleteMenu: deleteMenuAction, updateMenu } = useContextMenu();
   const [isVisibleModal, setIsVisibleModal] = useState(false);
   const [modalTitle, setModalTitle] = useState('');
   const [modalContent, setModalContent] = useState<React.ReactNode | null>(null);
-  const [menu, setMenu] = useState<any[]>([]);
+  const [localMenus, setLocalMenus] = useState<IMenuItem[]>(menus);
 
   const sensors = useSensors(
     useSensor(PointerSensor),
     useSensor(KeyboardSensor, { coordinateGetter: sortableKeyboardCoordinates })
   );
 
-  useEffect(() => {
-    let isMounted = true;
-    getMenuApi().then((response) => {
-      if (isMounted && response.menu) {
-        setMenu(response.menu);
-      }
-    });
-    return () => {
-      isMounted = false;
-    };
-  }, [reloadMenuWeb]);
+  // Sync local state when context menus change
+  React.useEffect(() => {
+    setLocalMenus(menus);
+  }, [menus]);
 
-  const activateMenu = (menuItem: any, status: any) => {
-    activateMenuApi(menuItem._id, status).then((response) => {
-      if (status === true) {
-        notification['success']({
-          message: response.message,
-          duration: notifDelay,
-        });
-      } else {
-        notification['warning']({
-          message: response.message,
-          duration: notifDelayErr,
-        });
-      }
-    });
+  const handleActivateMenu = (menuItem: IMenuItem, status: boolean) => {
+    activateMenu(menuItem._id, status);
   };
 
   const handleDragEnd = (event: DragEndEvent) => {
     const { active, over } = event;
     if (!over || active.id === over.id) return;
 
-    const oldIndex = menu.findIndex((item) => item._id === active.id);
-    const newIndex = menu.findIndex((item) => item._id === over.id);
-    const reordered = arrayMove(menu, oldIndex, newIndex);
-    setMenu(reordered);
+    const oldIndex = localMenus.findIndex((item) => item._id === active.id);
+    const newIndex = localMenus.findIndex((item) => item._id === over.id);
+    const reordered = arrayMove(localMenus, oldIndex, newIndex);
+    setLocalMenus(reordered);
 
     reordered.forEach((item, index) => {
-      updateMenuApi(item._id, { order: index });
+      updateMenu(item._id, { order: index });
     });
   };
 
-  const deleteMenu = (menuItem: any) => {
+  const handleDeleteMenu = (menuItem: IMenuItem) => {
     confirm({
       title: 'Eliminando menú',
       content: `¿Estás seguro que quieres eliminar el menú ${menuItem.title}?`,
@@ -92,20 +69,7 @@ function MenuWebList({ reloadMenuWeb, setReloadMenuWeb }: IMenuWebListProps) {
       okType: 'danger',
       cancelText: 'Cancelar',
       onOk() {
-        deleteMenuApi(menuItem._id)
-          .then((response) => {
-            notification['success']({
-              message: response.message,
-              duration: notifDelay,
-            });
-            setReloadMenuWeb(true);
-          })
-          .catch(() => {
-            notification['error']({
-              message: 'Error del servidor, inténtelo más tarde.',
-              duration: notifDelayErr,
-            });
-          });
+        deleteMenuAction(menuItem._id);
       },
     });
   };
@@ -116,21 +80,19 @@ function MenuWebList({ reloadMenuWeb, setReloadMenuWeb }: IMenuWebListProps) {
         setIsVisibleModal={setIsVisibleModal}
         setModalTitle={setModalTitle}
         setModalContent={setModalContent}
-        setReloadMenuWeb={setReloadMenuWeb}
       />
       <div className="menu-web-list__items">
         <DndContext sensors={sensors} collisionDetection={closestCenter} onDragEnd={handleDragEnd}>
-          <SortableContext items={menu.map((item) => item._id)} strategy={verticalListSortingStrategy}>
-            {menu.map((item) => (
+          <SortableContext items={localMenus.map((item) => item._id)} strategy={verticalListSortingStrategy}>
+            {localMenus.map((item) => (
               <SortableMenuItem
                 key={item._id}
                 item={item}
-                activateMenu={activateMenu}
-                deleteMenu={deleteMenu}
+                activateMenu={handleActivateMenu}
+                deleteMenu={handleDeleteMenu}
                 setIsVisibleModal={setIsVisibleModal}
                 setModalTitle={setModalTitle}
                 setModalContent={setModalContent}
-                setReloadMenuWeb={setReloadMenuWeb}
               />
             ))}
           </SortableContext>
@@ -143,14 +105,19 @@ function MenuWebList({ reloadMenuWeb, setReloadMenuWeb }: IMenuWebListProps) {
   );
 }
 
-function AddMenuWebModal(props: any) {
-  const { setIsVisibleModal, setModalTitle, setModalContent, setReloadMenuWeb } = props;
+function AddMenuWebModal({
+  setIsVisibleModal,
+  setModalTitle,
+  setModalContent,
+}: {
+  setIsVisibleModal: React.Dispatch<React.SetStateAction<boolean>>;
+  setModalTitle: (title: string) => void;
+  setModalContent: (content: React.ReactNode) => void;
+}) {
   const addMenuWebModal = () => {
     setIsVisibleModal(true);
     setModalTitle('Creando nuevo menú');
-    setModalContent(
-      <AddMenuWebForm setIsVisibleModal={setIsVisibleModal} setReloadMenuWeb={setReloadMenuWeb} />
-    );
+    setModalContent(<AddMenuWebForm setIsVisibleModal={setIsVisibleModal} />);
   };
   return (
     <div className="menu-web-list__header">
@@ -162,13 +129,12 @@ function AddMenuWebModal(props: any) {
 }
 
 interface ISortableMenuItemProps {
-  item: any;
-  activateMenu: (menu: any, status: any) => void;
-  deleteMenu: (menu: any) => void;
+  item: IMenuItem;
+  activateMenu: (menu: IMenuItem, status: boolean) => void;
+  deleteMenu: (menu: IMenuItem) => void;
   setIsVisibleModal: React.Dispatch<React.SetStateAction<boolean>>;
   setModalTitle: (title: string) => void;
   setModalContent: (content: React.ReactNode) => void;
-  setReloadMenuWeb: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
 function SortableMenuItem({
@@ -178,7 +144,6 @@ function SortableMenuItem({
   setIsVisibleModal,
   setModalTitle,
   setModalContent,
-  setReloadMenuWeb,
 }: ISortableMenuItemProps) {
   const { attributes, listeners, setNodeRef, transform, transition } = useSortable({ id: item._id });
 
@@ -187,16 +152,10 @@ function SortableMenuItem({
     transition,
   };
 
-  const editMenuWebModal = (menu: any) => {
+  const editMenuWebModal = (menu: IMenuItem) => {
     setIsVisibleModal(true);
     setModalTitle(`Editando menu: ${menu.title}`);
-    setModalContent(
-      <EditMenuWebForm
-        setIsVisibleModal={setIsVisibleModal}
-        setReloadMenuWeb={setReloadMenuWeb}
-        menu={menu}
-      />
-    );
+    setModalContent(<EditMenuWebForm setIsVisibleModal={setIsVisibleModal} menu={menu} />);
   };
 
   return (

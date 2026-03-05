@@ -1,7 +1,7 @@
 import React, { useState, useEffect, memo } from 'react';
 import { useNavigate } from 'react-router';
 import { useDauth } from 'dauth-context-react';
-import { getIndexedDBVersionApi, updateIndexedDBVersionApi } from 'api/utils';
+import { getIndexedDBVersionAPI, updateIndexedDBVersionAPI } from 'api/endpoints/app/app.api';
 import { useCookies } from 'react-cookie';
 import { Button, message, Modal } from 'antd';
 import './Home.scss';
@@ -25,13 +25,17 @@ function Home() {
 
 function RenderHome(props: any) {
   const { deleteCookies, user } = props;
-  const [idbVersion, setIdbVersion] = useState(null);
+  const [idbVersion, setIdbVersion] = useState<number | null>(null);
   const { confirm } = Modal;
   useEffect(() => {
     let isMounted = true;
-    getIndexedDBVersionApi().then((res) => {
-      res && isMounted && setIdbVersion(res.indexedDBVersion);
-    });
+    getIndexedDBVersionAPI()
+      .then(({ response, data }) => {
+        if (response.status === 200 && data.indexedDBVersion) {
+          isMounted && setIdbVersion(data.indexedDBVersion);
+        }
+      })
+      .catch(() => {});
     return () => {
       isMounted = false;
     };
@@ -44,21 +48,17 @@ function RenderHome(props: any) {
       okType: 'primary',
       cancelText: 'Cancelar',
       onOk() {
-        updateIndexedDBVersionApi()
-          .then((res) => {
-            if (res) {
-              if (res.status !== 200) {
-                message.warning(res.message);
-              } else {
-                message.success(res.message);
-                setIdbVersion(res.indexedDBVersion);
-              }
+        updateIndexedDBVersionAPI()
+          .then(({ response, data }) => {
+            if (response.status === 200) {
+              message.success(data.message);
+              setIdbVersion(data.indexedDBVersion);
             } else {
-              message.error('No hay respuesta al servidor.');
+              message.warning(data.message);
             }
           })
-          .catch((err) => {
-            message.error(err.message);
+          .catch(() => {
+            message.error('No hay respuesta al servidor.');
           });
       },
     });

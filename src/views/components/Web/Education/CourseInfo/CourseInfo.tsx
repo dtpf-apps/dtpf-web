@@ -1,6 +1,11 @@
 import React, { useState, useEffect, Suspense, lazy } from 'react';
 import { Link } from 'react-router';
-import { getCourseApi, getImageApi, getPrevCourseApi, getNextCourseApi } from 'api/education';
+import {
+  getCourseAPI,
+  getPrevCourseAPI,
+  getNextCourseAPI,
+  getImageUrl,
+} from 'api/endpoints/education/education.api';
 import useScrollToTop from 'hooks/useScrollToTop';
 import dayjs from 'dayjs';
 import relativeTime from 'dayjs/plugin/relativeTime';
@@ -18,25 +23,32 @@ const Error = lazy(() => import('views/pages/Errors'));
 
 export default function CourseInfo(props: any) {
   const { url, courses } = props;
-  const [course, setCourse] = useState(null);
+  const [course, setCourse] = useState<any>(null);
   const [isLoading, setIsLoading] = useState(true);
   useScrollToTop();
   useEffect(() => {
     let isMounted = true;
     const offlineCourse = courses && courses.docs && courses.docs.find((course: any) => course.url === url);
-    getCourseApi(url).then((response) => {
-      if (response.status === 200) {
-        if (isMounted) {
-          setCourse(response.course);
-          setIsLoading(false);
+    getCourseAPI({ url })
+      .then(({ response, data }) => {
+        if (response.status === 200) {
+          if (isMounted) {
+            setCourse(data.course);
+            setIsLoading(false);
+          }
+        } else {
+          if (offlineCourse) {
+            setCourse(offlineCourse);
+            setIsLoading(false);
+          }
         }
-      } else {
+      })
+      .catch(() => {
         if (offlineCourse) {
           setCourse(offlineCourse);
           setIsLoading(false);
         }
-      }
-    });
+      });
     return () => {
       isMounted = false;
     };
@@ -64,10 +76,9 @@ export default function CourseInfo(props: any) {
 
 function Course(props: any) {
   const { course, courses } = props;
-  const [image, setImage] = useState('');
-  const [prevCourse, setPrevCourse] = useState(null);
-  const [nextCourse, setNextCourse] = useState(null);
-  const [isLoading, setIsLoading] = useState(true);
+  const image = course?.image ? getImageUrl(course.image) : '';
+  const [prevCourse, setPrevCourse] = useState<any>(null);
+  const [nextCourse, setNextCourse] = useState<any>(null);
   function cycle(array: any, str: any) {
     const i = array.indexOf(str);
     if (i === -1) return undefined;
@@ -76,9 +87,9 @@ function Course(props: any) {
   useEffect(() => {
     let isMounted = true;
     if (course) {
-      getPrevCourseApi(course.url).then((res) => {
-        if (res.status === 200) {
-          isMounted && setPrevCourse(res.prevCourse);
+      getPrevCourseAPI({ url: course.url }).then(({ response, data }) => {
+        if (response.status === 200) {
+          isMounted && setPrevCourse(data.prevCourse);
         } else {
           const coursesUrl = [];
           if (courses.docs) {
@@ -91,9 +102,9 @@ function Course(props: any) {
           }
         }
       });
-      getNextCourseApi(course.url).then((res) => {
-        if (res.status === 200) {
-          isMounted && setNextCourse(res.nextCourse);
+      getNextCourseAPI({ url: course.url }).then(({ response, data }) => {
+        if (response.status === 200) {
+          isMounted && setNextCourse(data.nextCourse);
         } else {
           const coursesUrl = [];
           if (courses.docs) {
@@ -110,73 +121,44 @@ function Course(props: any) {
       isMounted = false;
     };
   }, [course, courses]);
-  useEffect(() => {
-    let isMounted = true;
-    if (course && course.image) {
-      getImageApi(course.image).then((response) => {
-        if (response.status === 200) {
-          if (isMounted) {
-            setImage(response.url);
-          }
-        } else {
-          setImage('');
-        }
-        setIsLoading(false);
-      });
-    } else {
-      setImage('');
-      setIsLoading(false);
-    }
-    return () => {
-      isMounted = false;
-    };
-  }, [course]);
   return (
     <>
-      {isLoading ? (
-        <Suspense fallback={<></>}>
-          <Spin />
-        </Suspense>
-      ) : (
-        <>
-          <Suspense fallback={<></>}>
-            <Helmet titleHelmet={`Formación | ${course.title}`} contentHelmet={course.title} />
-          </Suspense>
-          <Links prevCourse={prevCourse} nextCourse={nextCourse} />
-          <Col span={24} className="course-info__title">
-            <h1>{course.title}</h1>
-          </Col>
-          <div className="course-info__image">
-            <Image src={image ? image : noImage} alt={course && 'Imágen de ' + course.title}></Image>
-          </div>
-          <Row className="course-info__info">
-            <Col span={12} className="course-info__info-duration">
-              {course && course.duration}&nbsp;horas
-            </Col>
-            <Col span={12} className="course-info__info-date">
-              Hace&nbsp;{course && dayjs(course.date).fromNow(true)}
-            </Col>
-          </Row>
-          <Col className="course-info__description">
-            <p>{course && course.description}</p>
-          </Col>
-          <Row className="course-info__tags">
-            <Tags course={course && course} />
-          </Row>
-          <Row className="course-info__button">
-            <Col span={24} className="course-info__button-link">
-              {course && course.link && (
-                <Button>
-                  <a href={course.link} target="_blank" rel="noopener noreferrer">
-                    <LinkOutlined />
-                    Enlace a Certificación
-                  </a>
-                </Button>
-              )}
-            </Col>
-          </Row>
-        </>
-      )}
+      <Suspense fallback={<></>}>
+        <Helmet titleHelmet={`Formación | ${course.title}`} contentHelmet={course.title} />
+      </Suspense>
+      <Links prevCourse={prevCourse} nextCourse={nextCourse} />
+      <Col span={24} className="course-info__title">
+        <h1>{course.title}</h1>
+      </Col>
+      <div className="course-info__image">
+        <Image src={image ? image : noImage} alt={course && 'Imágen de ' + course.title}></Image>
+      </div>
+      <Row className="course-info__info">
+        <Col span={12} className="course-info__info-duration">
+          {course && course.duration}&nbsp;horas
+        </Col>
+        <Col span={12} className="course-info__info-date">
+          Hace&nbsp;{course && dayjs(course.date).fromNow(true)}
+        </Col>
+      </Row>
+      <Col className="course-info__description">
+        <p>{course && course.description}</p>
+      </Col>
+      <Row className="course-info__tags">
+        <Tags course={course && course} />
+      </Row>
+      <Row className="course-info__button">
+        <Col span={24} className="course-info__button-link">
+          {course && course.link && (
+            <Button>
+              <a href={course.link} target="_blank" rel="noopener noreferrer">
+                <LinkOutlined />
+                Enlace a Certificación
+              </a>
+            </Button>
+          )}
+        </Col>
+      </Row>
     </>
   );
 }

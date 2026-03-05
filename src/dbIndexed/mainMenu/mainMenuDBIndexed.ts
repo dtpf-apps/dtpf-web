@@ -1,25 +1,22 @@
-import { getMenuApi } from '../../api/menu';
+import { getMenusAPI } from 'api/endpoints/menu/menu.api';
 import { MAIN_MENU } from '../config';
 
 export function updateMainMenuDBIndexed(db: any) {
-  let mainMenu = {
+  let mainMenu: any = {
     mainMenu: MAIN_MENU,
     menu: [],
   };
-  getMenuApi()
-    .then((res) => {
-      if (res.message !== 'Failed to fetch') {
-        if (res) {
-          const arrayMenu: any = [];
-          res.menu &&
-            res.menu.forEach((item: any) => {
-              item.active && arrayMenu.push(item);
-            });
-          mainMenu = {
-            mainMenu: MAIN_MENU,
-            menu: arrayMenu,
-          };
-        }
+  getMenusAPI()
+    .then(({ data }) => {
+      if (data.menu) {
+        const arrayMenu: any = [];
+        data.menu.forEach((item: any) => {
+          item.active && arrayMenu.push(item);
+        });
+        mainMenu = {
+          mainMenu: MAIN_MENU,
+          menu: arrayMenu,
+        };
       }
     })
     .then(() => {

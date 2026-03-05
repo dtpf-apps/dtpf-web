@@ -1,5 +1,10 @@
 import { useContext } from 'react';
-import { ConnectionContext } from '../providers/ConnectionProvider';
+import ConnectionContext from 'contexts/connection/ConnectionContext';
 
-// eslint-disable-next-line import/no-anonymous-default-export
-export default () => useContext(ConnectionContext);
+export default function useConnection() {
+  const context = useContext(ConnectionContext);
+  if (context === undefined) {
+    throw new Error('useConnection must be used within a ConnectionProvider');
+  }
+  return context;
+}

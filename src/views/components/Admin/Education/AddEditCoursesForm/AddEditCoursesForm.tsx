@@ -2,11 +2,12 @@ import React, { useState, useEffect, useCallback, memo } from 'react';
 import { Row, Col, Form, Input, InputNumber, Button, Image, DatePicker, notification, Space } from 'antd';
 import { useDropzone } from 'react-dropzone';
 import AdminTags from '../AdminTags';
-import { addCourseApi, updateCourseApi, getImageApi, uploadImageApi } from 'api/education';
+import useContextEducation from 'hooks/contexts/useContextEducation';
+import { getImageUrl } from 'api/endpoints/education/education.api';
 import { LinkOutlined, FontSizeOutlined } from '@ant-design/icons';
 import dayjs from 'dayjs';
 import customParseFormat from 'dayjs/plugin/customParseFormat';
-import { notifDelay, notifDelayErr } from 'utils/notifications';
+import { notifDelay } from 'utils/notifications';
 import NoImage from 'assets/img/png/no-image.png';
 import './AddEditCoursesForm.scss';
 
@@ -15,13 +16,12 @@ const { TextArea } = Input;
 
 interface IAddEditCoursesFormProps {
   setIsVisibleModal: React.Dispatch<React.SetStateAction<boolean>>;
-  setReloadCourses: React.Dispatch<React.SetStateAction<boolean>>;
   course?: any;
 }
 
-function AddEditCoursesForm({ setIsVisibleModal, setReloadCourses, course }: IAddEditCoursesFormProps) {
-  const [image, setImage] = useState(null);
-  const [courseData, setCourseData] = useState([]);
+function AddEditCoursesForm({ setIsVisibleModal, course }: IAddEditCoursesFormProps) {
+  const [image, setImage] = useState<any>(null);
+  const [courseData, setCourseData] = useState<any>([]);
 
   useEffect(() => {
     if (course) {
@@ -33,9 +33,7 @@ function AddEditCoursesForm({ setIsVisibleModal, setReloadCourses, course }: IAd
 
   useEffect(() => {
     if (course && course.image) {
-      getImageApi(course.image).then((response) => {
-        setImage(response.url);
-      });
+      setImage(getImageUrl(course.image));
     } else {
       setImage(null);
     }
@@ -48,7 +46,6 @@ function AddEditCoursesForm({ setIsVisibleModal, setReloadCourses, course }: IAd
         courseData={courseData}
         setCourseData={setCourseData}
         course={course}
-        setReloadCourses={setReloadCourses}
         image={image}
         setIsVisibleModal={setIsVisibleModal}
       />
@@ -60,19 +57,12 @@ interface IAddEditFormProps {
   courseData: any;
   setCourseData: (data: any) => void;
   course?: any;
-  setReloadCourses: React.Dispatch<React.SetStateAction<boolean>>;
   image?: any;
   setIsVisibleModal: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
-function AddEditForm({
-  courseData,
-  setCourseData,
-  course,
-  setReloadCourses,
-  image,
-  setIsVisibleModal,
-}: IAddEditFormProps) {
+function AddEditForm({ courseData, setCourseData, course, image, setIsVisibleModal }: IAddEditFormProps) {
+  const { addCourse, updateCourse, uploadImage } = useContextEducation();
   const [proccessCourseState, setProccessCourseState] = useState(false);
 
   useEffect(() => {
@@ -82,107 +72,39 @@ function AddEditForm({
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [image]);
 
-  const processCourse = () => {
+  const processCourse = async () => {
     const { title, url, description, duration } = courseData;
     if (!title || !url || !description || !duration) {
       notification['warning']({
         message: 'Los campos de título, url, descripción y duración son obligatorios.',
       });
-    } else {
+      return;
+    }
+    setProccessCourseState(true);
+    try {
       if (!course) {
-        addCourse();
-      } else {
-        updateCourse();
-      }
-    }
-  };
-
-  const updateCourse = async () => {
-    let userUpdate = courseData;
-    if (typeof userUpdate.image === 'object') {
-      await uploadImageApi(userUpdate.image, course._id).then((response) => {
-        if (response.status === 200) {
-          userUpdate.image = response.image;
-          updateCourseApi(course._id, userUpdate).then((result) => {
-            if (result.status === 200) {
-              notification['success']({
-                message: result.message,
-                duration: notifDelay,
-              });
-              setIsVisibleModal(false);
-              setReloadCourses(true);
-            } else {
-              notification['error']({
-                message: result.message,
-                duration: notifDelayErr,
-              });
-              setReloadCourses(true);
-            }
-          });
-        } else {
-          notification['error']({
-            message: response.message,
-            duration: notifDelay,
-          });
+        const success = await addCourse({ ...courseData });
+        if (success) {
           setIsVisibleModal(false);
-          setReloadCourses(true);
-        }
-      });
-    } else {
-      await updateCourseApi(course._id, courseData)
-        .then((response) => {
-          if (response.status === 200) {
-            notification['success']({
-              message: response.message,
-            });
-            setIsVisibleModal(false);
-            setReloadCourses(true);
-            setCourseData([]);
-          } else {
-            const typeNotification = response.status === 500 ? 'error' : 'warning';
-            notification[typeNotification]({
-              message: response.message,
-            });
-          }
-        })
-        .catch(() => {
-          notification['error']({
-            message: 'Error del servidor.',
-          });
-        });
-    }
-  };
-
-  const addCourse = async () => {
-    await addCourseApi(courseData)
-      .then((response) => {
-        if (response.status !== 200) {
-          notification['warning']({
-            message: response.message,
-          });
-        } else {
-          notification['success']({
-            message: response.message,
-          });
-          setIsVisibleModal(false);
-          setReloadCourses(true);
           setCourseData([]);
         }
-      })
-      .catch(() => {
-        notification['error']({
-          message: 'Error del servidor.',
-        });
-      });
+      } else {
+        let data = { ...courseData };
+        if (typeof data.image === 'object') {
+          const imageName = await uploadImage(data.image, course._id);
+          if (!imageName) return;
+          data.image = imageName;
+        }
+        const success = await updateCourse(course._id, { ...data });
+        if (success) {
+          setIsVisibleModal(false);
+          setCourseData([]);
+        }
+      }
+    } finally {
+      setProccessCourseState(false);
+    }
   };
-
-  const loading = () => {
-    setProccessCourseState(true);
-  };
-
-  setTimeout(() => {
-    setProccessCourseState(false);
-  }, 6000);
 
   return (
     <>
@@ -280,17 +202,11 @@ function AddEditForm({
             />
           </Col>
         </Row>
-        <Button
-          type="primary"
-          htmlType="submit"
-          loading={proccessCourseState}
-          onClick={loading}
-          className="btn-submit"
-        >
+        <Button type="primary" htmlType="submit" loading={proccessCourseState} className="btn-submit">
           {course ? 'Actualizar curso' : 'Crear curso'}
         </Button>
       </Form>
-      {course && <AdminTags course={course} courseData={courseData} setReloadCourses={setReloadCourses} />}
+      {course && <AdminTags course={course} courseData={courseData} />}
     </>
   );
 }
