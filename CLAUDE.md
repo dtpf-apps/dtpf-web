@@ -30,10 +30,24 @@ React Router v7 (`Routes`, `Route`, `Outlet`, `Navigate`, `useNavigate` — all 
 
 ### State Management
 
-Context-based (no Redux). Three providers:
-- **DauthProvider** (from `dauth-context-react`) -- Wraps the app in `src/App.tsx`. Configured with `domainName` and `dauthUrl` props. Handles auth code exchange, token storage (`dauth_state` / `dauth_refresh_token` in localStorage), and user session.
-- **ConnectionProvider** (`src/providers/`) -- Monitors `navigator.onLine` and backend connectivity with polling (2s when offline, 30s when online)
-- **MainMenuProvider** (`src/providers/`) -- Fetches and caches the navigation menu, re-fetches on connection status change
+Context-based (no Redux). Uses `useReducer` + Context pattern with 7 files per domain: Context, Provider, initialState, reducer types/reducer/actions, and a context hook.
+
+**Provider nesting** (in `src/App.tsx`):
+```
+DauthProvider > ConnectionProvider > MenuProvider > AboutMeProvider > ContactProvider > EducationProvider > Router
+```
+
+**Domain contexts** (`src/contexts/`):
+- **ConnectionProvider** -- Monitors `navigator.onLine` and backend connectivity with polling (2s offline, 30s online)
+- **MenuProvider** -- CRUD admin menus + public menu. Replaces old MainMenuProvider
+- **AboutMeProvider** -- Cube info + main info (public + admin)
+- **ContactProvider** -- Contact messages CRUD + polling for message status
+- **EducationProvider** -- Courses CRUD + pagination + image upload + tags
+
+**External provider**:
+- **DauthProvider** (from `dauth-context-react`) -- Configured with `domainName` and `dauthUrl` props. Handles auth code exchange, token storage, and user session
+
+**Context hooks** (`src/hooks/contexts/`): `useContextAboutMe`, `useContextContact`, `useContextEducation`, `useContextMenu`. Connection uses `src/hooks/useConnection.ts`.
 
 ### Auth Flow
 
@@ -44,17 +58,19 @@ Context-based (no Redux). Three providers:
 
 ### API Layer
 
-Fetch-based HTTP calls. Base path configured in `src/api/utils/config.ts` (localhost:3998 in dev, same-origin in prod). Localhost detection in `src/utils/isLocalhost.ts` also matches `192.168.1.x` addresses.
+Fetch-based HTTP calls using `fetchAPI<T>()` wrapper from `src/api/utils/fetchHelper.ts`. Uses `credentials: 'include'` for httpOnly cookies (dauth BFF pattern — no manual token handling). Utilities: `apiUrl()` builds full endpoint URL, `buildUrl()` adds query params.
 
-**Token retrieval**: `src/api/endpoints/auth/auth.api.ts` exports `getAccessTokenApi()` which reads the access token from dauth's `dauth_state` localStorage key. All protected API calls use this function.
+Base path configured in `src/api/utils/config.ts` (localhost:3998 in dev, same-origin in prod). Localhost detection in `src/utils/isLocalhost.ts` also matches `192.168.1.x` addresses.
 
 **Typed endpoints** (TypeScript, in `src/api/endpoints/`):
+- `aboutMe/` -- aboutMe.api.ts + aboutMe.response.interface.ts
+- `app/` -- app.api.ts + app.response.interface.ts (IndexedDB version)
 - `auth/` -- auth.api.ts (getAccessTokenApi only)
-- `aboutMe/` -- aboutMe.api.ts
-
-**Legacy endpoints** (JavaScript, in `src/api/`): Plain JS files (contact.js, education.js, menu.js, user.js, utils.js). Being migrated to the new TS endpoint structure.
-
-Shared request utility: `src/api/utils/makeRequest.js`
+- `connection/` -- connection.api.ts
+- `contact/` -- contact.api.ts + contact.response.interface.ts
+- `education/` -- education.api.ts + education.response.interface.ts
+- `menu/` -- menu.api.ts + menu.response.interface.ts
+- `user/` -- user.ts (exists but unused by components)
 
 ### Path Aliases
 
@@ -79,14 +95,14 @@ import { useAuth } from 'hooks/useAuth';
 ### Custom Hooks (`src/hooks/`)
 
 - `useAuth` -- Wrapper around `useDauth()` from dauth-context-react. Returns `{ user, isLoading, isAuthenticated }`
-- `useConnection` -- Access ConnectionContext
-- `useGetCourses` -- Fetch and cache courses
-- `useGetMainMenu` -- Access MainMenuContext
-- `useMessagesStatus` -- Check message reload status
+- `useConnection` -- Access ConnectionContext (from `src/contexts/connection/`)
+- `useGetCourses` -- Fetch and cache courses for public pages (uses typed API)
 - `useNearScreen` -- Intersection Observer for lazy loading
 - `useScrollToTop` -- Scroll restoration
 - `useRandomNumber` -- Random number generator
 - `useEventListener` -- Generic event listener hook
+
+**Context hooks** (`src/hooks/contexts/`): `useContextAboutMe`, `useContextContact`, `useContextEducation`, `useContextMenu` -- typed wrappers with throw guard for missing provider.
 
 ### Offline Support
 
@@ -111,11 +127,12 @@ Reusable shared components: ButtonGoBack, CommingSoon, CookiesConsent, Modal, Pa
 
 ## TypeScript Migration
 
-The codebase is actively migrating from JS to TS. When modifying files:
+The codebase has been largely migrated to TypeScript. All API modules, contexts, providers, and hooks are TypeScript. Some view components still have `any` types. When modifying files:
 - New code should be TypeScript
-- Response types extend `TResponseAPI` from `src/interfaces/general.interface.ts`
-- Follow the typed endpoint pattern in `src/api/endpoints/` for new API code
-- Providers (`src/providers/`) are still JavaScript (.jsx) -- they are candidates for migration
+- Response types defined in `*.response.interface.ts` files alongside API modules
+- State interfaces in `src/interfaces/` (e.g., `education.interface.ts`, `menu.interface.ts`)
+- Follow the context pattern in `src/contexts/` (7 files per domain) for new state domains
+- Follow the API pattern in `src/api/endpoints/` using `fetchAPI<T>()` from `fetchHelper.ts`
 
 ## Code Style
 
