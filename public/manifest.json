@@ -1,11 +1,11 @@
 {
-  "name": "Portfolio David T. Pizarro Frick",
-  "short_name": "DTPF",
+  "name": "dtpf — Software Developer",
+  "short_name": "dtpf",
   "icons": [
     {
-      "src": "favicon.ico",
-      "type": "image/x-icon",
-      "sizes": "64x64"
+      "src": "favicon.svg",
+      "type": "image/svg+xml",
+      "sizes": "any"
     },
     {
       "src": "logo192.png",
@@ -22,14 +22,18 @@
     {
       "src": "logo512.png",
       "type": "image/png",
-      "sizes": "512x512"
+      "sizes": "512x512",
+      "purpose": "any"
+    },
+    {
+      "src": "logo512_maskable.png",
+      "type": "image/png",
+      "sizes": "512x512",
+      "purpose": "maskable"
     }
   ],
   "start_url": "/",
   "display": "standalone",
-  "theme_color": "#5d718d",
-  "background_color": "#E4E4E4",
-  "permissions": [
-    "notifications"
-  ]
+  "theme_color": "#0B0F19",
+  "background_color": "#0B0F19"
 }

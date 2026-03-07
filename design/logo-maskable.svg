@@ -1,0 +1,14 @@
+<svg width="512" height="512" viewBox="0 0 512 512" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="g" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#2DD4BF"/>
+      <stop offset="100%" stop-color="#FBBF24"/>
+    </linearGradient>
+  </defs>
+  <!-- No border-radius, full bleed background for maskable -->
+  <rect width="512" height="512" fill="#0B0F19"/>
+  <!-- Content scaled to 80% safe zone (51px padding each side) -->
+  <path d="M148 187C148 187 112 187 112 256C112 325 148 325 148 325" stroke="#2DD4BF" stroke-width="18" stroke-linecap="round" fill="none" opacity="0.35"/>
+  <path d="M364 187C364 187 400 187 400 256C400 325 364 325 364 325" stroke="#2DD4BF" stroke-width="18" stroke-linecap="round" fill="none" opacity="0.35"/>
+  <text x="256" y="280" text-anchor="middle" font-family="'JetBrains Mono',monospace" font-weight="700" font-size="112" fill="url(#g)">dtpf</text>
+</svg>
