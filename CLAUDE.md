@@ -4,146 +4,113 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## Project Overview
 
-Personal portfolio website (dtpf.es) with a public-facing site and an admin panel. Built with React 19, TypeScript 5.9, Ant Design 6, and SCSS. Uses Vite 7 with `@vitejs/plugin-react-swc`. Package manager: **pnpm**. Requires **Node.js 22.12+**.
+Personal portfolio website (dtpf.es). Built with React 19, TypeScript 5.9, Tailwind CSS v4, Framer Motion, and Vite 7. Package manager: **pnpm**. Requires **Node.js 22+**.
 
-**Authentication** is handled externally by **dauth** via `dauth-context-react` (`DauthProvider` + `useDauth()` hook). There is no local auth logic — all user identity comes from dauth (passwordless: magic link + passkey).
+Dark mode by default, light via `.light` class on `<html>`. i18n with Spanish default, English fallback (i18next + react-i18next).
 
 ## Commands
 
 ```bash
-pnpm dev              # Start Vite dev server on localhost:3000
+pnpm dev              # Vite dev server on localhost:3000
 pnpm build            # Production build (tsc + vite build)
 pnpm preview          # Preview production build locally
-pnpm format           # Prettier formatting across src/
+pnpm format           # Prettier formatting
 ```
 
-Note: Test files exist in `src/__tests__/api/` (Jest) but no test script is currently configured in `package.json`.
+No test framework configured.
 
 ## Architecture
 
 ### Routing
 
-React Router v7 (`Routes`, `Route`, `Outlet`, `Navigate`, `useNavigate` — all from `react-router`). Routes defined directly in `src/App.tsx` with two nested layout branches:
-- **Public** (`/*`) via `LayoutBasic` (uses `Outlet`) -- Home, Education (with `/education/:url` detail), Curriculum, Contact, Privacy Policy
-- **Admin** (`/ad1988/*`) via `LayoutAdmin` (uses `Outlet`) -- Home, Menu, Contact Messages, Education, About Me
-- **Admin Sign In** (`/ad1988/login`) -- rendered outside `LayoutAdmin` (standalone route). Redirects to dauth login via `loginWithRedirect()`.
+React Router v7 with `createBrowserRouter` and lazy-loaded routes via `React.lazy()` + `Suspense`. Routes defined in `src/router/router.tsx`, paths centralized in `src/router/paths.ts`.
 
-### State Management
+**Pages:**
+- `/` — Home (hero, bento grid projects, manifesto, stack, CTA)
+- `/projects` — Projects list with stacked cards
+- `/projects/:slug` — Project detail with case study (Problem → Solution → Result)
+- `/about` — Profile card, bio, experience, tools grid
+- `/contact` — Contact form + direct links
+- `/privacy-policy` — Static GDPR/LOPD page
+- `*` — 404 Not Found
 
-Context-based (no Redux). Uses `useReducer` + Context pattern with 7 files per domain: Context, Provider, initialState, reducer types/reducer/actions, and a context hook.
+### Layout
 
-**Provider nesting** (in `src/App.tsx`):
-```
-DauthProvider > ConnectionProvider > MenuProvider > AboutMeProvider > ContactProvider > EducationProvider > Router
-```
-
-**Domain contexts** (`src/contexts/`):
-- **ConnectionProvider** -- Monitors `navigator.onLine` and backend connectivity with polling (2s offline, 30s online)
-- **MenuProvider** -- CRUD admin menus + public menu. Replaces old MainMenuProvider
-- **AboutMeProvider** -- Cube info + main info (public + admin)
-- **ContactProvider** -- Contact messages CRUD + polling for message status
-- **EducationProvider** -- Courses CRUD + pagination + image upload + tags
-
-**External provider**:
-- **DauthProvider** (from `dauth-context-react`) -- Configured with `domainName` and `dauthUrl` props. Handles auth code exchange, token storage, and user session
-
-**Context hooks** (`src/hooks/contexts/`): `useContextAboutMe`, `useContextContact`, `useContextEducation`, `useContextMenu`. Connection uses `src/hooks/useConnection.ts`.
-
-### Auth Flow
-
-1. User visits `/ad1988/login` → `SignIn` component calls `loginWithRedirect()` → redirects to dauth
-2. User authenticates in dauth (magic link or passkey) → dauth redirects back with `?code=` authorization code
-3. `DauthProvider` detects the code, exchanges it for tokens via `POST /exchange-code`
-4. Tokens stored in localStorage. `useDauth()` provides `user`, `isAuthenticated`, `isLoading`, `logout`, `loginWithRedirect`
-
-### API Layer
-
-Fetch-based HTTP calls using `fetchAPI<T>()` wrapper from `src/api/utils/fetchHelper.ts`. Uses `credentials: 'include'` for httpOnly cookies (dauth BFF pattern — no manual token handling). Utilities: `apiUrl()` builds full endpoint URL, `buildUrl()` adds query params.
-
-Base path configured in `src/api/utils/config.ts` (localhost:3998 in dev, same-origin in prod). Localhost detection in `src/utils/isLocalhost.ts` also matches `192.168.1.x` addresses.
-
-**Typed endpoints** (TypeScript, in `src/api/endpoints/`):
-- `aboutMe/` -- aboutMe.api.ts + aboutMe.response.interface.ts
-- `app/` -- app.api.ts + app.response.interface.ts (IndexedDB version)
-- `auth/` -- auth.api.ts (getAccessTokenApi only)
-- `connection/` -- connection.api.ts
-- `contact/` -- contact.api.ts + contact.response.interface.ts
-- `education/` -- education.api.ts + education.response.interface.ts
-- `menu/` -- menu.api.ts + menu.response.interface.ts
-- `user/` -- user.ts (exists but unused by components)
-
-### Path Aliases
-
-`tsconfig.json` sets `baseUrl: "src"` and Vite resolves them via `vite-tsconfig-paths`, so imports use absolute paths from src:
-```typescript
-import { useAuth } from 'hooks/useAuth';
-```
+Single `PortfolioLayout` wrapping all routes: sticky Header + `AnimatePresence` page transitions + Footer.
 
 ### Styling
 
-- Component-scoped SCSS files co-located with each component (compiled via Dart Sass with `api: 'modern'`)
-- Global SCSS in `src/scss/` (_variables, _mixins, _tags, _animations, index)
-- CSS custom properties for dark/light theme (`data-theme` attribute on root), toggle in `views/components/UI/Theme/`
-- Ant Design v6 imported in `src/main.tsx`
+- **Tailwind CSS v4** with `@theme` design tokens in `src/styles/portfolio.css`
+- **Ocean Teal palette**: accent `#2DD4BF`, warm `#FBBF24`, dark bg `#0B0F19`
+- **Fonts**: Space Grotesk (headings), Inter (body), JetBrains Mono (code/labels) — loaded via Google Fonts in `index.html`
+- Light mode overrides via `.light` class on `<html>` (ThemeContext manages this)
+- Grain texture overlay via CSS SVG filter on `body::after`
+- `prefers-reduced-motion` support
 
-### Component Conventions
+### Theme
 
-- Structure: `ComponentName/ComponentName.tsx` + `.scss` + `index.ts` (barrel export)
-- Components wrapped with `memo()` for performance
-- Forms use Ant Design `Form` component with validation
+`src/contexts/theme/ThemeContext.tsx` — ThemeProvider + useTheme hook. Dark-first, persisted in localStorage (`dtpf-theme`). Detects system preference on first visit. Updates `<meta name="theme-color">`.
 
-### Custom Hooks (`src/hooks/`)
+### i18n
 
-- `useAuth` -- Wrapper around `useDauth()` from dauth-context-react. Returns `{ user, isLoading, isAuthenticated }`
-- `useConnection` -- Access ConnectionContext (from `src/contexts/connection/`)
-- `useGetCourses` -- Fetch and cache courses for public pages (uses typed API)
-- `useNearScreen` -- Intersection Observer for lazy loading
-- `useScrollToTop` -- Scroll restoration
-- `useRandomNumber` -- Random number generator
-- `useEventListener` -- Generic event listener hook
+`src/utils/i18n.ts` — i18next with browser language detection. Persisted in localStorage (`dtpf-lang`). Translation files in `src/assets/locale/{es,en}.ts` (~120 keys each).
 
-**Context hooks** (`src/hooks/contexts/`): `useContextAboutMe`, `useContextContact`, `useContextEducation`, `useContextMenu` -- typed wrappers with throw guard for missing provider.
+### Projects Data
 
-### Offline Support
+`src/config/projects.ts` — Typed `Project` interface with 5 projects (dauth, easymediacloud, dalist, audity, dtpf). Each has i18n keys for name, tagline, description, case study sections, stack array, metrics, and live URL.
 
-PWA via `vite-plugin-pwa` (v1.x) with injectManifest strategy. Service worker source in `src/service-worker.ts`, registration in `src/serviceWorkerRegistration.ts` with auto-update notifications. IndexedDB (`src/dbIndexed/`) caches courses and menu data for offline use (Workbox 7).
+### API
 
-### WebSockets
+`src/api/utils/config.ts` — `apiUrl()` builds full endpoint URL. Base path auto-detects localhost (port 3998) vs production (same-origin). Single endpoint used: `POST /api/v1/contact-me`.
 
-Socket.io client v4 (`socket.io-client`) in `src/webSockets/hooks/` -- `useMessagesUnreadLength` hook provides real-time unread contact message count in the admin layout.
+### Contact Form Anti-Spam
+
+The contact form includes:
+- Honeypot field (`website`) hidden off-screen — bots fill it, humans don't
+- Time trap (`_t` timestamp) — rejects submissions faster than 3 seconds
+- Backend rate limits: 3/hour per IP, 1/24h per email, max 5 URLs in message
 
 ### Animations
 
-- **Motion** (framer-motion) for page animations: character-by-character text (`MainTitle`), fade-in on scroll (`ProjectLayout`, `Courses`), auto-play carousel (`InfoBanner`)
-- **@dnd-kit** (`@dnd-kit/core` + `@dnd-kit/sortable`) for drag-and-drop menu reordering (`MenuWebList`)
+Framer Motion throughout:
+- Page transitions (`AnimatePresence mode="wait"`)
+- Hero staggered entrance (name, tagline, proof bar, CTAs)
+- `whileInView` scroll reveals with stagger for projects and stack sections
+- Mobile menu overlay with staggered nav links
 
-### Tests
+### Offline Support
 
-Jest + React Testing Library test files exist in `src/__tests__/api/` but **no test runner is configured** in `package.json` after the Vite migration. Tests are not runnable without adding a test framework (e.g., Vitest).
+PWA via `vite-plugin-pwa` with `injectManifest` strategy. Service worker in `src/service-worker.ts`. Workbox 7 for precaching.
 
-### UI Components (`src/views/components/UI/`)
+### Path Aliases
 
-Reusable shared components: ButtonGoBack, CommingSoon, CookiesConsent, Modal, Pagination, Spin, Theme.
+`tsconfig.json` sets `baseUrl: "src"`, resolved by `vite-tsconfig-paths`. Imports use absolute paths from src.
 
-## TypeScript Migration
+## Component Structure
 
-The codebase has been largely migrated to TypeScript. All API modules, contexts, providers, and hooks are TypeScript. Some view components still have `any` types. When modifying files:
-- New code should be TypeScript
-- Response types defined in `*.response.interface.ts` files alongside API modules
-- State interfaces in `src/interfaces/` (e.g., `education.interface.ts`, `menu.interface.ts`)
-- Follow the context pattern in `src/contexts/` (7 files per domain) for new state domains
-- Follow the API pattern in `src/api/endpoints/` using `fetchAPI<T>()` from `fetchHelper.ts`
+```
+src/
+├── api/utils/config.ts          # API URL builder
+├── assets/locale/{es,en}.ts     # i18n translations
+├── config/projects.ts           # Project data
+├── contexts/theme/              # ThemeContext + useTheme
+├── router/{router,paths}.tsx    # Routes
+├── styles/portfolio.css         # Tailwind @theme tokens
+├── utils/i18n.ts                # i18next config
+├── views/
+│   ├── layouts/PortfolioLayout.tsx
+│   ├── components/navigation/{Header,Footer}.tsx
+│   └── pages/{Home,Projects,ProjectDetail,About,Contact,NotFound,PrivacyPolicy}.tsx
+├── main.tsx                     # Entry point
+└── App.tsx                      # ThemeProvider > RouterProvider + Toaster
+```
 
 ## Code Style
 
-- Prettier config in package.json: single quotes, trailing commas (es5), 110 char width, 2-space indent, semicolons
+- Prettier: 110 char width, single quotes, trailing commas (es5), 2-space indent, semicolons
 - No ESLint configured
 
 ## Environment Variables
 
-Variables in `.env`:
-- `VITE_PUBLIC_URL` -- Public URL for the site (e.g., `https://dtpf.es`)
-- `VITE_DAUTH_DOMAIN_NAME` -- Dauth domain name (e.g., `dtpf`)
-- `VITE_DAUTH_URL` -- Dauth frontend URL (e.g., `http://localhost:4012`)
-
-API endpoint configuration is handled in code (`src/api/utils/config.ts` and `src/config/url.ts`) based on localhost detection, not environment variables.
+No env vars needed for the frontend in development. In production, set as GitHub Secrets:
+- `VITE_PUBLIC_URL` — Public URL (e.g., `https://dtpf.es`)

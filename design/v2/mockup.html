@@ -1,0 +1,1412 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>dtpf.es — Portfolio Redesign v2</title>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  /* ══════════════════════════════════════════ */
+  /* Paleta: "Ocean Teal" — Diferente de dauth */
+  /* Tipografia: Space Grotesk (headings) + Inter (body) */
+  /* Concepto: "Builder" — No habla de tech, muestra productos reales */
+  /* ══════════════════════════════════════════ */
+
+  :root {
+    --bg-primary: #0B0F19;
+    --bg-secondary: #111827;
+    --bg-tertiary: #1F2937;
+    --bg-surface: #151C2C;
+    --text-primary: #E8ECF4;
+    --text-secondary: #8B95A9;
+    --text-muted: #4B5567;
+    --accent: #2DD4BF;
+    --accent-hover: #5EEAD4;
+    --accent-deep: #14B8A6;
+    --accent-glow: rgba(45, 212, 191, 0.12);
+    --accent-subtle: rgba(45, 212, 191, 0.06);
+    --warm: #FBBF24;
+    --warm-glow: rgba(251, 191, 36, 0.10);
+    --success: #34D399;
+    --error: #F87171;
+    --border: #1E293B;
+    --border-hover: #334155;
+    --grain-opacity: 0.03;
+  }
+
+  html.light {
+    --bg-primary: #F8FAFC;
+    --bg-secondary: #FFFFFF;
+    --bg-tertiary: #F1F5F9;
+    --bg-surface: #FFFFFF;
+    --text-primary: #0F172A;
+    --text-secondary: #64748B;
+    --text-muted: #94A3B8;
+    --accent: #0D9488;
+    --accent-hover: #0F766E;
+    --accent-deep: #115E59;
+    --accent-glow: rgba(13, 148, 136, 0.08);
+    --accent-subtle: rgba(13, 148, 136, 0.04);
+    --warm: #D97706;
+    --border: #E2E8F0;
+    --border-hover: #CBD5E1;
+    --grain-opacity: 0.015;
+  }
+  html.light .mockup-nav { background: #fff; }
+  html.light .site-header { background: rgba(248,250,252,0.85); }
+  html.light .hero-name {
+    background: linear-gradient(135deg, #0F172A 0%, #334155 100%);
+    -webkit-background-clip: text;
+  }
+  html.light .project-card,
+  html.light .bento-card,
+  html.light .tool-group,
+  html.light .contact-form-card,
+  html.light .exp-card,
+  html.light .profile-section {
+    box-shadow: 0 1px 3px rgba(0,0,0,0.04);
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    font-family: 'Inter', system-ui, sans-serif;
+    background: var(--bg-primary);
+    color: var(--text-primary);
+    line-height: 1.6;
+    overflow-x: hidden;
+  }
+
+  /* Grain texture overlay — trending 2026 */
+  body::after {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+    opacity: var(--grain-opacity);
+    pointer-events: none;
+    z-index: 9998;
+  }
+
+  /* ── Mockup Nav ── */
+  .mockup-nav {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    z-index: 99999;
+    background: #000;
+    border-bottom: 1px solid var(--border);
+    padding: 10px 24px;
+    display: flex;
+    gap: 8px;
+    align-items: center;
+    flex-wrap: wrap;
+  }
+  .mockup-nav span { color: var(--text-muted); font-size: 13px; margin-right: 8px; }
+  .mockup-nav button {
+    background: var(--bg-tertiary); color: var(--text-secondary);
+    border: 1px solid var(--border); padding: 6px 14px; border-radius: 6px;
+    font-size: 13px; font-family: inherit; cursor: pointer; transition: all 0.2s;
+  }
+  .mockup-nav button:hover { background: var(--bg-surface); color: var(--text-primary); }
+  .mockup-nav button.active { background: var(--accent); color: #0B0F19; border-color: var(--accent); font-weight: 600; }
+  .mockup-nav .theme-tog { margin-left: auto; font-size: 16px; padding: 6px 12px; }
+
+  .page { display: none; padding-top: 52px; }
+  .page.active { display: block; }
+
+  /* ── Site Header ── */
+  .site-header {
+    display: flex; justify-content: space-between; align-items: center;
+    padding: 16px 48px; max-width: 1200px; margin: 0 auto;
+    position: sticky; top: 52px; z-index: 100;
+    background: rgba(11, 15, 25, 0.85);
+    backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px);
+    border-bottom: 1px solid var(--border);
+  }
+  .site-logo {
+    font-family: 'Space Grotesk', sans-serif;
+    font-size: 18px; font-weight: 700; color: var(--text-primary);
+    letter-spacing: -0.5px; text-decoration: none;
+  }
+  .site-logo .dot { color: var(--accent); }
+  .site-nav { display: flex; gap: 28px; align-items: center; }
+  .site-nav a {
+    color: var(--text-secondary); text-decoration: none; font-size: 14px;
+    font-weight: 500; transition: color 0.2s;
+  }
+  .site-nav a:hover { color: var(--text-primary); }
+  .site-nav a.is-active { color: var(--text-primary); }
+  .header-right { display: flex; gap: 10px; align-items: center; }
+  .icon-btn {
+    background: transparent; border: 1px solid var(--border); color: var(--text-muted);
+    width: 36px; height: 36px; border-radius: 8px; font-size: 15px;
+    cursor: pointer; transition: all 0.2s; display: flex; align-items: center; justify-content: center;
+  }
+  .icon-btn:hover { border-color: var(--border-hover); color: var(--text-secondary); }
+  .lang-switch {
+    background: transparent; border: 1px solid var(--border); color: var(--text-muted);
+    padding: 6px 10px; border-radius: 8px; font-size: 12px; font-weight: 600;
+    font-family: 'JetBrains Mono', monospace; cursor: pointer; transition: all 0.2s;
+    letter-spacing: 0.5px;
+  }
+  .lang-switch:hover { border-color: var(--border-hover); color: var(--text-secondary); }
+
+  /* ── Shared ── */
+  .btn {
+    display: inline-flex; align-items: center; gap: 8px;
+    padding: 12px 24px; border-radius: 10px; font-size: 14px; font-weight: 600;
+    font-family: 'Inter', sans-serif; cursor: pointer; transition: all 0.25s;
+    text-decoration: none; border: none;
+  }
+  .btn-accent { background: var(--accent); color: #0B0F19; }
+  .btn-accent:hover {
+    background: var(--accent-hover);
+    box-shadow: 0 0 40px var(--accent-glow);
+    transform: translateY(-1px);
+  }
+  .btn-outline { background: transparent; color: var(--text-primary); border: 1px solid var(--border); }
+  .btn-outline:hover { border-color: var(--border-hover); background: var(--bg-tertiary); }
+  .btn-ghost { background: transparent; color: var(--accent); border: none; padding: 8px 0; font-weight: 500; }
+  .btn-ghost:hover { color: var(--accent-hover); }
+  .btn-sm { padding: 8px 16px; font-size: 13px; border-radius: 8px; }
+  .btn-lg { padding: 14px 28px; font-size: 15px; }
+
+  .tag {
+    display: inline-block; padding: 3px 10px; border-radius: 6px;
+    font-size: 12px; font-weight: 500;
+    background: var(--accent-subtle); color: var(--accent);
+    border: 1px solid rgba(45, 212, 191, 0.12);
+  }
+  .tag-neutral {
+    background: transparent; color: var(--text-muted);
+    border: 1px solid var(--border);
+  }
+
+  .section {
+    max-width: 1100px; margin: 0 auto; padding: 80px 24px;
+  }
+  .section-label {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 12px; font-weight: 500; color: var(--accent);
+    text-transform: uppercase; letter-spacing: 2px; margin-bottom: 12px;
+  }
+  .section-heading {
+    font-family: 'Space Grotesk', sans-serif;
+    font-size: 32px; font-weight: 700; letter-spacing: -0.8px; margin-bottom: 8px;
+  }
+  .section-desc {
+    font-size: 16px; color: var(--text-secondary); margin-bottom: 48px; max-width: 520px;
+  }
+
+  /* Footer */
+  .site-footer {
+    text-align: center; padding: 48px 24px;
+    border-top: 1px solid var(--border);
+    max-width: 1100px; margin: 0 auto;
+  }
+  .site-footer .f-name {
+    font-family: 'Space Grotesk', sans-serif;
+    font-size: 14px; font-weight: 600; margin-bottom: 6px;
+  }
+  .site-footer .f-links { display: flex; gap: 20px; justify-content: center; margin-bottom: 16px; }
+  .site-footer .f-links a { color: var(--text-muted); text-decoration: none; font-size: 13px; transition: color 0.2s; }
+  .site-footer .f-links a:hover { color: var(--accent); }
+  .site-footer .f-copy { font-size: 12px; color: var(--text-muted); }
+
+  /* ══════════════════════════════════════════ */
+  /* ── HOME ── */
+  /* ══════════════════════════════════════════ */
+
+  /* Hero — full viewport, dramatic */
+  .hero {
+    min-height: 92vh; display: flex; flex-direction: column;
+    justify-content: center; align-items: center; text-align: center;
+    padding: 80px 24px; position: relative; overflow: hidden;
+  }
+  .hero::before {
+    content: ''; position: absolute;
+    top: -20%; left: 50%; transform: translateX(-50%);
+    width: 800px; height: 800px;
+    background: radial-gradient(circle, rgba(45, 212, 191, 0.07) 0%, rgba(251, 191, 36, 0.03) 40%, transparent 70%);
+    pointer-events: none;
+  }
+  /* Subtle grid pattern in hero background */
+  .hero::after {
+    content: ''; position: absolute; inset: 0;
+    background-image:
+      linear-gradient(var(--border) 1px, transparent 1px),
+      linear-gradient(90deg, var(--border) 1px, transparent 1px);
+    background-size: 60px 60px;
+    opacity: 0.3;
+    mask-image: radial-gradient(ellipse 60% 50% at 50% 50%, black 20%, transparent 100%);
+    -webkit-mask-image: radial-gradient(ellipse 60% 50% at 50% 50%, black 20%, transparent 100%);
+    pointer-events: none;
+  }
+
+  .hero-name {
+    font-family: 'Space Grotesk', sans-serif;
+    font-size: 72px; font-weight: 700; line-height: 1.0;
+    letter-spacing: -3.5px; margin-bottom: 24px;
+    background: linear-gradient(135deg, var(--text-primary) 0%, var(--text-secondary) 100%);
+    -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+    position: relative; z-index: 1;
+  }
+  .hero-tagline {
+    font-size: 20px; font-weight: 400; color: var(--text-secondary);
+    max-width: 480px; margin: 0 auto 16px; line-height: 1.7;
+    position: relative; z-index: 1;
+  }
+  .hero-tagline strong {
+    color: var(--accent); font-weight: 500;
+  }
+  .hero-proof {
+    display: flex; gap: 24px; align-items: center; justify-content: center;
+    margin-bottom: 40px; position: relative; z-index: 1;
+  }
+  .hero-proof .proof-item {
+    display: flex; align-items: center; gap: 6px;
+    font-size: 13px; color: var(--text-muted);
+    font-family: 'JetBrains Mono', monospace;
+  }
+  .hero-proof .proof-dot {
+    width: 6px; height: 6px; border-radius: 50%; background: var(--success);
+  }
+  .hero-proof .proof-num {
+    font-weight: 600; color: var(--text-primary); font-size: 14px;
+  }
+  .hero-ctas {
+    display: flex; gap: 14px; justify-content: center; position: relative; z-index: 1;
+  }
+  .scroll-hint {
+    margin-top: 80px; color: var(--text-muted); font-size: 11px;
+    font-family: 'JetBrains Mono', monospace; letter-spacing: 1px;
+    text-transform: uppercase; position: relative; z-index: 1;
+    display: flex; flex-direction: column; align-items: center; gap: 8px;
+  }
+  .scroll-arrow {
+    width: 1px; height: 32px; background: linear-gradient(to bottom, var(--text-muted), transparent);
+    animation: scrollPulse 2s infinite;
+  }
+  @keyframes scrollPulse {
+    0%, 100% { opacity: 0.3; transform: scaleY(1); }
+    50% { opacity: 1; transform: scaleY(1.2); }
+  }
+
+  /* ── Bento Grid — Projects ── */
+  .bento-grid {
+    display: grid;
+    grid-template-columns: repeat(12, 1fr);
+    gap: 16px;
+  }
+  .bento-card {
+    background: var(--bg-surface); border: 1px solid var(--border);
+    border-radius: 16px; padding: 28px; position: relative;
+    overflow: hidden; transition: all 0.35s;
+  }
+  .bento-card:hover {
+    border-color: var(--border-hover);
+    transform: translateY(-2px);
+    box-shadow: 0 16px 48px rgba(0,0,0,0.2);
+  }
+  .bento-card.featured { grid-column: span 7; }
+  .bento-card.secondary { grid-column: span 5; }
+  .bento-card.third { grid-column: span 5; }
+  .bento-card.fourth { grid-column: span 7; }
+  .bento-card.full { grid-column: span 12; }
+
+  .bento-status {
+    display: inline-flex; align-items: center; gap: 6px;
+    font-size: 11px; font-weight: 500; color: var(--success);
+    font-family: 'JetBrains Mono', monospace;
+    text-transform: uppercase; letter-spacing: 0.8px;
+    margin-bottom: 16px;
+  }
+  .bento-status .status-dot {
+    width: 6px; height: 6px; border-radius: 50%; background: var(--success);
+    animation: pulse 2s infinite;
+  }
+  @keyframes pulse {
+    0%, 100% { opacity: 1; } 50% { opacity: 0.4; }
+  }
+  .bento-card h3 {
+    font-family: 'Space Grotesk', sans-serif;
+    font-size: 22px; font-weight: 700; letter-spacing: -0.5px;
+    margin-bottom: 8px;
+  }
+  .bento-card .bento-tagline {
+    font-size: 14px; color: var(--text-secondary); line-height: 1.6; margin-bottom: 16px;
+  }
+  .bento-card .bento-tags { display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 20px; }
+  .bento-card .bento-actions { display: flex; gap: 12px; align-items: center; }
+  /* Hover glow line at top */
+  .bento-card::after {
+    content: ''; position: absolute; top: 0; left: 0; right: 0; height: 2px;
+    background: linear-gradient(90deg, var(--accent), var(--warm));
+    opacity: 0; transition: opacity 0.35s;
+  }
+  .bento-card:hover::after { opacity: 1; }
+
+  /* ── "Why I Build" — personal manifesto ── */
+  .manifesto {
+    max-width: 640px; margin: 0 auto; padding: 40px 24px 96px;
+    text-align: center;
+  }
+  .manifesto-quote {
+    font-family: 'Space Grotesk', sans-serif;
+    font-size: 28px; font-weight: 600; letter-spacing: -0.5px;
+    line-height: 1.4; margin-bottom: 20px;
+    color: var(--text-primary);
+  }
+  .manifesto-quote .em-accent { color: var(--accent); }
+  .manifesto-body {
+    font-size: 15px; color: var(--text-secondary); line-height: 1.8;
+    max-width: 500px; margin: 0 auto;
+  }
+
+  /* ── Stack — minimal horizontal ── */
+  .stack-strip {
+    display: flex; flex-wrap: wrap; gap: 12px; justify-content: center;
+  }
+  .stack-chip {
+    display: flex; align-items: center; gap: 8px;
+    padding: 10px 16px; border: 1px solid var(--border); border-radius: 10px;
+    font-size: 13px; font-weight: 500; color: var(--text-secondary);
+    background: var(--bg-surface); transition: all 0.2s;
+  }
+  .stack-chip:hover {
+    border-color: var(--accent); color: var(--accent); background: var(--accent-subtle);
+  }
+  .stack-chip .chip-icon {
+    width: 20px; height: 20px; border-radius: 4px; background: var(--bg-tertiary);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 11px; font-weight: 700; font-family: 'JetBrains Mono', monospace;
+    color: var(--accent);
+  }
+
+  /* ── CTA ── */
+  .cta-section {
+    background: var(--bg-surface); border: 1px solid var(--border);
+    border-radius: 20px; padding: 56px; text-align: center;
+    position: relative; overflow: hidden;
+  }
+  .cta-section::before {
+    content: ''; position: absolute; top: -50%; right: -30%;
+    width: 400px; height: 400px;
+    background: radial-gradient(circle, var(--accent-glow), transparent 70%);
+    pointer-events: none;
+  }
+  .cta-section h2 {
+    font-family: 'Space Grotesk', sans-serif;
+    font-size: 28px; font-weight: 700; letter-spacing: -0.5px;
+    margin-bottom: 10px; position: relative;
+  }
+  .cta-section p {
+    font-size: 15px; color: var(--text-secondary); margin-bottom: 28px;
+    position: relative;
+  }
+
+  /* ══════════════════════════════════════════ */
+  /* ── PROJECTS PAGE ── */
+  /* ══════════════════════════════════════════ */
+
+  .projects-list {
+    max-width: 1100px; margin: 0 auto; padding: 40px 24px 96px;
+    display: flex; flex-direction: column; gap: 16px;
+  }
+  .project-card {
+    display: grid; grid-template-columns: 1fr auto;
+    gap: 24px; align-items: center;
+    background: var(--bg-surface); border: 1px solid var(--border);
+    border-radius: 16px; padding: 32px; transition: all 0.3s;
+    position: relative; overflow: hidden;
+  }
+  .project-card:hover {
+    border-color: var(--border-hover);
+    box-shadow: 0 12px 40px rgba(0,0,0,0.15);
+  }
+  .project-card::after {
+    content: ''; position: absolute; left: 0; top: 0; bottom: 0;
+    width: 3px; background: var(--accent); opacity: 0; transition: opacity 0.3s;
+  }
+  .project-card:hover::after { opacity: 1; }
+  .project-card .pc-meta {
+    display: flex; align-items: center; gap: 12px; margin-bottom: 8px;
+  }
+  .project-card .pc-url {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 12px; color: var(--text-muted);
+  }
+  .project-card .pc-badge {
+    font-size: 10px; font-weight: 600; text-transform: uppercase;
+    letter-spacing: 0.8px; padding: 3px 8px; border-radius: 4px;
+    background: rgba(52, 211, 153, 0.1); color: var(--success);
+    border: 1px solid rgba(52, 211, 153, 0.15);
+  }
+  .project-card h3 {
+    font-family: 'Space Grotesk', sans-serif;
+    font-size: 22px; font-weight: 700; letter-spacing: -0.3px;
+    margin-bottom: 6px;
+  }
+  .project-card .pc-desc {
+    font-size: 14px; color: var(--text-secondary); line-height: 1.7;
+    margin-bottom: 14px; max-width: 620px;
+  }
+  .project-card .pc-tags { display: flex; flex-wrap: wrap; gap: 6px; }
+  .project-card .pc-actions {
+    display: flex; flex-direction: column; gap: 8px; align-items: flex-end;
+  }
+
+  /* ══════════════════════════════════════════ */
+  /* ── PROJECT DETAIL ── */
+  /* ══════════════════════════════════════════ */
+
+  .detail-wrap {
+    max-width: 860px; margin: 0 auto; padding: 48px 24px 96px;
+  }
+  .detail-back {
+    display: inline-flex; align-items: center; gap: 6px;
+    color: var(--text-muted); text-decoration: none;
+    font-size: 13px; font-weight: 500; margin-bottom: 40px;
+    font-family: 'JetBrains Mono', monospace;
+    transition: color 0.2s; letter-spacing: 0.3px;
+  }
+  .detail-back:hover { color: var(--accent); }
+  .detail-title {
+    font-family: 'Space Grotesk', sans-serif;
+    font-size: 48px; font-weight: 700; letter-spacing: -2px; margin-bottom: 12px;
+  }
+  .detail-subtitle {
+    font-size: 18px; color: var(--text-secondary); line-height: 1.6; margin-bottom: 28px;
+  }
+  .detail-ctas { display: flex; gap: 12px; margin-bottom: 48px; }
+  .detail-divider { border: none; border-top: 1px solid var(--border); margin: 36px 0; }
+  .detail-body { font-size: 16px; color: var(--text-secondary); line-height: 1.85; margin-bottom: 14px; }
+  .detail-cols { display: grid; grid-template-columns: 1fr 1fr; gap: 40px; margin-top: 40px; }
+  .detail-cols h4 {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px; font-weight: 600; color: var(--text-muted);
+    text-transform: uppercase; letter-spacing: 1.5px; margin-bottom: 16px;
+  }
+  .tech-pills { display: flex; flex-wrap: wrap; gap: 8px; }
+  .tech-pill {
+    padding: 7px 14px; border: 1px solid var(--border); border-radius: 8px;
+    font-size: 13px; font-weight: 500; color: var(--text-secondary);
+  }
+  .metric-row {
+    display: flex; justify-content: space-between; padding: 10px 0;
+    border-bottom: 1px solid var(--border); font-size: 14px;
+  }
+  .metric-row .m-label { color: var(--text-secondary); }
+  .metric-row .m-value { color: var(--text-primary); font-weight: 600; }
+  .metric-row:last-child { border-bottom: none; }
+
+  /* ══════════════════════════════════════════ */
+  /* ── ABOUT ── */
+  /* ══════════════════════════════════════════ */
+
+  .about-wrap { max-width: 800px; margin: 0 auto; padding: 48px 24px 96px; }
+
+  .profile-section {
+    display: flex; gap: 28px; align-items: center;
+    padding: 28px; background: var(--bg-surface);
+    border: 1px solid var(--border); border-radius: 16px;
+    margin-bottom: 48px;
+  }
+  .profile-avatar {
+    width: 88px; height: 88px; border-radius: 50%; flex-shrink: 0;
+    background: linear-gradient(135deg, var(--accent), var(--warm));
+    display: flex; align-items: center; justify-content: center;
+    font-family: 'Space Grotesk', sans-serif;
+    font-size: 28px; font-weight: 700; color: #0B0F19;
+  }
+  .profile-details h2 {
+    font-family: 'Space Grotesk', sans-serif;
+    font-size: 20px; font-weight: 700; letter-spacing: -0.3px; margin-bottom: 2px;
+  }
+  .profile-details .p-role { font-size: 14px; color: var(--accent); font-weight: 500; margin-bottom: 2px; }
+  .profile-details .p-location {
+    font-size: 13px; color: var(--text-muted); margin-bottom: 10px;
+  }
+  .profile-links { display: flex; gap: 8px; }
+  .profile-links a {
+    font-size: 12px; color: var(--text-secondary); text-decoration: none;
+    padding: 5px 12px; border: 1px solid var(--border); border-radius: 6px;
+    font-weight: 500; transition: all 0.2s;
+  }
+  .profile-links a:hover { border-color: var(--accent); color: var(--accent); }
+
+  .about-block { margin-bottom: 48px; }
+  .about-block h2 {
+    font-family: 'Space Grotesk', sans-serif;
+    font-size: 20px; font-weight: 700; letter-spacing: -0.3px;
+    margin-bottom: 16px; padding-bottom: 12px; border-bottom: 1px solid var(--border);
+  }
+  .about-block p {
+    font-size: 15px; color: var(--text-secondary); line-height: 1.8; margin-bottom: 14px;
+  }
+
+  .exp-card {
+    display: flex; gap: 16px; padding: 18px;
+    border: 1px solid var(--border); border-radius: 12px;
+    background: var(--bg-surface); margin-bottom: 10px; transition: border-color 0.2s;
+  }
+  .exp-card:hover { border-color: var(--border-hover); }
+  .exp-indicator {
+    width: 8px; height: 8px; border-radius: 50%; background: var(--accent);
+    margin-top: 7px; flex-shrink: 0;
+  }
+  .exp-card h3 { font-size: 14px; font-weight: 600; margin-bottom: 1px; }
+  .exp-card .exp-co { font-size: 13px; color: var(--accent); font-weight: 500; }
+  .exp-card .exp-period {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px; color: var(--text-muted); margin-bottom: 6px;
+  }
+  .exp-card .exp-desc { font-size: 13px; color: var(--text-secondary); line-height: 1.6; }
+
+  .tool-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; }
+  .tool-group {
+    background: var(--bg-surface); border: 1px solid var(--border);
+    border-radius: 12px; padding: 18px;
+  }
+  .tool-group h4 {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px; font-weight: 600; color: var(--text-muted);
+    text-transform: uppercase; letter-spacing: 1px; margin-bottom: 12px;
+  }
+  .tool-group ul { list-style: none; }
+  .tool-group li {
+    font-size: 13px; color: var(--text-secondary); padding: 4px 0;
+    display: flex; align-items: center; gap: 8px;
+  }
+  .tool-group li::before {
+    content: ''; width: 4px; height: 4px; border-radius: 50%;
+    background: var(--accent); flex-shrink: 0;
+  }
+
+  /* ══════════════════════════════════════════ */
+  /* ── CONTACT ── */
+  /* ══════════════════════════════════════════ */
+
+  .contact-wrap { max-width: 560px; margin: 0 auto; padding: 48px 24px 96px; }
+  .contact-form-card {
+    background: var(--bg-surface); border: 1px solid var(--border);
+    border-radius: 16px; padding: 32px;
+  }
+  .fg { margin-bottom: 18px; }
+  .fg label {
+    display: block; font-size: 13px; font-weight: 500;
+    color: var(--text-secondary); margin-bottom: 6px;
+  }
+  .fg label .req { color: var(--accent); }
+  .fg input, .fg textarea {
+    width: 100%; padding: 11px 14px; background: var(--bg-tertiary);
+    border: 1px solid var(--border); border-radius: 8px;
+    color: var(--text-primary); font-size: 14px; font-family: inherit;
+    outline: none; transition: border-color 0.2s;
+  }
+  .fg input:focus, .fg textarea:focus {
+    border-color: var(--accent); box-shadow: 0 0 0 3px var(--accent-glow);
+  }
+  .fg input::placeholder, .fg textarea::placeholder { color: var(--text-muted); }
+  .fg textarea { min-height: 110px; resize: vertical; }
+  .checkbox-row {
+    display: flex; align-items: center; gap: 10px; margin-bottom: 22px;
+    font-size: 13px; color: var(--text-secondary);
+  }
+  .checkbox-row input { accent-color: var(--accent); width: 15px; height: 15px; }
+  .checkbox-row a { color: var(--accent); text-decoration: none; }
+  .contact-sep {
+    text-align: center; color: var(--text-muted); font-size: 12px;
+    margin: 28px 0; position: relative;
+    font-family: 'JetBrains Mono', monospace; letter-spacing: 0.5px;
+  }
+  .contact-sep::before, .contact-sep::after {
+    content: ''; position: absolute; top: 50%;
+    width: calc(50% - 50px); height: 1px; background: var(--border);
+  }
+  .contact-sep::before { left: 0; }
+  .contact-sep::after { right: 0; }
+  .direct-links { display: flex; flex-direction: column; gap: 8px; }
+  .direct-link {
+    display: flex; align-items: center; gap: 12px;
+    padding: 12px 14px; border: 1px solid var(--border); border-radius: 10px;
+    text-decoration: none; color: var(--text-secondary); font-size: 13px;
+    transition: all 0.2s;
+  }
+  .direct-link:hover {
+    border-color: var(--accent); color: var(--text-primary); background: var(--accent-subtle);
+  }
+  .direct-link .dl-icon {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 12px; font-weight: 600; width: 28px; text-align: center;
+    color: var(--accent);
+  }
+
+  /* ══════════════════════════════════════════ */
+  /* ── 404 ── */
+  /* ══════════════════════════════════════════ */
+
+  .four04 {
+    text-align: center; padding: 160px 24px; max-width: 460px; margin: 0 auto;
+  }
+  .four04 .code {
+    font-family: 'Space Grotesk', sans-serif;
+    font-size: 140px; font-weight: 700; letter-spacing: -8px;
+    background: linear-gradient(135deg, var(--accent), var(--warm));
+    -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+    line-height: 1; margin-bottom: 20px;
+  }
+  .four04 h1 {
+    font-family: 'Space Grotesk', sans-serif;
+    font-size: 22px; font-weight: 700; margin-bottom: 10px;
+  }
+  .four04 p { font-size: 15px; color: var(--text-secondary); margin-bottom: 32px; }
+
+  /* ══════════════════════════════════════════ */
+  /* ── MOBILE PREVIEW ── */
+  /* ══════════════════════════════════════════ */
+
+  .mobile-frame {
+    max-width: 375px; margin: 32px auto;
+    border: 1px solid var(--border); border-radius: 20px;
+    overflow: hidden; background: var(--bg-primary);
+  }
+  .m-header {
+    display: flex; justify-content: space-between; align-items: center;
+    padding: 14px 18px; border-bottom: 1px solid var(--border);
+  }
+  .m-header .site-logo { font-size: 16px; }
+  .m-burger { display: flex; flex-direction: column; gap: 3px; cursor: pointer; }
+  .m-burger span { width: 18px; height: 2px; background: var(--text-primary); border-radius: 1px; }
+  .m-menu-open {
+    background: var(--bg-primary); padding: 56px 28px; min-height: 420px;
+    display: flex; flex-direction: column; justify-content: center;
+  }
+  .m-menu-open a {
+    display: block; font-family: 'Space Grotesk', sans-serif;
+    font-size: 32px; font-weight: 700; color: var(--text-primary);
+    text-decoration: none; padding: 12px 0; letter-spacing: -0.5px;
+  }
+  .m-menu-open a:hover { color: var(--accent); }
+  .m-menu-open a.is-active { color: var(--accent); }
+  .m-menu-bottom {
+    display: flex; gap: 10px; margin-top: 32px; padding-top: 20px;
+    border-top: 1px solid var(--border);
+  }
+
+  /* ── Page header ── */
+  .pg-header {
+    max-width: 1100px; margin: 0 auto; padding: 56px 24px 0;
+  }
+  .pg-header h1 {
+    font-family: 'Space Grotesk', sans-serif;
+    font-size: 36px; font-weight: 700; letter-spacing: -1px; margin-bottom: 8px;
+  }
+  .pg-header p { font-size: 16px; color: var(--text-secondary); }
+
+  @media (max-width: 768px) {
+    .bento-card.featured, .bento-card.secondary, .bento-card.third, .bento-card.fourth, .bento-card.full { grid-column: span 12; }
+    .tool-grid { grid-template-columns: repeat(2, 1fr); }
+    .detail-cols { grid-template-columns: 1fr; }
+    .profile-section { flex-direction: column; text-align: center; }
+    .profile-links { justify-content: center; }
+    .hero-name { font-size: 44px; letter-spacing: -2px; }
+    .hero-proof { flex-direction: column; gap: 8px; }
+    .hero-ctas { flex-direction: column; align-items: center; }
+  }
+</style>
+</head>
+<body>
+
+<!-- Mockup Nav -->
+<div class="mockup-nav">
+  <span>dtpf.es v2</span>
+  <button class="active" onclick="showPage('home')">Home</button>
+  <button onclick="showPage('projects')">Proyectos</button>
+  <button onclick="showPage('detail')">Detalle</button>
+  <button onclick="showPage('about')">Sobre Mi</button>
+  <button onclick="showPage('contact')">Contacto</button>
+  <button onclick="showPage('notfound')">404</button>
+  <button onclick="showPage('mobile')">Mobile</button>
+  <button class="theme-tog" onclick="toggleTheme()">🌙</button>
+</div>
+
+<!-- ══════════════════════════════════════════════════════════════ -->
+<!-- HOME -->
+<!-- ══════════════════════════════════════════════════════════════ -->
+<div id="page-home" class="page active">
+
+  <div class="site-header">
+    <a class="site-logo" href="#">d<span class="dot">.</span>pizarro</a>
+    <div class="site-nav">
+      <a href="#" class="is-active">Inicio</a>
+      <a href="#" onclick="showPage('projects')">Proyectos</a>
+      <a href="#" onclick="showPage('about')">Sobre mi</a>
+      <a href="#" onclick="showPage('contact')">Contacto</a>
+    </div>
+    <div class="header-right">
+      <button class="lang-switch">EN</button>
+      <button class="icon-btn">☾</button>
+    </div>
+  </div>
+
+  <div class="hero">
+    <h1 class="hero-name">David T.<br>Pizarro Frick</h1>
+    <p class="hero-tagline">
+      Construyo productos web que funcionan,<br>
+      <strong>desde la idea hasta produccion</strong>.
+    </p>
+    <div class="hero-proof">
+      <div class="proof-item"><span class="proof-dot"></span> <span class="proof-num">5</span> apps en produccion</div>
+      <div class="proof-item" style="color: var(--text-muted);">·</div>
+      <div class="proof-item"><span class="proof-num">3+</span> anos en SaaS enterprise</div>
+      <div class="proof-item" style="color: var(--text-muted);">·</div>
+      <div class="proof-item"><span class="proof-num">854</span> tests</div>
+    </div>
+    <div class="hero-ctas">
+      <button class="btn btn-accent btn-lg" onclick="showPage('projects')">Ver lo que he construido</button>
+      <button class="btn btn-outline btn-lg" onclick="showPage('contact')">Hablemos</button>
+    </div>
+    <div class="scroll-hint">
+      scroll
+      <div class="scroll-arrow"></div>
+    </div>
+  </div>
+
+  <!-- Projects — Bento Grid -->
+  <div class="section">
+    <div class="section-label">Proyectos</div>
+    <h2 class="section-heading">Productos reales, no side projects</h2>
+    <p class="section-desc">Cada uno de estos proyectos esta desplegado, con usuarios reales, CI/CD y monitoring.</p>
+
+    <div class="bento-grid">
+      <!-- dauth — featured -->
+      <div class="bento-card featured">
+        <div class="bento-status"><span class="status-dot"></span> dauth.ovh</div>
+        <h3>dauth</h3>
+        <div class="bento-tagline">Autenticacion passwordless multi-tenant. Magic link, passkey, OAuth. Lo uso como infraestructura para mis otras apps — 4 tenants conectados.</div>
+        <div class="bento-tags">
+          <span class="tag">React 19</span>
+          <span class="tag">TypeScript</span>
+          <span class="tag">WebAuthn</span>
+          <span class="tag">854 tests</span>
+        </div>
+        <div class="bento-actions">
+          <button class="btn btn-sm btn-accent" onclick="showPage('detail')">Ver caso de estudio</button>
+          <button class="btn btn-sm btn-outline">Visitar ↗</button>
+        </div>
+      </div>
+
+      <!-- EasyMediaCloud — secondary -->
+      <div class="bento-card secondary">
+        <div class="bento-status"><span class="status-dot"></span> easymediacloud.dtpf.es</div>
+        <h3>EasyMediaCloud</h3>
+        <div class="bento-tagline">Plataforma de almacenamiento de medios con drag-and-drop y API REST.</div>
+        <div class="bento-tags">
+          <span class="tag">React</span>
+          <span class="tag">Node.js</span>
+          <span class="tag">MongoDB</span>
+        </div>
+        <div class="bento-actions">
+          <button class="btn btn-sm btn-accent">Ver detalle</button>
+        </div>
+      </div>
+
+      <!-- Dalist -->
+      <div class="bento-card third">
+        <div class="bento-status"><span class="status-dot"></span> dalist.dtpf.es</div>
+        <h3>Dalist</h3>
+        <div class="bento-tagline">Listas de deseos con comparticion, categorias y soporte offline completo.</div>
+        <div class="bento-tags">
+          <span class="tag">PWA</span>
+          <span class="tag">Offline</span>
+          <span class="tag">React</span>
+        </div>
+        <div class="bento-actions">
+          <button class="btn btn-sm btn-accent">Ver detalle</button>
+        </div>
+      </div>
+
+      <!-- Audity -->
+      <div class="bento-card fourth">
+        <div class="bento-status"><span class="status-dot"></span> audity.dtpf.es</div>
+        <h3>Audity</h3>
+        <div class="bento-tagline">Streaming musical tipo Spotify con reproductor completo, playlists y busqueda. Proyecto colaborativo de fin de master, en produccion.</div>
+        <div class="bento-tags">
+          <span class="tag">React</span>
+          <span class="tag">Auth0</span>
+          <span class="tag">PWA</span>
+        </div>
+        <div class="bento-actions">
+          <button class="btn btn-sm btn-accent">Ver detalle</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Manifesto -->
+  <div class="manifesto">
+    <p class="manifesto-quote">
+      No colecciono side projects.<br>
+      <span class="em-accent">Los pongo en produccion.</span>
+    </p>
+    <p class="manifesto-body">
+      Cada app que construyo tiene CI/CD propio, monitoring con Grafana, y deploy automatico.
+      Uso IA como multiplicador en cada fase del desarrollo — no como atajo, sino como parte del proceso de ingenieria.
+    </p>
+  </div>
+
+  <!-- Stack -->
+  <div class="section" style="padding-top: 0;">
+    <div class="section-label">Stack</div>
+    <h2 class="section-heading">Herramientas del dia a dia</h2>
+    <p class="section-desc">Lo que uso para construir, desplegar y mantener.</p>
+
+    <div class="stack-strip">
+      <div class="stack-chip"><div class="chip-icon">R</div> React</div>
+      <div class="stack-chip"><div class="chip-icon">TS</div> TypeScript</div>
+      <div class="stack-chip"><div class="chip-icon">N</div> Node.js</div>
+      <div class="stack-chip"><div class="chip-icon">M</div> MongoDB</div>
+      <div class="stack-chip"><div class="chip-icon">TW</div> Tailwind</div>
+      <div class="stack-chip"><div class="chip-icon">V</div> Vite</div>
+      <div class="stack-chip"><div class="chip-icon">D</div> Docker</div>
+      <div class="stack-chip"><div class="chip-icon">GH</div> GitHub Actions</div>
+      <div class="stack-chip"><div class="chip-icon">AI</div> Claude</div>
+      <div class="stack-chip"><div class="chip-icon">L</div> Linux</div>
+    </div>
+  </div>
+
+  <!-- CTA -->
+  <div class="section" style="padding-top: 0;">
+    <div class="cta-section">
+      <h2>Buscando nuevas oportunidades</h2>
+      <p>Si necesitas un developer que lleve productos de idea a produccion, hablemos.</p>
+      <button class="btn btn-accent btn-lg" onclick="showPage('contact')">Contactar</button>
+    </div>
+  </div>
+
+  <div class="site-footer">
+    <div class="f-name">David T. Pizarro Frick</div>
+    <div class="f-links">
+      <a href="#">LinkedIn</a> <a href="#">GitHub</a> <a href="#">Email</a>
+    </div>
+    <div class="f-copy">© 2024 – 2026</div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════════════════════════ -->
+<!-- PROJECTS -->
+<!-- ══════════════════════════════════════════════════════════════ -->
+<div id="page-projects" class="page">
+  <div class="site-header">
+    <a class="site-logo" href="#" onclick="showPage('home')">d<span class="dot">.</span>pizarro</a>
+    <div class="site-nav">
+      <a href="#" onclick="showPage('home')">Inicio</a>
+      <a href="#" class="is-active">Proyectos</a>
+      <a href="#" onclick="showPage('about')">Sobre mi</a>
+      <a href="#" onclick="showPage('contact')">Contacto</a>
+    </div>
+    <div class="header-right">
+      <button class="lang-switch">EN</button>
+      <button class="icon-btn">☾</button>
+    </div>
+  </div>
+
+  <div class="pg-header">
+    <h1>Proyectos</h1>
+    <p>5 aplicaciones desplegadas y mantenidas en produccion.</p>
+  </div>
+
+  <div class="projects-list">
+    <div class="project-card">
+      <div>
+        <div class="pc-meta">
+          <span class="pc-url">dauth.ovh</span>
+          <span class="pc-badge">Produccion</span>
+        </div>
+        <h3>dauth</h3>
+        <p class="pc-desc">Sistema de autenticacion passwordless multi-tenant. Proporciona magic link y passkey a 4 aplicaciones. Authorization code flow, gestion de licencias y suscripciones. 854 tests, CI/CD completo.</p>
+        <div class="pc-tags">
+          <span class="tag-neutral tag">React 19</span>
+          <span class="tag-neutral tag">TypeScript</span>
+          <span class="tag-neutral tag">Node.js</span>
+          <span class="tag-neutral tag">WebAuthn</span>
+          <span class="tag-neutral tag">MongoDB</span>
+        </div>
+      </div>
+      <div class="pc-actions">
+        <button class="btn btn-sm btn-accent" onclick="showPage('detail')">Caso de estudio</button>
+        <button class="btn btn-sm btn-outline">Visitar ↗</button>
+      </div>
+    </div>
+
+    <div class="project-card">
+      <div>
+        <div class="pc-meta">
+          <span class="pc-url">easymediacloud.dtpf.es</span>
+          <span class="pc-badge">Produccion</span>
+        </div>
+        <h3>EasyMediaCloud</h3>
+        <p class="pc-desc">Almacenamiento de medios con organizacion por carpetas, vista previa, subida drag-and-drop, y API REST para integracion externa. Auth delegada en dauth.</p>
+        <div class="pc-tags">
+          <span class="tag-neutral tag">React 19</span>
+          <span class="tag-neutral tag">TypeScript</span>
+          <span class="tag-neutral tag">Node.js</span>
+          <span class="tag-neutral tag">MongoDB</span>
+        </div>
+      </div>
+      <div class="pc-actions">
+        <button class="btn btn-sm btn-accent">Caso de estudio</button>
+        <button class="btn btn-sm btn-outline">Visitar ↗</button>
+      </div>
+    </div>
+
+    <div class="project-card">
+      <div>
+        <div class="pc-meta">
+          <span class="pc-url">dalist.dtpf.es</span>
+          <span class="pc-badge">Produccion</span>
+        </div>
+        <h3>Dalist</h3>
+        <p class="pc-desc">Listas de deseos con categorias, estado de completado y comparticion entre usuarios. PWA con soporte offline completo via IndexedDB y Workbox.</p>
+        <div class="pc-tags">
+          <span class="tag-neutral tag">React</span>
+          <span class="tag-neutral tag">TypeScript</span>
+          <span class="tag-neutral tag">PWA</span>
+          <span class="tag-neutral tag">Offline</span>
+        </div>
+      </div>
+      <div class="pc-actions">
+        <button class="btn btn-sm btn-accent">Caso de estudio</button>
+        <button class="btn btn-sm btn-outline">Visitar ↗</button>
+      </div>
+    </div>
+
+    <div class="project-card">
+      <div>
+        <div class="pc-meta">
+          <span class="pc-url">dtpf.es</span>
+          <span class="pc-badge" style="background: var(--accent-subtle); color: var(--accent); border-color: rgba(45,212,191,0.15);">Este sitio</span>
+        </div>
+        <h3>dtpf.es</h3>
+        <p class="pc-desc">Este portfolio. Space Grotesk + Tailwind CSS v4 + Framer Motion. Dark mode, i18n ES/EN, grain texture. Construido para que el sitio sea la demostracion.</p>
+        <div class="pc-tags">
+          <span class="tag-neutral tag">React 19</span>
+          <span class="tag-neutral tag">Tailwind v4</span>
+          <span class="tag-neutral tag">Framer Motion</span>
+        </div>
+      </div>
+      <div class="pc-actions">
+        <button class="btn btn-sm btn-outline">Caso de estudio</button>
+      </div>
+    </div>
+
+    <div class="project-card">
+      <div>
+        <div class="pc-meta">
+          <span class="pc-url">audity.dtpf.es</span>
+          <span class="pc-badge">Produccion</span>
+        </div>
+        <h3>Audity</h3>
+        <p class="pc-desc">Streaming musical tipo Spotify. Reproductor completo, playlists, busqueda, CMS. Proyecto colaborativo de fin de master desplegado y mantenido.</p>
+        <div class="pc-tags">
+          <span class="tag-neutral tag">React</span>
+          <span class="tag-neutral tag">Node.js</span>
+          <span class="tag-neutral tag">Auth0</span>
+          <span class="tag-neutral tag">PWA</span>
+        </div>
+      </div>
+      <div class="pc-actions">
+        <button class="btn btn-sm btn-accent">Caso de estudio</button>
+        <button class="btn btn-sm btn-outline">Visitar ↗</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="site-footer">
+    <div class="f-name">David T. Pizarro Frick</div>
+    <div class="f-links"><a href="#">LinkedIn</a> <a href="#">GitHub</a> <a href="#">Email</a></div>
+    <div class="f-copy">© 2024 – 2026</div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════════════════════════ -->
+<!-- PROJECT DETAIL -->
+<!-- ══════════════════════════════════════════════════════════════ -->
+<div id="page-detail" class="page">
+  <div class="site-header">
+    <a class="site-logo" href="#" onclick="showPage('home')">d<span class="dot">.</span>pizarro</a>
+    <div class="site-nav">
+      <a href="#" onclick="showPage('home')">Inicio</a>
+      <a href="#" class="is-active" onclick="showPage('projects')">Proyectos</a>
+      <a href="#" onclick="showPage('about')">Sobre mi</a>
+      <a href="#" onclick="showPage('contact')">Contacto</a>
+    </div>
+    <div class="header-right">
+      <button class="lang-switch">EN</button>
+      <button class="icon-btn">☾</button>
+    </div>
+  </div>
+
+  <div class="detail-wrap">
+    <a class="detail-back" onclick="showPage('projects')">← proyectos</a>
+
+    <h1 class="detail-title">dauth</h1>
+    <p class="detail-subtitle">Un sistema de autenticacion passwordless que sirve como infraestructura para todas mis aplicaciones.</p>
+
+    <div class="detail-ctas">
+      <button class="btn btn-accent">Visitar dauth.ovh ↗</button>
+      <button class="btn btn-outline">Ver en GitHub ↗</button>
+    </div>
+
+    <hr class="detail-divider">
+
+    <p class="detail-body"><strong style="color: var(--text-primary);">El problema.</strong> Cada aplicacion que construia necesitaba su propio sistema de login. Repetia la misma logica de autenticacion, gestion de tokens, y flujos de email. Queria una solucion centralizada que pudiera reutilizar.</p>
+
+    <p class="detail-body"><strong style="color: var(--text-primary);">La solucion.</strong> dauth es un sistema de autenticacion como servicio (AuthaaS) que proporciona login sin contrasena a cualquier aplicacion. Soporta magic link y passkey (WebAuthn). Cada app conectada obtiene su propio tenant con configuracion independiente y authorization code flow.</p>
+
+    <p class="detail-body"><strong style="color: var(--text-primary);">El resultado.</strong> Actualmente gestiona la autenticacion de 4 aplicaciones en produccion. 854 tests automatizados. CI/CD completo con GitHub Actions. Monitoring centralizado con Grafana + Loki. El frontend fue rediseñado completamente con Tailwind CSS v4 eliminando Ant Design.</p>
+
+    <hr class="detail-divider">
+
+    <div class="detail-cols">
+      <div>
+        <h4>Stack</h4>
+        <div class="tech-pills">
+          <div class="tech-pill">React 19</div>
+          <div class="tech-pill">TypeScript 5.9</div>
+          <div class="tech-pill">Node.js 22</div>
+          <div class="tech-pill">Express 5</div>
+          <div class="tech-pill">MongoDB 8</div>
+          <div class="tech-pill">Tailwind CSS v4</div>
+          <div class="tech-pill">WebAuthn</div>
+          <div class="tech-pill">Vite 7</div>
+          <div class="tech-pill">GitHub Actions</div>
+        </div>
+      </div>
+      <div>
+        <h4>Datos</h4>
+        <div class="metric-row"><span class="m-label">Tenants activos</span><span class="m-value">4</span></div>
+        <div class="metric-row"><span class="m-label">Tests</span><span class="m-value">854</span></div>
+        <div class="metric-row"><span class="m-label">Autenticacion</span><span class="m-value">Passwordless</span></div>
+        <div class="metric-row"><span class="m-label">Monitoring</span><span class="m-value">Grafana + Loki</span></div>
+        <div class="metric-row"><span class="m-label">Deploy</span><span class="m-value">GitHub Actions</span></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="site-footer">
+    <div class="f-name">David T. Pizarro Frick</div>
+    <div class="f-links"><a href="#">LinkedIn</a> <a href="#">GitHub</a> <a href="#">Email</a></div>
+    <div class="f-copy">© 2024 – 2026</div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════════════════════════ -->
+<!-- ABOUT -->
+<!-- ══════════════════════════════════════════════════════════════ -->
+<div id="page-about" class="page">
+  <div class="site-header">
+    <a class="site-logo" href="#" onclick="showPage('home')">d<span class="dot">.</span>pizarro</a>
+    <div class="site-nav">
+      <a href="#" onclick="showPage('home')">Inicio</a>
+      <a href="#" onclick="showPage('projects')">Proyectos</a>
+      <a href="#" class="is-active">Sobre mi</a>
+      <a href="#" onclick="showPage('contact')">Contacto</a>
+    </div>
+    <div class="header-right">
+      <button class="lang-switch">EN</button>
+      <button class="icon-btn">☾</button>
+    </div>
+  </div>
+
+  <div class="pg-header"><h1>Sobre mi</h1></div>
+
+  <div class="about-wrap">
+    <div class="profile-section">
+      <div class="profile-avatar">DP</div>
+      <div class="profile-details">
+        <h2>David T. Pizarro Frick</h2>
+        <div class="p-role">Software Developer</div>
+        <div class="p-location">Mallorca, Spain</div>
+        <div class="profile-links">
+          <a href="#">LinkedIn ↗</a>
+          <a href="#">GitHub ↗</a>
+        </div>
+      </div>
+    </div>
+
+    <div class="about-block">
+      <p>
+        Soy desarrollador de software en Hub4Retail, una plataforma SaaS para el sector moda con clientes como Lacoste, Camper y Ecoalf. Me encargo del frontend con React y TypeScript.
+      </p>
+      <p>
+        Fuera del trabajo, construyo y mantengo 5 aplicaciones propias en produccion — desde un sistema de autenticacion multi-tenant hasta una plataforma de streaming musical. No son ejercicios ni tutoriales: tienen usuarios reales, CI/CD, monitoring, y deploy automatico.
+      </p>
+      <p>
+        Lo que mas me motiva es llevar una idea de cero a un producto que funciona. Uso herramientas de IA como Claude y Cursor como parte natural de mi flujo de trabajo — al mismo nivel que Git o Docker.
+      </p>
+    </div>
+
+    <div class="about-block">
+      <h2>Experiencia</h2>
+
+      <div class="exp-card">
+        <div class="exp-indicator"></div>
+        <div>
+          <h3>Frontend Developer</h3>
+          <div class="exp-co">Hub4Retail</div>
+          <div class="exp-period">Jul 2023 — Presente</div>
+          <div class="exp-desc">Plataforma SaaS para retail moda. +20 clientes enterprise incluyendo Lacoste, Camper, Ecoalf. React + TypeScript + testing.</div>
+        </div>
+      </div>
+
+      <div class="exp-card">
+        <div class="exp-indicator"></div>
+        <div>
+          <h3>Full Stack Developer</h3>
+          <div class="exp-co">Palmira</div>
+          <div class="exp-period">Jun 2021 — Jun 2023</div>
+          <div class="exp-desc">Apps moviles y web con React Native, Node.js y MongoDB.</div>
+        </div>
+      </div>
+
+      <div class="exp-card">
+        <div class="exp-indicator"></div>
+        <div>
+          <h3>Master Full Stack Development</h3>
+          <div class="exp-co">Assembler Institute of Technology</div>
+          <div class="exp-period">Oct 2022 — May 2023</div>
+          <div class="exp-desc">+1200 horas, 30+ proyectos. MERN stack, metodologias agiles.</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="about-block">
+      <h2>Herramientas</h2>
+      <div class="tool-grid">
+        <div class="tool-group">
+          <h4>Frontend</h4>
+          <ul>
+            <li>React 19</li>
+            <li>TypeScript</li>
+            <li>Tailwind CSS</li>
+            <li>Framer Motion</li>
+            <li>Vite</li>
+          </ul>
+        </div>
+        <div class="tool-group">
+          <h4>Backend</h4>
+          <ul>
+            <li>Node.js</li>
+            <li>Express</li>
+            <li>MongoDB</li>
+            <li>REST APIs</li>
+            <li>WebSockets</li>
+          </ul>
+        </div>
+        <div class="tool-group">
+          <h4>DevOps</h4>
+          <ul>
+            <li>Docker</li>
+            <li>GitHub Actions</li>
+            <li>PM2</li>
+            <li>Linux</li>
+            <li>Cloudflare</li>
+          </ul>
+        </div>
+        <div class="tool-group">
+          <h4>AI & Tools</h4>
+          <ul>
+            <li>Claude</li>
+            <li>Claude Code</li>
+            <li>Cursor</li>
+            <li>Git</li>
+            <li>Grafana</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="site-footer">
+    <div class="f-name">David T. Pizarro Frick</div>
+    <div class="f-links"><a href="#">LinkedIn</a> <a href="#">GitHub</a> <a href="#">Email</a></div>
+    <div class="f-copy">© 2024 – 2026</div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════════════════════════ -->
+<!-- CONTACT -->
+<!-- ══════════════════════════════════════════════════════════════ -->
+<div id="page-contact" class="page">
+  <div class="site-header">
+    <a class="site-logo" href="#" onclick="showPage('home')">d<span class="dot">.</span>pizarro</a>
+    <div class="site-nav">
+      <a href="#" onclick="showPage('home')">Inicio</a>
+      <a href="#" onclick="showPage('projects')">Proyectos</a>
+      <a href="#" onclick="showPage('about')">Sobre mi</a>
+      <a href="#" class="is-active">Contacto</a>
+    </div>
+    <div class="header-right">
+      <button class="lang-switch">EN</button>
+      <button class="icon-btn">☾</button>
+    </div>
+  </div>
+
+  <div class="pg-header" style="text-align: center;">
+    <h1>Contacto</h1>
+    <p>Escribeme y te respondo en menos de 24 horas.</p>
+  </div>
+
+  <div class="contact-wrap">
+    <div class="contact-form-card">
+      <div class="fg">
+        <label>Email <span class="req">*</span></label>
+        <input type="email" placeholder="tu@email.com">
+      </div>
+      <div class="fg">
+        <label>Nombre</label>
+        <input type="text" placeholder="Tu nombre">
+      </div>
+      <div class="fg">
+        <label>Mensaje <span class="req">*</span></label>
+        <textarea placeholder="Cuentame sobre tu proyecto o la oportunidad..."></textarea>
+      </div>
+      <div class="checkbox-row">
+        <input type="checkbox">
+        <span>He leido y acepto la <a href="#">politica de privacidad</a></span>
+      </div>
+      <button class="btn btn-accent" style="width: 100%; justify-content: center;">Enviar mensaje</button>
+    </div>
+
+    <div class="contact-sep">o directamente</div>
+
+    <div class="direct-links">
+      <a href="#" class="direct-link"><span class="dl-icon">@</span> davidpizarrofrick@gmail.com</a>
+      <a href="#" class="direct-link"><span class="dl-icon">in</span> linkedin.com/in/david-tomas-pizarro-frick</a>
+      <a href="#" class="direct-link"><span class="dl-icon">gh</span> github.com/DTPF</a>
+    </div>
+  </div>
+
+  <div class="site-footer">
+    <div class="f-name">David T. Pizarro Frick</div>
+    <div class="f-links"><a href="#">LinkedIn</a> <a href="#">GitHub</a> <a href="#">Email</a></div>
+    <div class="f-copy">© 2024 – 2026</div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════════════════════════ -->
+<!-- 404 -->
+<!-- ══════════════════════════════════════════════════════════════ -->
+<div id="page-notfound" class="page">
+  <div class="site-header">
+    <a class="site-logo" href="#" onclick="showPage('home')">d<span class="dot">.</span>pizarro</a>
+    <div class="site-nav">
+      <a href="#" onclick="showPage('home')">Inicio</a>
+      <a href="#" onclick="showPage('projects')">Proyectos</a>
+      <a href="#" onclick="showPage('about')">Sobre mi</a>
+      <a href="#" onclick="showPage('contact')">Contacto</a>
+    </div>
+    <div class="header-right">
+      <button class="lang-switch">EN</button>
+      <button class="icon-btn">☾</button>
+    </div>
+  </div>
+
+  <div class="four04">
+    <div class="code">404</div>
+    <h1>Pagina no encontrada</h1>
+    <p>La URL que buscas no existe o ha sido eliminada.</p>
+    <button class="btn btn-accent" onclick="showPage('home')">Volver al inicio</button>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════════════════════════ -->
+<!-- MOBILE -->
+<!-- ══════════════════════════════════════════════════════════════ -->
+<div id="page-mobile" class="page">
+  <div class="section">
+    <div class="section-label">Responsive</div>
+    <h2 class="section-heading">Vista mobile</h2>
+    <p class="section-desc">Header compacto, menu fullscreen y hero adaptado.</p>
+
+    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 32px; max-width: 800px; margin: 0 auto;">
+
+      <div>
+        <p style="font-family: 'JetBrains Mono', monospace; font-size: 11px; color: var(--text-muted); margin-bottom: 10px; text-transform: uppercase; letter-spacing: 1px;">Header</p>
+        <div class="mobile-frame" style="min-height: auto;">
+          <div class="m-header">
+            <span class="site-logo" style="font-size: 16px;">d<span class="dot">.</span>pizarro</span>
+            <div class="m-burger"><span></span><span></span><span></span></div>
+          </div>
+        </div>
+
+        <p style="font-family: 'JetBrains Mono', monospace; font-size: 11px; color: var(--text-muted); margin-bottom: 10px; margin-top: 24px; text-transform: uppercase; letter-spacing: 1px;">Hero</p>
+        <div class="mobile-frame">
+          <div style="padding: 48px 22px; text-align: center;">
+            <h1 style="font-family: 'Space Grotesk', sans-serif; font-size: 36px; font-weight: 700; letter-spacing: -1.5px; margin-bottom: 14px; background: linear-gradient(135deg, var(--text-primary), var(--text-secondary)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; line-height: 1.1;">David T.<br>Pizarro Frick</h1>
+            <p style="font-size: 15px; color: var(--text-secondary); margin-bottom: 20px; line-height: 1.6;">Construyo productos web que funcionan, <strong style="color: var(--accent);">desde la idea hasta produccion</strong>.</p>
+            <div style="display: flex; flex-direction: column; gap: 8px; font-family: 'JetBrains Mono', monospace; font-size: 12px; color: var(--text-muted); margin-bottom: 24px; align-items: center;">
+              <span><span style="color: var(--text-primary); font-weight: 600;">5</span> apps en produccion</span>
+              <span><span style="color: var(--text-primary); font-weight: 600;">854</span> tests</span>
+            </div>
+            <div style="display: flex; flex-direction: column; gap: 8px;">
+              <button class="btn btn-accent" style="width: 100%; justify-content: center;">Ver lo que he construido</button>
+              <button class="btn btn-outline" style="width: 100%; justify-content: center;">Hablemos</button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div>
+        <p style="font-family: 'JetBrains Mono', monospace; font-size: 11px; color: var(--text-muted); margin-bottom: 10px; text-transform: uppercase; letter-spacing: 1px;">Menu desplegado</p>
+        <div class="mobile-frame">
+          <div class="m-header">
+            <span class="site-logo" style="font-size: 16px;">d<span class="dot">.</span>pizarro</span>
+            <span style="font-size: 22px; color: var(--text-primary); cursor: pointer;">✕</span>
+          </div>
+          <div class="m-menu-open">
+            <a href="#">Inicio</a>
+            <a href="#" class="is-active">Proyectos</a>
+            <a href="#">Sobre mi</a>
+            <a href="#">Contacto</a>
+            <div class="m-menu-bottom">
+              <button class="lang-switch">EN</button>
+              <button class="icon-btn">☾</button>
+            </div>
+            <div style="display: flex; gap: 20px; margin-top: 16px;">
+              <a href="#" style="font-size: 13px !important; font-weight: 500 !important; color: var(--text-muted) !important; text-decoration: none;">LinkedIn</a>
+              <a href="#" style="font-size: 13px !important; font-weight: 500 !important; color: var(--text-muted) !important; text-decoration: none;">GitHub</a>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+<script>
+  function showPage(id) {
+    document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+    document.getElementById('page-' + id).classList.add('active');
+    document.querySelectorAll('.mockup-nav button:not(.theme-tog)').forEach(b => b.classList.remove('active'));
+    if (event && event.target && event.target.closest('.mockup-nav')) {
+      event.target.classList.add('active');
+    }
+    window.scrollTo(0, 0);
+  }
+  function toggleTheme() {
+    document.documentElement.classList.toggle('light');
+    document.querySelector('.theme-tog').textContent =
+      document.documentElement.classList.contains('light') ? '☀️' : '🌙';
+  }
+</script>
+
+</body>
+</html>
