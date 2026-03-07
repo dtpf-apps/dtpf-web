@@ -134,11 +134,11 @@ export const en = {
     'Currently managing auth for 4 production apps. 854 automated tests. Full CI/CD with GitHub Actions. Centralized monitoring with Grafana + Loki. Frontend completely redesigned with Tailwind CSS v4, removing Ant Design.',
   project_dauth_url: 'dauth.ovh',
 
-  project_emc_name: 'EasyMediaCloud',
-  project_emc_tagline: 'Media storage and management platform with drag-and-drop and REST API.',
-  project_emc_desc:
+  project_dstash_name: 'dstash',
+  project_dstash_tagline: 'Media storage and management platform with drag-and-drop and REST API.',
+  project_dstash_desc:
     'Media storage with folder organization, preview, drag-and-drop upload, and REST API for external integration. Auth delegated to dauth.',
-  project_emc_url: 'easymediacloud.dtpf.es',
+  project_dstash_url: 'dstash.dtpf.es',
 
   project_dalist_name: 'Dalist',
   project_dalist_tagline: 'Wishlists with sharing, categories, and full offline support.',

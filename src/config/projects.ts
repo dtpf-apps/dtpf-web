@@ -36,12 +36,12 @@ export const projects: Project[] = [
     resultKey: 'project_dauth_result',
   },
   {
-    slug: 'easymediacloud',
-    nameKey: 'project_emc_name',
-    taglineKey: 'project_emc_tagline',
-    descKey: 'project_emc_desc',
-    urlKey: 'project_emc_url',
-    liveUrl: 'https://easymediacloud.dtpf.es',
+    slug: 'dstash',
+    nameKey: 'project_dstash_name',
+    taglineKey: 'project_dstash_tagline',
+    descKey: 'project_dstash_desc',
+    urlKey: 'project_dstash_url',
+    liveUrl: 'https://dstash.dtpf.es',
     stack: ['React 19', 'TypeScript', 'Node.js', 'Express', 'MongoDB', 'Drag & Drop'],
   },
   {

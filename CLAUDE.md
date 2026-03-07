@@ -57,7 +57,7 @@ Single `PortfolioLayout` wrapping all routes: sticky Header + `AnimatePresence` 
 
 ### Projects Data
 
-`src/config/projects.ts` — Typed `Project` interface with 5 projects (dauth, easymediacloud, dalist, audity, dtpf). Each has i18n keys for name, tagline, description, case study sections, stack array, metrics, and live URL.
+`src/config/projects.ts` — Typed `Project` interface with 5 projects (dauth, dstash, dalist, audity, dtpf). Each has i18n keys for name, tagline, description, case study sections, stack array, metrics, and live URL.
 
 ### API
 
