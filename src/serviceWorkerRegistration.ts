@@ -7,11 +7,8 @@ type Config = {
 
 export function register(config?: Config) {
   if (import.meta.env.PROD && 'serviceWorker' in navigator) {
-    // The URL constructor is available in all browsers that support SW.
     const publicUrl = new URL(import.meta.env.BASE_URL, window.location.href);
     if (publicUrl.origin !== window.location.origin) {
-      // Our service worker won't work if PUBLIC_URL is on a different origin
-      // from what our page is served on.
       return;
     }
 
@@ -19,19 +16,11 @@ export function register(config?: Config) {
       const swUrl = `${import.meta.env.BASE_URL}service-worker.js`;
 
       if (isLocalhost) {
-        // This is running on localhost. Let's check if a service worker still exists or not.
         checkValidServiceWorker(swUrl, config);
-
-        // Add some additional logging to localhost, pointing developers to the
-        // service worker/PWA documentation.
         navigator.serviceWorker.ready.then(() => {
-          console.log(
-            'This web app is being served cache-first by a service ' +
-              'worker. To learn more, visit https://cra.link/PWA'
-          );
+          console.log('This web app is being served cache-first by a service worker.');
         });
       } else {
-        // Is not localhost. Just register service worker
         registerValidSW(swUrl, config);
       }
     });
@@ -42,6 +31,10 @@ function registerValidSW(swUrl: string, config?: Config) {
   navigator.serviceWorker
     .register(swUrl)
     .then((registration) => {
+      setInterval(() => {
+        registration.update();
+      }, 60_000);
+
       registration.onupdatefound = () => {
         const installingWorker = registration.installing;
         if (installingWorker == null) {
@@ -50,19 +43,16 @@ function registerValidSW(swUrl: string, config?: Config) {
         installingWorker.onstatechange = () => {
           if (installingWorker.state === 'installed') {
             if (navigator.serviceWorker.controller) {
-              // At this point, the updated precached content has been fetched,
-              // but the previous service worker will still serve the older
-              // content until all client tabs are closed.
-
-              // Execute callback
-              if (config && config.onUpdate) {
+              document.dispatchEvent(
+                new CustomEvent('sw-update-available', {
+                  detail: { waiting: registration.waiting },
+                })
+              );
+              if (config?.onUpdate) {
                 config.onUpdate(registration);
               }
             } else {
-              // At this point, everything has been precached.
-
-              // Execute callback
-              if (config && config.onSuccess) {
+              if (config?.onSuccess) {
                 config.onSuccess(registration);
               }
             }
@@ -73,25 +63,25 @@ function registerValidSW(swUrl: string, config?: Config) {
     .catch((error) => {
       console.error('Error during service worker registration:', error);
     });
+
+  navigator.serviceWorker.addEventListener('controllerchange', () => {
+    window.location.reload();
+  });
 }
 
 function checkValidServiceWorker(swUrl: string, config?: Config) {
-  // Check if the service worker can be found. If it can't reload the page.
   fetch(swUrl, {
     headers: { 'Service-Worker': 'script' },
   })
     .then((response) => {
-      // Ensure service worker exists, and that we really are getting a JS file.
       const contentType = response.headers.get('content-type');
       if (response.status === 404 || (contentType != null && contentType.indexOf('javascript') === -1)) {
-        // No service worker found. Probably a different app. Reload the page.
         navigator.serviceWorker.ready.then((registration) => {
           registration.unregister().then(() => {
             window.location.reload();
           });
         });
       } else {
-        // Service worker found. Proceed as normal.
         registerValidSW(swUrl, config);
       }
     })
