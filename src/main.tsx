@@ -6,12 +6,4 @@ import * as serviceWorkerRegistration from './serviceWorkerRegistration';
 
 createRoot(document.getElementById('root')!).render(<App />);
 
-serviceWorkerRegistration.register({
-  onUpdate: (registration: any) => {
-    if (registration?.waiting) {
-      registration.waiting.postMessage({ type: 'SKIP_WAITING' });
-      registration.update();
-      window.location.reload();
-    }
-  },
-});
+serviceWorkerRegistration.register();

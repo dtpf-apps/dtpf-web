@@ -5,6 +5,8 @@
   --font-heading: 'Space Grotesk', system-ui, sans-serif;
   --font-mono: 'JetBrains Mono', 'Fira Code', monospace;
 
+  --animate-slide-up: slide-up 0.3s ease-out;
+
   /* Dark mode (default) */
   --color-bg-primary: #0B0F19;
   --color-bg-secondary: #111827;
@@ -53,6 +55,17 @@
 
   --color-border: #E2E8F0;
   --color-border-hover: #CBD5E1;
+}
+
+@keyframes slide-up {
+  from {
+    opacity: 0;
+    transform: translateX(-50%) translateY(1rem);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(-50%) translateY(0);
+  }
 }
 
 /* Base styles */

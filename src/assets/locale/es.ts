@@ -157,4 +157,9 @@ export const es = {
   project_audity_desc:
     'Streaming musical tipo Spotify. Reproductor completo, playlists, busqueda, CMS. Proyecto colaborativo de fin de master desplegado y mantenido.',
   project_audity_url: 'audity.dtpf.es',
+
+  // Service Worker Update
+  'sw_update-available': 'Nueva version disponible',
+  'sw_update-now': 'Actualizar',
+  'sw_update-on-navigate': 'Se cargara automaticamente al navegar',
 };
