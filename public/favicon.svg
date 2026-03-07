@@ -1,0 +1,12 @@
+<svg width="512" height="512" viewBox="0 0 512 512" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="g" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#2DD4BF"/>
+      <stop offset="100%" stop-color="#FBBF24"/>
+    </linearGradient>
+  </defs>
+  <rect width="512" height="512" rx="111" fill="#0B0F19"/>
+  <path d="M119 170C119 170 77 170 77 256C77 342 119 342 119 342" stroke="#2DD4BF" stroke-width="21" stroke-linecap="round" fill="none" opacity="0.35"/>
+  <path d="M393 170C393 170 435 170 435 256C435 342 393 342 393 342" stroke="#2DD4BF" stroke-width="21" stroke-linecap="round" fill="none" opacity="0.35"/>
+  <text x="256" y="286" text-anchor="middle" font-family="'JetBrains Mono',monospace" font-weight="700" font-size="137" fill="url(#g)">dtpf</text>
+</svg>
