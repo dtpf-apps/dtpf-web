@@ -35,6 +35,13 @@ function registerValidSW(swUrl: string, config?: Config) {
         registration.update();
       }, 60_000);
 
+      // Check for updates when the app returns to foreground (mobile PWA)
+      document.addEventListener('visibilitychange', () => {
+        if (document.visibilityState === 'visible') {
+          registration.update();
+        }
+      });
+
       registration.onupdatefound = () => {
         const installingWorker = registration.installing;
         if (installingWorker == null) {
