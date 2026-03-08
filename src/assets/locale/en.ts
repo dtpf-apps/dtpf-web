@@ -123,7 +123,7 @@ export const en = {
   project_dauth_tagline_long:
     'A passwordless auth system that serves as infrastructure for all my applications.',
   project_dauth_desc:
-    'Complete auth system providing passwordless login to 4 apps. Authorization code flow, license management, and subscriptions. 854 tests, full CI/CD.',
+    'Complete auth system providing passwordless login to 4 apps. Authorization code flow, license management, and subscriptions. 929 tests, full CI/CD.',
   project_dauth_featured:
     'Multi-tenant passwordless auth. Magic link, passkey, OAuth. I use it as infrastructure for my other apps — 4 tenants connected.',
   project_dauth_problem:
