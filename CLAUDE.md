@@ -15,9 +15,39 @@ pnpm dev              # Vite dev server on localhost:3000
 pnpm build            # Production build (tsc + vite build)
 pnpm preview          # Preview production build locally
 pnpm format           # Prettier formatting
+pnpm test             # Run tests (vitest)
+pnpm test:watch       # Run tests in watch mode
+pnpm test:coverage    # Run tests with v8 coverage report (HTML in coverage/)
 ```
 
-No test framework configured.
+### Testing
+
+Vitest 4 with jsdom environment, @testing-library/react, and jest-dom matchers. 61 tests across 14 test files. Coverage thresholds: 70% (statements, branches, functions, lines). Tests run in CI before deploy.
+
+```
+test/
+├── setup.ts                          # IntersectionObserver + matchMedia mocks
+├── helpers/renderWithProviders.tsx    # MemoryRouter + ThemeProvider + i18n wrapper
+├── api/fetchHelper.test.ts           # 7 tests
+├── config/projects.test.ts           # 4 tests
+├── contexts/theme.test.tsx           # 8 tests
+├── utils/
+│   ├── i18n.test.ts                  # 3 tests
+│   └── isLocalhost.test.ts           # 5 tests
+├── components/
+│   ├── Header.test.tsx               # 4 tests
+│   └── Footer.test.tsx               # 3 tests
+└── pages/
+    ├── Home.test.tsx                  # 5 tests
+    ├── About.test.tsx                 # 4 tests
+    ├── Projects.test.tsx              # 3 tests
+    ├── ProjectDetail.test.tsx         # 5 tests
+    ├── Contact.test.tsx               # 6 tests
+    ├── NotFound.test.tsx              # 2 tests
+    └── PrivacyPolicy.test.tsx         # 2 tests
+```
+
+Key patterns: `renderWithProviders()` wraps components in router/theme/i18n, relative imports from test/ (path aliases only work inside src/), `document.querySelector` for inputs without label association.
 
 ## Architecture
 
