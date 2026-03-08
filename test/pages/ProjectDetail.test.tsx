@@ -32,7 +32,7 @@ describe('ProjectDetail', () => {
   it('shows metrics for dauth', () => {
     renderProjectDetail('dauth');
     expect(screen.getByText('Tenants activos')).toBeInTheDocument();
-    expect(screen.getByText('854')).toBeInTheDocument();
+    expect(screen.getByText('929')).toBeInTheDocument();
   });
 
   it('shows stack tags', () => {
