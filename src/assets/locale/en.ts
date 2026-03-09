@@ -12,8 +12,8 @@ export const en = {
   hero_proof_apps: 'apps in production',
   hero_proof_saas: 'years in enterprise SaaS',
   hero_proof_tests: 'tests',
-  hero_cta_projects: 'See what I\'ve built',
-  hero_cta_contact: 'Let\'s talk',
+  hero_cta_projects: "See what I've built",
+  hero_cta_contact: "Let's talk",
 
   // Home: Projects section
   home_projects_label: 'Projects',
@@ -24,7 +24,7 @@ export const en = {
   home_projects_detail: 'View detail',
 
   // Home: Manifesto
-  manifesto_line1: 'I don\'t collect side projects.',
+  manifesto_line1: "I don't collect side projects.",
   manifesto_line2: 'I ship them to production.',
   manifesto_body:
     'Every app I build has its own CI/CD, Grafana monitoring, and automated deploys. I use AI as a force multiplier throughout development — not as a shortcut, but as part of a rigorous engineering process.',
@@ -36,7 +36,7 @@ export const en = {
 
   // Home: CTA
   home_cta_title: 'Looking for new opportunities',
-  home_cta_desc: 'If you need a developer who ships products from idea to production, let\'s talk.',
+  home_cta_desc: "If you need a developer who ships products from idea to production, let's talk.",
   home_cta_button: 'Get in touch',
 
   // Projects page
@@ -60,9 +60,9 @@ export const en = {
   // About
   about_title: 'About',
   about_bio_p1:
-    'I\'m a software developer at Hub4Retail, a SaaS platform for the fashion retail industry with clients like Lacoste, Camper, and Ecoalf. I lead the frontend with React and TypeScript.',
+    "I'm a software developer at Hub4Retail, a SaaS platform for the fashion retail industry with clients like Lacoste, Camper, and Ecoalf. I lead the frontend with React and TypeScript.",
   about_bio_p2:
-    'Outside of work, I build and maintain 5 production apps — from a multi-tenant auth system to a music streaming platform. These aren\'t tutorials or exercises: they have real users, CI/CD, monitoring, and automated deploys.',
+    "Outside of work, I build and maintain 5 production apps — from a multi-tenant auth system to a music streaming platform. These aren't tutorials or exercises: they have real users, CI/CD, monitoring, and automated deploys.",
   about_bio_p3:
     'What motivates me most is taking an idea from zero to a working product. I use AI tools like Claude and Cursor as a natural part of my workflow — at the same level as Git or Docker.',
   about_role: 'Software Developer',
@@ -91,7 +91,7 @@ export const en = {
 
   // Contact
   contact_title: 'Contact',
-  contact_subtitle: 'Write me and I\'ll get back to you within 24 hours.',
+  contact_subtitle: "Write me and I'll get back to you within 24 hours.",
   contact_email_label: 'Email',
   contact_email_placeholder: 'you@email.com',
   contact_name_label: 'Name',
@@ -101,13 +101,13 @@ export const en = {
   contact_privacy: 'I have read and accept the',
   contact_privacy_link: 'privacy policy',
   contact_submit: 'Send message',
-  contact_success: 'Message sent. I\'ll reply soon.',
+  contact_success: "Message sent. I'll reply soon.",
   contact_error: 'Error sending. Please try again.',
   contact_or: 'or directly',
 
   // 404
   not_found_title: 'Page not found',
-  not_found_desc: 'The URL you\'re looking for doesn\'t exist or has been removed.',
+  not_found_desc: "The URL you're looking for doesn't exist or has been removed.",
   not_found_cta: 'Go home',
 
   // Footer
@@ -155,11 +155,12 @@ export const en = {
   project_audity_name: 'Audity',
   project_audity_tagline: 'Spotify-like music streaming with full player, playlists, and search.',
   project_audity_desc:
-    'Spotify-like music streaming. Full player, playlists, search, CMS. Collaborative master\'s final project, deployed and maintained.',
+    "Spotify-like music streaming. Full player, playlists, search, CMS. Collaborative master's final project, deployed and maintained.",
   project_audity_url: 'audity.dtpf.es',
 
   // Service Worker Update
   'sw_update-available': 'New version available',
   'sw_update-now': 'Update',
+  sw_updating: 'Updating...',
   'sw_update-on-navigate': 'Will load automatically on next navigation',
 };

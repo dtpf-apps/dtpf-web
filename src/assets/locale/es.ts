@@ -161,5 +161,6 @@ export const es = {
   // Service Worker Update
   'sw_update-available': 'Nueva version disponible',
   'sw_update-now': 'Actualizar',
+  sw_updating: 'Actualizando...',
   'sw_update-on-navigate': 'Se cargara automaticamente al navegar',
 };
