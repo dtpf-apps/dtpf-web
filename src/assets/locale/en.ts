@@ -135,15 +135,27 @@ export const en = {
   project_dauth_url: 'dauth.ovh',
 
   project_dstash_name: 'dstash',
-  project_dstash_tagline: 'Media storage and management platform with drag-and-drop and REST API.',
+  project_dstash_tagline: 'Media storage platform with secure REST API, admin dashboard, and signed URLs.',
   project_dstash_desc:
-    'Media storage with folder organization, preview, drag-and-drop upload, and REST API for external integration. Auth delegated to dauth.',
+    'Media storage with folder organization, drag-and-drop, REST API with signed URLs and opaque API keys. Full admin dashboard, rate limiting, and audit logging. 1,197 tests.',
+  project_dstash_problem:
+    'I needed to store and serve files (images, documents, media) for multiple apps, with access control and without depending on external services like S3.',
+  project_dstash_solution:
+    'dstash is a self-hosted media storage platform. Supports drag-and-drop upload, folder organization, preview, and REST API for external integration. Security with signed URLs (HMAC-SHA256), opaque API keys, Zod validation, rate limiting, and audit logging.',
+  project_dstash_result:
+    'In production serving media for multiple applications. 1,197 automated tests (331 backend, 866 frontend). Admin dashboard with user, content, and audit management. Frontend redesigned with Tailwind CSS v4 + Radix UI. Full CI/CD with GitHub Actions.',
   project_dstash_url: 'dstash.dtpf.es',
 
   project_dalist_name: 'Dalist',
-  project_dalist_tagline: 'Wishlists with sharing, categories, and full offline support.',
+  project_dalist_tagline: 'Wishlists with drag-and-drop, custom themes, and PWA.',
   project_dalist_desc:
-    'Wishlists with categories, completion status, and user sharing. PWA with full offline support via IndexedDB and Workbox.',
+    'Wishlists with categories, drag-and-drop reordering, customizable color themes, and installable PWA. Frontend redesigned with Tailwind CSS v4.',
+  project_dalist_problem:
+    'I wanted a simple app to manage shared wishlists — gifts, pending purchases — without relying on generic note-taking apps.',
+  project_dalist_solution:
+    'Dalist is a wishlist app with drag-and-drop (dnd-kit), customizable colors per list, status filters, and sharing. Installable PWA with service worker and Workbox precaching.',
+  project_dalist_result:
+    'In production as an installable PWA. Frontend migrated from Ant Design to Tailwind CSS v4 + Lucide + Framer Motion. Auth delegated to dauth. CI/CD with GitHub Actions.',
   project_dalist_url: 'dalist.dtpf.es',
 
   project_portfolio_name: 'dtpf.es',

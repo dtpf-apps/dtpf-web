@@ -135,15 +135,27 @@ export const es = {
   project_dauth_url: 'dauth.ovh',
 
   project_dstash_name: 'dstash',
-  project_dstash_tagline: 'Plataforma de almacenamiento y gestion de medios con drag-and-drop y API REST.',
+  project_dstash_tagline: 'Plataforma de almacenamiento de medios con API REST segura, admin dashboard y signed URLs.',
   project_dstash_desc:
-    'Almacenamiento de medios con organizacion por carpetas, vista previa, subida drag-and-drop, y API REST para integracion externa. Auth delegada en dauth.',
+    'Almacenamiento de medios con organizacion por carpetas, drag-and-drop, API REST con signed URLs y API keys opacas. Admin dashboard completo, rate limiting y audit logging. 1.197 tests.',
+  project_dstash_problem:
+    'Necesitaba almacenar y servir archivos (imagenes, documentos, media) para varias aplicaciones, con control de acceso y sin depender de servicios externos como S3.',
+  project_dstash_solution:
+    'dstash es una plataforma de almacenamiento de medios propia. Soporta subida drag-and-drop, organizacion por carpetas, vista previa, y API REST para integracion externa. Seguridad con signed URLs (HMAC-SHA256), API keys opacas, validacion Zod, rate limiting y audit logging.',
+  project_dstash_result:
+    'En produccion sirviendo medios para multiples aplicaciones. 1.197 tests automatizados (331 backend, 866 frontend). Admin dashboard con gestion de usuarios, contenido y auditoria. Frontend redisenado con Tailwind CSS v4 + Radix UI. CI/CD completo con GitHub Actions.',
   project_dstash_url: 'dstash.dtpf.es',
 
   project_dalist_name: 'Dalist',
-  project_dalist_tagline: 'Listas de deseos con comparticion, categorias y soporte offline completo.',
+  project_dalist_tagline: 'Listas de deseos con drag-and-drop, temas personalizables y PWA.',
   project_dalist_desc:
-    'Listas de deseos con categorias, estado de completado y comparticion entre usuarios. PWA con soporte offline completo via IndexedDB y Workbox.',
+    'Listas de deseos con categorias, drag-and-drop para reordenar, temas de color personalizables y PWA instalable. Frontend redisenado con Tailwind CSS v4.',
+  project_dalist_problem:
+    'Queria una app sencilla para gestionar listas de deseos compartidas — regalos, compras pendientes — sin depender de apps de notas genericas.',
+  project_dalist_solution:
+    'Dalist es una app de listas de deseos con drag-and-drop (dnd-kit), colores personalizables por lista, filtros por estado y comparticion. PWA instalable con service worker y Workbox para precaching.',
+  project_dalist_result:
+    'En produccion como PWA instalable. Frontend migrado de Ant Design a Tailwind CSS v4 + Lucide + Framer Motion. Auth delegada en dauth. CI/CD con GitHub Actions.',
   project_dalist_url: 'dalist.dtpf.es',
 
   project_portfolio_name: 'dtpf.es',
