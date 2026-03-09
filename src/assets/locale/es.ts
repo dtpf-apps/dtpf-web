@@ -123,7 +123,7 @@ export const es = {
   project_dauth_tagline_long:
     'Un sistema de autenticacion passwordless que sirve como infraestructura para todas mis aplicaciones.',
   project_dauth_desc:
-    'Sistema completo de autenticacion que proporciona login sin contrasena a 4 aplicaciones. Authorization code flow, gestion de licencias y suscripciones. 929 tests, CI/CD completo.',
+    'Sistema completo de autenticacion que proporciona login sin contrasena a 4 aplicaciones. Authorization code flow, gestion de licencias y suscripciones. 1.159 tests, CI/CD completo.',
   project_dauth_featured:
     'Autenticacion passwordless multi-tenant. Magic link, passkey, OAuth. Lo uso como infraestructura para mis otras apps — 4 tenants conectados.',
   project_dauth_problem:
@@ -131,7 +131,7 @@ export const es = {
   project_dauth_solution:
     'dauth es un sistema de autenticacion como servicio (AuthaaS) que proporciona login sin contrasena a cualquier aplicacion. Soporta magic link y passkey (WebAuthn). Cada app conectada obtiene su propio tenant con configuracion independiente y authorization code flow.',
   project_dauth_result:
-    'Actualmente gestiona la autenticacion de 4 aplicaciones en produccion. 929 tests automatizados. CI/CD completo con GitHub Actions. Monitoring centralizado con Grafana + Loki. El frontend fue redisenado completamente con Tailwind CSS v4 eliminando Ant Design.',
+    'Actualmente gestiona la autenticacion de 4 aplicaciones en produccion. 1.159 tests automatizados. CI/CD completo con GitHub Actions. Monitoring centralizado con Grafana + Loki. El frontend fue redisenado completamente con Tailwind CSS v4 eliminando Ant Design.',
   project_dauth_url: 'dauth.ovh',
 
   project_dstash_name: 'dstash',

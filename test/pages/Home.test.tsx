@@ -12,7 +12,7 @@ describe('Home', () => {
   it('shows proof bar with stats', () => {
     renderWithProviders(<Home />);
     expect(screen.getByText('5')).toBeInTheDocument();
-    expect(screen.getByText('1.700+')).toBeInTheDocument();
+    expect(screen.getByText('2.400+')).toBeInTheDocument();
   });
 
   it('renders featured projects in bento grid', () => {
