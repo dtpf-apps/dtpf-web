@@ -147,15 +147,15 @@ export const en = {
   project_dstash_url: 'dstash.dtpf.es',
 
   project_dalist_name: 'Dalist',
-  project_dalist_tagline: 'Wishlists with drag-and-drop, custom themes, and PWA.',
+  project_dalist_tagline: 'Notes and checklists app with drag-and-drop, labels, colors, and PWA.',
   project_dalist_desc:
-    'Wishlists with categories, drag-and-drop reordering, customizable color themes, and installable PWA. Frontend redesigned with Tailwind CSS v4.',
+    'Text notes and checklists with drag-and-drop, custom colors, labels, archive, and trash. Installable PWA with Tailwind CSS v4.',
   project_dalist_problem:
-    'I wanted a simple app to manage shared wishlists — gifts, pending purchases — without relying on generic note-taking apps.',
+    'I needed a central place to organize quick notes, to-do lists, and checklists — without the complexity of Notion or the limitations of Google Keep.',
   project_dalist_solution:
-    'Dalist is a wishlist app with drag-and-drop (dnd-kit), customizable colors per list, status filters, and sharing. Installable PWA with service worker and Workbox precaching.',
+    'Dalist is a Google Keep-style notes and checklists app. Supports text notes, checklists with completable items, per-note colors, labels, pinning, archive, and trash with auto-deletion after 7 days. Drag-and-drop reordering via dnd-kit.',
   project_dalist_result:
-    'In production as an installable PWA. Frontend migrated from Ant Design to Tailwind CSS v4 + Lucide + Framer Motion. Auth delegated to dauth. CI/CD with GitHub Actions.',
+    'In production as an installable PWA. Frontend fully redesigned: from Ant Design to Tailwind CSS v4 + Lucide + Framer Motion. Auth delegated to dauth. CI/CD with GitHub Actions.',
   project_dalist_url: 'dalist.dtpf.es',
 
   project_portfolio_name: 'dtpf.es',
