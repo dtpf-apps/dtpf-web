@@ -38,7 +38,7 @@ describe('ProjectDetail', () => {
   it('shows stack tags', () => {
     renderProjectDetail('dstash');
     expect(screen.getByText('React 19')).toBeInTheDocument();
-    expect(screen.getByText('MongoDB')).toBeInTheDocument();
+    expect(screen.getByText('MongoDB 8')).toBeInTheDocument();
   });
 
   it('has visit link to live URL', () => {
