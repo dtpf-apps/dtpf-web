@@ -84,7 +84,7 @@ export default function Home() {
           <span className="hidden text-text-muted md:inline">·</span>
           <span><span className="font-semibold text-text-primary">3+</span> {t('hero_proof_saas')}</span>
           <span className="hidden text-text-muted md:inline">·</span>
-          <span><span className="font-semibold text-text-primary">1.700+</span> {t('hero_proof_tests')}</span>
+          <span><span className="font-semibold text-text-primary">2.400+</span> {t('hero_proof_tests')}</span>
         </motion.div>
 
         <motion.div

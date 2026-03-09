@@ -26,7 +26,7 @@ export const projects: Project[] = [
     stack: ['React 19', 'TypeScript 5.9', 'Node.js 22', 'Express 5', 'MongoDB 8', 'Tailwind CSS v4', 'WebAuthn', 'Vite 7', 'GitHub Actions'],
     metrics: [
       { labelKey: 'tenants', label: 'Tenants activos', value: '4' },
-      { labelKey: 'tests', label: 'Tests', value: '929' },
+      { labelKey: 'tests', label: 'Tests', value: '1.159' },
       { labelKey: 'auth', label: 'Autenticacion', value: 'Passwordless' },
       { labelKey: 'monitoring', label: 'Monitoring', value: 'Grafana + Loki' },
       { labelKey: 'deploy', label: 'Deploy', value: 'GitHub Actions' },
