@@ -1,11 +1,6 @@
 import { isLocalhost } from './utils/isLocalhost';
 
-type Config = {
-  onSuccess?: (registration: ServiceWorkerRegistration) => void;
-  onUpdate?: (registration: ServiceWorkerRegistration) => void;
-};
-
-export function register(config?: Config) {
+export function register() {
   if (import.meta.env.PROD && 'serviceWorker' in navigator) {
     const publicUrl = new URL(import.meta.env.BASE_URL, window.location.href);
     if (publicUrl.origin !== window.location.origin) {
@@ -16,67 +11,24 @@ export function register(config?: Config) {
       const swUrl = `${import.meta.env.BASE_URL}service-worker.js`;
 
       if (isLocalhost) {
-        checkValidServiceWorker(swUrl, config);
+        checkValidServiceWorker(swUrl);
         navigator.serviceWorker.ready.then(() => {
           console.log('This web app is being served cache-first by a service worker.');
         });
       } else {
-        registerValidSW(swUrl, config);
+        registerValidSW(swUrl);
       }
     });
   }
 }
 
-function registerValidSW(swUrl: string, config?: Config) {
-  navigator.serviceWorker
-    .register(swUrl)
-    .then((registration) => {
-      setInterval(() => {
-        registration.update();
-      }, 60_000);
-
-      // Check for updates when the app returns to foreground (mobile PWA)
-      document.addEventListener('visibilitychange', () => {
-        if (document.visibilityState === 'visible') {
-          registration.update();
-        }
-      });
-
-      registration.onupdatefound = () => {
-        const installingWorker = registration.installing;
-        if (installingWorker == null) {
-          return;
-        }
-        installingWorker.onstatechange = () => {
-          if (installingWorker.state === 'installed') {
-            if (navigator.serviceWorker.controller) {
-              document.dispatchEvent(
-                new CustomEvent('sw-update-available', {
-                  detail: { waiting: registration.waiting },
-                })
-              );
-              if (config?.onUpdate) {
-                config.onUpdate(registration);
-              }
-            } else {
-              if (config?.onSuccess) {
-                config.onSuccess(registration);
-              }
-            }
-          }
-        };
-      };
-    })
-    .catch((error) => {
-      console.error('Error during service worker registration:', error);
-    });
-
-  navigator.serviceWorker.addEventListener('controllerchange', () => {
-    window.location.reload();
+function registerValidSW(swUrl: string) {
+  navigator.serviceWorker.register(swUrl).catch((error) => {
+    console.error('Error during service worker registration:', error);
   });
 }
 
-function checkValidServiceWorker(swUrl: string, config?: Config) {
+function checkValidServiceWorker(swUrl: string) {
   fetch(swUrl, {
     headers: { 'Service-Worker': 'script' },
   })
@@ -89,7 +41,7 @@ function checkValidServiceWorker(swUrl: string, config?: Config) {
           });
         });
       } else {
-        registerValidSW(swUrl, config);
+        registerValidSW(swUrl);
       }
     })
     .catch(() => {

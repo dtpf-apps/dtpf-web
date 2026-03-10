@@ -1,60 +1,53 @@
 import { useEffect, useCallback, useState } from 'react';
 
+declare const __BUILD_TIME__: string;
+
 export default function useSWUpdate() {
   const [updateAvailable, setUpdateAvailable] = useState(false);
-  const [waitingWorker, setWaitingWorker] = useState<ServiceWorker | null>(null);
 
   useEffect(() => {
+    if (!import.meta.env.PROD) return;
+
     let cancelled = false;
 
-    function handleWaiting(sw: ServiceWorker) {
-      if (!cancelled) {
-        setWaitingWorker(sw);
-        setUpdateAvailable(true);
+    async function check() {
+      try {
+        const res = await fetch(`/version.json?_=${Date.now()}`);
+        if (!res.ok) return;
+        const data = await res.json();
+        if (!cancelled && data.buildTime && data.buildTime !== __BUILD_TIME__) {
+          setUpdateAvailable(true);
+        }
+      } catch {
+        // Network error — skip silently
       }
     }
 
-    // Listen for CustomEvent from serviceWorkerRegistration.ts
-    function onSWUpdate(e: Event) {
-      const { waiting } = (e as CustomEvent).detail;
-      if (waiting) handleWaiting(waiting);
-    }
+    // First check after 5s (give deploy time to finish)
+    const timeout = setTimeout(check, 5_000);
 
-    document.addEventListener('sw-update-available', onSWUpdate);
+    // Then check every 30s
+    const interval = setInterval(check, 30_000);
 
-    // Directly monitor registration — more reliable than CustomEvent alone
-    navigator.serviceWorker?.getRegistration().then((reg) => {
-      if (!reg || cancelled) return;
-
-      // Check if there's already a waiting worker
-      if (reg.waiting) {
-        handleWaiting(reg.waiting);
-        return;
-      }
-
-      // Listen for future updates directly on the registration
-      reg.addEventListener('updatefound', () => {
-        const newWorker = reg.installing;
-        if (!newWorker) return;
-        newWorker.addEventListener('statechange', () => {
-          if (newWorker.state === 'installed' && navigator.serviceWorker.controller) {
-            handleWaiting(newWorker);
-          }
-        });
-      });
-    });
+    // Also check when app comes to foreground
+    const onVisible = () => {
+      if (document.visibilityState === 'visible') check();
+    };
+    document.addEventListener('visibilitychange', onVisible);
+    window.addEventListener('focus', check);
 
     return () => {
       cancelled = true;
-      document.removeEventListener('sw-update-available', onSWUpdate);
+      clearTimeout(timeout);
+      clearInterval(interval);
+      document.removeEventListener('visibilitychange', onVisible);
+      window.removeEventListener('focus', check);
     };
   }, []);
 
   const applyUpdate = useCallback(() => {
-    if (waitingWorker) {
-      waitingWorker.postMessage({ type: 'SKIP_WAITING' });
-    }
-  }, [waitingWorker]);
+    window.location.reload();
+  }, []);
 
   return { updateAvailable, applyUpdate };
 }
