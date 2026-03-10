@@ -4,7 +4,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## Project Overview
 
-Personal portfolio website (dtpf.es). Built with React 19, TypeScript 5.9, Tailwind CSS v4, Framer Motion, and Vite 7. Package manager: **pnpm**. Requires **Node.js 22+**.
+Personal portfolio website (dtpf.es). Built with React 19, TypeScript 5.9, Tailwind CSS v4, Framer Motion 12, Lucide icons, and Vite 7. Package manager: **pnpm**. Requires **Node.js 22+**.
 
 Dark mode by default, light via `.light` class on `<html>`. i18n with Spanish default, English fallback (i18next + react-i18next).
 
@@ -22,15 +22,15 @@ pnpm test:coverage    # Run tests with v8 coverage report (HTML in coverage/)
 
 ### Testing
 
-Vitest 4 with jsdom environment, @testing-library/react, and jest-dom matchers. 61 tests across 14 test files. Coverage thresholds: 70% (statements, branches, functions, lines). Tests run in CI before deploy.
+Vitest 4 with jsdom environment, @testing-library/react, and jest-dom matchers. **61 tests** across 14 test files. Coverage thresholds: 70% (statements, branches, functions, lines). Tests run in CI before deploy.
 
 ```
 test/
 ├── setup.ts                          # IntersectionObserver + matchMedia mocks
 ├── helpers/renderWithProviders.tsx    # MemoryRouter + ThemeProvider + i18n wrapper
-├── api/fetchHelper.test.ts           # 7 tests
-├── config/projects.test.ts           # 4 tests
-├── contexts/theme.test.tsx           # 8 tests
+├── api/fetchHelper.test.ts           # 7 tests — apiUrl, buildUrl, fetchAPI
+├── config/projects.test.ts           # 4 tests — project data validation
+├── contexts/theme.test.tsx           # 8 tests — ThemeProvider + useTheme
 ├── utils/
 │   ├── i18n.test.ts                  # 3 tests
 │   └── isLocalhost.test.ts           # 5 tests
@@ -87,11 +87,11 @@ Single `PortfolioLayout` wrapping all routes: sticky Header + `AnimatePresence` 
 
 ### Projects Data
 
-`src/config/projects.ts` — Typed `Project` interface with 5 projects (dauth, dstash, dalist, audity, dtpf). Each has i18n keys for name, tagline, description, case study sections, stack array, metrics, and live URL.
+`src/config/projects.ts` — Typed `Project` interface with 5 projects (dauth, dstash, dalist, dtpf, audity). Each has i18n keys for name, tagline, description, case study sections (problemKey, solutionKey, resultKey), stack array, metrics, and live URL. dauth and dstash include metrics (test counts, deploy info). dalist includes case study sections. The Home page filters out `dtpf` from the featured bento grid (shows 4 projects).
 
 ### API
 
-`src/api/utils/config.ts` — `apiUrl()` builds full endpoint URL. Base path auto-detects localhost (port 3998) vs production (same-origin). Single endpoint used: `POST /api/v1/contact-me`.
+`src/api/utils/config.ts` — `basePath` and `apiVersion` constants. Base path auto-detects localhost (port 3998) vs production (same-origin). `src/api/utils/fetchHelper.ts` — `apiUrl()` builds full endpoint URL, `buildUrl()` appends query params, `fetchAPI<T>()` generic typed fetch wrapper with `credentials: 'include'`. Single endpoint used: `POST /api/v1/contact-me`.
 
 ### Contact Form Anti-Spam
 
@@ -108,9 +108,9 @@ Framer Motion throughout:
 - `whileInView` scroll reveals with stagger for projects and stack sections
 - Mobile menu overlay with staggered nav links
 
-### Offline Support
+### Offline Support / PWA
 
-PWA via `vite-plugin-pwa` with `injectManifest` strategy. Service worker in `src/service-worker.ts`. Workbox 7 for precaching.
+PWA via `vite-plugin-pwa` with `injectManifest` strategy. Service worker in `src/service-worker.ts`, registration logic in `src/serviceWorkerRegistration.ts`. Workbox 7 for precaching. `useSWUpdate` hook monitors for new service worker versions and surfaces update availability via `SWUpdateBanner` component (slide-up toast with "Update now" / dismiss).
 
 ### Path Aliases
 
@@ -120,19 +120,28 @@ PWA via `vite-plugin-pwa` with `injectManifest` strategy. Service worker in `src
 
 ```
 src/
-├── api/utils/config.ts          # API URL builder
-├── assets/locale/{es,en}.ts     # i18n translations
-├── config/projects.ts           # Project data
-├── contexts/theme/              # ThemeContext + useTheme
-├── router/{router,paths}.tsx    # Routes
-├── styles/portfolio.css         # Tailwind @theme tokens
-├── utils/i18n.ts                # i18next config
+├── api/utils/
+│   ├── config.ts                # basePath + apiVersion constants
+│   └── fetchHelper.ts           # apiUrl, buildUrl, fetchAPI<T>
+├── assets/locale/{es,en}.ts     # i18n translations (~120 keys each)
+├── config/projects.ts           # Project data (5 projects)
+├── contexts/theme/              # ThemeContext + ThemeProvider + useTheme
+├── hooks/useSWUpdate.ts         # Service worker update detection hook
+├── router/{router,paths}.tsx    # Routes (createBrowserRouter + lazy-loaded)
+├── styles/portfolio.css         # Tailwind @theme tokens + base styles
+├── utils/
+│   ├── i18n.ts                  # i18next config
+│   └── isLocalhost.ts           # Localhost detection helper
 ├── views/
 │   ├── layouts/PortfolioLayout.tsx
-│   ├── components/navigation/{Header,Footer}.tsx
+│   ├── components/
+│   │   ├── navigation/{Header,Footer}.tsx
+│   │   └── SWUpdateBanner.tsx   # Service worker update toast
 │   └── pages/{Home,Projects,ProjectDetail,About,Contact,NotFound,PrivacyPolicy}.tsx
-├── main.tsx                     # Entry point
-└── App.tsx                      # ThemeProvider > RouterProvider + Toaster
+├── service-worker.ts            # Workbox service worker (injectManifest)
+├── serviceWorkerRegistration.ts # SW registration + update event dispatch
+├── main.tsx                     # Entry point (registers SW)
+└── App.tsx                      # ThemeProvider > RouterProvider + SWUpdateBanner + Toaster
 ```
 
 ## Code Style
@@ -142,5 +151,8 @@ src/
 
 ## Environment Variables
 
-No env vars needed for the frontend in development. In production, set as GitHub Secrets:
+`.env` file with:
 - `VITE_PUBLIC_URL` — Public URL (e.g., `https://dtpf.es`)
+- `VITE_DAUTH_DOMAIN_NAME` — Dauth domain name (e.g., `dtpf`)
+
+In production, both are set as GitHub Secrets.

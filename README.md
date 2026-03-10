@@ -1,20 +1,22 @@
 # dtpf-frontend-react
 
-Frontend SPA for the [dtpf.es](https://dtpf.es) personal portfolio website. Dark-mode-first design with animated page transitions, i18n support, and PWA offline capabilities.
+Frontend SPA for the [dtpf.es](https://dtpf.es) personal portfolio website. Built with React 19, TypeScript, Tailwind CSS v4, and Framer Motion, featuring dark-mode-first design, animated page transitions, ES/EN internationalization, and PWA offline support. Live at [dtpf.es](https://dtpf.es).
 
 ## Tech Stack
 
-- **Framework:** React 19
-- **Language:** TypeScript 5.9
-- **Build Tool:** Vite 7
-- **Styling:** Tailwind CSS v4 with custom `@theme` design tokens
-- **Animations:** Framer Motion
-- **Icons:** Lucide React
-- **Routing:** React Router v7 (lazy-loaded routes)
-- **i18n:** i18next + react-i18next (Spanish default, English fallback)
-- **Notifications:** Sonner (toast)
-- **PWA:** vite-plugin-pwa with Workbox 7 (injectManifest strategy)
-- **Package Manager:** pnpm
+| Technology | Version | Purpose |
+|---|---|---|
+| React | 19 | UI framework |
+| TypeScript | 5.9 | Type safety |
+| Vite | 7 | Build tool |
+| Tailwind CSS | 4 | Utility-first styling |
+| Framer Motion | 12 | Animations and page transitions |
+| Lucide React | 0.577 | Icons |
+| React Router | 7 | Client-side routing (lazy-loaded) |
+| i18next | 25 | Internationalization (ES/EN) |
+| Sonner | 2 | Toast notifications |
+| Workbox | 7 | PWA service worker (injectManifest) |
+| Vitest | 4 | Testing |
 
 ## Prerequisites
 
@@ -22,7 +24,7 @@ Frontend SPA for the [dtpf.es](https://dtpf.es) personal portfolio website. Dark
 - pnpm
 - Backend API running on port 3998 (see dtpf-backend-node)
 
-## Installation
+## Setup
 
 ```bash
 git clone https://github.com/dtpf-apps/dtpf-frontend-react.git
@@ -30,30 +32,62 @@ cd dtpf-frontend-react
 pnpm install
 ```
 
-No environment variables are needed for local development.
+## Scripts
 
-## Available Scripts
+| Script | Description |
+|---|---|
+| `pnpm dev` | Start Vite dev server on port 3000 |
+| `pnpm build` | Production build (`tsc` + `vite build`) |
+| `pnpm preview` | Preview production build locally |
+| `pnpm format` | Format source files with Prettier |
+| `pnpm test` | Run tests with Vitest |
+| `pnpm test:watch` | Run tests in watch mode |
+| `pnpm test:coverage` | Run tests with v8 coverage report |
 
-| Script | Command | Description |
-|--------|---------|-------------|
-| `dev` | `pnpm dev` | Start Vite dev server on port 3000 |
-| `build` | `pnpm build` | Production build (`tsc` + `vite build`) |
-| `preview` | `pnpm preview` | Preview production build locally |
-| `format` | `pnpm format` | Format source files with Prettier |
+## Environment Variables
 
-## Development
+| Variable | Description | Default |
+|---|---|---|
+| `VITE_PUBLIC_URL` | Public URL | `https://dtpf.es` |
+| `VITE_DAUTH_DOMAIN_NAME` | dauth domain name | `dtpf` |
 
-```bash
-# Ensure the backend is running on port 3998 first
-pnpm dev
+No env vars are needed for local development. In production, both are set as GitHub Secrets.
+
+## Project Structure
+
+```
+src/
+├── api/utils/
+│   ├── config.ts                    # basePath + apiVersion (auto-detects localhost)
+│   └── fetchHelper.ts               # apiUrl, buildUrl, fetchAPI<T>
+├── assets/locale/{es,en}.ts         # i18n translations (~120 keys each)
+├── config/projects.ts               # Typed project data (5 projects with i18n keys)
+├── contexts/theme/                  # ThemeContext + ThemeProvider + useTheme
+├── hooks/useSWUpdate.ts             # Service worker update detection hook
+├── router/
+│   ├── router.tsx                   # Route definitions with React.lazy()
+│   └── paths.ts                     # Centralized path constants
+├── styles/portfolio.css             # Tailwind @theme design tokens + base styles
+├── utils/
+│   ├── i18n.ts                      # i18next configuration
+│   └── isLocalhost.ts               # Localhost detection helper
+├── views/
+│   ├── layouts/PortfolioLayout.tsx   # Sticky header + AnimatePresence + footer
+│   ├── components/
+│   │   ├── navigation/              # Header, Footer
+│   │   └── SWUpdateBanner.tsx       # Service worker update toast
+│   └── pages/                       # Home, Projects, ProjectDetail, About,
+│                                    # Contact, NotFound, PrivacyPolicy
+├── service-worker.ts                # Workbox service worker (injectManifest)
+├── serviceWorkerRegistration.ts     # SW registration + update event dispatch
+├── main.tsx                         # Entry point (registers SW)
+└── App.tsx                          # ThemeProvider > RouterProvider + Toaster
 ```
 
-The dev server starts at `http://localhost:3000`. API calls auto-detect localhost and proxy to `http://localhost:3998`.
-
-## Pages
+## Routes
 
 | Path | Page | Description |
-|------|------|-------------|
+|---|---|---|
 | `/` | Home | Hero section, bento grid projects, manifesto, stack, CTA |
 | `/projects` | Projects | Project list with stacked card layout |
 | `/projects/:slug` | ProjectDetail | Case study: Problem, Solution, Result |
@@ -62,86 +96,39 @@ The dev server starts at `http://localhost:3000`. API calls auto-detect localhos
 | `/privacy-policy` | PrivacyPolicy | Static GDPR/LOPD page |
 | `*` | NotFound | 404 page |
 
-## Project Structure
+## Styling
 
-```
-src/
-├── api/utils/config.ts          # API URL builder (auto-detects localhost vs production)
-├── assets/locale/{es,en}.ts     # i18n translation files (~120 keys each)
-├── config/projects.ts           # Typed project data (5 projects with i18n keys)
-├── contexts/theme/              # ThemeContext + useTheme hook
-├── router/
-│   ├── router.tsx               # Route definitions with React.lazy()
-│   └── paths.ts                 # Centralized path constants
-├── styles/portfolio.css         # Tailwind @theme design tokens
-├── utils/i18n.ts                # i18next configuration
-├── views/
-│   ├── layouts/PortfolioLayout.tsx    # Sticky header + AnimatePresence + footer
-│   ├── components/navigation/        # Header, Footer
-│   └── pages/                        # Home, Projects, ProjectDetail, About,
-│                                     # Contact, NotFound, PrivacyPolicy
-├── service-worker.ts            # Workbox PWA service worker
-├── main.tsx                     # Entry point
-└── App.tsx                      # ThemeProvider > RouterProvider + Toaster
-```
-
-## Design System
-
-- **Theme:** Dark mode by default, light mode via `.light` class on `<html>` (persisted in localStorage as `dtpf-theme`)
-- **Color palette:** Ocean Teal -- accent `#2DD4BF`, warm `#FBBF24`, dark background `#0B0F19`
-- **Fonts:** Space Grotesk (headings), Inter (body), JetBrains Mono (code/labels) -- loaded via Google Fonts
-- **Grain texture:** CSS SVG filter overlay on `body::after`
-- **Reduced motion:** Respects `prefers-reduced-motion`
-
-## Animations
-
-Framer Motion is used throughout:
-
-- Page transitions via `AnimatePresence mode="wait"`
-- Staggered hero entrance (name, tagline, proof bar, CTAs)
-- `whileInView` scroll reveals with stagger for projects and stack sections
-- Mobile menu overlay with staggered nav links
-
-## Contact Form Anti-Spam
-
-Client-side layers:
-
-- **Honeypot** field (`website`) hidden off-screen -- bots fill it, humans do not
-- **Time trap** (`_t` timestamp) -- submissions faster than 3 seconds are rejected
-
-Server-side layers (handled by the backend):
-
-- IP rate limit: 3 requests per hour
-- Email cooldown: 1 message per email per 24 hours
-- URL detection: max 5 URLs in message body
+Dark-mode-first design built with Tailwind CSS v4 and custom `@theme` design tokens defined in `src/styles/portfolio.css`. Ocean Teal palette: accent `#2DD4BF`, warm `#FBBF24`, dark background `#0B0F19`. Light mode toggles via `.light` class on `<html>`, persisted in localStorage (`dtpf-theme`). Typography uses Space Grotesk (headings), Inter (body), and JetBrains Mono (code/labels) loaded via Google Fonts. Grain texture overlay via CSS SVG filter. Respects `prefers-reduced-motion`. Framer Motion powers page transitions (`AnimatePresence`), staggered hero entrance, scroll reveals, and mobile menu animations.
 
 ## i18n
 
-Configured in `src/utils/i18n.ts` with browser language detection. Language persisted in localStorage (`dtpf-lang`). Translation files in `src/assets/locale/{es,en}.ts`.
+i18next with browser language detection. Spanish default, English fallback. Language persisted in localStorage (`dtpf-lang`). Translation files in `src/assets/locale/{es,en}.ts` with ~120 keys each.
 
-## Environment Variables
+## PWA
 
-No env vars are needed for local development. In production, set as GitHub Secrets:
+Progressive Web App via `vite-plugin-pwa` with `injectManifest` strategy. Workbox 7 handles precaching of all build assets. Service worker in `src/service-worker.ts`, registration in `src/serviceWorkerRegistration.ts`. `useSWUpdate` hook detects new versions and shows a `SWUpdateBanner` toast with "Update now" / dismiss options.
 
-| Variable | Description |
-|----------|-------------|
-| `VITE_PUBLIC_URL` | Public URL (e.g., `https://dtpf.es`) |
+## Testing
 
-## Deployment
-
-Deployment is automatic via GitHub Actions. Push to a branch triggers build + deploy.
+61 tests across 14 files using Vitest 4 with jsdom, @testing-library/react, and jest-dom. Coverage thresholds: 70% (statements, branches, functions, lines).
 
 ```bash
-git push origin main    # deploys to production (dtpf.es)
-git push origin dev     # deploys to staging (dev.dtpf.es)
+pnpm test
+pnpm test:coverage
 ```
 
-In production, the backend serves the built frontend from its `client/` directory as static files. Ports: 3998 (production), 5998 (staging).
+## Deploy
+
+GitHub Actions CI/CD. Push triggers build on self-hosted runner + rsync to app server.
+
+```bash
+git push origin main    # production (dtpf.es)
+git push origin dev     # staging (dev.dtpf.es)
+```
 
 ## Code Style
 
-- Prettier: 110 char width, single quotes, semicolons, trailing commas (es5), 2-space indent
-- No linter or test framework configured
+Prettier: 110 char width, single quotes, semicolons, trailing commas (es5), 2-space indent.
 
 ## License
 
