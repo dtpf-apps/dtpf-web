@@ -86,4 +86,53 @@ describe('ThemeContext', () => {
   it('throws if useTheme is used outside ThemeProvider', () => {
     expect(() => renderHook(() => useTheme())).toThrow('useTheme must be used within ThemeProvider');
   });
+
+  it('updates meta theme-color for dark theme', () => {
+    // Create meta tag
+    const meta = document.createElement('meta');
+    meta.setAttribute('name', 'theme-color');
+    meta.setAttribute('content', '#F8FAFC');
+    document.head.appendChild(meta);
+
+    renderThemeHook();
+
+    // Default is dark
+    expect(meta.getAttribute('content')).toBe('#0B0F19');
+
+    document.head.removeChild(meta);
+  });
+
+  it('updates meta theme-color for light theme', () => {
+    const meta = document.createElement('meta');
+    meta.setAttribute('name', 'theme-color');
+    meta.setAttribute('content', '#0B0F19');
+    document.head.appendChild(meta);
+
+    localStorage.setItem('dtpf-theme', 'light');
+    renderThemeHook();
+
+    expect(meta.getAttribute('content')).toBe('#F8FAFC');
+
+    document.head.removeChild(meta);
+  });
+
+  it('detects system light preference when no saved theme', () => {
+    Object.defineProperty(window, 'matchMedia', {
+      writable: true,
+      configurable: true,
+      value: (query: string) => ({
+        matches: query === '(prefers-color-scheme: light)' ? true : false,
+        media: query,
+        addEventListener: vi.fn(),
+        removeEventListener: vi.fn(),
+        onchange: null,
+        addListener: vi.fn(),
+        removeListener: vi.fn(),
+        dispatchEvent: vi.fn(),
+      }),
+    });
+
+    const { result } = renderThemeHook();
+    expect(result.current.theme).toBe('light');
+  });
 });
