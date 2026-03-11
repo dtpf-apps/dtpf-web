@@ -26,4 +26,32 @@ describe('Projects', () => {
     // 4 projects (excluding dtpf) should have visit links
     expect(externalLinks.length).toBe(4);
   });
+
+  it('dtpf shows "This site" badge', () => {
+    renderWithProviders(<Projects />);
+    expect(screen.getByText('This site')).toBeInTheDocument();
+  });
+
+  it('non-dtpf projects show "Production" badge', () => {
+    renderWithProviders(<Projects />);
+    const badges = screen.getAllByText('Production');
+    // 4 non-dtpf projects have production badge
+    expect(badges.length).toBe(4);
+  });
+
+  it('renders stack tags for each project', () => {
+    renderWithProviders(<Projects />);
+    // dauth has React 19
+    expect(screen.getAllByText('React 19').length).toBeGreaterThanOrEqual(1);
+    // audity has Auth0
+    expect(screen.getByText('Auth0')).toBeInTheDocument();
+    // dalist has PWA
+    expect(screen.getAllByText('PWA').length).toBeGreaterThanOrEqual(1);
+  });
+
+  it('renders project descriptions', () => {
+    renderWithProviders(<Projects />);
+    expect(screen.getByText(/providing passwordless login/)).toBeInTheDocument();
+    expect(screen.getByText(/Media storage with folder/)).toBeInTheDocument();
+  });
 });

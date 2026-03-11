@@ -77,4 +77,35 @@ describe('fetchAPI', () => {
       credentials: 'include',
     });
   });
+
+  it('returns response object alongside data', async () => {
+    const mockResponse = {
+      ok: true,
+      status: 200,
+      json: () => Promise.resolve({ status: 200 }),
+    };
+    mockFetch.mockResolvedValue(mockResponse);
+
+    const { response, data } = await fetchAPI<{ status: number }>('http://test.com/api');
+    expect(response).toBe(mockResponse);
+    expect(data.status).toBe(200);
+  });
+
+  it('propagates network errors', async () => {
+    mockFetch.mockRejectedValue(new Error('Network failure'));
+
+    await expect(fetchAPI('http://test.com/api')).rejects.toThrow('Network failure');
+  });
+
+  it('always includes credentials even without options', async () => {
+    mockFetch.mockResolvedValue({
+      json: () => Promise.resolve({}),
+    });
+
+    await fetchAPI('http://test.com/api');
+
+    expect(mockFetch).toHaveBeenCalledWith('http://test.com/api', {
+      credentials: 'include',
+    });
+  });
 });
