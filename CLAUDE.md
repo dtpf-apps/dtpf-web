@@ -22,27 +22,29 @@ pnpm test:coverage    # Run tests with v8 coverage report (HTML in coverage/)
 
 ### Testing
 
-Vitest 4 with jsdom environment, @testing-library/react, and jest-dom matchers. **61 tests** across 14 test files. Coverage thresholds: 70% (statements, branches, functions, lines). Tests run in CI before deploy.
+Vitest 4 with jsdom environment, @testing-library/react, and jest-dom matchers. **114 tests** across 15 test files. Coverage thresholds: 70% (statements, branches, functions, lines). Tests run in CI before deploy.
 
 ```
 test/
 ├── setup.ts                          # IntersectionObserver + matchMedia mocks
 ├── helpers/renderWithProviders.tsx    # MemoryRouter + ThemeProvider + i18n wrapper
-├── api/fetchHelper.test.ts           # 7 tests — apiUrl, buildUrl, fetchAPI
-├── config/projects.test.ts           # 4 tests — project data validation
-├── contexts/theme.test.tsx           # 8 tests — ThemeProvider + useTheme
+├── config/projects.test.ts           # 9 tests — project data validation
+├── contexts/theme.test.tsx           # 11 tests — ThemeProvider + useTheme
+├── router/
+│   ├── paths.test.ts                 # 4 tests
+│   └── navigation.test.tsx           # 6 tests
 ├── utils/
 │   ├── i18n.test.ts                  # 3 tests
 │   └── isLocalhost.test.ts           # 5 tests
 ├── components/
-│   ├── Header.test.tsx               # 4 tests
+│   ├── Header.test.tsx               # 14 tests
 │   └── Footer.test.tsx               # 3 tests
 └── pages/
-    ├── Home.test.tsx                  # 5 tests
-    ├── About.test.tsx                 # 4 tests
-    ├── Projects.test.tsx              # 3 tests
-    ├── ProjectDetail.test.tsx         # 5 tests
-    ├── Contact.test.tsx               # 6 tests
+    ├── Home.test.tsx                  # 13 tests
+    ├── About.test.tsx                 # 11 tests
+    ├── Projects.test.tsx              # 7 tests
+    ├── ProjectDetail.test.tsx         # 11 tests
+    ├── Contact.test.tsx               # 13 tests
     ├── NotFound.test.tsx              # 2 tests
     └── PrivacyPolicy.test.tsx         # 2 tests
 ```
@@ -91,7 +93,7 @@ Single `PortfolioLayout` wrapping all routes: sticky Header + `AnimatePresence` 
 
 ### API
 
-`src/api/utils/config.ts` — `basePath` and `apiVersion` constants. Base path auto-detects localhost (port 3998) vs production (same-origin). `src/api/utils/fetchHelper.ts` — `apiUrl()` builds full endpoint URL, `buildUrl()` appends query params, `fetchAPI<T>()` generic typed fetch wrapper with `credentials: 'include'`. Single endpoint used: `POST /api/v1/contact-me`.
+`src/api/utils/config.ts` — `basePath`, `apiVersion` constants, and `apiUrl()` helper. Base path auto-detects localhost (port 3998) vs production (same-origin). Single endpoint used: `POST /api/v1/contact-me`.
 
 ### Contact Form Anti-Spam
 
@@ -120,9 +122,7 @@ PWA via `vite-plugin-pwa` with `injectManifest` strategy. Service worker in `src
 
 ```
 src/
-├── api/utils/
-│   ├── config.ts                # basePath + apiVersion constants
-│   └── fetchHelper.ts           # apiUrl, buildUrl, fetchAPI<T>
+├── api/utils/config.ts          # basePath + apiVersion + apiUrl()
 ├── assets/locale/{es,en}.ts     # i18n translations (~120 keys each)
 ├── config/projects.ts           # Project data (5 projects)
 ├── contexts/theme/              # ThemeContext + ThemeProvider + useTheme
@@ -151,8 +151,4 @@ src/
 
 ## Environment Variables
 
-`.env` file with:
-- `VITE_PUBLIC_URL` — Public URL (e.g., `https://dtpf.es`)
-- `VITE_DAUTH_DOMAIN_NAME` — Dauth domain name (e.g., `dtpf`)
-
-In production, both are set as GitHub Secrets.
+No frontend environment variables are currently used in the code. The `.env` file exists but is empty.
