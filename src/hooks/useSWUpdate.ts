@@ -17,9 +17,6 @@ export default function useSWUpdate() {
         const data = await res.json();
         if (!cancelled && data.buildTime && data.buildTime !== __BUILD_TIME__) {
           setUpdateAvailable(true);
-          // Ensure the new service worker is downloaded and ready to activate
-          const reg = await navigator.serviceWorker?.getRegistration();
-          reg?.update();
         }
       } catch {
         // Network error — skip silently
@@ -49,22 +46,14 @@ export default function useSWUpdate() {
   }, []);
 
   const applyUpdate = useCallback(async () => {
-    try {
-      const registration = await navigator.serviceWorker?.getRegistration();
-      const waiting = registration?.waiting;
-      if (waiting) {
-        // Activate the new SW, then reload once it takes control
-        navigator.serviceWorker.addEventListener('controllerchange', () => {
-          window.location.reload();
-        });
-        waiting.postMessage({ type: 'SKIP_WAITING' });
-        // Safety timeout in case controllerchange doesn't fire
-        setTimeout(() => window.location.reload(), 2000);
-        return;
-      }
-    } catch {
-      // SW API not available — fall through to reload
+    // Unregister SW and clear all caches to ensure a clean reload.
+    // The new page load will re-register the SW with fresh precache.
+    const registrations = await navigator.serviceWorker?.getRegistrations();
+    if (registrations) {
+      for (const reg of registrations) await reg.unregister();
     }
+    const cacheNames = await caches.keys();
+    for (const name of cacheNames) await caches.delete(name);
     window.location.reload();
   }, []);
 
