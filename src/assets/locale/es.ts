@@ -149,11 +149,11 @@ export const es = {
   project_dalist_name: 'dalist',
   project_dalist_tagline: 'App de notas colaborativa con checklists, notas compartidas en tiempo real y PWA.',
   project_dalist_desc:
-    'App de notas y checklists con notas compartidas en tiempo real, historial de versiones, 19 colores, etiquetas, cifrado AES-256 y notificaciones. PWA instalable. 1.621 tests.',
+    'App de notas y checklists con notas compartidas en tiempo real, historial de versiones, 19 colores, etiquetas, cifrado de notas en reposo y notificaciones. PWA instalable. 1.621 tests.',
   project_dalist_problem:
     'Necesitaba un sitio central para organizar notas y checklists con la posibilidad de compartirlas — sin la complejidad de Notion ni las limitaciones de Google Keep.',
   project_dalist_solution:
-    'dalist es una app de notas y checklists con colaboracion en tiempo real. Notas compartidas con presencia activa via Socket.io, historial de versiones con restauracion, checklists con variante dev (commit types), 19 colores, etiquetas, cifrado AES-256-GCM, notificaciones por email y en-app, y papelera con auto-eliminacion a los 7 dias.',
+    'dalist es una app de notas y checklists con colaboracion en tiempo real. Notas compartidas con presencia activa via Socket.io, historial de versiones con restauracion, checklists con variante dev (commit types), 19 colores, etiquetas, cifrado AES-256-GCM de notas en reposo, notificaciones por email y en-app, y papelera con auto-eliminacion a los 7 dias.',
   project_dalist_result:
     'En produccion como PWA instalable. 1.621 tests automatizados (349 backend, 1.227 frontend, 45 E2E). Colaboracion en tiempo real con Socket.io, historial de versiones, notificaciones por email. Frontend con Tailwind CSS v4. Auth delegada en dauth. CI/CD con GitHub Actions.',
   project_dalist_url: 'dalist.dtpf.es',
