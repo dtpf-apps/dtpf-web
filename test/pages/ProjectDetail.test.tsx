@@ -32,7 +32,7 @@ describe('ProjectDetail', () => {
   it('shows metrics for dauth', () => {
     renderProjectDetail('dauth');
     expect(screen.getByText('Tenants activos')).toBeInTheDocument();
-    expect(screen.getByText('1.159')).toBeInTheDocument();
+    expect(screen.getByText('1.702')).toBeInTheDocument();
   });
 
   it('shows stack tags', () => {
@@ -77,14 +77,15 @@ describe('ProjectDetail', () => {
     expect(backLink).toBeDefined();
   });
 
-  it('does not render metrics section for projects without metrics', () => {
+  it('renders metrics for dalist', () => {
     renderProjectDetail('dalist');
-    expect(screen.queryByText('Data')).not.toBeInTheDocument();
+    expect(screen.getByText('Data')).toBeInTheDocument();
+    expect(screen.getByText('1.621')).toBeInTheDocument();
   });
 
   it('renders all dstash metrics', () => {
     renderProjectDetail('dstash');
-    expect(screen.getByText('1.197')).toBeInTheDocument();
+    expect(screen.getByText('2.114')).toBeInTheDocument();
     expect(screen.getByText('Signed URLs + API Keys')).toBeInTheDocument();
   });
 });

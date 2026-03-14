@@ -26,7 +26,7 @@ export const projects: Project[] = [
     stack: ['React 19', 'TypeScript 5.9', 'Node.js 22', 'Express 5', 'MongoDB 8', 'Tailwind CSS v4', 'WebAuthn', 'Vite 7', 'GitHub Actions'],
     metrics: [
       { labelKey: 'tenants', label: 'Tenants activos', value: '4' },
-      { labelKey: 'tests', label: 'Tests', value: '1.159' },
+      { labelKey: 'tests', label: 'Tests', value: '1.702' },
       { labelKey: 'auth', label: 'Autenticacion', value: 'Passwordless' },
       { labelKey: 'monitoring', label: 'Monitoring', value: 'Grafana + Loki' },
       { labelKey: 'deploy', label: 'Deploy', value: 'GitHub Actions' },
@@ -44,7 +44,7 @@ export const projects: Project[] = [
     liveUrl: 'https://dstash.dtpf.es',
     stack: ['React 19', 'TypeScript 5.9', 'Node.js 22', 'Express 5', 'MongoDB 8', 'Tailwind CSS v4', 'Radix UI', 'Vite 7', 'GitHub Actions'],
     metrics: [
-      { labelKey: 'tests', label: 'Tests', value: '1.197' },
+      { labelKey: 'tests', label: 'Tests', value: '2.114' },
       { labelKey: 'security', label: 'Seguridad', value: 'Signed URLs + API Keys' },
       { labelKey: 'admin', label: 'Admin', value: 'Dashboard completo' },
       { labelKey: 'deploy', label: 'Deploy', value: 'GitHub Actions' },
@@ -60,7 +60,13 @@ export const projects: Project[] = [
     descKey: 'project_dalist_desc',
     urlKey: 'project_dalist_url',
     liveUrl: 'https://dalist.dtpf.es',
-    stack: ['React 19', 'TypeScript 5.9', 'Tailwind CSS v4', 'PWA', 'Framer Motion', 'dnd-kit', 'Vite 7'],
+    stack: ['React 19', 'TypeScript 5.9', 'Node.js 22', 'Express 5', 'MongoDB 8', 'Tailwind CSS v4', 'Socket.io', 'PWA', 'Framer Motion', 'dnd-kit', 'Vite 7', 'GitHub Actions'],
+    metrics: [
+      { labelKey: 'tests', label: 'Tests', value: '1.621' },
+      { labelKey: 'realtime', label: 'Tiempo real', value: 'Socket.io' },
+      { labelKey: 'encryption', label: 'Cifrado', value: 'AES-256-GCM' },
+      { labelKey: 'deploy', label: 'Deploy', value: 'GitHub Actions' },
+    ],
     problemKey: 'project_dalist_problem',
     solutionKey: 'project_dalist_solution',
     resultKey: 'project_dalist_result',
