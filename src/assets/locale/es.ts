@@ -17,7 +17,7 @@ export const es = {
 
   // Home: Projects section
   home_projects_label: 'Proyectos',
-  home_projects_heading: 'Productos reales, no side projects',
+  home_projects_heading: 'Desplegado, monitoreado, mantenido',
   home_projects_desc: 'Cada uno de estos proyectos esta desplegado, con usuarios reales, CI/CD y monitoring.',
   home_projects_case_study: 'Ver caso de estudio',
   home_projects_visit: 'Visitar',
