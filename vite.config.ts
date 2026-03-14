@@ -1,33 +1,14 @@
-import { defineConfig, type Plugin } from 'vitest/config';
+import { defineConfig } from 'vitest/config';
 import react from '@vitejs/plugin-react-swc';
 import tsconfigPaths from 'vite-tsconfig-paths';
 import tailwindcss from '@tailwindcss/vite';
 import { VitePWA } from 'vite-plugin-pwa';
-
-const buildTime = Date.now().toString();
-
-function versionFilePlugin(): Plugin {
-  return {
-    name: 'version-file',
-    config() {
-      return { define: { __BUILD_TIME__: JSON.stringify(buildTime) } };
-    },
-    generateBundle() {
-      this.emitFile({
-        type: 'asset',
-        fileName: 'version.json',
-        source: JSON.stringify({ buildTime }),
-      });
-    },
-  };
-}
 
 export default defineConfig({
   plugins: [
     react(),
     tsconfigPaths(),
     tailwindcss(),
-    versionFilePlugin(),
     VitePWA({
       strategies: 'injectManifest',
       srcDir: 'src',
@@ -61,8 +42,6 @@ export default defineConfig({
         'src/styles/**',
         'src/router/router.tsx',
         'src/views/layouts/**',
-        'src/hooks/useSWUpdate.ts',
-        'src/views/components/SWUpdateBanner.tsx',
         'src/api/utils/config.ts',
       ],
       thresholds: {

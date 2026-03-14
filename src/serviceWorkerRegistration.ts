@@ -7,6 +7,17 @@ export function register() {
       return;
     }
 
+    // Silent auto-update: when a new SW takes control, reload to get fresh content.
+    // Skip the first controllerchange (initial SW installation on first visit).
+    let hasController = !!navigator.serviceWorker.controller;
+    navigator.serviceWorker.addEventListener('controllerchange', () => {
+      if (!hasController) {
+        hasController = true;
+        return;
+      }
+      window.location.reload();
+    });
+
     window.addEventListener('load', () => {
       const swUrl = `${import.meta.env.BASE_URL}service-worker.js`;
 
