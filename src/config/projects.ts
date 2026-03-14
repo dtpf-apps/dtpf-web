@@ -64,7 +64,7 @@ export const projects: Project[] = [
     metrics: [
       { labelKey: 'tests', label: 'Tests', value: '1.621' },
       { labelKey: 'realtime', label: 'Tiempo real', value: 'Socket.io' },
-      { labelKey: 'encryption', label: 'Cifrado', value: 'AES-256-GCM' },
+      { labelKey: 'encryption', label: 'Cifrado', value: 'Notas cifradas en reposo' },
       { labelKey: 'deploy', label: 'Deploy', value: 'GitHub Actions' },
     ],
     problemKey: 'project_dalist_problem',
