@@ -123,7 +123,7 @@ export const es = {
   project_dauth_tagline_long:
     'Un sistema de autenticacion passwordless que sirve como infraestructura para todas mis aplicaciones.',
   project_dauth_desc:
-    'Sistema completo de autenticacion que proporciona login sin contrasena a 4 aplicaciones. Authorization code flow, gestion de licencias y suscripciones. 1.159 tests, CI/CD completo.',
+    'Sistema completo de autenticacion que proporciona login sin contrasena a 4 aplicaciones. Authorization code flow, gestion de licencias y suscripciones. 1.702 tests, CI/CD completo.',
   project_dauth_featured:
     'Autenticacion passwordless multi-tenant. Magic link, passkey, OAuth. Lo uso como infraestructura para mis otras apps — 4 tenants conectados.',
   project_dauth_problem:
@@ -131,31 +131,31 @@ export const es = {
   project_dauth_solution:
     'dauth es un sistema de autenticacion como servicio (AuthaaS) que proporciona login sin contrasena a cualquier aplicacion. Soporta magic link y passkey (WebAuthn). Cada app conectada obtiene su propio tenant con configuracion independiente y authorization code flow.',
   project_dauth_result:
-    'Actualmente gestiona la autenticacion de 4 aplicaciones en produccion. 1.159 tests automatizados. CI/CD completo con GitHub Actions. Monitoring centralizado con Grafana + Loki. El frontend fue redisenado completamente con Tailwind CSS v4 eliminando Ant Design.',
+    'Actualmente gestiona la autenticacion de 4 aplicaciones en produccion. 1.702 tests automatizados (636 backend, 740 frontend, 253 npm packages, 73 E2E). Magic link con browser-binding y passkeys WebAuthn. CI/CD completo con GitHub Actions. Monitoring centralizado con Grafana + Loki.',
   project_dauth_url: 'dauth.ovh',
 
   project_dstash_name: 'dstash',
   project_dstash_tagline: 'Plataforma de almacenamiento de medios con API REST segura, admin dashboard y signed URLs.',
   project_dstash_desc:
-    'Almacenamiento de medios con organizacion por carpetas, drag-and-drop, API REST con signed URLs y API keys opacas. Admin dashboard completo, rate limiting y audit logging. 1.197 tests.',
+    'Almacenamiento de medios con organizacion por carpetas, drag-and-drop, API REST con signed URLs y API keys opacas. Modo protegido, thumbnails, suscripciones. Admin dashboard completo. 2.114 tests.',
   project_dstash_problem:
     'Necesitaba almacenar y servir archivos (imagenes, documentos, media) para varias aplicaciones, con control de acceso y sin depender de servicios externos como S3.',
   project_dstash_solution:
     'dstash es una plataforma de almacenamiento de medios propia. Soporta subida drag-and-drop, organizacion por carpetas, vista previa, y API REST para integracion externa. Seguridad con signed URLs (HMAC-SHA256), API keys opacas, validacion Zod, rate limiting y audit logging.',
   project_dstash_result:
-    'En produccion sirviendo medios para multiples aplicaciones. 1.197 tests automatizados (331 backend, 866 frontend). Admin dashboard con gestion de usuarios, contenido y auditoria. Frontend redisenado con Tailwind CSS v4 + Radix UI. CI/CD completo con GitHub Actions.',
+    'En produccion sirviendo medios para multiples aplicaciones. 2.114 tests automatizados (841 backend, 1.166 frontend, 107 E2E). Modo protegido con PIN, thumbnails WebP automaticos, sistema de suscripciones. Admin dashboard completo. CI/CD con GitHub Actions.',
   project_dstash_url: 'dstash.dtpf.es',
 
-  project_dalist_name: 'Dalist',
-  project_dalist_tagline: 'App de notas y checklists con drag-and-drop, etiquetas, colores y PWA.',
+  project_dalist_name: 'dalist',
+  project_dalist_tagline: 'App de notas colaborativa con checklists, notas compartidas en tiempo real y PWA.',
   project_dalist_desc:
-    'Notas de texto y checklists con drag-and-drop, colores personalizables, etiquetas, archivo y papelera. PWA instalable con Tailwind CSS v4.',
+    'App de notas y checklists con notas compartidas en tiempo real, historial de versiones, 19 colores, etiquetas, cifrado AES-256 y notificaciones. PWA instalable. 1.621 tests.',
   project_dalist_problem:
-    'Necesitaba un sitio central para organizar notas rapidas, listas de tareas y checklists — sin la complejidad de Notion ni las limitaciones de Google Keep.',
+    'Necesitaba un sitio central para organizar notas y checklists con la posibilidad de compartirlas — sin la complejidad de Notion ni las limitaciones de Google Keep.',
   project_dalist_solution:
-    'Dalist es una app de notas y checklists tipo Google Keep. Soporta notas de texto, checklists con items completables, colores por nota, etiquetas, fijado, archivo y papelera con eliminacion automatica a los 7 dias. Drag-and-drop para reordenar con dnd-kit.',
+    'dalist es una app de notas y checklists con colaboracion en tiempo real. Notas compartidas con presencia activa via Socket.io, historial de versiones con restauracion, checklists con variante dev (commit types), 19 colores, etiquetas, cifrado AES-256-GCM, notificaciones por email y en-app, y papelera con auto-eliminacion a los 7 dias.',
   project_dalist_result:
-    'En produccion como PWA instalable. Frontend redisenado completamente: de Ant Design a Tailwind CSS v4 + Lucide + Framer Motion. Auth delegada en dauth. CI/CD con GitHub Actions.',
+    'En produccion como PWA instalable. 1.621 tests automatizados (349 backend, 1.227 frontend, 45 E2E). Colaboracion en tiempo real con Socket.io, historial de versiones, notificaciones por email. Frontend con Tailwind CSS v4. Auth delegada en dauth. CI/CD con GitHub Actions.',
   project_dalist_url: 'dalist.dtpf.es',
 
   project_portfolio_name: 'dtpf.es',
