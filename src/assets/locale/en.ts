@@ -17,7 +17,7 @@ export const en = {
 
   // Home: Projects section
   home_projects_label: 'Projects',
-  home_projects_heading: 'Real products, not side projects',
+  home_projects_heading: 'Deployed, monitored, maintained',
   home_projects_desc: 'Each of these is deployed, with real users, CI/CD, and monitoring.',
   home_projects_case_study: 'Case study',
   home_projects_visit: 'Visit',
