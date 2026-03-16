@@ -24,7 +24,7 @@ function CookieConsentBanner() {
 
   return (
     <div className="fixed bottom-0 left-0 right-0 z-50 p-4 md:p-6">
-      <div className="mx-auto flex max-w-lg flex-col gap-3 rounded-xl border border-border-subtle bg-bg-elevated p-4 shadow-2xl">
+      <div className="mx-auto flex max-w-lg flex-col gap-3 rounded-xl border border-border bg-bg-secondary p-4 shadow-2xl">
         <div className="flex items-start gap-3">
           <Cookie className="mt-0.5 h-5 w-5 shrink-0 text-accent" />
           <p className="min-w-0 flex-1 text-sm text-text-secondary">{t('cookie_text')}</p>
@@ -32,7 +32,7 @@ function CookieConsentBanner() {
         <div className="flex justify-end gap-2">
           <button
             onClick={() => handleConsent(false)}
-            className="rounded-lg px-3 py-1.5 text-sm text-text-secondary hover:bg-bg-hover"
+            className="rounded-lg px-3 py-1.5 text-sm text-text-secondary hover:bg-bg-tertiary"
           >
             {t('cookie_necessary_only')}
           </button>
