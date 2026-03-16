@@ -1,4 +1,5 @@
 import { Component, type ErrorInfo, type ReactNode } from 'react';
+import { trackEvent } from 'utils/analytics';
 
 interface Props {
   children: ReactNode;
@@ -18,6 +19,10 @@ class ErrorBoundary extends Component<Props, State> {
   componentDidCatch(error: Error, errorInfo: ErrorInfo) {
     console.error('ErrorBoundary caught:', error, errorInfo);
     import('./utils/errorTracking').then(({ reportError }) => reportError(error, 'error-boundary'));
+    trackEvent('error:boundary', {
+      message: error.message.slice(0, 100),
+      path: window.location.pathname,
+    });
   }
 
   render() {
