@@ -4,6 +4,7 @@ import { paths, projectDetailPath } from 'router/paths';
 import { projects } from 'config/projects';
 import { motion } from 'framer-motion';
 import { ArrowRight, ExternalLink } from 'lucide-react';
+import { trackEvent } from 'utils/analytics';
 
 const featured = projects.filter((p) => p.slug !== 'dtpf');
 
@@ -45,7 +46,8 @@ export default function Home() {
         <div
           className="pointer-events-none absolute inset-0 opacity-30"
           style={{
-            backgroundImage: 'linear-gradient(var(--color-border) 1px, transparent 1px), linear-gradient(90deg, var(--color-border) 1px, transparent 1px)',
+            backgroundImage:
+              'linear-gradient(var(--color-border) 1px, transparent 1px), linear-gradient(90deg, var(--color-border) 1px, transparent 1px)',
             backgroundSize: '60px 60px',
             maskImage: 'radial-gradient(ellipse 60% 50% at 50% 50%, black 20%, transparent 100%)',
             WebkitMaskImage: 'radial-gradient(ellipse 60% 50% at 50% 50%, black 20%, transparent 100%)',
@@ -67,8 +69,7 @@ export default function Home() {
           transition={{ duration: 0.4, delay: 0.15, ease: 'easeOut' }}
           className="relative z-10 mt-6 max-w-[480px] text-lg text-text-secondary md:text-xl"
         >
-          {t('hero_tagline_1')}{' '}
-          <strong className="font-medium text-accent">{t('hero_tagline_2')}</strong>.
+          {t('hero_tagline_1')} <strong className="font-medium text-accent">{t('hero_tagline_2')}</strong>.
         </motion.p>
 
         <motion.div
@@ -82,9 +83,13 @@ export default function Home() {
             <span className="font-semibold text-text-primary">5</span> {t('hero_proof_apps')}
           </span>
           <span className="hidden text-text-muted md:inline">·</span>
-          <span><span className="font-semibold text-text-primary">3+</span> {t('hero_proof_saas')}</span>
+          <span>
+            <span className="font-semibold text-text-primary">3+</span> {t('hero_proof_saas')}
+          </span>
           <span className="hidden text-text-muted md:inline">·</span>
-          <span><span className="font-semibold text-text-primary">6.100+</span> {t('hero_proof_tests')}</span>
+          <span>
+            <span className="font-semibold text-text-primary">6.100+</span> {t('hero_proof_tests')}
+          </span>
         </motion.div>
 
         <motion.div
@@ -93,10 +98,18 @@ export default function Home() {
           transition={{ delay: 0.4, duration: 0.4 }}
           className="relative z-10 mt-10 flex flex-col gap-3 sm:flex-row"
         >
-          <Link to={paths.projects} className="inline-flex items-center justify-center gap-2 rounded-[10px] bg-accent px-7 py-3.5 text-[15px] font-semibold text-[#0B0F19] transition-all hover:bg-accent-hover hover:shadow-[0_0_40px_var(--color-accent-glow)] hover:-translate-y-0.5">
+          <Link
+            to={paths.projects}
+            onClick={() => trackEvent('home:hero-view-projects')}
+            className="inline-flex items-center justify-center gap-2 rounded-[10px] bg-accent px-7 py-3.5 text-[15px] font-semibold text-[#0B0F19] transition-all hover:bg-accent-hover hover:shadow-[0_0_40px_var(--color-accent-glow)] hover:-translate-y-0.5"
+          >
             {t('hero_cta_projects')}
           </Link>
-          <Link to={paths.contact} className="inline-flex items-center justify-center gap-2 rounded-[10px] border border-border px-7 py-3.5 text-[15px] font-semibold text-text-primary transition-all hover:border-border-hover hover:bg-bg-tertiary">
+          <Link
+            to={paths.contact}
+            onClick={() => trackEvent('home:hero-get-in-touch')}
+            className="inline-flex items-center justify-center gap-2 rounded-[10px] border border-border px-7 py-3.5 text-[15px] font-semibold text-text-primary transition-all hover:border-border-hover hover:bg-bg-tertiary"
+          >
             {t('hero_cta_contact')}
           </Link>
         </motion.div>
@@ -114,8 +127,12 @@ export default function Home() {
 
       {/* ── Featured Projects — Bento Grid ── */}
       <section className="mx-auto max-w-[1100px] px-6 py-20">
-        <p className="mb-3 font-mono text-xs font-medium uppercase tracking-[2px] text-accent">{t('home_projects_label')}</p>
-        <h2 className="mb-2 font-heading text-[32px] font-bold tracking-tight">{t('home_projects_heading')}</h2>
+        <p className="mb-3 font-mono text-xs font-medium uppercase tracking-[2px] text-accent">
+          {t('home_projects_label')}
+        </p>
+        <h2 className="mb-2 font-heading text-[32px] font-bold tracking-tight">
+          {t('home_projects_heading')}
+        </h2>
         <p className="mb-12 max-w-[520px] text-base text-text-secondary">{t('home_projects_desc')}</p>
 
         <motion.div
@@ -130,10 +147,13 @@ export default function Home() {
               key={p.slug}
               variants={fadeUp}
               className={`group relative overflow-hidden rounded-2xl border border-border bg-bg-surface p-7 transition-all duration-300 hover:-translate-y-0.5 hover:border-border-hover hover:shadow-[0_16px_48px_rgba(0,0,0,0.2)] ${
-                i === 0 ? 'col-span-12 md:col-span-7' :
-                i === 1 ? 'col-span-12 md:col-span-5' :
-                i === 2 ? 'col-span-12 md:col-span-5' :
-                'col-span-12 md:col-span-7'
+                i === 0
+                  ? 'col-span-12 md:col-span-7'
+                  : i === 1
+                    ? 'col-span-12 md:col-span-5'
+                    : i === 2
+                      ? 'col-span-12 md:col-span-5'
+                      : 'col-span-12 md:col-span-7'
               }`}
             >
               {/* Top hover line */}
@@ -149,16 +169,29 @@ export default function Home() {
               </p>
               <div className="mb-5 flex flex-wrap gap-1.5">
                 {p.stack.slice(0, 4).map((s) => (
-                  <span key={s} className="rounded-md border border-accent/15 bg-accent-subtle px-2.5 py-0.5 text-xs font-medium text-accent">
+                  <span
+                    key={s}
+                    className="rounded-md border border-accent/15 bg-accent-subtle px-2.5 py-0.5 text-xs font-medium text-accent"
+                  >
                     {s}
                   </span>
                 ))}
               </div>
               <div className="flex items-center gap-3">
-                <Link to={projectDetailPath(p.slug)} className="inline-flex items-center gap-1.5 rounded-lg bg-accent px-4 py-2 text-[13px] font-semibold text-[#0B0F19] transition-all hover:bg-accent-hover">
+                <Link
+                  to={projectDetailPath(p.slug)}
+                  onClick={() => trackEvent('home:project-card', { slug: p.slug })}
+                  className="inline-flex items-center gap-1.5 rounded-lg bg-accent px-4 py-2 text-[13px] font-semibold text-[#0B0F19] transition-all hover:bg-accent-hover"
+                >
                   {t('home_projects_case_study')} <ArrowRight size={14} />
                 </Link>
-                <a href={p.liveUrl} target="_blank" rel="noreferrer" className="inline-flex items-center gap-1.5 rounded-lg border border-border px-4 py-2 text-[13px] font-semibold text-text-primary transition-all hover:border-border-hover hover:bg-bg-tertiary">
+                <a
+                  href={p.liveUrl}
+                  target="_blank"
+                  rel="noreferrer"
+                  className="inline-flex items-center gap-1.5 rounded-lg border border-border px-4 py-2 text-[13px] font-semibold text-text-primary transition-all hover:border-border-hover hover:bg-bg-tertiary"
+                  onClick={() => trackEvent('home:visit-project', { slug: p.slug })}
+                >
                   {t('home_projects_visit')} <ExternalLink size={13} />
                 </a>
               </div>
@@ -172,11 +205,13 @@ export default function Home() {
         <motion.p
           initial={{ opacity: 0 }}
           whileInView={{ opacity: 1 }}
+          onViewportEnter={() => trackEvent('home:manifesto-visible')}
           viewport={{ once: true }}
           transition={{ duration: 0.5 }}
           className="mb-5 font-heading text-[28px] font-semibold leading-snug tracking-tight"
         >
-          {t('manifesto_line1')}<br />
+          {t('manifesto_line1')}
+          <br />
           <span className="text-accent">{t('manifesto_line2')}</span>
         </motion.p>
         <p className="mx-auto max-w-[500px] text-[15px] leading-relaxed text-text-secondary">
@@ -186,7 +221,9 @@ export default function Home() {
 
       {/* ── Stack ── */}
       <section className="mx-auto max-w-[1100px] px-6 py-20">
-        <p className="mb-3 font-mono text-xs font-medium uppercase tracking-[2px] text-accent">{t('home_stack_label')}</p>
+        <p className="mb-3 font-mono text-xs font-medium uppercase tracking-[2px] text-accent">
+          {t('home_stack_label')}
+        </p>
         <h2 className="mb-2 font-heading text-[32px] font-bold tracking-tight">{t('home_stack_heading')}</h2>
         <p className="mb-12 max-w-[520px] text-base text-text-secondary">{t('home_stack_desc')}</p>
 
@@ -216,9 +253,15 @@ export default function Home() {
       <section className="mx-auto max-w-[1100px] px-6 pb-24">
         <div className="relative overflow-hidden rounded-2xl border border-border bg-bg-surface p-14 text-center">
           <div className="pointer-events-none absolute -right-[30%] -top-1/2 h-[400px] w-[400px] rounded-full bg-[radial-gradient(circle,var(--color-accent-glow),transparent_70%)]" />
-          <h2 className="relative mb-3 font-heading text-[28px] font-bold tracking-tight">{t('home_cta_title')}</h2>
+          <h2 className="relative mb-3 font-heading text-[28px] font-bold tracking-tight">
+            {t('home_cta_title')}
+          </h2>
           <p className="relative mb-7 text-[15px] text-text-secondary">{t('home_cta_desc')}</p>
-          <Link to={paths.contact} className="relative inline-flex items-center gap-2 rounded-[10px] bg-accent px-7 py-3.5 text-[15px] font-semibold text-[#0B0F19] transition-all hover:bg-accent-hover hover:shadow-[0_0_40px_var(--color-accent-glow)] hover:-translate-y-0.5">
+          <Link
+            to={paths.contact}
+            onClick={() => trackEvent('home:final-cta')}
+            className="relative inline-flex items-center gap-2 rounded-[10px] bg-accent px-7 py-3.5 text-[15px] font-semibold text-[#0B0F19] transition-all hover:bg-accent-hover hover:shadow-[0_0_40px_var(--color-accent-glow)] hover:-translate-y-0.5"
+          >
             {t('home_cta_button')}
           </Link>
         </div>

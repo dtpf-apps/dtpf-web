@@ -2,9 +2,11 @@ import { Outlet, useLocation } from 'react-router';
 import Header from 'views/components/navigation/Header';
 import Footer from 'views/components/navigation/Footer';
 import { AnimatePresence, motion } from 'framer-motion';
+import useAnalyticsPageView from 'hooks/useAnalyticsPageView';
 
 export default function PortfolioLayout() {
   const { pathname } = useLocation();
+  useAnalyticsPageView();
 
   return (
     <div className="min-h-screen flex flex-col">

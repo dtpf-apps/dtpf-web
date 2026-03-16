@@ -4,6 +4,7 @@ import { projects } from 'config/projects';
 import { paths } from 'router/paths';
 import { motion } from 'framer-motion';
 import { ArrowLeft, ExternalLink } from 'lucide-react';
+import { trackEvent } from 'utils/analytics';
 
 export default function ProjectDetail() {
   const { slug } = useParams<{ slug: string }>();
@@ -22,7 +23,11 @@ export default function ProjectDetail() {
         transition={{ duration: 0.3 }}
         className="mx-auto max-w-[860px] px-6 py-12 pb-24"
       >
-        <Link to={paths.projects} className="mb-10 inline-flex items-center gap-1.5 font-mono text-[13px] tracking-wide text-text-muted transition-colors hover:text-accent">
+        <Link
+          to={paths.projects}
+          onClick={() => trackEvent('project:back')}
+          className="mb-10 inline-flex items-center gap-1.5 font-mono text-[13px] tracking-wide text-text-muted transition-colors hover:text-accent"
+        >
           <ArrowLeft size={14} /> {t('projects_back')}
         </Link>
 
@@ -32,11 +37,23 @@ export default function ProjectDetail() {
         </p>
 
         <div className="mb-12 flex gap-3">
-          <a href={project.liveUrl} target="_blank" rel="noreferrer" className="inline-flex items-center gap-2 rounded-[10px] bg-accent px-6 py-3 text-sm font-semibold text-[#0B0F19] transition hover:bg-accent-hover">
+          <a
+            href={project.liveUrl}
+            target="_blank"
+            rel="noreferrer"
+            className="inline-flex items-center gap-2 rounded-[10px] bg-accent px-6 py-3 text-sm font-semibold text-[#0B0F19] transition hover:bg-accent-hover"
+            onClick={() => trackEvent('project:visit-live', { slug: project.slug })}
+          >
             {t('detail_visit')} {t(project.urlKey)} <ExternalLink size={14} />
           </a>
           {project.githubUrl && (
-            <a href={project.githubUrl} target="_blank" rel="noreferrer" className="inline-flex items-center gap-2 rounded-[10px] border border-border px-6 py-3 text-sm font-semibold text-text-primary transition hover:border-border-hover hover:bg-bg-tertiary">
+            <a
+              href={project.githubUrl}
+              target="_blank"
+              rel="noreferrer"
+              className="inline-flex items-center gap-2 rounded-[10px] border border-border px-6 py-3 text-sm font-semibold text-text-primary transition hover:border-border-hover hover:bg-bg-tertiary"
+              onClick={() => trackEvent('project:github', { slug: project.slug })}
+            >
               {t('detail_github')} <ExternalLink size={14} />
             </a>
           )}
@@ -68,19 +85,31 @@ export default function ProjectDetail() {
         {/* Stack + Metrics */}
         <div className="mt-10 grid grid-cols-1 gap-10 md:grid-cols-2">
           <div>
-            <h4 className="mb-4 font-mono text-[11px] font-semibold uppercase tracking-[1.5px] text-text-muted">{t('detail_stack')}</h4>
+            <h4 className="mb-4 font-mono text-[11px] font-semibold uppercase tracking-[1.5px] text-text-muted">
+              {t('detail_stack')}
+            </h4>
             <div className="flex flex-wrap gap-2">
               {project.stack.map((s) => (
-                <span key={s} className="rounded-lg border border-border px-3.5 py-1.5 text-[13px] font-medium text-text-secondary">{s}</span>
+                <span
+                  key={s}
+                  className="rounded-lg border border-border px-3.5 py-1.5 text-[13px] font-medium text-text-secondary"
+                >
+                  {s}
+                </span>
               ))}
             </div>
           </div>
 
           {project.metrics && (
             <div>
-              <h4 className="mb-4 font-mono text-[11px] font-semibold uppercase tracking-[1.5px] text-text-muted">{t('detail_metrics')}</h4>
+              <h4 className="mb-4 font-mono text-[11px] font-semibold uppercase tracking-[1.5px] text-text-muted">
+                {t('detail_metrics')}
+              </h4>
               {project.metrics.map((m) => (
-                <div key={m.labelKey} className="flex justify-between border-b border-border py-2.5 text-sm last:border-b-0">
+                <div
+                  key={m.labelKey}
+                  className="flex justify-between border-b border-border py-2.5 text-sm last:border-b-0"
+                >
                   <span className="text-text-secondary">{m.label}</span>
                   <span className="font-semibold text-text-primary">{m.value}</span>
                 </div>

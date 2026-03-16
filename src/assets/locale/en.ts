@@ -170,4 +170,7 @@ export const en = {
     "Spotify-like music streaming. Full player, playlists, search, CMS. Collaborative master's final project, deployed and maintained.",
   project_audity_url: 'audity.dtpf.es',
 
+  cookie_text: 'We use analytics cookies to improve your experience. You can accept or decline their use.',
+  cookie_accept: 'Accept',
+  cookie_necessary_only: 'Necessary only',
 };

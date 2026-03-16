@@ -135,7 +135,8 @@ export const es = {
   project_dauth_url: 'dauth.ovh',
 
   project_dstash_name: 'dstash',
-  project_dstash_tagline: 'Plataforma de almacenamiento de medios con API REST segura, admin dashboard y signed URLs.',
+  project_dstash_tagline:
+    'Plataforma de almacenamiento de medios con API REST segura, admin dashboard y signed URLs.',
   project_dstash_desc:
     'Almacenamiento de medios con organizacion por carpetas, drag-and-drop, API REST con signed URLs y API keys opacas. Modo protegido, thumbnails, suscripciones. Admin dashboard completo. 2.114 tests.',
   project_dstash_problem:
@@ -170,4 +171,7 @@ export const es = {
     'Streaming musical tipo Spotify. Reproductor completo, playlists, busqueda, CMS. Proyecto colaborativo de fin de master desplegado y mantenido.',
   project_audity_url: 'audity.dtpf.es',
 
+  cookie_text: 'Utilizamos cookies analiticas para mejorar tu experiencia. Puedes aceptar o rechazar su uso.',
+  cookie_accept: 'Aceptar',
+  cookie_necessary_only: 'Solo necesarias',
 };
