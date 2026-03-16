@@ -6,9 +6,13 @@ import { router } from 'router/router';
 import ErrorBoundary from './ErrorBoundary';
 import { initErrorTracking } from 'utils/errorTracking';
 import { basePath, apiVersion } from 'api/utils/config';
+import CookieConsentBanner from 'views/components/CookieConsentBanner';
+import { initAnalytics } from 'utils/analytics';
+import { hasAnalyticsConsent } from 'utils/cookieConsent';
 
 export default function App() {
   useEffect(() => {
+    if (hasAnalyticsConsent()) initAnalytics();
     initErrorTracking(`${basePath}/${apiVersion}`);
   }, []);
 
@@ -26,6 +30,7 @@ export default function App() {
             },
           }}
         />
+        <CookieConsentBanner />
       </ThemeProvider>
     </ErrorBoundary>
   );

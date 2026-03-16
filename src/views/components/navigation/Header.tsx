@@ -5,6 +5,7 @@ import { useTheme } from 'contexts/theme/ThemeContext';
 import { Moon, Sun, Menu, X } from 'lucide-react';
 import { paths } from 'router/paths';
 import { motion, AnimatePresence } from 'framer-motion';
+import { trackEvent } from 'utils/analytics';
 
 function Header() {
   const { t, i18n } = useTranslation();
@@ -15,6 +16,7 @@ function Header() {
     const next = i18n.language === 'es' ? 'en' : 'es';
     i18n.changeLanguage(next);
     localStorage.setItem('dtpf-lang', next);
+    trackEvent('nav:toggle-language', { lang: next });
   }, [i18n]);
 
   const navLinks = [
@@ -32,14 +34,24 @@ function Header() {
       <header className="sticky top-0 z-50 border-b border-border bg-bg-primary/85 backdrop-blur-xl">
         <div className="mx-auto flex max-w-[1200px] items-center justify-between px-6 py-4 md:px-12">
           {/* Logo */}
-          <Link to={paths.home} className="font-heading text-lg font-bold tracking-tight text-text-primary no-underline">
+          <Link
+            to={paths.home}
+            onClick={() => trackEvent('nav:logo-click')}
+            className="font-heading text-lg font-bold tracking-tight text-text-primary no-underline"
+          >
             dtpf
           </Link>
 
           {/* Desktop nav */}
           <nav className="hidden items-center gap-7 md:flex">
             {navLinks.map((l) => (
-              <NavLink key={l.to} to={l.to} end={l.to === '/'} className={linkClass}>
+              <NavLink
+                key={l.to}
+                to={l.to}
+                end={l.to === '/'}
+                className={linkClass}
+                onClick={() => trackEvent('nav:navigate', { page: l.to })}
+              >
                 {l.label}
               </NavLink>
             ))}
@@ -54,7 +66,10 @@ function Header() {
               {i18n.language === 'es' ? 'EN' : 'ES'}
             </button>
             <button
-              onClick={toggleTheme}
+              onClick={() => {
+                toggleTheme();
+                trackEvent('nav:toggle-theme', { theme: isDark ? 'light' : 'dark' });
+              }}
               aria-label={t('theme_toggle')}
               className="flex h-9 w-9 items-center justify-center rounded-lg border border-border text-text-muted transition-colors hover:border-border-hover hover:text-text-secondary"
             >
@@ -64,7 +79,10 @@ function Header() {
 
           {/* Mobile hamburger */}
           <button
-            onClick={() => setMobileOpen(true)}
+            onClick={() => {
+              setMobileOpen(true);
+              trackEvent('nav:mobile-menu-open');
+            }}
             className="flex h-9 w-9 items-center justify-center rounded-lg border border-border text-text-primary md:hidden"
             aria-label="Menu"
           >
@@ -84,11 +102,12 @@ function Header() {
             className="fixed inset-0 z-[999] bg-bg-primary"
           >
             <div className="flex items-center justify-between border-b border-border px-6 py-4">
-              <span className="font-heading text-lg font-bold text-text-primary">
-                dtpf
-              </span>
+              <span className="font-heading text-lg font-bold text-text-primary">dtpf</span>
               <button
-                onClick={() => setMobileOpen(false)}
+                onClick={() => {
+                  setMobileOpen(false);
+                  trackEvent('nav:mobile-menu-close');
+                }}
                 className="flex h-9 w-9 items-center justify-center rounded-lg border border-border text-text-primary"
               >
                 <X size={18} />
@@ -105,7 +124,10 @@ function Header() {
                   <NavLink
                     to={l.to}
                     end={l.to === '/'}
-                    onClick={() => setMobileOpen(false)}
+                    onClick={() => {
+                      setMobileOpen(false);
+                      trackEvent('nav:mobile-navigate', { page: l.to });
+                    }}
                     className={({ isActive }) =>
                       `font-heading text-3xl font-bold tracking-tight ${isActive ? 'text-accent' : 'text-text-primary'}`
                     }
@@ -122,15 +144,34 @@ function Header() {
                   {i18n.language === 'es' ? 'EN' : 'ES'}
                 </button>
                 <button
-                  onClick={toggleTheme}
+                  onClick={() => {
+                    toggleTheme();
+                    trackEvent('nav:toggle-theme', { theme: isDark ? 'light' : 'dark' });
+                  }}
                   className="flex h-9 w-9 items-center justify-center rounded-lg border border-border text-text-muted"
                 >
                   {isDark ? <Sun size={16} /> : <Moon size={16} />}
                 </button>
               </div>
               <div className="mt-4 flex gap-5">
-                <a href="https://www.linkedin.com/in/david-tomas-pizarro-frick" target="_blank" rel="noreferrer" className="text-sm text-text-muted hover:text-accent">LinkedIn</a>
-                <a href="https://github.com/DTPF" target="_blank" rel="noreferrer" className="text-sm text-text-muted hover:text-accent">GitHub</a>
+                <a
+                  href="https://www.linkedin.com/in/david-tomas-pizarro-frick"
+                  target="_blank"
+                  rel="noreferrer"
+                  className="text-sm text-text-muted hover:text-accent"
+                  onClick={() => trackEvent('nav:mobile-linkedin')}
+                >
+                  LinkedIn
+                </a>
+                <a
+                  href="https://github.com/DTPF"
+                  target="_blank"
+                  rel="noreferrer"
+                  className="text-sm text-text-muted hover:text-accent"
+                  onClick={() => trackEvent('nav:mobile-github')}
+                >
+                  GitHub
+                </a>
               </div>
             </nav>
           </motion.div>

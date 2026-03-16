@@ -5,6 +5,7 @@ import { toast } from 'sonner';
 import { paths } from 'router/paths';
 import { Send } from 'lucide-react';
 import { apiUrl } from 'api/utils/config';
+import { trackEvent } from 'utils/analytics';
 
 export default function Contact() {
   const { t } = useTranslation();
@@ -16,6 +17,7 @@ export default function Contact() {
     const form = e.currentTarget;
     const data = new FormData(form);
 
+    trackEvent('contact:submit');
     setLoading(true);
     try {
       const res = await fetch(apiUrl('/contact-me'), {
@@ -32,13 +34,16 @@ export default function Contact() {
       if (!res.ok) {
         const body = await res.json().catch(() => null);
         toast.error(body?.message || t('contact_error'));
+        trackEvent('contact:error');
         return;
       }
       toast.success(t('contact_success'));
+      trackEvent('contact:success');
       form.reset();
       formLoadedAt.current = Date.now();
     } catch {
       toast.error(t('contact_error'));
+      trackEvent('contact:error');
     } finally {
       setLoading(false);
     }
@@ -72,7 +77,9 @@ export default function Contact() {
             />
           </div>
           <div className="mb-5">
-            <label className="mb-1.5 block text-[13px] font-medium text-text-secondary">{t('contact_name_label')}</label>
+            <label className="mb-1.5 block text-[13px] font-medium text-text-secondary">
+              {t('contact_name_label')}
+            </label>
             <input
               name="name"
               type="text"
@@ -94,7 +101,10 @@ export default function Contact() {
           </div>
           <label className="mb-6 flex items-center gap-2.5 text-[13px] text-text-secondary">
             <input type="checkbox" required className="h-4 w-4 accent-accent" />
-            {t('contact_privacy')} <Link to={paths.privacyPolicy} className="text-accent no-underline hover:underline">{t('contact_privacy_link')}</Link>
+            {t('contact_privacy')}{' '}
+            <Link to={paths.privacyPolicy} className="text-accent no-underline hover:underline">
+              {t('contact_privacy_link')}
+            </Link>
           </label>
           <button
             type="submit"
@@ -112,15 +122,31 @@ export default function Contact() {
         </div>
 
         <div className="flex flex-col gap-2">
-          <a href="mailto:davidpizarrofrick@gmail.com" className="flex items-center gap-3 rounded-[10px] border border-border px-4 py-3 text-[13px] text-text-secondary transition hover:border-accent hover:bg-accent-subtle hover:text-text-primary">
+          <a
+            href="mailto:davidpizarrofrick@gmail.com"
+            className="flex items-center gap-3 rounded-[10px] border border-border px-4 py-3 text-[13px] text-text-secondary transition hover:border-accent hover:bg-accent-subtle hover:text-text-primary"
+            onClick={() => trackEvent('contact:email')}
+          >
             <span className="font-mono text-xs font-semibold text-accent">@</span>
             davidpizarrofrick@gmail.com
           </a>
-          <a href="https://www.linkedin.com/in/david-tomas-pizarro-frick" target="_blank" rel="noreferrer" className="flex items-center gap-3 rounded-[10px] border border-border px-4 py-3 text-[13px] text-text-secondary transition hover:border-accent hover:bg-accent-subtle hover:text-text-primary">
+          <a
+            href="https://www.linkedin.com/in/david-tomas-pizarro-frick"
+            target="_blank"
+            rel="noreferrer"
+            className="flex items-center gap-3 rounded-[10px] border border-border px-4 py-3 text-[13px] text-text-secondary transition hover:border-accent hover:bg-accent-subtle hover:text-text-primary"
+            onClick={() => trackEvent('contact:linkedin')}
+          >
             <span className="font-mono text-xs font-semibold text-accent">in</span>
             linkedin.com/in/david-tomas-pizarro-frick
           </a>
-          <a href="https://github.com/DTPF" target="_blank" rel="noreferrer" className="flex items-center gap-3 rounded-[10px] border border-border px-4 py-3 text-[13px] text-text-secondary transition hover:border-accent hover:bg-accent-subtle hover:text-text-primary">
+          <a
+            href="https://github.com/DTPF"
+            target="_blank"
+            rel="noreferrer"
+            className="flex items-center gap-3 rounded-[10px] border border-border px-4 py-3 text-[13px] text-text-secondary transition hover:border-accent hover:bg-accent-subtle hover:text-text-primary"
+            onClick={() => trackEvent('contact:github')}
+          >
             <span className="font-mono text-xs font-semibold text-accent">gh</span>
             github.com/DTPF
           </a>

@@ -4,9 +4,13 @@ import { projects } from 'config/projects';
 import { projectDetailPath } from 'router/paths';
 import { motion } from 'framer-motion';
 import { ArrowRight, ExternalLink } from 'lucide-react';
+import { trackEvent } from 'utils/analytics';
 
 const stagger = { hidden: {}, visible: { transition: { staggerChildren: 0.07 } } };
-const fadeUp = { hidden: { opacity: 0, y: 16 }, visible: { opacity: 1, y: 0, transition: { duration: 0.35 } } };
+const fadeUp = {
+  hidden: { opacity: 0, y: 16 },
+  visible: { opacity: 1, y: 0, transition: { duration: 0.35 } },
+};
 
 export default function Projects() {
   const { t } = useTranslation();
@@ -38,29 +42,48 @@ export default function Projects() {
             <div>
               <div className="mb-2 flex items-center gap-3">
                 <span className="font-mono text-xs text-text-muted">{t(p.urlKey)}</span>
-                <span className={`rounded px-2 py-0.5 text-[10px] font-semibold uppercase tracking-wider ${
-                  p.slug === 'dtpf'
-                    ? 'border border-accent/20 bg-accent-subtle text-accent'
-                    : 'border border-success/20 bg-success/10 text-success'
-                }`}>
+                <span
+                  className={`rounded px-2 py-0.5 text-[10px] font-semibold uppercase tracking-wider ${
+                    p.slug === 'dtpf'
+                      ? 'border border-accent/20 bg-accent-subtle text-accent'
+                      : 'border border-success/20 bg-success/10 text-success'
+                  }`}
+                >
                   {p.slug === 'dtpf' ? t('projects_badge_this') : t('projects_badge_production')}
                 </span>
               </div>
               <h3 className="mb-1.5 font-heading text-[22px] font-bold tracking-tight">{t(p.nameKey)}</h3>
-              <p className="mb-3.5 max-w-[620px] text-sm leading-relaxed text-text-secondary">{t(p.descKey)}</p>
+              <p className="mb-3.5 max-w-[620px] text-sm leading-relaxed text-text-secondary">
+                {t(p.descKey)}
+              </p>
               <div className="flex flex-wrap gap-1.5">
                 {p.stack.map((s) => (
-                  <span key={s} className="rounded-md border border-border px-2.5 py-0.5 text-xs font-medium text-text-muted">{s}</span>
+                  <span
+                    key={s}
+                    className="rounded-md border border-border px-2.5 py-0.5 text-xs font-medium text-text-muted"
+                  >
+                    {s}
+                  </span>
                 ))}
               </div>
             </div>
 
             <div className="flex flex-row gap-2 md:flex-col md:items-end">
-              <Link to={projectDetailPath(p.slug)} className="inline-flex items-center gap-1.5 rounded-lg bg-accent px-4 py-2 text-[13px] font-semibold text-[#0B0F19] transition hover:bg-accent-hover">
+              <Link
+                to={projectDetailPath(p.slug)}
+                onClick={() => trackEvent('projects:case-study', { slug: p.slug })}
+                className="inline-flex items-center gap-1.5 rounded-lg bg-accent px-4 py-2 text-[13px] font-semibold text-[#0B0F19] transition hover:bg-accent-hover"
+              >
                 {t('projects_case_study')} <ArrowRight size={14} />
               </Link>
               {p.slug !== 'dtpf' && (
-                <a href={p.liveUrl} target="_blank" rel="noreferrer" className="inline-flex items-center gap-1.5 rounded-lg border border-border px-4 py-2 text-[13px] font-semibold text-text-primary transition hover:border-border-hover hover:bg-bg-tertiary">
+                <a
+                  href={p.liveUrl}
+                  target="_blank"
+                  rel="noreferrer"
+                  className="inline-flex items-center gap-1.5 rounded-lg border border-border px-4 py-2 text-[13px] font-semibold text-text-primary transition hover:border-border-hover hover:bg-bg-tertiary"
+                  onClick={() => trackEvent('projects:visit-live', { slug: p.slug })}
+                >
                   {t('projects_visit')} <ExternalLink size={13} />
                 </a>
               )}
