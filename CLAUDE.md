@@ -22,7 +22,7 @@ pnpm test:coverage    # Run tests with v8 coverage report (HTML in coverage/)
 
 ### Testing
 
-Vitest 4 with jsdom environment, @testing-library/react, and jest-dom matchers. **114 tests** across 15 test files. Coverage thresholds: 70% (statements, branches, functions, lines). Tests run in CI before deploy.
+Vitest 4 with jsdom environment, @testing-library/react, and jest-dom matchers. **214 tests** across 21 test files. Coverage thresholds: 95% (statements, branches, functions, lines). Coverage: 99.2% stmts, 95.1% branches, 97.9% funcs, 99.1% lines. Tests run in CI before deploy.
 
 ```
 test/
@@ -34,17 +34,24 @@ test/
 │   ├── paths.test.ts                 # 4 tests
 │   └── navigation.test.tsx           # 6 tests
 ├── utils/
+│   ├── analytics.test.ts             # 32 tests — Umami analytics init/tracking
+│   ├── cookieConsent.test.ts         # 12 tests
+│   ├── errorTracking.test.ts         # 22 tests — error tracking init/reporting/batching
 │   ├── i18n.test.ts                  # 3 tests
 │   └── isLocalhost.test.ts           # 5 tests
+├── hooks/
+│   └── useAnalyticsPageView.test.tsx # 6 tests
 ├── components/
-│   ├── Header.test.tsx               # 14 tests
-│   └── Footer.test.tsx               # 3 tests
+│   ├── CookieConsentBanner.test.tsx  # 7 tests
+│   ├── ErrorBoundary.test.tsx        # 6 tests — error boundary + fallback UI
+│   ├── Header.test.tsx               # 24 tests — nav, mobile menu, trackEvent
+│   └── Footer.test.tsx               # 7 tests — links + trackEvent
 └── pages/
-    ├── Home.test.tsx                  # 13 tests
-    ├── About.test.tsx                 # 11 tests
-    ├── Projects.test.tsx              # 7 tests
-    ├── ProjectDetail.test.tsx         # 11 tests
-    ├── Contact.test.tsx               # 13 tests
+    ├── Home.test.tsx                  # 20 tests — sections, CTAs, trackEvent
+    ├── About.test.tsx                 # 13 tests — profile, experience, trackEvent
+    ├── Projects.test.tsx              # 9 tests — list, badges, trackEvent
+    ├── ProjectDetail.test.tsx         # 15 tests — case study, metrics, trackEvent
+    ├── Contact.test.tsx               # 16 tests — form, submit, trackEvent
     ├── NotFound.test.tsx              # 2 tests
     └── PrivacyPolicy.test.tsx         # 2 tests
 ```
@@ -58,6 +65,7 @@ Key patterns: `renderWithProviders()` wraps components in router/theme/i18n, rel
 React Router v7 with `createBrowserRouter` and lazy-loaded routes via `React.lazy()` + `Suspense`. Routes defined in `src/router/router.tsx`, paths centralized in `src/router/paths.ts`.
 
 **Pages:**
+
 - `/` — Home (hero, bento grid projects, manifesto, stack, CTA)
 - `/projects` — Projects list with stacked cards
 - `/projects/:slug` — Project detail with case study (Problem → Solution → Result)
@@ -98,6 +106,7 @@ Single `PortfolioLayout` wrapping all routes: sticky Header + `AnimatePresence` 
 ### Contact Form Anti-Spam
 
 The contact form includes:
+
 - Honeypot field (`website`) hidden off-screen — bots fill it, humans don't
 - Time trap (`_t` timestamp) — rejects submissions faster than 3 seconds
 - Backend rate limits: 3/hour per IP, 1/24h per email, max 5 URLs in message
@@ -105,6 +114,7 @@ The contact form includes:
 ### Animations
 
 Framer Motion throughout:
+
 - Page transitions (`AnimatePresence mode="wait"`)
 - Hero staggered entrance (name, tagline, proof bar, CTAs)
 - `whileInView` scroll reveals with stagger for projects and stack sections

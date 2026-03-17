@@ -2,8 +2,20 @@ import { screen, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { renderWithProviders } from '../helpers/renderWithProviders';
 import Header from '../../src/views/components/navigation/Header';
+import { trackEvent } from '../../src/utils/analytics';
+
+vi.mock('../../src/utils/analytics', () => ({
+  trackEvent: vi.fn(),
+  trackPageView: vi.fn(),
+  initAnalytics: vi.fn(),
+  identifyUser: vi.fn(),
+}));
 
 describe('Header', () => {
+  beforeEach(() => {
+    vi.clearAllMocks();
+  });
+
   it('renders logo link to home', () => {
     renderWithProviders(<Header />);
     const logo = screen.getByText('dtpf');
@@ -28,7 +40,9 @@ describe('Header', () => {
     renderWithProviders(<Header />);
 
     // Find the lang toggle button (shows "EN" when current lang is "es")
-    const langBtn = screen.getAllByRole('button').find((b) => b.textContent === 'EN' || b.textContent === 'ES');
+    const langBtn = screen
+      .getAllByRole('button')
+      .find((b) => b.textContent === 'EN' || b.textContent === 'ES');
     expect(langBtn).toBeDefined();
 
     const initialText = langBtn!.textContent;
@@ -98,7 +112,9 @@ describe('Header', () => {
 
     await waitFor(() => {
       // Should have two lang toggle buttons (desktop + mobile)
-      const langBtns = screen.getAllByRole('button').filter((b) => b.textContent === 'EN' || b.textContent === 'ES');
+      const langBtns = screen
+        .getAllByRole('button')
+        .filter((b) => b.textContent === 'EN' || b.textContent === 'ES');
       expect(langBtns.length).toBeGreaterThanOrEqual(2);
     });
   });
@@ -153,7 +169,9 @@ describe('Header', () => {
     const user = userEvent.setup();
     renderWithProviders(<Header />);
 
-    const langBtn = screen.getAllByRole('button').find((b) => b.textContent === 'EN' || b.textContent === 'ES');
+    const langBtn = screen
+      .getAllByRole('button')
+      .find((b) => b.textContent === 'EN' || b.textContent === 'ES');
     await user.click(langBtn!);
 
     const savedLang = localStorage.getItem('dtpf-lang');
@@ -165,5 +183,142 @@ describe('Header', () => {
     renderWithProviders(<Header />);
     const menuBtn = screen.getByRole('button', { name: 'Menu' });
     expect(menuBtn).toBeInTheDocument();
+  });
+
+  it('desktop theme toggle tracks nav:toggle-theme event', async () => {
+    const user = userEvent.setup();
+    renderWithProviders(<Header />);
+    const themeBtn = screen.getAllByRole('button').find((b) => b.getAttribute('aria-label'));
+    await user.click(themeBtn!);
+    expect(trackEvent).toHaveBeenCalledWith(
+      'nav:toggle-theme',
+      expect.objectContaining({ theme: expect.any(String) })
+    );
+  });
+
+  it('logo click tracks nav:logo-click event', async () => {
+    const user = userEvent.setup();
+    renderWithProviders(<Header />);
+    await user.click(screen.getByText('dtpf'));
+    expect(trackEvent).toHaveBeenCalledWith('nav:logo-click');
+  });
+
+  it('hamburger open tracks nav:mobile-menu-open event', async () => {
+    const user = userEvent.setup();
+    renderWithProviders(<Header />);
+    await user.click(screen.getByRole('button', { name: 'Menu' }));
+    expect(trackEvent).toHaveBeenCalledWith('nav:mobile-menu-open');
+  });
+
+  it('mobile close button (X) tracks nav:mobile-menu-close event', async () => {
+    const user = userEvent.setup();
+    renderWithProviders(<Header />);
+    await user.click(screen.getByRole('button', { name: 'Menu' }));
+
+    await waitFor(() => {
+      const allButtons = screen.getAllByRole('button');
+      // X close button should be present in mobile overlay
+      expect(allButtons.length).toBeGreaterThanOrEqual(4);
+    });
+
+    // The close button is a sibling of the "dtpf" span in the mobile overlay header
+    const dtpfTexts = screen.getAllByText('dtpf');
+    // dtpfTexts[0] is the logo link, dtpfTexts[1] is the mobile overlay span
+    const closeBtn = dtpfTexts[1].parentElement?.querySelector('button');
+    expect(closeBtn).toBeTruthy();
+    await user.click(closeBtn!);
+    expect(trackEvent).toHaveBeenCalledWith('nav:mobile-menu-close');
+  });
+
+  it('mobile LinkedIn link tracks nav:mobile-linkedin event', async () => {
+    const user = userEvent.setup();
+    renderWithProviders(<Header />);
+    await user.click(screen.getByRole('button', { name: 'Menu' }));
+
+    await waitFor(() => {
+      expect(screen.getByText('LinkedIn')).toBeInTheDocument();
+    });
+
+    await user.click(screen.getByText('LinkedIn'));
+    expect(trackEvent).toHaveBeenCalledWith('nav:mobile-linkedin');
+  });
+
+  it('mobile GitHub link tracks nav:mobile-github event', async () => {
+    const user = userEvent.setup();
+    renderWithProviders(<Header />);
+    await user.click(screen.getByRole('button', { name: 'Menu' }));
+
+    await waitFor(() => {
+      expect(screen.getByText('GitHub')).toBeInTheDocument();
+    });
+
+    await user.click(screen.getByText('GitHub'));
+    expect(trackEvent).toHaveBeenCalledWith('nav:mobile-github');
+  });
+
+  it('language toggle tracks nav:toggle-language event', async () => {
+    const user = userEvent.setup();
+    renderWithProviders(<Header />);
+    const langBtn = screen
+      .getAllByRole('button')
+      .find((b) => b.textContent === 'EN' || b.textContent === 'ES');
+    await user.click(langBtn!);
+    expect(trackEvent).toHaveBeenCalledWith(
+      'nav:toggle-language',
+      expect.objectContaining({ lang: expect.any(String) })
+    );
+  });
+
+  it('desktop nav link click tracks nav:navigate event', async () => {
+    const user = userEvent.setup();
+    renderWithProviders(<Header />);
+    const aboutLink = screen.getAllByRole('link').find((l) => l.getAttribute('href') === '/about');
+    await user.click(aboutLink!);
+    expect(trackEvent).toHaveBeenCalledWith('nav:navigate', { page: '/about' });
+  });
+
+  it('mobile nav link tracks nav:mobile-navigate event', async () => {
+    const user = userEvent.setup();
+    renderWithProviders(<Header />);
+    await user.click(screen.getByRole('button', { name: 'Menu' }));
+
+    await waitFor(() => {
+      const links = screen.getAllByRole('link').filter((l) => l.getAttribute('href') === '/about');
+      expect(links.length).toBeGreaterThanOrEqual(2);
+    });
+
+    // Click the mobile about link (last one with /about)
+    const aboutLinks = screen.getAllByRole('link').filter((l) => l.getAttribute('href') === '/about');
+    await user.click(aboutLinks[aboutLinks.length - 1]);
+    expect(trackEvent).toHaveBeenCalledWith('nav:mobile-navigate', { page: '/about' });
+  });
+
+  it('mobile theme toggle tracks nav:toggle-theme event', async () => {
+    const user = userEvent.setup();
+    renderWithProviders(<Header />);
+    await user.click(screen.getByRole('button', { name: 'Menu' }));
+
+    await waitFor(() => {
+      // Mobile lang toggle should be visible
+      const langBtns = screen
+        .getAllByRole('button')
+        .filter((b) => b.textContent === 'EN' || b.textContent === 'ES');
+      expect(langBtns.length).toBeGreaterThanOrEqual(2);
+    });
+
+    // The mobile theme toggle is a sibling of the mobile lang toggle inside the controls div
+    const langBtns = screen
+      .getAllByRole('button')
+      .filter((b) => b.textContent === 'EN' || b.textContent === 'ES');
+    // The mobile lang button is the last one
+    const mobileLangBtn = langBtns[langBtns.length - 1];
+    // The theme toggle is its next sibling button in the same container
+    const mobileThemeBtn = mobileLangBtn.parentElement?.querySelectorAll('button')[1];
+    expect(mobileThemeBtn).toBeTruthy();
+    await user.click(mobileThemeBtn!);
+    expect(trackEvent).toHaveBeenCalledWith(
+      'nav:toggle-theme',
+      expect.objectContaining({ theme: expect.any(String) })
+    );
   });
 });

@@ -1,9 +1,22 @@
 import { screen } from '@testing-library/react';
+import userEvent from '@testing-library/user-event';
 import { renderWithProviders } from '../helpers/renderWithProviders';
 import Projects from '../../src/views/pages/Projects';
 import { projects } from '../../src/config/projects';
+import { trackEvent } from '../../src/utils/analytics';
+
+vi.mock('../../src/utils/analytics', () => ({
+  trackEvent: vi.fn(),
+  trackPageView: vi.fn(),
+  initAnalytics: vi.fn(),
+  identifyUser: vi.fn(),
+}));
 
 describe('Projects', () => {
+  beforeEach(() => {
+    vi.clearAllMocks();
+  });
+
   it('renders all 5 projects', () => {
     renderWithProviders(<Projects />);
     // Each project renders an h3 heading with its translated name
@@ -13,7 +26,9 @@ describe('Projects', () => {
 
   it('each project has a case study link', () => {
     renderWithProviders(<Projects />);
-    const caseStudyLinks = screen.getAllByRole('link').filter((l) => l.getAttribute('href')?.startsWith('/projects/'));
+    const caseStudyLinks = screen
+      .getAllByRole('link')
+      .filter((l) => l.getAttribute('href')?.startsWith('/projects/'));
     expect(caseStudyLinks.length).toBe(projects.length);
   });
 
@@ -53,5 +68,32 @@ describe('Projects', () => {
     renderWithProviders(<Projects />);
     expect(screen.getByText(/providing passwordless login/)).toBeInTheDocument();
     expect(screen.getByText(/Media storage with folder/)).toBeInTheDocument();
+  });
+
+  it('clicking case study link tracks projects:case-study event', async () => {
+    const user = userEvent.setup();
+    renderWithProviders(<Projects />);
+    const caseStudyLinks = screen
+      .getAllByRole('link')
+      .filter((l) => l.getAttribute('href')?.startsWith('/projects/'));
+    await user.click(caseStudyLinks[0]);
+    expect(trackEvent).toHaveBeenCalledWith(
+      'projects:case-study',
+      expect.objectContaining({ slug: expect.any(String) })
+    );
+  });
+
+  it('clicking visit link tracks projects:visit-live event', async () => {
+    const user = userEvent.setup();
+    renderWithProviders(<Projects />);
+    const externalLinks = screen.getAllByRole('link').filter((l) => {
+      const href = l.getAttribute('href');
+      return href?.startsWith('https://') && !href?.includes('linkedin') && !href?.includes('github');
+    });
+    await user.click(externalLinks[0]);
+    expect(trackEvent).toHaveBeenCalledWith(
+      'projects:visit-live',
+      expect.objectContaining({ slug: expect.any(String) })
+    );
   });
 });

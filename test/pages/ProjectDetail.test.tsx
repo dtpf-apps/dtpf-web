@@ -1,9 +1,18 @@
 import React from 'react';
 import { render, screen } from '@testing-library/react';
+import userEvent from '@testing-library/user-event';
 import { MemoryRouter, Routes, Route } from 'react-router';
 import { ThemeProvider } from '../../src/contexts/theme/ThemeContext';
 import '../../src/utils/i18n';
 import ProjectDetail from '../../src/views/pages/ProjectDetail';
+import { trackEvent } from '../../src/utils/analytics';
+
+vi.mock('../../src/utils/analytics', () => ({
+  trackEvent: vi.fn(),
+  trackPageView: vi.fn(),
+  initAnalytics: vi.fn(),
+  identifyUser: vi.fn(),
+}));
 
 function renderProjectDetail(slug: string) {
   return render(
@@ -19,6 +28,10 @@ function renderProjectDetail(slug: string) {
 }
 
 describe('ProjectDetail', () => {
+  beforeEach(() => {
+    vi.clearAllMocks();
+  });
+
   it('renders project detail for valid slug', () => {
     renderProjectDetail('dauth');
     expect(screen.getByText('React 19')).toBeInTheDocument();
@@ -87,5 +100,41 @@ describe('ProjectDetail', () => {
     renderProjectDetail('dstash');
     expect(screen.getByText('2.114')).toBeInTheDocument();
     expect(screen.getByText('Signed URLs + API Keys')).toBeInTheDocument();
+  });
+
+  it('clicking back link tracks project:back event', async () => {
+    const user = userEvent.setup();
+    renderProjectDetail('dauth');
+    const backLink = screen.getAllByRole('link').find((l) => l.getAttribute('href') === '/projects');
+    await user.click(backLink!);
+    expect(trackEvent).toHaveBeenCalledWith('project:back');
+  });
+
+  it('clicking visit link tracks project:visit-live event', async () => {
+    const user = userEvent.setup();
+    renderProjectDetail('dauth');
+    const visitLink = screen.getAllByRole('link').find((l) => l.getAttribute('href') === 'https://dauth.ovh');
+    await user.click(visitLink!);
+    expect(trackEvent).toHaveBeenCalledWith('project:visit-live', { slug: 'dauth' });
+  });
+
+  it('clicking GitHub link tracks project:github event', async () => {
+    const user = userEvent.setup();
+    renderProjectDetail('dtpf');
+    const githubLink = screen
+      .getAllByRole('link')
+      .find((l) => l.getAttribute('href')?.includes('github.com'));
+    if (githubLink) {
+      await user.click(githubLink);
+      expect(trackEvent).toHaveBeenCalledWith('project:github', { slug: 'dtpf' });
+    }
+  });
+
+  it('project without githubUrl does not show GitHub link', () => {
+    renderProjectDetail('dauth');
+    const githubLinks = screen
+      .getAllByRole('link')
+      .filter((l) => l.getAttribute('href')?.includes('github.com'));
+    expect(githubLinks.length).toBe(0);
   });
 });
