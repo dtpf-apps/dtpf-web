@@ -1,8 +1,21 @@
 import { screen } from '@testing-library/react';
+import userEvent from '@testing-library/user-event';
 import { renderWithProviders } from '../helpers/renderWithProviders';
 import About from '../../src/views/pages/About';
+import { trackEvent } from '../../src/utils/analytics';
+
+vi.mock('../../src/utils/analytics', () => ({
+  trackEvent: vi.fn(),
+  trackPageView: vi.fn(),
+  initAnalytics: vi.fn(),
+  identifyUser: vi.fn(),
+}));
 
 describe('About', () => {
+  beforeEach(() => {
+    vi.clearAllMocks();
+  });
+
   it('renders name and profile initials', () => {
     renderWithProviders(<About />);
     expect(screen.getByText('David T. Pizarro Frick')).toBeInTheDocument();
@@ -80,5 +93,23 @@ describe('About', () => {
     renderWithProviders(<About />);
     expect(screen.getByText('Software Developer')).toBeInTheDocument();
     expect(screen.getByText('Mallorca, Spain')).toBeInTheDocument();
+  });
+
+  it('clicking LinkedIn tracks about:linkedin event', async () => {
+    const user = userEvent.setup();
+    renderWithProviders(<About />);
+    const linkedinLink = screen
+      .getAllByRole('link')
+      .find((l) => l.getAttribute('href')?.includes('linkedin'));
+    await user.click(linkedinLink!);
+    expect(trackEvent).toHaveBeenCalledWith('about:linkedin');
+  });
+
+  it('clicking GitHub tracks about:github event', async () => {
+    const user = userEvent.setup();
+    renderWithProviders(<About />);
+    const githubLink = screen.getAllByRole('link').find((l) => l.getAttribute('href')?.includes('github'));
+    await user.click(githubLink!);
+    expect(trackEvent).toHaveBeenCalledWith('about:github');
   });
 });

@@ -147,6 +147,32 @@ describe('analytics', () => {
       expect(typeof mockTrack.mock.calls[0][0]).toBe('function');
     });
 
+    it('trackPageView callback sets url and falls back to document.title', async () => {
+      Object.defineProperty(window, 'location', {
+        value: { hostname: 'dtpf.es' },
+        writable: true,
+        configurable: true,
+      });
+      resetModule();
+      analytics = await import('../../src/utils/analytics');
+      analytics.initAnalytics();
+
+      // Mock that invokes the callback so the arrow function body executes
+      const mockTrack = vi.fn((cb: unknown) => {
+        if (typeof cb === 'function') cb({});
+      });
+      Object.defineProperty(window, 'umami', {
+        value: { track: mockTrack, identify: vi.fn() },
+        writable: true,
+        configurable: true,
+      });
+
+      // Call without explicit title — triggers document.title fallback
+      analytics.trackPageView('/about');
+
+      expect(mockTrack).toHaveBeenCalledTimes(1);
+    });
+
     it('calls umami.track() without args when no url provided', async () => {
       Object.defineProperty(window, 'location', {
         value: { hostname: 'dtpf.es' },

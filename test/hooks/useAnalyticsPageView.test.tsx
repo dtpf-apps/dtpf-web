@@ -4,9 +4,10 @@ import useAnalyticsPageView from '../../src/hooks/useAnalyticsPageView';
 
 vi.mock('../../src/utils/analytics', () => ({
   trackPageView: vi.fn(),
+  trackEvent: vi.fn(),
 }));
 
-import { trackPageView } from '../../src/utils/analytics';
+import { trackPageView, trackEvent } from '../../src/utils/analytics';
 
 function wrapper({ children }: { children: React.ReactNode }) {
   return <MemoryRouter initialEntries={['/projects?q=dauth']}>{children}</MemoryRouter>;
@@ -57,5 +58,21 @@ describe('useAnalyticsPageView', () => {
     renderHook(() => useAnalyticsPageView(), { wrapper: wrapperAbout });
 
     expect(trackPageView).toHaveBeenCalledWith('/about');
+  });
+
+  it('tracks perf:page-load when loadEventEnd > 0', () => {
+    const originalGetEntriesByType = performance.getEntriesByType;
+    vi.spyOn(performance, 'getEntriesByType').mockReturnValue([
+      { loadEventEnd: 500, startTime: 0 } as PerformanceNavigationTiming,
+    ]);
+
+    renderHook(() => useAnalyticsPageView(), { wrapper });
+
+    expect(trackEvent).toHaveBeenCalledWith('perf:page-load', {
+      duration: 500,
+      path: '/projects',
+    });
+
+    (performance.getEntriesByType as ReturnType<typeof vi.fn>).mockRestore();
   });
 });
