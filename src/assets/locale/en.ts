@@ -173,4 +173,8 @@ export const en = {
   cookie_text: 'We use analytics cookies to improve your experience. You can accept or decline their use.',
   cookie_accept: 'Accept',
   cookie_necessary_only: 'Necessary only',
+
+  // Error boundary
+  updating_app: 'Updating app...',
+  error_boundary_description: 'An unexpected error occurred. Please try again.',
 };

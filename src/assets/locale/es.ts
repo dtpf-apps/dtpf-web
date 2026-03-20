@@ -174,4 +174,8 @@ export const es = {
   cookie_text: 'Utilizamos cookies analiticas para mejorar tu experiencia. Puedes aceptar o rechazar su uso.',
   cookie_accept: 'Aceptar',
   cookie_necessary_only: 'Solo necesarias',
+
+  // Error boundary
+  updating_app: 'Actualizando la aplicacion...',
+  error_boundary_description: 'Ha ocurrido un error inesperado. Por favor, intentalo de nuevo.',
 };

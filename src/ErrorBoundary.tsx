@@ -7,13 +7,65 @@ interface Props {
 
 interface State {
   hasError: boolean;
+  error: Error | null;
+}
+
+function isChunkError(error: Error): boolean {
+  return (
+    error.name === 'ChunkLoadError' ||
+    error.message.includes('Failed to fetch dynamically imported module') ||
+    error.message.includes('Importing a module script failed') ||
+    error.message.includes('error loading dynamically imported module')
+  );
+}
+
+function ErrorFallback({ error }: { error: Error | null }) {
+  if (error && isChunkError(error)) {
+    return (
+      <div style={{ display: 'grid', placeContent: 'center', height: '100vh', textAlign: 'center' }}>
+        <div
+          style={{
+            width: 32,
+            height: 32,
+            border: '3px solid #e5e7eb',
+            borderTopColor: '#6366f1',
+            borderRadius: '50%',
+            animation: 'spin 0.8s linear infinite',
+            margin: '0 auto 16px',
+          }}
+        />
+        <style>{`@keyframes spin { to { transform: rotate(360deg) } }`}</style>
+        <p style={{ color: '#6b7280' }}>Updating app...</p>
+      </div>
+    );
+  }
+
+  return (
+    <div style={{ display: 'grid', placeContent: 'center', height: '100vh', textAlign: 'center' }}>
+      <h1 style={{ fontSize: '1.25rem', fontWeight: 600, marginBottom: 8 }}>Something went wrong</h1>
+      <p style={{ color: '#6b7280', marginBottom: 16 }}>An unexpected error occurred. Please try again.</p>
+      <button
+        onClick={() => window.location.reload()}
+        style={{
+          padding: '8px 24px',
+          borderRadius: 8,
+          border: '1px solid #d1d5db',
+          background: '#f9fafb',
+          cursor: 'pointer',
+          fontSize: '0.875rem',
+        }}
+      >
+        Reload
+      </button>
+    </div>
+  );
 }
 
 class ErrorBoundary extends Component<Props, State> {
-  state: State = { hasError: false };
+  state: State = { hasError: false, error: null };
 
-  static getDerivedStateFromError(): State {
-    return { hasError: true };
+  static getDerivedStateFromError(error: Error): State {
+    return { hasError: true, error };
   }
 
   componentDidCatch(error: Error, errorInfo: ErrorInfo) {
@@ -27,14 +79,7 @@ class ErrorBoundary extends Component<Props, State> {
 
   render() {
     if (this.state.hasError) {
-      return (
-        <div style={{ display: 'grid', placeContent: 'center', height: '100vh', textAlign: 'center' }}>
-          <h1>Something went wrong</h1>
-          <p style={{ marginTop: 16 }}>
-            <button onClick={() => window.location.reload()}>Reload</button>
-          </p>
-        </div>
-      );
+      return <ErrorFallback error={this.state.error} />;
     }
     return this.props.children;
   }

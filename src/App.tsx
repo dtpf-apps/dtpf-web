@@ -10,11 +10,17 @@ import CookieConsentBanner from 'views/components/CookieConsentBanner';
 import StagingBadge from 'views/components/StagingBadge';
 import { initAnalytics } from 'utils/analytics';
 import { hasAnalyticsConsent } from 'utils/cookieConsent';
+import { checkChunkRecovery } from 'utils/lazyWithRetry';
+import useSWUpdate from 'hooks/useSWUpdate';
+
+initErrorTracking(`${basePath}/${apiVersion}`);
 
 export default function App() {
+  useSWUpdate();
+
   useEffect(() => {
     if (hasAnalyticsConsent()) initAnalytics();
-    initErrorTracking(`${basePath}/${apiVersion}`);
+    checkChunkRecovery();
   }, []);
 
   return (

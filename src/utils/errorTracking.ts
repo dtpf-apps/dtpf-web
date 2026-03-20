@@ -37,6 +37,8 @@ export function initErrorTracking(baseApiUrl: string): void {
       source: 'unhandled-rejection',
     });
   });
+
+  window.addEventListener('beforeunload', () => flush());
 }
 
 export function reportError(error: Error, source: ErrorSource = 'error-boundary'): void {
