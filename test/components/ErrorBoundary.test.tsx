@@ -13,9 +13,13 @@ vi.mock('../../src/utils/errorTracking', () => ({
   reportError: vi.fn(),
 }));
 
-function ThrowError({ shouldThrow }: { shouldThrow: boolean }) {
-  if (shouldThrow) throw new Error('Test error');
+function ThrowError({ shouldThrow, message }: { shouldThrow: boolean; message?: string }) {
+  if (shouldThrow) throw new Error(message || 'Test error');
   return <div>Child content</div>;
+}
+
+function ThrowChunkError() {
+  throw new Error('Failed to fetch dynamically imported module /assets/Home-abc123.js');
 }
 
 describe('ErrorBoundary', () => {
@@ -48,13 +52,32 @@ describe('ErrorBoundary', () => {
     expect(screen.getByText('Something went wrong')).toBeInTheDocument();
   });
 
-  it('shows a Reload button in error state', () => {
+  it('shows a Reload button for generic errors', () => {
     render(
       <ErrorBoundary>
         <ThrowError shouldThrow={true} />
       </ErrorBoundary>
     );
     expect(screen.getByRole('button', { name: 'Reload' })).toBeInTheDocument();
+  });
+
+  it('shows error description for generic errors', () => {
+    render(
+      <ErrorBoundary>
+        <ThrowError shouldThrow={true} />
+      </ErrorBoundary>
+    );
+    expect(screen.getByText('An unexpected error occurred. Please try again.')).toBeInTheDocument();
+  });
+
+  it('shows updating spinner for chunk errors', () => {
+    render(
+      <ErrorBoundary>
+        <ThrowChunkError />
+      </ErrorBoundary>
+    );
+    expect(screen.getByText('Updating app...')).toBeInTheDocument();
+    expect(screen.queryByRole('button', { name: 'Reload' })).not.toBeInTheDocument();
   });
 
   it('calls trackEvent on error', async () => {
