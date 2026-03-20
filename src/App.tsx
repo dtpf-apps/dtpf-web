@@ -7,6 +7,7 @@ import ErrorBoundary from './ErrorBoundary';
 import { initErrorTracking } from 'utils/errorTracking';
 import { basePath, apiVersion } from 'api/utils/config';
 import CookieConsentBanner from 'views/components/CookieConsentBanner';
+import StagingBadge from 'views/components/StagingBadge';
 import { initAnalytics } from 'utils/analytics';
 import { hasAnalyticsConsent } from 'utils/cookieConsent';
 
@@ -31,6 +32,7 @@ export default function App() {
           }}
         />
         <CookieConsentBanner />
+        <StagingBadge />
       </ThemeProvider>
     </ErrorBoundary>
   );
