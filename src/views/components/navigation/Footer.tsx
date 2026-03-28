@@ -17,6 +17,7 @@ function Footer() {
           onClick={() => trackEvent('footer:linkedin')}
         >
           LinkedIn
+          <span className="sr-only"> ({t('open_new_window')})</span>
         </a>
         <a
           href="https://github.com/DTPF"
@@ -26,6 +27,7 @@ function Footer() {
           onClick={() => trackEvent('footer:github')}
         >
           GitHub
+          <span className="sr-only"> ({t('open_new_window')})</span>
         </a>
         <a
           href="mailto:davidpizarrofrick@gmail.com"

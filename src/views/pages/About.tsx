@@ -1,12 +1,7 @@
 import { useTranslation } from 'react-i18next';
 import { motion } from 'framer-motion';
 import { trackEvent } from 'utils/analytics';
-
-const fadeUp = {
-  hidden: { opacity: 0, y: 16 },
-  visible: { opacity: 1, y: 0, transition: { duration: 0.35 } },
-};
-const stagger = { hidden: {}, visible: { transition: { staggerChildren: 0.06 } } };
+import { stagger, fadeUp } from 'utils/animations';
 
 const experience = [
   {
@@ -57,7 +52,7 @@ export default function About() {
             DP
           </div>
           <div className="text-center sm:text-left">
-            <h2 className="mb-0.5 font-heading text-xl font-bold tracking-tight">David T. Pizarro Frick</h2>
+            <p className="mb-0.5 font-heading text-xl font-bold tracking-tight">David T. Pizarro Frick</p>
             <p className="mb-0.5 text-sm font-medium text-accent">{t('about_role')}</p>
             <p className="mb-3 text-[13px] text-text-muted">{t('about_location')}</p>
             <div className="flex justify-center gap-2 sm:justify-start">

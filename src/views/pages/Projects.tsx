@@ -5,12 +5,7 @@ import { projectDetailPath } from 'router/paths';
 import { motion } from 'framer-motion';
 import { ArrowRight, ExternalLink } from 'lucide-react';
 import { trackEvent } from 'utils/analytics';
-
-const stagger = { hidden: {}, visible: { transition: { staggerChildren: 0.07 } } };
-const fadeUp = {
-  hidden: { opacity: 0, y: 16 },
-  visible: { opacity: 1, y: 0, transition: { duration: 0.35 } },
-};
+import { stagger, fadeUp } from 'utils/animations';
 
 export default function Projects() {
   const { t } = useTranslation();
@@ -74,7 +69,7 @@ export default function Projects() {
                 onClick={() => trackEvent('projects:case-study', { slug: p.slug })}
                 className="inline-flex items-center gap-1.5 rounded-lg bg-accent px-4 py-2 text-[13px] font-semibold text-[#0B0F19] transition hover:bg-accent-hover"
               >
-                {t('projects_case_study')} <ArrowRight size={14} />
+                {t('projects_case_study')} <ArrowRight size={14} aria-hidden="true" />
               </Link>
               {p.slug !== 'dtpf' && (
                 <a
@@ -84,7 +79,7 @@ export default function Projects() {
                   className="inline-flex items-center gap-1.5 rounded-lg border border-border px-4 py-2 text-[13px] font-semibold text-text-primary transition hover:border-border-hover hover:bg-bg-tertiary"
                   onClick={() => trackEvent('projects:visit-live', { slug: p.slug })}
                 >
-                  {t('projects_visit')} <ExternalLink size={13} />
+                  {t('projects_visit')} <ExternalLink size={13} aria-hidden="true" />
                 </a>
               )}
             </div>

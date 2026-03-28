@@ -8,7 +8,6 @@ vi.mock('../../src/utils/analytics', () => ({
   trackEvent: vi.fn(),
   trackPageView: vi.fn(),
   initAnalytics: vi.fn(),
-  identifyUser: vi.fn(),
 }));
 
 describe('Home', () => {

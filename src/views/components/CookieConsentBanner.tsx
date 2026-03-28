@@ -23,7 +23,11 @@ function CookieConsentBanner() {
   if (!visible) return null;
 
   return (
-    <div className="fixed bottom-0 left-0 right-0 z-50 p-4 md:p-6">
+    <div
+      role="alertdialog"
+      aria-label={t('cookie_banner_title')}
+      className="fixed bottom-0 left-0 right-0 z-50 p-4 md:p-6"
+    >
       <div className="mx-auto flex max-w-lg flex-col gap-3 rounded-xl border border-border bg-bg-secondary p-4 shadow-2xl">
         <div className="flex items-start gap-3">
           <Cookie className="mt-0.5 h-5 w-5 shrink-0 text-accent" />

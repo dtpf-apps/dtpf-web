@@ -31,13 +31,9 @@ type UmamiTrack = {
     ((callback: (props: Record<string, unknown>) => object) => void);
 };
 
-type UmamiIdentify = {
-  identify: (data: Record<string, string | number>) => void;
-};
-
-function getUmami(): (UmamiTrack & UmamiIdentify) | undefined {
+function getUmami(): UmamiTrack | undefined {
   if (!initialized) return undefined;
-  return (window as unknown as Record<string, unknown>).umami as (UmamiTrack & UmamiIdentify) | undefined;
+  return (window as unknown as Record<string, unknown>).umami as UmamiTrack | undefined;
 }
 
 export function trackPageView(url?: string, title?: string): void {
@@ -54,10 +50,4 @@ export function trackEvent(name: string, data?: Record<string, string | number>)
   const umami = getUmami();
   if (!umami?.track) return;
   umami.track(name, data);
-}
-
-export function identifyUser(userId: string, data?: Record<string, string | number>): void {
-  const umami = getUmami();
-  if (!umami?.identify) return;
-  umami.identify({ userId, ...data });
 }

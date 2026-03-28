@@ -8,7 +8,6 @@ vi.mock('../../src/utils/analytics', () => ({
   trackEvent: vi.fn(),
   trackPageView: vi.fn(),
   initAnalytics: vi.fn(),
-  identifyUser: vi.fn(),
 }));
 
 describe('Header', () => {
@@ -31,7 +30,12 @@ describe('Header', () => {
 
   it('theme toggle button exists', () => {
     renderWithProviders(<Header />);
-    const btn = screen.getAllByRole('button').find((b) => b.getAttribute('aria-label'));
+    const btn = screen
+      .getAllByRole('button')
+      .find(
+        (b) =>
+          b.getAttribute('aria-label') === 'Toggle theme' || b.getAttribute('aria-label') === 'Cambiar tema'
+      );
     expect(btn).toBeDefined();
   });
 
@@ -147,7 +151,12 @@ describe('Header', () => {
   it('theme toggle button has aria-label', () => {
     renderWithProviders(<Header />);
     // aria-label uses i18n key 'theme_toggle' — can be English or Spanish
-    const themeBtn = screen.getAllByRole('button').find((b) => b.getAttribute('aria-label'));
+    const themeBtn = screen
+      .getAllByRole('button')
+      .find(
+        (b) =>
+          b.getAttribute('aria-label') === 'Toggle theme' || b.getAttribute('aria-label') === 'Cambiar tema'
+      );
     expect(themeBtn).toBeDefined();
     expect(themeBtn!.getAttribute('aria-label')).toBeTruthy();
   });
@@ -188,7 +197,12 @@ describe('Header', () => {
   it('desktop theme toggle tracks nav:toggle-theme event', async () => {
     const user = userEvent.setup();
     renderWithProviders(<Header />);
-    const themeBtn = screen.getAllByRole('button').find((b) => b.getAttribute('aria-label'));
+    const themeBtn = screen
+      .getAllByRole('button')
+      .find(
+        (b) =>
+          b.getAttribute('aria-label') === 'Toggle theme' || b.getAttribute('aria-label') === 'Cambiar tema'
+      );
     await user.click(themeBtn!);
     expect(trackEvent).toHaveBeenCalledWith(
       'nav:toggle-theme',

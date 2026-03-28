@@ -28,12 +28,12 @@ export default function ProjectDetail() {
           onClick={() => trackEvent('project:back')}
           className="mb-10 inline-flex items-center gap-1.5 font-mono text-[13px] tracking-wide text-text-muted transition-colors hover:text-accent"
         >
-          <ArrowLeft size={14} /> {t('projects_back')}
+          <ArrowLeft size={14} aria-hidden="true" /> {t('projects_back')}
         </Link>
 
         <h1 className="mb-3 font-heading text-5xl font-bold tracking-[-2px]">{t(project.nameKey)}</h1>
         <p className="mb-7 text-lg leading-relaxed text-text-secondary">
-          {project.slug === 'dauth' && project.slug ? t('project_dauth_tagline_long') : t(project.taglineKey)}
+          {project.slug === 'dauth' ? t('project_dauth_tagline_long') : t(project.taglineKey)}
         </p>
 
         <div className="mb-12 flex gap-3">
@@ -44,7 +44,7 @@ export default function ProjectDetail() {
             className="inline-flex items-center gap-2 rounded-[10px] bg-accent px-6 py-3 text-sm font-semibold text-[#0B0F19] transition hover:bg-accent-hover"
             onClick={() => trackEvent('project:visit-live', { slug: project.slug })}
           >
-            {t('detail_visit')} {t(project.urlKey)} <ExternalLink size={14} />
+            {t('detail_visit')} {t(project.urlKey)} <ExternalLink size={14} aria-hidden="true" />
           </a>
           {project.githubUrl && (
             <a
@@ -54,7 +54,7 @@ export default function ProjectDetail() {
               className="inline-flex items-center gap-2 rounded-[10px] border border-border px-6 py-3 text-sm font-semibold text-text-primary transition hover:border-border-hover hover:bg-bg-tertiary"
               onClick={() => trackEvent('project:github', { slug: project.slug })}
             >
-              {t('detail_github')} <ExternalLink size={14} />
+              {t('detail_github')} <ExternalLink size={14} aria-hidden="true" />
             </a>
           )}
         </div>
@@ -85,9 +85,9 @@ export default function ProjectDetail() {
         {/* Stack + Metrics */}
         <div className="mt-10 grid grid-cols-1 gap-10 md:grid-cols-2">
           <div>
-            <h4 className="mb-4 font-mono text-[11px] font-semibold uppercase tracking-[1.5px] text-text-muted">
+            <h2 className="mb-4 font-mono text-[11px] font-semibold uppercase tracking-[1.5px] text-text-muted">
               {t('detail_stack')}
-            </h4>
+            </h2>
             <div className="flex flex-wrap gap-2">
               {project.stack.map((s) => (
                 <span
@@ -102,15 +102,15 @@ export default function ProjectDetail() {
 
           {project.metrics && (
             <div>
-              <h4 className="mb-4 font-mono text-[11px] font-semibold uppercase tracking-[1.5px] text-text-muted">
+              <h2 className="mb-4 font-mono text-[11px] font-semibold uppercase tracking-[1.5px] text-text-muted">
                 {t('detail_metrics')}
-              </h4>
+              </h2>
               {project.metrics.map((m) => (
                 <div
                   key={m.labelKey}
                   className="flex justify-between border-b border-border py-2.5 text-sm last:border-b-0"
                 >
-                  <span className="text-text-secondary">{m.label}</span>
+                  <span className="text-text-secondary">{t(m.labelKey)}</span>
                   <span className="font-semibold text-text-primary">{m.value}</span>
                 </div>
               ))}

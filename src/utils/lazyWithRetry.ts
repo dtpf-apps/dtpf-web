@@ -1,21 +1,16 @@
 import { lazy, type ComponentType } from 'react';
 import { trackEvent } from 'utils/analytics';
 import { reportError } from 'utils/errorTracking';
+import { isChunkError } from 'utils/chunkError';
 
 const RETRY_KEY = 'chunk-retry';
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-export default function lazyWithRetry(importFn: () => Promise<{ default: ComponentType<any> }>) {
+export default function lazyWithRetry(importFn: () => Promise<{ default: ComponentType<object> }>) {
   return lazy(() =>
     importFn().catch((error: unknown) => {
-      const isChunkError =
-        error instanceof Error &&
-        (error.name === 'ChunkLoadError' ||
-          error.message.includes('Failed to fetch dynamically imported module') ||
-          error.message.includes('Importing a module script failed') ||
-          error.message.includes('error loading dynamically imported module'));
+      const isChunk = error instanceof Error && isChunkError(error);
 
-      if (!isChunkError) throw error;
+      if (!isChunk) throw error;
 
       const hasRetried = sessionStorage.getItem(RETRY_KEY);
 

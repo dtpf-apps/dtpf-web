@@ -5,17 +5,9 @@ import { projects } from 'config/projects';
 import { motion } from 'framer-motion';
 import { ArrowRight, ExternalLink } from 'lucide-react';
 import { trackEvent } from 'utils/analytics';
+import { stagger, fadeUp } from 'utils/animations';
 
 const featured = projects.filter((p) => p.slug !== 'dtpf');
-
-const stagger = {
-  hidden: {},
-  visible: { transition: { staggerChildren: 0.08 } },
-};
-const fadeUp = {
-  hidden: { opacity: 0, y: 20 },
-  visible: { opacity: 1, y: 0, transition: { duration: 0.4, ease: [0, 0, 0.2, 1] as const } },
-};
 
 const stackItems = [
   { abbr: 'R', name: 'React' },
@@ -118,6 +110,7 @@ export default function Home() {
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           transition={{ delay: 0.8, duration: 0.6 }}
+          aria-hidden="true"
           className="relative z-10 mt-20 flex flex-col items-center gap-2 font-mono text-[11px] uppercase tracking-[2px] text-text-muted"
         >
           scroll
@@ -183,7 +176,7 @@ export default function Home() {
                   onClick={() => trackEvent('home:project-card', { slug: p.slug })}
                   className="inline-flex items-center gap-1.5 rounded-lg bg-accent px-4 py-2 text-[13px] font-semibold text-[#0B0F19] transition-all hover:bg-accent-hover"
                 >
-                  {t('home_projects_case_study')} <ArrowRight size={14} />
+                  {t('home_projects_case_study')} <ArrowRight size={14} aria-hidden="true" />
                 </Link>
                 <a
                   href={p.liveUrl}
@@ -192,7 +185,7 @@ export default function Home() {
                   className="inline-flex items-center gap-1.5 rounded-lg border border-border px-4 py-2 text-[13px] font-semibold text-text-primary transition-all hover:border-border-hover hover:bg-bg-tertiary"
                   onClick={() => trackEvent('home:visit-project', { slug: p.slug })}
                 >
-                  {t('home_projects_visit')} <ExternalLink size={13} />
+                  {t('home_projects_visit')} <ExternalLink size={13} aria-hidden="true" />
                 </a>
               </div>
             </motion.div>

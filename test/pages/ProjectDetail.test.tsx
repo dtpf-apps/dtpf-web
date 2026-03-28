@@ -11,7 +11,6 @@ vi.mock('../../src/utils/analytics', () => ({
   trackEvent: vi.fn(),
   trackPageView: vi.fn(),
   initAnalytics: vi.fn(),
-  identifyUser: vi.fn(),
 }));
 
 function renderProjectDetail(slug: string) {
@@ -44,7 +43,7 @@ describe('ProjectDetail', () => {
 
   it('shows metrics for dauth', () => {
     renderProjectDetail('dauth');
-    expect(screen.getByText('Tenants activos')).toBeInTheDocument();
+    expect(screen.getByText('Active tenants')).toBeInTheDocument();
     expect(screen.getByText('1.702')).toBeInTheDocument();
   });
 

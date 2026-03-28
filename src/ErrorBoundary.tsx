@@ -1,5 +1,7 @@
 import { Component, type ErrorInfo, type ReactNode } from 'react';
 import { trackEvent } from 'utils/analytics';
+import { isChunkError } from 'utils/chunkError';
+import i18n from 'utils/i18n';
 
 interface Props {
   children: ReactNode;
@@ -8,15 +10,6 @@ interface Props {
 interface State {
   hasError: boolean;
   error: Error | null;
-}
-
-function isChunkError(error: Error): boolean {
-  return (
-    error.name === 'ChunkLoadError' ||
-    error.message.includes('Failed to fetch dynamically imported module') ||
-    error.message.includes('Importing a module script failed') ||
-    error.message.includes('error loading dynamically imported module')
-  );
 }
 
 function ErrorFallback({ error }: { error: Error | null }) {
@@ -35,15 +28,17 @@ function ErrorFallback({ error }: { error: Error | null }) {
           }}
         />
         <style>{`@keyframes spin { to { transform: rotate(360deg) } }`}</style>
-        <p style={{ color: '#6b7280' }}>Updating app...</p>
+        <p style={{ color: '#6b7280' }}>{i18n.t('updating_app')}</p>
       </div>
     );
   }
 
   return (
     <div style={{ display: 'grid', placeContent: 'center', height: '100vh', textAlign: 'center' }}>
-      <h1 style={{ fontSize: '1.25rem', fontWeight: 600, marginBottom: 8 }}>Something went wrong</h1>
-      <p style={{ color: '#6b7280', marginBottom: 16 }}>An unexpected error occurred. Please try again.</p>
+      <h1 style={{ fontSize: '1.25rem', fontWeight: 600, marginBottom: 8 }}>
+        {i18n.t('error_boundary_title')}
+      </h1>
+      <p style={{ color: '#6b7280', marginBottom: 16 }}>{i18n.t('error_boundary_description')}</p>
       <button
         onClick={() => window.location.reload()}
         style={{
@@ -55,7 +50,7 @@ function ErrorFallback({ error }: { error: Error | null }) {
           fontSize: '0.875rem',
         }}
       >
-        Reload
+        {i18n.t('error_boundary_reload')}
       </button>
     </div>
   );
