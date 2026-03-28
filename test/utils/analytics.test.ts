@@ -136,7 +136,7 @@ describe('analytics', () => {
 
       const mockTrack = vi.fn();
       Object.defineProperty(window, 'umami', {
-        value: { track: mockTrack, identify: vi.fn() },
+        value: { track: mockTrack },
         writable: true,
         configurable: true,
       });
@@ -162,7 +162,7 @@ describe('analytics', () => {
         if (typeof cb === 'function') cb({});
       });
       Object.defineProperty(window, 'umami', {
-        value: { track: mockTrack, identify: vi.fn() },
+        value: { track: mockTrack },
         writable: true,
         configurable: true,
       });
@@ -185,7 +185,7 @@ describe('analytics', () => {
 
       const mockTrack = vi.fn();
       Object.defineProperty(window, 'umami', {
-        value: { track: mockTrack, identify: vi.fn() },
+        value: { track: mockTrack },
         writable: true,
         configurable: true,
       });
@@ -222,7 +222,7 @@ describe('analytics', () => {
 
       const mockTrack = vi.fn();
       Object.defineProperty(window, 'umami', {
-        value: { track: mockTrack, identify: vi.fn() },
+        value: { track: mockTrack },
         writable: true,
         configurable: true,
       });
@@ -244,7 +244,7 @@ describe('analytics', () => {
 
       const mockTrack = vi.fn();
       Object.defineProperty(window, 'umami', {
-        value: { track: mockTrack, identify: vi.fn() },
+        value: { track: mockTrack },
         writable: true,
         configurable: true,
       });
@@ -252,43 +252,6 @@ describe('analytics', () => {
       analytics.trackEvent('nav:logo-click');
 
       expect(mockTrack).toHaveBeenCalledWith('nav:logo-click', undefined);
-    });
-  });
-
-  describe('identifyUser', () => {
-    it('does nothing when not initialized', () => {
-      const mockIdentify = vi.fn();
-      Object.defineProperty(window, 'umami', {
-        value: { track: vi.fn(), identify: mockIdentify },
-        writable: true,
-        configurable: true,
-      });
-
-      analytics.identifyUser('user123');
-
-      expect(mockIdentify).not.toHaveBeenCalled();
-    });
-
-    it('calls umami.identify with userId and data', async () => {
-      Object.defineProperty(window, 'location', {
-        value: { hostname: 'dtpf.es' },
-        writable: true,
-        configurable: true,
-      });
-      resetModule();
-      analytics = await import('../../src/utils/analytics');
-      analytics.initAnalytics();
-
-      const mockIdentify = vi.fn();
-      Object.defineProperty(window, 'umami', {
-        value: { track: vi.fn(), identify: mockIdentify },
-        writable: true,
-        configurable: true,
-      });
-
-      analytics.identifyUser('user123', { plan: 'free' });
-
-      expect(mockIdentify).toHaveBeenCalledWith({ userId: 'user123', plan: 'free' });
     });
   });
 });

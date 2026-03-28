@@ -1,4 +1,4 @@
-import { memo, useCallback, useState } from 'react';
+import { memo, useCallback, useEffect, useRef, useState } from 'react';
 import { Link, NavLink } from 'react-router';
 import { useTranslation } from 'react-i18next';
 import { useTheme } from 'contexts/theme/ThemeContext';
@@ -11,6 +11,8 @@ function Header() {
   const { t, i18n } = useTranslation();
   const { isDark, toggleTheme } = useTheme();
   const [mobileOpen, setMobileOpen] = useState(false);
+  const menuButtonRef = useRef<HTMLButtonElement>(null);
+  const closeButtonRef = useRef<HTMLButtonElement>(null);
 
   const toggleLang = useCallback(() => {
     const next = i18n.language === 'es' ? 'en' : 'es';
@@ -18,6 +20,14 @@ function Header() {
     localStorage.setItem('dtpf-lang', next);
     trackEvent('nav:toggle-language', { lang: next });
   }, [i18n]);
+
+  useEffect(() => {
+    if (mobileOpen) {
+      closeButtonRef.current?.focus();
+    } else {
+      menuButtonRef.current?.focus();
+    }
+  }, [mobileOpen]);
 
   const navLinks = [
     { to: paths.home, label: t('nav_home') },
@@ -28,6 +38,27 @@ function Header() {
 
   const linkClass = ({ isActive }: { isActive: boolean }) =>
     `text-sm font-medium transition-colors ${isActive ? 'text-text-primary' : 'text-text-secondary hover:text-text-primary'}`;
+
+  function handleMobileKeyDown(e: React.KeyboardEvent<HTMLDivElement>) {
+    if (e.key === 'Escape') {
+      setMobileOpen(false);
+      return;
+    }
+    if (e.key !== 'Tab') return;
+    const focusable = e.currentTarget.querySelectorAll<HTMLElement>(
+      'a[href], button, input, textarea, select, [tabindex]:not([tabindex="-1"])'
+    );
+    if (focusable.length === 0) return;
+    const first = focusable[0];
+    const last = focusable[focusable.length - 1];
+    if (e.shiftKey && document.activeElement === first) {
+      e.preventDefault();
+      last.focus();
+    } else if (!e.shiftKey && document.activeElement === last) {
+      e.preventDefault();
+      first.focus();
+    }
+  }
 
   return (
     <>
@@ -61,6 +92,7 @@ function Header() {
           <div className="hidden items-center gap-2.5 md:flex">
             <button
               onClick={toggleLang}
+              aria-label={t('lang_toggle')}
               className="rounded-lg border border-border px-2.5 py-1.5 font-mono text-xs font-semibold tracking-wider text-text-muted transition-colors hover:border-border-hover hover:text-text-secondary"
             >
               {i18n.language === 'es' ? 'EN' : 'ES'}
@@ -73,12 +105,13 @@ function Header() {
               aria-label={t('theme_toggle')}
               className="flex h-9 w-9 items-center justify-center rounded-lg border border-border text-text-muted transition-colors hover:border-border-hover hover:text-text-secondary"
             >
-              {isDark ? <Sun size={16} /> : <Moon size={16} />}
+              {isDark ? <Sun size={16} aria-hidden="true" /> : <Moon size={16} aria-hidden="true" />}
             </button>
           </div>
 
           {/* Mobile hamburger */}
           <button
+            ref={menuButtonRef}
             onClick={() => {
               setMobileOpen(true);
               trackEvent('nav:mobile-menu-open');
@@ -86,7 +119,7 @@ function Header() {
             className="flex h-9 w-9 items-center justify-center rounded-lg border border-border text-text-primary md:hidden"
             aria-label="Menu"
           >
-            <Menu size={18} />
+            <Menu size={18} aria-hidden="true" />
           </button>
         </div>
       </header>
@@ -100,17 +133,23 @@ function Header() {
             exit={{ opacity: 0 }}
             transition={{ duration: 0.2 }}
             className="fixed inset-0 z-[999] bg-bg-primary"
+            role="dialog"
+            aria-modal="true"
+            aria-label={t('nav_mobile_menu')}
+            onKeyDown={handleMobileKeyDown}
           >
             <div className="flex items-center justify-between border-b border-border px-6 py-4">
               <span className="font-heading text-lg font-bold text-text-primary">dtpf</span>
               <button
+                ref={closeButtonRef}
                 onClick={() => {
                   setMobileOpen(false);
                   trackEvent('nav:mobile-menu-close');
                 }}
+                aria-label={t('close_menu')}
                 className="flex h-9 w-9 items-center justify-center rounded-lg border border-border text-text-primary"
               >
-                <X size={18} />
+                <X size={18} aria-hidden="true" />
               </button>
             </div>
             <nav className="flex flex-col items-start justify-center gap-2 px-8 py-16">
@@ -139,6 +178,7 @@ function Header() {
               <div className="mt-10 flex gap-3 border-t border-border pt-6">
                 <button
                   onClick={toggleLang}
+                  aria-label={t('lang_toggle')}
                   className="rounded-lg border border-border px-3 py-2 font-mono text-xs font-semibold text-text-muted"
                 >
                   {i18n.language === 'es' ? 'EN' : 'ES'}
@@ -150,7 +190,7 @@ function Header() {
                   }}
                   className="flex h-9 w-9 items-center justify-center rounded-lg border border-border text-text-muted"
                 >
-                  {isDark ? <Sun size={16} /> : <Moon size={16} />}
+                  {isDark ? <Sun size={16} aria-hidden="true" /> : <Moon size={16} aria-hidden="true" />}
                 </button>
               </div>
               <div className="mt-4 flex gap-5">

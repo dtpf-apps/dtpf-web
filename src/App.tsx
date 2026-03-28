@@ -1,5 +1,6 @@
 import { useEffect } from 'react';
 import { RouterProvider } from 'react-router';
+import { MotionConfig } from 'framer-motion';
 import { ThemeProvider } from 'contexts/theme/ThemeContext';
 import { Toaster } from 'sonner';
 import { router } from 'router/router';
@@ -25,21 +26,23 @@ export default function App() {
 
   return (
     <ErrorBoundary>
-      <ThemeProvider>
-        <RouterProvider router={router} />
-        <Toaster
-          position="bottom-right"
-          toastOptions={{
-            style: {
-              background: 'var(--color-bg-surface)',
-              border: '1px solid var(--color-border)',
-              color: 'var(--color-text-primary)',
-            },
-          }}
-        />
-        <CookieConsentBanner />
-        <StagingBadge />
-      </ThemeProvider>
+      <MotionConfig reducedMotion="user">
+        <ThemeProvider>
+          <RouterProvider router={router} />
+          <Toaster
+            position="bottom-right"
+            toastOptions={{
+              style: {
+                background: 'var(--color-bg-surface)',
+                border: '1px solid var(--color-border)',
+                color: 'var(--color-text-primary)',
+              },
+            }}
+          />
+          <CookieConsentBanner />
+          <StagingBadge />
+        </ThemeProvider>
+      </MotionConfig>
     </ErrorBoundary>
   );
 }

@@ -37,6 +37,10 @@ describe('isLocalhost', () => {
     expect(await loadWithHostname('192.168.1.44')).toBe(true);
   });
 
+  it('detects 10.x.x.x addresses', async () => {
+    expect(await loadWithHostname('10.5.0.44')).toBe(true);
+  });
+
   it('returns false for production domain', async () => {
     expect(await loadWithHostname('dtpf.es')).toBe(false);
   });

@@ -19,6 +19,10 @@ export default function Contact() {
 
     trackEvent('contact:submit');
     setLoading(true);
+
+    const controller = new AbortController();
+    const timeoutId = setTimeout(() => controller.abort(), 15_000);
+
     try {
       const res = await fetch(apiUrl('/contact-me'), {
         method: 'POST',
@@ -30,6 +34,7 @@ export default function Contact() {
           website: data.get('website'),
           _t: formLoadedAt.current,
         }),
+        signal: controller.signal,
       });
       if (!res.ok) {
         const body = await res.json().catch(() => null);
@@ -41,10 +46,15 @@ export default function Contact() {
       trackEvent('contact:success');
       form.reset();
       formLoadedAt.current = Date.now();
-    } catch {
-      toast.error(t('contact_error'));
+    } catch (err) {
+      if (err instanceof DOMException && err.name === 'AbortError') {
+        toast.error(t('contact_timeout'));
+      } else {
+        toast.error(t('contact_error'));
+      }
       trackEvent('contact:error');
     } finally {
+      clearTimeout(timeoutId);
       setLoading(false);
     }
   }
@@ -65,54 +75,91 @@ export default function Contact() {
             <input type="text" name="website" tabIndex={-1} autoComplete="off" />
           </div>
           <div className="mb-5">
-            <label className="mb-1.5 block text-[13px] font-medium text-text-secondary">
-              {t('contact_email_label')} <span className="text-accent">*</span>
+            <label
+              htmlFor="contact-email"
+              className="mb-1.5 block text-[13px] font-medium text-text-secondary"
+            >
+              {t('contact_email_label')}{' '}
+              <span className="text-accent" aria-hidden="true">
+                *
+              </span>
+              <span className="sr-only">({t('required')})</span>
             </label>
             <input
+              id="contact-email"
               name="email"
               type="email"
               required
+              aria-required="true"
+              autoComplete="email"
               placeholder={t('contact_email_placeholder')}
               className="w-full rounded-lg border border-border bg-bg-tertiary px-3.5 py-2.5 text-sm text-text-primary outline-none transition-colors placeholder:text-text-muted focus:border-accent focus:ring-[3px] focus:ring-accent-glow"
             />
           </div>
           <div className="mb-5">
-            <label className="mb-1.5 block text-[13px] font-medium text-text-secondary">
+            <label
+              htmlFor="contact-name"
+              className="mb-1.5 block text-[13px] font-medium text-text-secondary"
+            >
               {t('contact_name_label')}
             </label>
             <input
+              id="contact-name"
               name="name"
               type="text"
+              autoComplete="name"
               placeholder={t('contact_name_placeholder')}
               className="w-full rounded-lg border border-border bg-bg-tertiary px-3.5 py-2.5 text-sm text-text-primary outline-none transition-colors placeholder:text-text-muted focus:border-accent focus:ring-[3px] focus:ring-accent-glow"
             />
           </div>
           <div className="mb-5">
-            <label className="mb-1.5 block text-[13px] font-medium text-text-secondary">
-              {t('contact_message_label')} <span className="text-accent">*</span>
+            <label
+              htmlFor="contact-message"
+              className="mb-1.5 block text-[13px] font-medium text-text-secondary"
+            >
+              {t('contact_message_label')}{' '}
+              <span className="text-accent" aria-hidden="true">
+                *
+              </span>
+              <span className="sr-only">({t('required')})</span>
             </label>
             <textarea
+              id="contact-message"
               name="message"
               required
+              aria-required="true"
               rows={5}
               placeholder={t('contact_message_placeholder')}
               className="w-full resize-y rounded-lg border border-border bg-bg-tertiary px-3.5 py-2.5 text-sm text-text-primary outline-none transition-colors placeholder:text-text-muted focus:border-accent focus:ring-[3px] focus:ring-accent-glow"
             />
           </div>
-          <label className="mb-6 flex items-center gap-2.5 text-[13px] text-text-secondary">
-            <input type="checkbox" required className="h-4 w-4 accent-accent" />
-            {t('contact_privacy')}{' '}
-            <Link to={paths.privacyPolicy} className="text-accent no-underline hover:underline">
-              {t('contact_privacy_link')}
-            </Link>
-          </label>
+          <div className="mb-6 flex items-center gap-2.5 text-[13px] text-text-secondary">
+            <input
+              id="privacy-check"
+              type="checkbox"
+              required
+              aria-required="true"
+              className="h-4 w-4 accent-accent"
+            />
+            <label htmlFor="privacy-check">
+              {t('contact_privacy')}{' '}
+              <Link
+                to={paths.privacyPolicy}
+                className="text-accent underline-offset-2 hover:underline"
+                onClick={(e) => e.stopPropagation()}
+              >
+                {t('contact_privacy_link')}
+              </Link>
+            </label>
+          </div>
           <button
             type="submit"
             disabled={loading}
+            aria-busy={loading}
             className="flex w-full items-center justify-center gap-2 rounded-[10px] bg-accent px-6 py-3 text-sm font-semibold text-[#0B0F19] transition-all hover:bg-accent-hover disabled:opacity-50"
           >
-            <Send size={15} />
-            {t('contact_submit')}
+            <Send size={15} aria-hidden="true" />
+            {loading ? t('contact_sending') : t('contact_submit')}
           </button>
         </form>
 

@@ -21,8 +21,6 @@ export const es = {
   home_projects_desc: 'Cada uno de estos proyectos esta desplegado, con usuarios reales, CI/CD y monitoring.',
   home_projects_case_study: 'Ver caso de estudio',
   home_projects_visit: 'Visitar',
-  home_projects_detail: 'Ver detalle',
-
   // Home: Manifesto
   manifesto_line1: 'No colecciono side projects.',
   manifesto_line2: 'Los pongo en produccion.',
@@ -175,7 +173,30 @@ export const es = {
   cookie_accept: 'Aceptar',
   cookie_necessary_only: 'Solo necesarias',
 
+  // Accessibility
+  skip_to_content: 'Ir al contenido principal',
+  close_menu: 'Cerrar menu',
+  nav_mobile_menu: 'Menu de navegacion',
+  cookie_banner_title: 'Configuracion de cookies',
+  required: 'obligatorio',
+  contact_sending: 'Enviando...',
+  contact_timeout: 'La solicitud ha tardado demasiado. Intentalo de nuevo.',
+  open_new_window: 'abre en nueva ventana',
+
   // Error boundary
-  updating_app: 'Actualizando la aplicacion...',
+  error_boundary_title: 'Algo salio mal',
   error_boundary_description: 'Ha ocurrido un error inesperado. Por favor, intentalo de nuevo.',
+  error_boundary_reload: 'Recargar',
+  updating_app: 'Actualizando la aplicacion...',
+
+  // Metric labels
+  tenants: 'Tenants activos',
+  tests: 'Tests',
+  auth: 'Autenticacion',
+  monitoring: 'Monitoring',
+  deploy: 'Deploy',
+  security: 'Seguridad',
+  admin: 'Admin',
+  realtime: 'Tiempo real',
+  encryption: 'Cifrado',
 };

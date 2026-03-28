@@ -43,10 +43,23 @@ export default defineConfig({
       injectRegister: false,
       manifest: false,
       injectManifest: {
-        globPatterns: ['**/*.{js,css,html,ico,png,svg,jpg,woff,woff2}'],
+        globPatterns: ['**/*.{js,css,html,svg}'],
+        globIgnores: ['**/logo512*'],
       },
     }),
   ],
+  build: {
+    rollupOptions: {
+      output: {
+        manualChunks(id: string) {
+          if (id.includes('framer-motion')) return 'framer-motion';
+          if (id.includes('react-dom') || id.includes('react-router') || id.includes('/react/'))
+            return 'react-vendor';
+          if (id.includes('i18next') || id.includes('react-i18next')) return 'i18n';
+        },
+      },
+    },
+  },
   server: {
     host: '0.0.0.0',
     port: 3000,
