@@ -3,7 +3,8 @@ import react from '@vitejs/plugin-react-swc';
 import tsconfigPaths from 'vite-tsconfig-paths';
 import tailwindcss from '@tailwindcss/vite';
 import { VitePWA } from 'vite-plugin-pwa';
-import { readFileSync } from 'fs';
+import { existsSync, readFileSync, writeFileSync } from 'fs';
+import path from 'path';
 
 const pkg = JSON.parse(readFileSync('./package.json', 'utf-8'));
 const appVersion = pkg.version as string;
@@ -30,12 +31,51 @@ function versionFilePlugin(): Plugin {
   };
 }
 
+function manifestEnvPlugin(): Plugin {
+  const suffix = process.env.VITE_APP_SUFFIX || '';
+  let outDir = '';
+  let publicDir = '';
+
+  return {
+    name: 'manifest-env-name',
+    configResolved(config) {
+      outDir = config.build.outDir;
+      publicDir = config.publicDir;
+    },
+    configureServer(server) {
+      if (!suffix) return;
+      server.middlewares.use((req, res, next) => {
+        if (req.url === '/manifest.json') {
+          const manifest = JSON.parse(readFileSync(path.resolve(publicDir, 'manifest.json'), 'utf-8'));
+          manifest.name = `${manifest.name} ${suffix}`;
+          manifest.short_name = `${manifest.short_name} ${suffix}`;
+          res.setHeader('Content-Type', 'application/json');
+          res.end(JSON.stringify(manifest, null, 2));
+          return;
+        }
+        next();
+      });
+    },
+    closeBundle() {
+      if (!suffix) return;
+      const manifestPath = path.resolve(outDir, 'manifest.json');
+      if (existsSync(manifestPath)) {
+        const manifest = JSON.parse(readFileSync(manifestPath, 'utf-8'));
+        manifest.name = `${manifest.name} ${suffix}`;
+        manifest.short_name = `${manifest.short_name} ${suffix}`;
+        writeFileSync(manifestPath, JSON.stringify(manifest, null, 2));
+      }
+    },
+  };
+}
+
 export default defineConfig({
   plugins: [
     react(),
     tsconfigPaths(),
     tailwindcss(),
     versionFilePlugin(),
+    manifestEnvPlugin(),
     VitePWA({
       strategies: 'injectManifest',
       srcDir: 'src',
