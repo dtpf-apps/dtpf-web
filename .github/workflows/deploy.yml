@@ -40,6 +40,7 @@ jobs:
             echo "target=production" >> $GITHUB_OUTPUT
           else
             echo "target=staging" >> $GITHUB_OUTPUT
+            echo "app_suffix=DEV" >> $GITHUB_OUTPUT
           fi
 
       - name: Build
@@ -47,6 +48,7 @@ jobs:
         env:
           NODE_OPTIONS: '--max-old-space-size=4096'
           VITE_PUBLIC_URL: ${{ secrets.VITE_PUBLIC_URL }}
+          VITE_APP_SUFFIX: ${{ steps.env.outputs.app_suffix }}
 
       - name: Deploy to server
         run: |
