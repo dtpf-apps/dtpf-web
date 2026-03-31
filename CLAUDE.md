@@ -22,7 +22,7 @@ pnpm test:coverage    # Run tests with v8 coverage report (HTML in coverage/)
 
 ### Testing
 
-Vitest 4 with jsdom environment, @testing-library/react, and jest-dom matchers. **221 tests** across 21 test files. Coverage thresholds: 95% (statements, branches, functions, lines). Coverage: 99.2% stmts, 95.1% branches, 97.9% funcs, 99.1% lines. Tests run in CI before deploy.
+Vitest 4 with jsdom environment, @testing-library/react, and jest-dom matchers. **225 tests** across 24 test files. Coverage thresholds: 95% (statements, branches, functions, lines). Coverage: 99.2% stmts, 95.1% branches, 97.9% funcs, 99.1% lines. Tests run in CI before deploy.
 
 ```
 test/
