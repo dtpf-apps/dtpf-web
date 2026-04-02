@@ -1,5 +1,7 @@
 # CLAUDE.md
 
+- **⚠️ PRODUCTION DATA — SACRED ⚠️**: **NEVER** reprocess, delete, or modify existing data in production without the user's **EXPLICIT** instruction. To test: download and upload as NEW in staging. Always ASK before any production action. ZERO exceptions.
+
 This file provides guidance to Claude Code (claude.ai/code) when working with code in this repository.
 
 ## Project Overview
