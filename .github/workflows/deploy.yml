@@ -61,3 +61,18 @@ jobs:
             dist/ ${{ env.APP_SERVER }}:$DEPLOY_DIR/client/
 
           echo "✓ Frontend deployed to $TARGET"
+
+      - name: Notify build failure
+        if: failure()
+        run: |
+          REPO="${GITHUB_REPOSITORY#*/}"
+          MSG="❌ **${REPO}** deploy FAILED (${{ github.ref_name }})"
+          curl -sf http://10.5.0.47:18789/tools/invoke \
+            -H 'Authorization: Bearer ${{ secrets.OPENCLAW_GATEWAY_TOKEN }}' \
+            -H 'Content-Type: application/json' \
+            -d "$(jq -n --arg msg "$MSG" '{
+              tool: "message",
+              action: "send",
+              args: { message: $msg, to: "room:!UdPuWAOSDiENZBGANx:matrixdm", channel: "matrix" }
+            }')" || echo "::warning::Element notification failed"
+
