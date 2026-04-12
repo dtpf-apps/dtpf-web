@@ -1,8 +1,6 @@
 # CLAUDE.md
 
-- **⚠️ PRODUCTION DATA — SACRED ⚠️**: **NEVER** reprocess, delete, or modify existing data in production without the user's **EXPLICIT** instruction. To test: download and upload as NEW in staging. Always ASK before any production action. ZERO exceptions.
-
-This file provides guidance to Claude Code (claude.ai/code) when working with code in this repository.
+> Ecosystem context: root `d-context/CLAUDE.md` (common stack + conventions, shared rules) and `docs/services/dtpf.es.md` (cross-sub-project service guide: portfolio + API coordination, deploy map). This file covers `dtpf-web` internals only.
 
 ## Project Overview
 
@@ -158,7 +156,6 @@ src/
 
 ## Code Style
 
-- Prettier: 110 char width, single quotes, trailing commas (es5), 2-space indent, semicolons
 - No ESLint configured
 
 ## Environment Variables
