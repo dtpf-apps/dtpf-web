@@ -62,8 +62,25 @@ jobs:
 
           echo "✓ Frontend deployed to $TARGET"
 
+      - name: Auto-rerun on infra failure
+        id: autorerun
+        if: failure() && github.run_attempt == 1
+        env:
+          GH_TOKEN: ${{ secrets.RERUN_TOKEN }}
+        run: |
+          LOGS=$(gh run view ${{ github.run_id }} --log-failed --repo ${{ github.repository }} 2>/dev/null || true)
+          if echo "$LOGS" | grep -qE "Killed|exit code 137|exit 137|timed out in [0-9]+ms|Hook timed out"; then
+            REASON=$(echo "$LOGS" | grep -oE "Killed|exit code 137|exit 137|timed out in [0-9]+ms|Hook timed out" | head -1)
+            echo "::warning::Detected infra failure ($REASON), triggering auto-rerun"
+            echo "triggered=true" >> $GITHUB_OUTPUT
+            gh run rerun ${{ github.run_id }} --failed --repo ${{ github.repository }}
+          else
+            echo "Failure does not look like infra (no OOM/timeout match) — not rerunning"
+            echo "triggered=false" >> $GITHUB_OUTPUT
+          fi
+
       - name: Notify build failure
-        if: failure()
+        if: failure() && steps.autorerun.outputs.triggered != 'true'
         run: |
           REPO="${GITHUB_REPOSITORY#*/}"
           MSG="❌ **${REPO}** deploy FAILED (${{ github.ref_name }})"
