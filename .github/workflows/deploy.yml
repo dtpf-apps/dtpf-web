@@ -84,12 +84,11 @@ jobs:
         run: |
           REPO="${GITHUB_REPOSITORY#*/}"
           MSG="❌ **${REPO}** deploy FAILED (${{ github.ref_name }})"
-          curl -sf http://10.5.0.47:18789/tools/invoke \
-            -H 'Authorization: Bearer ${{ secrets.OPENCLAW_GATEWAY_TOKEN }}' \
+          TXN="ci-$(date +%s%N)"
+          curl -sf -X PUT \
+            "https://matrixdm.dtpf.es/_matrix/client/v3/rooms/%21UdPuWAOSDiENZBGANx:matrixdm/send/m.room.message/$TXN" \
+            -H 'Authorization: Bearer ${{ secrets.CI_BUILDS_BOT_TOKEN }}' \
             -H 'Content-Type: application/json' \
-            -d "$(jq -n --arg msg "$MSG" '{
-              tool: "message",
-              action: "send",
-              args: { message: $msg, to: "room:!UdPuWAOSDiENZBGANx:matrixdm", channel: "matrix" }
-            }')" || echo "::warning::Element notification failed"
+            -d "$(jq -n --arg msg "$MSG" '{msgtype:"m.text",body:$msg}')" \
+            || echo "::warning::Element notification failed"
 
