@@ -1,0 +1,83 @@
+name: Deploy Frontend (Gitea)
+
+on:
+  push:
+    branches: [main, dev]
+    paths-ignore:
+      - "*.md"
+  workflow_dispatch:
+
+concurrency:
+  group: deploy-${{ github.ref_name }}
+  cancel-in-progress: false
+
+env:
+  APP_SERVER: dtpf@10.5.0.165
+  APP_SERVER_PORT: 22
+  SERVICE_NAME: dtpf
+  npm_config_registry: http://10.5.0.61:4873
+
+jobs:
+  deploy:
+    runs-on: self-hosted
+    steps:
+      - uses: actions/checkout@93cb6efe18208431cddfb8368fd83d5badbf9bfd # v5
+
+      - name: Setup Node.js
+        uses: actions/setup-node@a0853c24544627f65ddf259abe73b1d18a591444 # v5
+        with:
+          node-version: "22"
+
+      - name: Setup pnpm
+        uses: pnpm/action-setup@f40ffcd9367d9f12939873eb1018b921a783ffaa # v4
+        with:
+          version: "11"
+          run_install: false
+
+      - name: Verify pnpm
+        run: pnpm --version
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: Run tests
+        run: pnpm test
+
+      - name: Determine environment
+        id: env
+        run: |
+          if [ "${{ github.ref_name }}" = "main" ]; then
+            echo "target=production" >> $GITHUB_OUTPUT
+          else
+            echo "target=staging" >> $GITHUB_OUTPUT
+            echo "app_suffix=DEV" >> $GITHUB_OUTPUT
+          fi
+
+      - name: Build
+        env:
+          NODE_OPTIONS: "--max-old-space-size=4096"
+          VITE_APP_SUFFIX: ${{ steps.env.outputs.app_suffix }}
+        run: pnpm build
+
+      - name: Deploy to app server
+        env:
+          TARGET: ${{ steps.env.outputs.target }}
+        run: |
+          DEPLOY_DIR="/html/$SERVICE_NAME/$TARGET"
+          rsync -az --delete -e "ssh -o StrictHostKeyChecking=no -p $APP_SERVER_PORT" \
+            dist/ $APP_SERVER:$DEPLOY_DIR/client/
+          echo "frontend deployed to $TARGET"
+
+      - name: Notify build failure
+        if: always()
+        run: |
+          if [ "${{ job.status }}" = "success" ]; then exit 0; fi
+          REPO="${GITHUB_REPOSITORY#*/}"
+          MSG="❌ **${REPO}** Gitea deploy FAILED (${{ github.ref_name }})"
+          TXN="ci-$(date +%s%N)"
+          curl -sf -X PUT \
+            "https://matrixdm.dtpf.es/_matrix/client/v3/rooms/%21UdPuWAOSDiENZBGANx:matrixdm/send/m.room.message/$TXN" \
+            -H 'Authorization: Bearer ${{ secrets.CI_BUILDS_BOT_TOKEN }}' \
+            -H 'Content-Type: application/json' \
+            -d "$(jq -n --arg msg "$MSG" '{msgtype:"m.text",body:$msg}')" \
+            || echo "::warning::Element notification failed"
