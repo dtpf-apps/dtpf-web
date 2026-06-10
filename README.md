@@ -1,4 +1,4 @@
-# dtpf-frontend-react
+# dtpf-web
 
 Frontend SPA for the [dtpf.es](https://dtpf.es) personal portfolio website. Built with React 19, TypeScript, Tailwind CSS v4, and Framer Motion, featuring dark-mode-first design, animated page transitions, ES/EN internationalization, and PWA offline support. Live at [dtpf.es](https://dtpf.es).
 
@@ -7,13 +7,13 @@ Frontend SPA for the [dtpf.es](https://dtpf.es) personal portfolio website. Buil
 | Technology | Version | Purpose |
 |---|---|---|
 | React | 19 | UI framework |
-| TypeScript | 5.9 | Type safety |
-| Vite | 7 | Build tool |
+| TypeScript | 6.0 | Type safety |
+| Vite | 8 | Build tool |
 | Tailwind CSS | 4 | Utility-first styling |
 | Framer Motion | 12 | Animations and page transitions |
-| Lucide React | 0.577 | Icons |
+| Lucide React | 1 | Icons |
 | React Router | 7 | Client-side routing (lazy-loaded) |
-| i18next | 25 | Internationalization (ES/EN) |
+| i18next | 26 | Internationalization (ES/EN) |
 | Sonner | 2 | Toast notifications |
 | Workbox | 7 | PWA service worker (injectManifest) |
 | Vitest | 4 | Testing |
@@ -22,13 +22,13 @@ Frontend SPA for the [dtpf.es](https://dtpf.es) personal portfolio website. Buil
 
 - Node.js >= 22
 - pnpm
-- Backend API running on port 3998 (see dtpf-backend-node)
+- Backend API running on port 3998 (see dtpf-api)
 
 ## Setup
 
 ```bash
-git clone https://github.com/dtpf-apps/dtpf-frontend-react.git
-cd dtpf-frontend-react
+git clone https://github.com/dtpf-apps/dtpf-web.git
+cd dtpf-web
 pnpm install
 ```
 
@@ -48,40 +48,48 @@ pnpm install
 
 | Variable | Description | Default |
 |---|---|---|
-| `VITE_PUBLIC_URL` | Public URL | `https://dtpf.es` |
-| `VITE_DAUTH_DOMAIN_NAME` | dauth domain name | `dtpf` |
+| `VITE_APP_SUFFIX` | Build-time suffix appended to the PWA manifest `name`/`short_name` (CI sets `DEV` on staging) | empty |
 
-No env vars are needed for local development. In production, both are set as GitHub Secrets.
+No env vars are needed for local development. No `VITE_*` variables are read by application code at runtime.
 
 ## Project Structure
 
 ```
 src/
-├── api/utils/
-│   ├── config.ts                    # basePath + apiVersion (auto-detects localhost)
-│   └── fetchHelper.ts               # apiUrl, buildUrl, fetchAPI<T>
-├── assets/locale/{es,en}.ts         # i18n translations (~120 keys each)
+├── api/utils/config.ts              # basePath + apiVersion + apiUrl() (auto-detects localhost)
+├── assets/locale/{es,en}.ts         # i18n translations (~140 keys each)
 ├── config/projects.ts               # Typed project data (5 projects with i18n keys)
 ├── contexts/theme/                  # ThemeContext + ThemeProvider + useTheme
-├── hooks/useSWUpdate.ts             # Service worker update detection hook
+├── hooks/
+│   ├── useAnalyticsPageView.ts      # SPA page-view + page-load perf tracking
+│   └── useSWUpdate.ts               # Silent PWA update (version.json polling)
 ├── router/
-│   ├── router.tsx                   # Route definitions with React.lazy()
+│   ├── router.tsx                   # Route definitions with lazyWithRetry()
 │   └── paths.ts                     # Centralized path constants
 ├── styles/portfolio.css             # Tailwind @theme design tokens + base styles
 ├── utils/
+│   ├── analytics.ts                 # Umami init + trackPageView/trackEvent
+│   ├── animations.ts                # Shared Framer Motion variants
+│   ├── chunkError.ts                # Chunk-load error detection
+│   ├── cookieConsent.ts             # Cookie consent storage helpers
+│   ├── errorTracking.ts             # Client error reporting (batched)
 │   ├── i18n.ts                      # i18next configuration
-│   └── isLocalhost.ts               # Localhost detection helper
+│   ├── isLocalhost.ts               # Localhost detection helper
+│   ├── isStaging.ts                 # Staging hostname detection
+│   └── lazyWithRetry.ts             # React.lazy with reload retry on chunk errors
 ├── views/
 │   ├── layouts/PortfolioLayout.tsx   # Sticky header + AnimatePresence + footer
 │   ├── components/
 │   │   ├── navigation/              # Header, Footer
-│   │   └── SWUpdateBanner.tsx       # Service worker update toast
+│   │   ├── CookieConsentBanner.tsx  # GDPR consent banner (gates analytics)
+│   │   └── StagingBadge.tsx         # "Staging" pill on dev.* hostnames
 │   └── pages/                       # Home, Projects, ProjectDetail, About,
 │                                    # Contact, NotFound, PrivacyPolicy
+├── ErrorBoundary.tsx                # Top-level error boundary + fallback UI
 ├── service-worker.ts                # Workbox service worker (injectManifest)
-├── serviceWorkerRegistration.ts     # SW registration + update event dispatch
+├── serviceWorkerRegistration.ts     # SW registration
 ├── main.tsx                         # Entry point (registers SW)
-└── App.tsx                          # ThemeProvider > RouterProvider + Toaster
+└── App.tsx                          # ErrorBoundary > ThemeProvider > RouterProvider + Toaster
 ```
 
 ## Routes
@@ -102,15 +110,19 @@ Dark-mode-first design built with Tailwind CSS v4 and custom `@theme` design tok
 
 ## i18n
 
-i18next with browser language detection. Spanish default, English fallback. Language persisted in localStorage (`dtpf-lang`). Translation files in `src/assets/locale/{es,en}.ts` with ~120 keys each.
+i18next with browser language detection. Spanish default, English fallback. Language persisted in localStorage (`dtpf-lang`). Translation files in `src/assets/locale/{es,en}.ts` with ~140 keys each.
 
 ## PWA
 
-Progressive Web App via `vite-plugin-pwa` with `injectManifest` strategy. Workbox 7 handles precaching of all build assets. Service worker in `src/service-worker.ts`, registration in `src/serviceWorkerRegistration.ts`. `useSWUpdate` hook detects new versions and shows a `SWUpdateBanner` toast with "Update now" / dismiss options.
+Progressive Web App via `vite-plugin-pwa` with `injectManifest` strategy. Workbox 7 handles precaching of all build assets. Service worker in `src/service-worker.ts`, registration in `src/serviceWorkerRegistration.ts`. Updates are silent: the build emits a `version.json`, the `useSWUpdate` hook polls it in production and, when a new build is detected, clears caches and applies the update on the next in-app navigation or tab re-focus — no update banner.
+
+## Analytics & Error Reporting
+
+Self-hosted Umami analytics (analytics.dtpf.es), loaded only after the user accepts analytics in the GDPR cookie consent banner (`CookieConsentBanner`, consent stored in localStorage). Page views and custom events are tracked client-side (`src/utils/analytics.ts`). Unhandled errors, promise rejections, and React render errors are deduplicated, batched, and reported to the backend at `POST /api/v1/client-errors` (`src/utils/errorTracking.ts` + `ErrorBoundary`).
 
 ## Testing
 
-61 tests across 14 files using Vitest 4 with jsdom, @testing-library/react, and jest-dom. Coverage thresholds: 70% (statements, branches, functions, lines).
+225 tests across 24 files using Vitest 4 with jsdom, @testing-library/react, and jest-dom. Coverage thresholds: 95% (statements, branches, functions, lines).
 
 ```bash
 pnpm test
@@ -119,11 +131,11 @@ pnpm test:coverage
 
 ## Deploy
 
-GitHub Actions CI/CD. Push triggers build on self-hosted runner + rsync to app server.
+Gitea Actions CI/CD on the self-hosted Gitea (`.gitea/workflows/deploy.yml`). A push runs tests, builds (staging builds get `VITE_APP_SUFFIX=DEV`), and rsyncs `dist/` to the app server. GitHub receives a push-mirror and keeps a disabled workflow (`.github/workflows/deploy.yml.disabled`) as disaster-recovery fallback.
 
 ```bash
-git push origin main    # production (dtpf.es)
-git push origin dev     # staging (dev.dtpf.es)
+git push gitea main    # production (dtpf.es)
+git push gitea dev     # staging (dev.dtpf.es)
 ```
 
 ## Code Style
