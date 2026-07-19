@@ -15,7 +15,10 @@ env:
   APP_SERVER: dtpf@10.5.0.165
   APP_SERVER_PORT: 22
   SERVICE_NAME: dtpf
-  npm_config_registry: http://10.5.0.61:4873
+  # Resolved via the runner's /etc/hosts → NPM (10.5.0.102), not a hardcoded
+  # backend IP: the skill-runtime CTs were renumbered 10.5.0.61→10.6.0.61 and
+  # every pipeline pinned to the old address died with EHOSTUNREACH.
+  npm_config_registry: https://verdaccio.dtpf.es
 
 jobs:
   deploy:
