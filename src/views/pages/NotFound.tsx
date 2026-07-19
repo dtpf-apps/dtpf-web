@@ -14,7 +14,10 @@ export default function NotFound() {
         </span>
         <h1 className="mb-3 font-heading text-[22px] font-bold">{t('not_found_title')}</h1>
         <p className="mb-8 text-[15px] text-text-secondary">{t('not_found_desc')}</p>
-        <Link to={paths.home} className="inline-flex items-center gap-2 rounded-[10px] bg-accent px-6 py-3 text-sm font-semibold text-[#0B0F19] transition hover:bg-accent-hover">
+        <Link
+          to={paths.home}
+          className="inline-flex items-center gap-2 rounded-[10px] bg-accent px-6 py-3 text-sm font-semibold text-[#0B0F19] transition hover:bg-accent-hover"
+        >
           {t('not_found_cta')}
         </Link>
       </div>
