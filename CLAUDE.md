@@ -4,7 +4,7 @@
 
 ## Project Overview
 
-Personal portfolio website (dtpf.es). Built with React 19, TypeScript 6.0, Tailwind CSS v4, Framer Motion 12, Lucide icons, and Vite 8. Package manager: **pnpm**. Requires **Node.js 22+**.
+Personal portfolio website (dtpf.es). Built with React 19, TypeScript 7, Tailwind CSS v4, Framer Motion 12, Lucide icons, and Vite 8. Package manager: **pnpm**. Requires **Node.js 24+** (`.nvmrc`).
 
 Dark mode by default, light via `.light` class on `<html>`. i18n with Spanish default, English fallback (i18next + react-i18next).
 
