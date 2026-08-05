@@ -4,23 +4,23 @@ Frontend SPA for the [dtpf.es](https://dtpf.es) personal portfolio website. Buil
 
 ## Tech Stack
 
-| Technology | Version | Purpose |
-|---|---|---|
-| React | 19 | UI framework |
-| TypeScript | 6.0 | Type safety |
-| Vite | 8 | Build tool |
-| Tailwind CSS | 4 | Utility-first styling |
-| Framer Motion | 12 | Animations and page transitions |
-| Lucide React | 1 | Icons |
-| React Router | 7 | Client-side routing (lazy-loaded) |
-| i18next | 26 | Internationalization (ES/EN) |
-| Sonner | 2 | Toast notifications |
-| Workbox | 7 | PWA service worker (injectManifest) |
-| Vitest | 4 | Testing |
+| Technology    | Version | Purpose                             |
+| ------------- | ------- | ----------------------------------- |
+| React         | 19      | UI framework                        |
+| TypeScript    | 7       | Type safety                         |
+| Vite          | 8       | Build tool                          |
+| Tailwind CSS  | 4       | Utility-first styling               |
+| Framer Motion | 13      | Animations and page transitions     |
+| Lucide React  | 1       | Icons                               |
+| React Router  | 8       | Client-side routing (lazy-loaded)   |
+| i18next       | 26      | Internationalization (ES/EN)        |
+| Sonner        | 2       | Toast notifications                 |
+| Workbox       | 7       | PWA service worker (injectManifest) |
+| Vitest        | 4       | Testing                             |
 
 ## Prerequisites
 
-- Node.js >= 22
+- Node.js >= 24
 - pnpm
 - Backend API running on port 3998 (see dtpf-api)
 
@@ -34,21 +34,21 @@ pnpm install
 
 ## Scripts
 
-| Script | Description |
-|---|---|
-| `pnpm dev` | Start Vite dev server on port 3000 |
-| `pnpm build` | Production build (`tsc` + `vite build`) |
-| `pnpm preview` | Preview production build locally |
-| `pnpm format` | Format source files with Prettier |
-| `pnpm test` | Run tests with Vitest |
-| `pnpm test:watch` | Run tests in watch mode |
-| `pnpm test:coverage` | Run tests with v8 coverage report |
+| Script               | Description                             |
+| -------------------- | --------------------------------------- |
+| `pnpm dev`           | Start Vite dev server on port 3000      |
+| `pnpm build`         | Production build (`tsc` + `vite build`) |
+| `pnpm preview`       | Preview production build locally        |
+| `pnpm format`        | Format source files with Prettier       |
+| `pnpm test`          | Run tests with Vitest                   |
+| `pnpm test:watch`    | Run tests in watch mode                 |
+| `pnpm test:coverage` | Run tests with v8 coverage report       |
 
 ## Environment Variables
 
-| Variable | Description | Default |
-|---|---|---|
-| `VITE_APP_SUFFIX` | Build-time suffix appended to the PWA manifest `name`/`short_name` (CI sets `DEV` on staging) | empty |
+| Variable          | Description                                                                                   | Default |
+| ----------------- | --------------------------------------------------------------------------------------------- | ------- |
+| `VITE_APP_SUFFIX` | Build-time suffix appended to the PWA manifest `name`/`short_name` (CI sets `DEV` on staging) | empty   |
 
 No env vars are needed for local development. No `VITE_*` variables are read by application code at runtime.
 
@@ -94,15 +94,15 @@ src/
 
 ## Routes
 
-| Path | Page | Description |
-|---|---|---|
-| `/` | Home | Hero section, bento grid projects, manifesto, stack, CTA |
-| `/projects` | Projects | Project list with stacked card layout |
-| `/projects/:slug` | ProjectDetail | Case study: Problem, Solution, Result |
-| `/about` | About | Profile card, bio, experience, tools grid |
-| `/contact` | Contact | Contact form with anti-spam + direct links |
-| `/privacy-policy` | PrivacyPolicy | Static GDPR/LOPD page |
-| `*` | NotFound | 404 page |
+| Path              | Page          | Description                                              |
+| ----------------- | ------------- | -------------------------------------------------------- |
+| `/`               | Home          | Hero section, bento grid projects, manifesto, stack, CTA |
+| `/projects`       | Projects      | Project list with stacked card layout                    |
+| `/projects/:slug` | ProjectDetail | Case study: Problem, Solution, Result                    |
+| `/about`          | About         | Profile card, bio, experience, tools grid                |
+| `/contact`        | Contact       | Contact form with anti-spam + direct links               |
+| `/privacy-policy` | PrivacyPolicy | Static GDPR/LOPD page                                    |
+| `*`               | NotFound      | 404 page                                                 |
 
 ## Styling
 
