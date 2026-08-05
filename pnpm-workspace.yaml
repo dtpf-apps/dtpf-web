@@ -3,8 +3,14 @@ allowBuilds:
   '@swc/core': false
   esbuild: false
 minimumReleaseAgeExclude:
-  - brace-expansion@5.0.6
+  # framer-motion 13 was published the same day it was adopted. CI pins pnpm 10,
+  # which has no release-age policy, but this keeps the install reproducible if
+  # the runner ever resolves pnpm 11, where the policy is on by default.
+  - framer-motion@13.0.0
 overrides:
-  'brace-expansion@>=5.0.0 <5.0.6': '^5.0.6'
-  'undici@>=7.0.0 <7.28.0': '^7.28.0'
-  '@babel/core@<=7.29.0': '^7.29.1'
+  # Security floors. Each entry pins a transitive chain that would otherwise
+  # re-resolve back to a vulnerable version: the parent's own range still
+  # admits one, so the safe version we get today is luck, not a decision.
+  'brace-expansion@>=5.0.0 <5.0.9': '^5.0.9' # workbox-build > glob > minimatch (GHSA-rgw5-rvv9-x895)
+  'brace-expansion@>=2.0.0 <2.1.4': '^2.1.4' # workbox-build > off-main-thread (same advisory, 2.x line)
+  'fast-uri@<3.1.5': '^3.1.5' # workbox-build > ajv (asks ^3.0.1) — GHSA host-confusion set
