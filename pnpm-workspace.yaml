@@ -1,12 +1,15 @@
+# Supply-chain quarantine: refuse any release younger than 24 h. pnpm ships this
+# check but leaves it OFF unless the key is present, and CI pins pnpm 10 — so
+# without this line nothing is enforced, here or on the runner. It used to be
+# absent while an exclude list sat below it, which exempted packages from a check
+# that never ran and read like protection. Verified against a positive control:
+# with the key armed pnpm refuses a two-day-old release with
+# ERR_PNPM_NO_MATURE_MATCHING_VERSION, and without it the same install succeeds.
+minimumReleaseAge: 1440
 allowBuilds:
   '@parcel/watcher': false
   '@swc/core': false
   esbuild: false
-minimumReleaseAgeExclude:
-  # framer-motion 13 was published the same day it was adopted. CI pins pnpm 10,
-  # which has no release-age policy, but this keeps the install reproducible if
-  # the runner ever resolves pnpm 11, where the policy is on by default.
-  - framer-motion@13.0.0
 overrides:
   # Security floors. Each entry pins a transitive chain that would otherwise
   # re-resolve back to a vulnerable version: the parent's own range still
@@ -14,3 +17,4 @@ overrides:
   'brace-expansion@>=5.0.0 <5.0.9': '^5.0.9' # workbox-build > glob > minimatch (GHSA-rgw5-rvv9-x895)
   'brace-expansion@>=2.0.0 <2.1.4': '^2.1.4' # workbox-build > off-main-thread (same advisory, 2.x line)
   'fast-uri@<3.1.5': '^3.1.5' # workbox-build > ajv (asks ^3.0.1) — GHSA host-confusion set
+  'nanoid@<3.3.18': '^3.3.18' # vite > postcss (asks ^3.3.16) — GHSA-2v37-7h3g-55p8
