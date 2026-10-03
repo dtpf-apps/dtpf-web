@@ -1,6 +1,5 @@
 import { defineConfig, type Plugin } from 'vitest/config';
 import react from '@vitejs/plugin-react-swc';
-import tsconfigPaths from 'vite-tsconfig-paths';
 import tailwindcss from '@tailwindcss/vite';
 import { VitePWA } from 'vite-plugin-pwa';
 import { existsSync, readFileSync, writeFileSync } from 'fs';
@@ -72,7 +71,6 @@ function manifestEnvPlugin(): Plugin {
 export default defineConfig({
   plugins: [
     react(),
-    tsconfigPaths(),
     tailwindcss(),
     versionFilePlugin(),
     manifestEnvPlugin(),
@@ -88,6 +86,11 @@ export default defineConfig({
       },
     }),
   ],
+  // Vite 8 resolves tsconfig `paths` natively. The vite-tsconfig-paths plugin this
+  // replaces pulls tsconfck, whose peer range stops at TypeScript 5.
+  resolve: {
+    tsconfigPaths: true,
+  },
   build: {
     rollupOptions: {
       output: {

@@ -122,7 +122,7 @@ Self-hosted Umami analytics (analytics.dtpf.es), loaded only after the user acce
 
 ## Testing
 
-225 tests across 24 files using Vitest 4 with jsdom, @testing-library/react, and jest-dom. Coverage thresholds: 95% (statements, branches, functions, lines).
+225 tests across 24 files using Vitest 5 with jsdom, @testing-library/react, and jest-dom. Coverage thresholds: 95% (statements, branches, functions, lines).
 
 ```bash
 pnpm test
