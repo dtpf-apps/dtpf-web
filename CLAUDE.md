@@ -22,7 +22,7 @@ pnpm test:coverage    # Run tests with v8 coverage report (HTML in coverage/)
 
 ### Testing
 
-Vitest 4 with jsdom environment, @testing-library/react, and jest-dom matchers. **225 tests** across 24 test files. Coverage thresholds: 95% (statements, branches, functions, lines) — `pnpm test:coverage` currently FAILS them (72.9% stmts overall; `useSWUpdate.ts` and `lazyWithRetry.ts` are largely uncovered). CI runs `pnpm test` (no coverage gate) before deploy.
+Vitest 5 with jsdom environment, @testing-library/react, and jest-dom matchers. **225 tests** across 24 test files. Coverage thresholds: 95% (statements, branches, functions, lines) — `pnpm test:coverage` currently FAILS them (72.9% stmts overall; `useSWUpdate.ts` and `lazyWithRetry.ts` are largely uncovered). CI runs `pnpm test` (no coverage gate) before deploy.
 
 ```
 test/
@@ -136,7 +136,7 @@ PWA via `vite-plugin-pwa` with `injectManifest` strategy. Service worker in `src
 
 ### Path Aliases
 
-`tsconfig.json` sets `baseUrl: "src"`, resolved by `vite-tsconfig-paths`. Imports use absolute paths from src.
+`tsconfig.json` maps `paths: { "*": ["./src/*"] }` (TypeScript 7 removed `baseUrl`), and Vite resolves it natively through `resolve.tsconfigPaths` — no plugin. Imports use absolute paths from src.
 
 ## Component Structure
 
