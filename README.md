@@ -10,13 +10,13 @@ Frontend SPA for the [dtpf.es](https://dtpf.es) personal portfolio website. Buil
 | TypeScript    | 7       | Type safety                         |
 | Vite          | 8       | Build tool                          |
 | Tailwind CSS  | 4       | Utility-first styling               |
-| Framer Motion | 13      | Animations and page transitions     |
+| Framer Motion | 14      | Animations and page transitions     |
 | Lucide React  | 1       | Icons                               |
 | React Router  | 8       | Client-side routing (lazy-loaded)   |
 | i18next       | 26      | Internationalization (ES/EN)        |
 | Sonner        | 2       | Toast notifications                 |
 | Workbox       | 7       | PWA service worker (injectManifest) |
-| Vitest        | 4       | Testing                             |
+| Vitest        | 5       | Testing                             |
 
 ## Prerequisites
 
