@@ -26,19 +26,26 @@ jobs:
     steps:
       - uses: actions/checkout@93cb6efe18208431cddfb8368fd83d5badbf9bfd # v5
 
-      - name: Setup Node.js
-        uses: actions/setup-node@a0853c24544627f65ddf259abe73b1d18a591444 # v5
-        with:
-          node-version-file: .nvmrc
-
+      # pnpm goes before Node: setup-node v5 reads `packageManager` and runs
+      # `pnpm store path` to cache the store, and until action-setup has run the
+      # only pnpm on PATH is the runner's corepack shim. Measured 2026-10-03: that
+      # shim resolved pnpm 12.8.1 to a corepack cache entry pointing at
+      # bin/pnpm.cjs, which the 12.x tarball no longer ships, and the job died
+      # inside Setup Node.js before pnpm was ever installed.
       - name: Setup pnpm
-        uses: pnpm/action-setup@f40ffcd9367d9f12939873eb1018b921a783ffaa # v4
+        # No `version:` input: v6 installs exactly what package.json's
+        # `packageManager` pins, so CI and every local install run one pnpm.
+        uses: pnpm/action-setup@ea17c68df8912ef543352723c149a84f56e3d413 # v6.1.0
         with:
-          version: "10.33.0"
           run_install: false
           # Per-job install dir: every runner on CT 552 shares /home/runner,
           # and concurrent jobs race on the default ~/setup-pnpm (ENOTEMPTY).
           dest: ${{ runner.temp }}/setup-pnpm
+
+      - name: Setup Node.js
+        uses: actions/setup-node@a0853c24544627f65ddf259abe73b1d18a591444 # v5
+        with:
+          node-version-file: .nvmrc
 
       - name: Verify pnpm
         run: pnpm --version

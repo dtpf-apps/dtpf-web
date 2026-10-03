@@ -1,11 +1,20 @@
-# Supply-chain quarantine: refuse any release younger than 24 h. pnpm ships this
-# check but leaves it OFF unless the key is present, and CI pins pnpm 10 — so
-# without this line nothing is enforced, here or on the runner. It used to be
-# absent while an exclude list sat below it, which exempted packages from a check
-# that never ran and read like protection. Verified against a positive control:
-# with the key armed pnpm refuses a two-day-old release with
-# ERR_PNPM_NO_MATURE_MATCHING_VERSION, and without it the same install succeeds.
+# Supply-chain quarantine: refuse any release younger than 24 h. pnpm 11+ applies
+# it by default and checks the committed lockfile against it too, but pnpm 10
+# leaves it OFF unless the key is present, so it stays explicit and the guard
+# does not depend on which pnpm runs. It used to be absent while an exclude list
+# sat below it, which exempted packages from a check that never ran and read like
+# protection. Verified against a positive control: with the key armed pnpm
+# refuses a two-day-old release with ERR_PNPM_NO_MATURE_MATCHING_VERSION, and
+# without it the same install succeeds.
 minimumReleaseAge: 1440
+
+# Refuse to install under a Node outside `engines.node`. It lives here and not in
+# .npmrc because pnpm 11+ reads only auth and registry settings from .npmrc: an
+# `engine-strict=true` there is silently ignored. Measured 2026-10-03 on 10.33.0,
+# 11.9.0 and 12.8.1: with this key all three refuse a too-new `engines.node` with
+# ERR_PNPM_UNSUPPORTED_ENGINE; without it the same install succeeds.
+engineStrict: true
+
 allowBuilds:
   '@parcel/watcher': false
   '@swc/core': false
