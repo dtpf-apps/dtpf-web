@@ -55,8 +55,14 @@ describe('cookieConsent', () => {
   });
 
   describe('hasAnalyticsConsent', () => {
-    it('returns true by default when no consent stored', () => {
-      expect(hasAnalyticsConsent()).toBe(true);
+    it('returns false until the visitor has decided — analytics is opt-in', () => {
+      expect(hasAnalyticsConsent()).toBe(false);
+    });
+
+    it('returns false when the stored consent is unreadable', () => {
+      localStorage.setItem(COOKIE_CONSENT_KEY, 'not-json');
+
+      expect(hasAnalyticsConsent()).toBe(false);
     });
 
     it('returns true when analytics consent is stored as true', () => {
@@ -73,8 +79,8 @@ describe('cookieConsent', () => {
   });
 
   describe('DEFAULT_CONSENT', () => {
-    it('has necessary true and analytics true', () => {
-      expect(DEFAULT_CONSENT).toEqual({ necessary: true, analytics: true });
+    it('grants only the necessary cookies', () => {
+      expect(DEFAULT_CONSENT).toEqual({ necessary: true, analytics: false });
     });
   });
 

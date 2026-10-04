@@ -22,7 +22,7 @@ pnpm test:coverage    # Run tests with v8 coverage report (HTML in coverage/)
 
 ### Testing
 
-Vitest 5 with jsdom environment, @testing-library/react, and jest-dom matchers. **225 tests** across 24 test files. Coverage thresholds: 95% (statements, branches, functions, lines) — `pnpm test:coverage` currently FAILS them (72.9% stmts overall; `useSWUpdate.ts` and `lazyWithRetry.ts` are largely uncovered). CI runs `pnpm test` (no coverage gate) before deploy.
+Vitest 5 with jsdom environment, @testing-library/react, and jest-dom matchers. **226 tests** across 24 test files. Coverage thresholds: 95% (statements, branches, functions, lines) — `pnpm test:coverage` currently FAILS them (72.9% stmts overall; `useSWUpdate.ts` and `lazyWithRetry.ts` are largely uncovered). CI runs `pnpm test` (no coverage gate) before deploy.
 
 ```
 test/
@@ -35,7 +35,7 @@ test/
 │   └── navigation.test.tsx           # 6 tests
 ├── utils/
 │   ├── analytics.test.ts             # 13 tests — Umami analytics init/tracking
-│   ├── cookieConsent.test.ts         # 11 tests
+│   ├── cookieConsent.test.ts         # 12 tests — analytics is opt-in
 │   ├── errorTracking.test.ts         # 24 tests — error tracking init/reporting/batching
 │   ├── i18n.test.ts                  # 3 tests
 │   ├── isLocalhost.test.ts           # 6 tests
