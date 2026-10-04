@@ -5,7 +5,9 @@ export interface CookieConsent {
   analytics: boolean;
 }
 
-export const DEFAULT_CONSENT: CookieConsent = { necessary: true, analytics: true };
+// Analytics is opt-in: until the visitor answers the banner, only the necessary
+// cookies apply and Umami is never loaded.
+export const DEFAULT_CONSENT: CookieConsent = { necessary: true, analytics: false };
 
 export function getStoredConsent(): CookieConsent | null {
   try {
@@ -23,5 +25,5 @@ export function storeConsent(consent: CookieConsent): void {
 
 export function hasAnalyticsConsent(): boolean {
   const consent = getStoredConsent();
-  return consent?.analytics ?? true;
+  return consent?.analytics ?? DEFAULT_CONSENT.analytics;
 }
