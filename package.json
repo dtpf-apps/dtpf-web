@@ -1,6 +1,6 @@
 {
   "name": "dtpf-web",
-  "version": "0.6.15",
+  "version": "0.6.16",
   "description": "Portfolio de David T. Pizarro Frick",
   "author": "David T. Pizarro Frick",
   "license": "MIT",
@@ -68,7 +68,7 @@
     "prettier": "^3.9.9",
     "typescript": "~7.0.2",
     "vite": "~8.3.2",
-    "vite-plugin-pwa": "^1.3.0",
+    "vite-plugin-pwa": "^2.0.0",
     "vitest": "^5.0.3",
     "workbox-build": "^7.4.1",
     "workbox-window": "^7.4.1"
