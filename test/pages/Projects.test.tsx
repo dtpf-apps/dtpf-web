@@ -23,7 +23,7 @@ describe('Projects', () => {
 
   it('renders every project as a card', () => {
     renderWithProviders(<Projects />);
-    const headings = screen.getAllByRole('heading', { level: 3 });
+    const headings = screen.getAllByRole('heading', { level: 2 });
     expect(headings.length).toBe(projects.length);
   });
 

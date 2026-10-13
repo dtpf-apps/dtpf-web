@@ -318,4 +318,26 @@ export const es = {
   metric_payments_bizum: 'Bizum y transferencia',
   metric_cms_sections: '8 secciones editables',
   metric_masters_project: 'Proyecto de máster (2023)',
+
+  // SEO descriptions (meta description / social cards)
+  seo_desc_home:
+    'Portfolio de David T. Pizarro Frick, ingeniero full-stack senior en Mallorca. Construyo y opero productos web de la idea a producción, con CI/CD, staging y monitorización.',
+  seo_desc_projects:
+    'Las aplicaciones que he construido y mantengo en producción: autenticación, almacenamiento de archivos, listas de la compra, una plataforma de agentes de IA y más, cada una con su caso de estudio.',
+  seo_desc_about:
+    'Ingeniero full-stack senior con años en SaaS B2B: experiencia, herramientas y forma de trabajar, desde Mallorca.',
+  seo_desc_contact:
+    'Escríbeme para hablar de un proyecto o una oportunidad. Respondo en menos de 24 horas; remoto o híbrido desde Mallorca.',
+  seo_desc_privacy:
+    'Política de privacidad de dtpf.es: qué datos personales se recogen, para qué y cómo ejercer tus derechos.',
+  seo_desc_cv:
+    'Currículum de David T. Pizarro Frick, ingeniero full-stack senior en Mallorca: experiencia, proyectos seleccionados y herramientas, listo para imprimir o descargar en PDF.',
+
+  // CV
+  cv_title: 'Currículum',
+  cv_download: 'Descargar PDF',
+  cv_profile: 'Perfil',
+  cv_projects: 'Proyectos seleccionados',
+  about_cv: 'Currículum',
+  contact_cv: 'Currículum (ver o descargar PDF)',
 };

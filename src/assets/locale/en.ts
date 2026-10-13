@@ -312,4 +312,26 @@ export const en = {
   metric_payments_bizum: 'Bizum and bank transfer',
   metric_cms_sections: '8 editable sections',
   metric_masters_project: "Master's project (2023)",
+
+  // SEO descriptions (meta description / social cards)
+  seo_desc_home:
+    'Portfolio of David T. Pizarro Frick, senior full-stack engineer in Mallorca. I build and run web products from idea to production, with CI/CD, staging and monitoring.',
+  seo_desc_projects:
+    'The apps I built and keep running in production: authentication, file storage, shopping lists, an AI agent platform and more, each with its case study.',
+  seo_desc_about:
+    'Senior full-stack engineer with years in B2B SaaS: experience, tools and how I work, based in Mallorca.',
+  seo_desc_contact:
+    'Write to me about a project or an opportunity. I reply within 24 hours; remote or hybrid from Mallorca.',
+  seo_desc_privacy:
+    'Privacy policy of dtpf.es: which personal data is collected, why, and how to exercise your rights.',
+  seo_desc_cv:
+    'Résumé of David T. Pizarro Frick, senior full-stack engineer in Mallorca: experience, selected projects and tools, ready to print or download as a PDF.',
+
+  // CV
+  cv_title: 'Résumé',
+  cv_download: 'Download PDF',
+  cv_profile: 'Profile',
+  cv_projects: 'Selected projects',
+  about_cv: 'Résumé',
+  contact_cv: 'Résumé (view or download PDF)',
 };

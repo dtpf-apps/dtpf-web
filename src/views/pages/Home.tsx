@@ -1,6 +1,9 @@
 import { useTranslation } from 'react-i18next';
-import { Link } from 'react-router';
+import { LocalizedLink as Link } from 'router/LocalizedLink';
+import useRouteLang from 'router/useRouteLang';
 import { paths, projectDetailPath } from 'router/paths';
+import Seo from 'views/components/Seo';
+import { personJsonLd } from 'config/site';
 import { projects } from 'config/projects';
 import { motion } from 'framer-motion';
 import { ArrowRight, ExternalLink } from 'lucide-react';
@@ -28,14 +31,20 @@ const stackItems = [
 export default function Home() {
   const { t, i18n } = useTranslation();
   const lang = i18n.language;
+  const routeLang = useRouteLang();
   // Rounded down to the thousand: the exact total is a moving target, the floor is not.
   const testsFigure = `${formatInt(roundDownToThousand(facts.tests.total), lang)}+`;
   const saasYears = yearsSince(facts.saasSince);
 
   return (
     <>
-      <title>David T. Pizarro Frick — Senior Full-Stack Engineer</title>
-      <meta name="description" content={`${t('hero_tagline_1')} ${t('hero_tagline_2')}`} />
+      <Seo
+        title="David T. Pizarro Frick — Senior Full-Stack Engineer"
+        description={t('seo_desc_home')}
+        ogKey="home"
+        type="profile"
+        jsonLd={personJsonLd(routeLang)}
+      />
 
       {/* ── Hero ── */}
       <section className="relative flex min-h-[92vh] flex-col items-center justify-center overflow-hidden px-6 py-20 text-center">

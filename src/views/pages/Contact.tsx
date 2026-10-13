@@ -1,6 +1,7 @@
 import { useState, useRef, type FormEvent } from 'react';
 import { useTranslation } from 'react-i18next';
-import { Link } from 'react-router';
+import { LocalizedLink as Link } from 'router/LocalizedLink';
+import Seo from 'views/components/Seo';
 import { toast } from 'sonner';
 import { paths } from 'router/paths';
 import { Send } from 'lucide-react';
@@ -61,7 +62,7 @@ export default function Contact() {
 
   return (
     <>
-      <title>{t('contact_title')} — David T. Pizarro Frick</title>
+      <Seo titleKey="contact_title" description={t('seo_desc_contact')} ogKey="contact" />
 
       <div className="mx-auto max-w-[1100px] px-6 pt-14 text-center">
         <h1 className="mb-2 font-heading text-4xl font-bold tracking-tight">{t('contact_title')}</h1>
@@ -197,6 +198,14 @@ export default function Contact() {
             <span className="font-mono text-xs font-semibold text-accent">gh</span>
             github.com/DTPF
           </a>
+          <Link
+            to={paths.cv}
+            className="flex items-center gap-3 rounded-[10px] border border-border px-4 py-3 text-[13px] text-text-secondary transition hover:border-accent hover:bg-accent-subtle hover:text-text-primary"
+            onClick={() => trackEvent('contact:cv')}
+          >
+            <span className="font-mono text-xs font-semibold text-accent">cv</span>
+            {t('contact_cv')}
+          </Link>
         </div>
       </div>
     </>

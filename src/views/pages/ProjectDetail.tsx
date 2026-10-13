@@ -1,5 +1,8 @@
 import { useTranslation } from 'react-i18next';
-import { useParams, Link, Navigate } from 'react-router';
+import { useParams } from 'react-router';
+import { LocalizedLink as Link, LocalizedNavigate as Navigate } from 'router/LocalizedLink';
+import Seo from 'views/components/Seo';
+import { softwareJsonLd } from 'config/site';
 import { projects } from 'config/projects';
 import { formatInt, projectVars } from 'config/facts';
 import { paths } from 'router/paths';
@@ -22,7 +25,18 @@ export default function ProjectDetail() {
 
   return (
     <>
-      <title>{t(project.nameKey)} — David T. Pizarro Frick</title>
+      <Seo
+        title={`${t(project.nameKey)} — David T. Pizarro Frick`}
+        description={t(project.taglineLongKey ?? project.taglineKey, vars)}
+        ogKey={`project-${project.slug}`}
+        type="article"
+        jsonLd={softwareJsonLd({
+          name: t(project.nameKey),
+          description: t(project.taglineLongKey ?? project.taglineKey, vars),
+          url: project.liveUrl,
+          android: Boolean(project.storeUrl),
+        })}
+      />
 
       <motion.div
         initial={{ opacity: 0, y: 12 }}

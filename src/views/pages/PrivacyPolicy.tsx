@@ -1,7 +1,18 @@
+import { useTranslation } from 'react-i18next';
+import { SITE_NAME } from 'config/site';
+import Seo from 'views/components/Seo';
+
 export default function PrivacyPolicy() {
+  const { t } = useTranslation();
+
   return (
     <>
-      <title>Política de Privacidad — dtpf.es</title>
+      <Seo
+        title={`Política de Privacidad — ${SITE_NAME}`}
+        description={t('seo_desc_privacy', { lng: 'es' })}
+        ogKey="privacy-policy"
+        esOnly
+      />
       <div lang="es" className="mx-auto max-w-[800px] px-6 py-16 pb-24">
         <h1 className="mb-8 font-heading text-4xl font-bold tracking-tight">Política de Privacidad</h1>
         <div className="space-y-6 text-[15px] leading-relaxed text-text-secondary">

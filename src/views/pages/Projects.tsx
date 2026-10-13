@@ -1,5 +1,6 @@
 import { useTranslation } from 'react-i18next';
-import { Link } from 'react-router';
+import { LocalizedLink as Link } from 'router/LocalizedLink';
+import Seo from 'views/components/Seo';
 import { projects } from 'config/projects';
 import { projectVars } from 'config/facts';
 import { projectDetailPath } from 'router/paths';
@@ -14,7 +15,7 @@ export default function Projects() {
 
   return (
     <>
-      <title>{t('projects_title')} — David T. Pizarro Frick</title>
+      <Seo titleKey="projects_title" description={t('seo_desc_projects')} ogKey="projects" />
 
       <div className="mx-auto max-w-[1100px] px-6 pt-14">
         <h1 className="mb-2 font-heading text-4xl font-bold tracking-tight">{t('projects_title')}</h1>
@@ -41,7 +42,7 @@ export default function Projects() {
                 <span className="font-mono text-xs text-text-muted">{t(p.urlKey)}</span>
                 <ProjectStatusBadge status={p.status} />
               </div>
-              <h3 className="mb-1.5 font-heading text-[22px] font-bold tracking-tight">{t(p.nameKey)}</h3>
+              <h2 className="mb-1.5 font-heading text-[22px] font-bold tracking-tight">{t(p.nameKey)}</h2>
               <p className="mb-3.5 max-w-[620px] text-sm leading-relaxed text-text-secondary">
                 {t(p.descKey, projectVars(p.slug, i18n.language))}
               </p>

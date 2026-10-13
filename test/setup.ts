@@ -1,4 +1,9 @@
 import '@testing-library/jest-dom/vitest';
+import i18n from '../src/utils/i18n';
+
+// jsdom lives at "/", which the app reads as Spanish; the suite's assertions are written
+// against the English copy, and routing takes its language from the URL, not from i18next.
+await i18n.changeLanguage('en');
 
 // jsdom doesn't implement IntersectionObserver (needed by Framer Motion whileInView)
 class MockIntersectionObserver {

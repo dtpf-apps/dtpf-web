@@ -12,7 +12,7 @@ function Footer() {
   const v = site.versions;
 
   return (
-    <footer className="mx-auto w-full max-w-[1100px] border-t border-border px-6 py-12 text-center">
+    <footer className="print:hidden mx-auto w-full max-w-[1100px] border-t border-border px-6 py-12 text-center">
       <p className="mb-1 font-heading text-sm font-semibold text-text-primary">David T. Pizarro Frick</p>
       <div className="mb-4 flex justify-center gap-5">
         <a

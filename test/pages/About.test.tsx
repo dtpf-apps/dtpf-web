@@ -1,4 +1,4 @@
-import { screen } from '@testing-library/react';
+import { screen, within } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { renderWithProviders } from '../helpers/renderWithProviders';
 import About from '../../src/views/pages/About';
@@ -24,13 +24,14 @@ describe('About', () => {
 
   it('renders experience section with 3 entries', () => {
     renderWithProviders(<About />);
-    const experienceHeadings = screen.getAllByRole('heading', { level: 3 });
-    expect(experienceHeadings.length).toBe(3);
+    const section = screen.getByRole('heading', { level: 2, name: 'Experience' }).parentElement!;
+    expect(within(section).getAllByRole('heading', { level: 3 })).toHaveLength(3);
   });
 
   it('renders tools grid with 5 categories', () => {
     renderWithProviders(<About />);
-    expect(screen.getAllByRole('heading', { level: 4 })).toHaveLength(5);
+    const section = screen.getByRole('heading', { level: 2, name: 'Tools' }).parentElement!;
+    expect(within(section).getAllByRole('heading', { level: 3 })).toHaveLength(5);
     expect(screen.getByText('React 19')).toBeInTheDocument();
     expect(screen.getByText('Node.js')).toBeInTheDocument();
     expect(screen.getByText('Docker')).toBeInTheDocument();
@@ -131,5 +132,18 @@ describe('About', () => {
     const githubLink = screen.getAllByRole('link').find((l) => l.getAttribute('href')?.includes('github'));
     await user.click(githubLink!);
     expect(trackEvent).toHaveBeenCalledWith('about:github');
+  });
+
+  it('links to the CV in the current language and tracks about:cv', async () => {
+    const user = userEvent.setup();
+    const { unmount } = renderWithProviders(<About />, { route: '/about' });
+    const link = screen.getByRole('link', { name: 'Résumé' });
+    expect(link).toHaveAttribute('href', '/cv');
+    await user.click(link);
+    expect(trackEvent).toHaveBeenCalledWith('about:cv');
+    unmount();
+
+    renderWithProviders(<About />, { route: '/en/about' });
+    expect(screen.getByRole('link', { name: 'Résumé' })).toHaveAttribute('href', '/en/cv');
   });
 });
