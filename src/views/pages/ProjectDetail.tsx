@@ -7,6 +7,7 @@ import { motion } from 'framer-motion';
 import { ArrowLeft, ExternalLink } from 'lucide-react';
 import { trackEvent } from 'utils/analytics';
 import ProjectStatusBadge from 'views/components/ProjectStatusBadge';
+import ProjectGallery from 'views/components/ProjectGallery';
 
 export default function ProjectDetail() {
   const { slug } = useParams<{ slug: string }>();
@@ -65,11 +66,23 @@ export default function ProjectDetail() {
               <a
                 href={project.storeUrl}
                 target="_blank"
-                rel="noreferrer"
-                className="inline-flex items-center gap-2 rounded-[10px] border border-border px-6 py-3 text-sm font-semibold text-text-primary transition hover:border-border-hover hover:bg-bg-tertiary"
+                rel="noopener noreferrer"
+                className="inline-flex items-center"
                 onClick={() => trackEvent('project:store', { slug: project.slug })}
               >
-                {t('detail_store')} <ExternalLink size={14} aria-hidden="true" />
+                {/* Official Google Play artwork: shown as supplied, never restyled. */}
+                <img
+                  src={
+                    i18n.language.startsWith('en')
+                      ? '/badges/google-play-en.png'
+                      : '/badges/google-play-es.png'
+                  }
+                  alt={t('detail_store')}
+                  width={646}
+                  height={250}
+                  className="h-14 w-auto"
+                  loading="lazy"
+                />
               </a>
             )}
             {project.githubUrl && (
@@ -111,6 +124,18 @@ export default function ProjectDetail() {
         )}
 
         <hr className="mt-9 border-border" />
+
+        {project.media?.length ? (
+          <section aria-labelledby="gallery-heading" className="mt-10">
+            <h2
+              id="gallery-heading"
+              className="mb-4 font-mono text-[11px] font-semibold uppercase tracking-[1.5px] text-text-muted"
+            >
+              {t('detail_gallery')}
+            </h2>
+            <ProjectGallery media={project.media} projectName={t(project.nameKey)} />
+          </section>
+        ) : null}
 
         {/* Stack + Metrics */}
         <div className="mt-10 grid grid-cols-1 gap-10 md:grid-cols-2">

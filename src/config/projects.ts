@@ -37,6 +37,29 @@ export interface Project {
   problemKey?: string;
   solutionKey?: string;
   resultKey?: string;
+  /** Screenshots shown in the detail page gallery; absent means no gallery section. */
+  media?: ProjectMedia[];
+}
+
+export interface ProjectMedia {
+  /** Absolute path under `public/`. */
+  src: string;
+  /** i18n key of the alt text, present in both locales. */
+  altKey: string;
+  /** Intrinsic pixel size, so the browser reserves the box before the image loads. */
+  width: number;
+  height: number;
+}
+
+const DESKTOP = { width: 1600, height: 1000 } as const;
+const PHONE = { width: 780, height: 1688 } as const;
+
+/** The desktop + phone landing pair every first-party app has. */
+function landingPair(slug: string): ProjectMedia[] {
+  return [
+    { src: `/projects/${slug}/landing-desktop.webp`, altKey: `media_${slug}_landing_desktop`, ...DESKTOP },
+    { src: `/projects/${slug}/landing-phone.webp`, altKey: `media_${slug}_landing_phone`, ...PHONE },
+  ];
 }
 
 /** The MERN-style stack every first-party app shares, with the versions measured in facts.json. */
@@ -94,6 +117,7 @@ export const projects: Project[] = [
     problemKey: 'project_dcompany_problem',
     solutionKey: 'project_dcompany_solution',
     resultKey: 'project_dcompany_result',
+    media: landingPair('dcompany'),
   },
   {
     slug: 'dauth',
@@ -117,6 +141,7 @@ export const projects: Project[] = [
     problemKey: 'project_dauth_problem',
     solutionKey: 'project_dauth_solution',
     resultKey: 'project_dauth_result',
+    media: landingPair('dauth'),
   },
   {
     slug: 'dinventory',
@@ -170,6 +195,7 @@ export const projects: Project[] = [
     problemKey: 'project_dalist_problem',
     solutionKey: 'project_dalist_solution',
     resultKey: 'project_dalist_result',
+    media: landingPair('dalist'),
   },
   {
     slug: 'airam',
@@ -190,6 +216,20 @@ export const projects: Project[] = [
     problemKey: 'project_airam_problem',
     solutionKey: 'project_airam_solution',
     resultKey: 'project_airam_result',
+    media: [
+      {
+        src: '/projects/airam/product-desktop.webp',
+        altKey: 'media_airam_product_desktop',
+        ...DESKTOP,
+      },
+      { src: '/projects/airam/product-phone.webp', altKey: 'media_airam_product_phone', ...PHONE },
+      { src: '/projects/airam/catalogue-phone.webp', altKey: 'media_airam_catalogue_phone', ...PHONE },
+      {
+        src: '/projects/airam/how-it-works-phone.webp',
+        altKey: 'media_airam_how_it_works_phone',
+        ...PHONE,
+      },
+    ],
   },
   {
     slug: 'dstash',
@@ -209,6 +249,7 @@ export const projects: Project[] = [
     problemKey: 'project_dstash_problem',
     solutionKey: 'project_dstash_solution',
     resultKey: 'project_dstash_result',
+    media: landingPair('dstash'),
   },
   {
     slug: 'dwealth',

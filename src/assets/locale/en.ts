@@ -227,6 +227,32 @@ export const en = {
   projects_badge_private: 'Private',
   detail_store: 'Get it on Google Play',
 
+  // Screenshot gallery
+  detail_gallery: 'Screenshots',
+  gallery_open: 'Enlarge screenshot: {{alt}}',
+  gallery_close: 'Close',
+  gallery_prev: 'Previous',
+  gallery_next: 'Next',
+  gallery_counter: '{{current}} of {{total}}',
+  gallery_dialog_label: '{{name}} screenshots',
+  media_dcompany_landing_desktop:
+    'dcompany landing on desktop: an invoice is forwarded, the inventory updates itself and an alert follows',
+  media_dcompany_landing_phone: 'dcompany landing on a phone',
+  media_dauth_landing_desktop:
+    'dauth landing: passwordless sign-in screen with magic link and passkey next to the pitch',
+  media_dauth_landing_phone: 'dauth landing on a phone',
+  media_dalist_landing_desktop: 'dalist landing: sample lists, tasks and an audio recording note',
+  media_dalist_landing_phone: 'dalist landing on a phone',
+  media_dstash_landing_desktop: 'dstash landing: "Your content, everywhere", with passkey sign-in',
+  media_dstash_landing_phone: 'dstash landing on a phone',
+  media_airam_product_desktop:
+    'petitairam.com product page on desktop: crochet bag with colour picker and add-to-basket button',
+  media_airam_product_phone: "petitairam.com product page on a phone, with the bag's photo gallery",
+  media_airam_catalogue_phone:
+    'petitairam.com catalogue on a phone, with "Made to order" and "Ready to ship" labels',
+  media_airam_how_it_works_phone:
+    'petitairam.com "How to order" page on a phone: four steps and payment by Bizum or bank transfer',
+
   // Footer: the portfolio's own figures
   footer_site_label: 'This site',
   footer_site_tests: '{{tests}} tests',

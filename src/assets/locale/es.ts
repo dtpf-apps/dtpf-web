@@ -231,6 +231,34 @@ export const es = {
   projects_badge_private: 'Privada',
   detail_store: 'Ver en Google Play',
 
+  // Screenshot gallery
+  detail_gallery: 'Capturas',
+  gallery_open: 'Ampliar captura: {{alt}}',
+  gallery_close: 'Cerrar',
+  gallery_prev: 'Anterior',
+  gallery_next: 'Siguiente',
+  gallery_counter: '{{current}} de {{total}}',
+  gallery_dialog_label: 'Capturas de {{name}}',
+  media_dcompany_landing_desktop:
+    'Landing de dcompany en escritorio: "Reenvía una factura. Tu inventario se actualiza solo", con la cadena email → inventario actualizado → aviso',
+  media_dcompany_landing_phone: 'Landing de dcompany en móvil',
+  media_dauth_landing_desktop:
+    'Landing de dauth: "Quitamos la contraseña de tu producto", junto a la pantalla de acceso con magic link y passkey',
+  media_dauth_landing_phone: 'Landing de dauth en móvil',
+  media_dalist_landing_desktop:
+    'Landing de dalist: "Tus ideas, organizadas. Tu voz, transformada", con ejemplos de listas, tareas y grabación de audio',
+  media_dalist_landing_phone: 'Landing de dalist en móvil',
+  media_dstash_landing_desktop: 'Landing de dstash: "Tu contenido, en todas partes", con acceso por passkey',
+  media_dstash_landing_phone: 'Landing de dstash en móvil',
+  media_airam_product_desktop:
+    'Ficha de producto de petitairam.com en escritorio: bolso de crochet con selector de color y botón de añadir a la cesta',
+  media_airam_product_phone:
+    'Ficha de producto de petitairam.com en móvil, con la galería de fotos del bolso',
+  media_airam_catalogue_phone:
+    'Catálogo de petitairam.com en móvil, con las etiquetas "Hecho por encargo" y "Lista para enviar"',
+  media_airam_how_it_works_phone:
+    'Página "Cómo realizar el pedido" de petitairam.com en móvil: cuatro pasos y pago por Bizum o transferencia',
+
   // Footer: the portfolio's own figures
   footer_site_label: 'Este sitio',
   footer_site_tests: '{{tests}} tests',

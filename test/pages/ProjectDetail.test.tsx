@@ -3,7 +3,7 @@ import { render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { MemoryRouter, Routes, Route } from 'react-router';
 import { ThemeProvider } from '../../src/contexts/theme/ThemeContext';
-import '../../src/utils/i18n';
+import i18n from '../../src/utils/i18n';
 import ProjectDetail from '../../src/views/pages/ProjectDetail';
 import { facts, formatInt } from '../../src/config/facts';
 import { trackEvent } from '../../src/utils/analytics';
@@ -127,6 +127,40 @@ describe('ProjectDetail', () => {
     expect(storeLink).toBeDefined();
     await user.click(storeLink!);
     expect(trackEvent).toHaveBeenCalledWith('project:store', { slug: 'dalist' });
+  });
+
+  it('shows the official Google Play badge for dalist, linking to the store and tracked', async () => {
+    const user = userEvent.setup();
+    renderProjectDetail('dalist');
+    const badge = screen.getByRole('img', { name: 'Get it on Google Play' });
+    expect(badge).toHaveAttribute('src', '/badges/google-play-en.png');
+    const link = badge.closest('a')!;
+    expect(link).toHaveAttribute('href', expect.stringContaining('play.google.com'));
+    await user.click(link);
+    expect(trackEvent).toHaveBeenCalledWith('project:store', { slug: 'dalist' });
+  });
+
+  it('serves the Spanish badge artwork when the language is Spanish', async () => {
+    await i18n.changeLanguage('es');
+    try {
+      renderProjectDetail('dalist');
+      const badge = screen.getByRole('img', { name: 'Ver en Google Play' });
+      expect(badge).toHaveAttribute('src', '/badges/google-play-es.png');
+      expect(badge.closest('a')).toHaveAccessibleName('Ver en Google Play');
+    } finally {
+      await i18n.changeLanguage('en');
+    }
+  });
+
+  it('renders the Screenshots section with thumbnails for dcompany', () => {
+    renderProjectDetail('dcompany');
+    expect(screen.getByRole('heading', { level: 2, name: 'Screenshots' })).toBeInTheDocument();
+    expect(screen.getAllByRole('button', { name: /^Enlarge screenshot:/ })).toHaveLength(2);
+  });
+
+  it('renders no Screenshots section for a project without media', () => {
+    renderProjectDetail('dwealth');
+    expect(screen.queryByRole('heading', { name: 'Screenshots' })).not.toBeInTheDocument();
   });
 
   it('renders all dstash metrics', () => {

@@ -1,4 +1,8 @@
+import fs from 'node:fs';
+import path from 'node:path';
 import { projects } from '../../src/config/projects';
+import { es } from '../../src/assets/locale/es';
+import { en } from '../../src/assets/locale/en';
 import { facts } from '../../src/config/facts';
 
 describe('projects config', () => {
@@ -104,6 +108,37 @@ describe('projects config', () => {
   it('links dalist to its Google Play listing', () => {
     const dalist = projects.find((p) => p.slug === 'dalist')!;
     expect(dalist.storeUrl).toBe('https://play.google.com/store/apps/details?id=es.dtpf.dalist');
+  });
+
+  describe('media', () => {
+    const withMedia = ['dcompany', 'dauth', 'dalist', 'airam', 'dstash'];
+
+    it('exists exactly for the projects that have screenshots', () => {
+      for (const p of projects) {
+        if (withMedia.includes(p.slug)) expect(p.media?.length, p.slug).toBeGreaterThan(0);
+        else expect(p.media, p.slug).toBeUndefined();
+      }
+    });
+
+    it('points at webp files that exist under public, inside the project folder', () => {
+      for (const p of projects) {
+        for (const m of p.media ?? []) {
+          expect(m.src, p.slug).toMatch(new RegExp(`^/projects/${p.slug}/[a-z0-9-]+\\.webp$`));
+          expect(fs.existsSync(path.join(__dirname, '../../public', m.src)), m.src).toBe(true);
+          expect(m.width, m.src).toBeGreaterThan(0);
+          expect(m.height, m.src).toBeGreaterThan(0);
+        }
+      }
+    });
+
+    it('has an alt text in both locales for every image', () => {
+      for (const p of projects) {
+        for (const m of p.media ?? []) {
+          expect((es as Record<string, string>)[m.altKey], m.altKey).toBeTruthy();
+          expect((en as Record<string, string>)[m.altKey], m.altKey).toBeTruthy();
+        }
+      }
+    });
   });
 
   it('every status with a note has its own key', () => {
