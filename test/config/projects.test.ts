@@ -1,8 +1,22 @@
+import fs from 'node:fs';
+import path from 'node:path';
 import { projects } from '../../src/config/projects';
+import { es } from '../../src/assets/locale/es';
+import { en } from '../../src/assets/locale/en';
+import { facts } from '../../src/config/facts';
 
 describe('projects config', () => {
-  it('has exactly 5 projects', () => {
-    expect(projects).toHaveLength(5);
+  it('lists the eight projects in the agreed order', () => {
+    expect(projects.map((p) => p.slug)).toEqual([
+      'dcompany',
+      'dauth',
+      'dinventory',
+      'dalist',
+      'airam',
+      'dstash',
+      'dwealth',
+      'audity',
+    ]);
   });
 
   it('each project has required fields', () => {
@@ -10,8 +24,10 @@ describe('projects config', () => {
       expect(p.slug).toBeTruthy();
       expect(p.nameKey).toBeTruthy();
       expect(p.taglineKey).toBeTruthy();
+      expect(p.descKey).toBeTruthy();
+      expect(p.urlKey).toBeTruthy();
+      expect(p.status).toBeTruthy();
       expect(p.stack.length).toBeGreaterThan(0);
-      expect(p.liveUrl).toMatch(/^https:\/\//);
     }
   });
 
@@ -20,14 +36,51 @@ describe('projects config', () => {
     expect(new Set(slugs).size).toBe(slugs.length);
   });
 
+  it('features exactly the first four projects on the home grid', () => {
+    const featured = projects.filter((p) => p.featured);
+    expect(featured).toHaveLength(4);
+    expect(featured).toEqual(projects.slice(0, 4));
+  });
+
+  it('every featured project has a live URL and a featured blurb', () => {
+    for (const p of projects.filter((p) => p.featured)) {
+      expect(p.liveUrl, p.slug).toMatch(/^https:\/\//);
+      expect(p.featuredKey, p.slug).toBeDefined();
+    }
+  });
+
+  it('only private projects lack a live URL', () => {
+    for (const p of projects) {
+      if (p.status === 'private') expect(p.liveUrl, p.slug).toBeUndefined();
+      else expect(p.liveUrl, p.slug).toMatch(/^https:\/\//);
+    }
+  });
+
+  it('all live URLs are unique', () => {
+    const urls = projects.map((p) => p.liveUrl).filter(Boolean);
+    expect(new Set(urls).size).toBe(urls.length);
+  });
+
+  it('is not its own project card — the portfolio lives in the footer', () => {
+    expect(projects.find((p) => p.slug === 'dtpf')).toBeUndefined();
+  });
+
   it('dauth has metrics and case study', () => {
     const dauth = projects.find((p) => p.slug === 'dauth');
     expect(dauth).toBeDefined();
-    expect(dauth!.metrics).toBeDefined();
     expect(dauth!.metrics!.length).toBeGreaterThan(0);
     expect(dauth!.problemKey).toBeDefined();
     expect(dauth!.solutionKey).toBeDefined();
     expect(dauth!.resultKey).toBeDefined();
+  });
+
+  it('every project with a case study has all three sections', () => {
+    for (const p of projects) {
+      if (p.problemKey) {
+        expect(p.solutionKey, p.slug).toBeDefined();
+        expect(p.resultKey, p.slug).toBeDefined();
+      }
+    }
   });
 
   it('all slugs are lowercase alphanumeric', () => {
@@ -36,34 +89,61 @@ describe('projects config', () => {
     }
   });
 
-  it('all stack arrays are non-empty and contain strings', () => {
+  it('never renders an unmeasured version in a stack tag', () => {
     for (const p of projects) {
-      expect(p.stack.length).toBeGreaterThan(0);
       for (const s of p.stack) {
         expect(typeof s).toBe('string');
-        expect(s.length).toBeGreaterThan(0);
+        expect(s, `${p.slug} stack`).not.toMatch(/undefined|NaN/);
       }
     }
   });
 
-  it('dtpf has no metrics and no case study', () => {
-    const dtpf = projects.find((p) => p.slug === 'dtpf');
-    expect(dtpf).toBeDefined();
-    expect(dtpf!.metrics).toBeUndefined();
-    expect(dtpf!.problemKey).toBeUndefined();
+  it('shows the dcompany MCP tool count floored to the ten with a plus', () => {
+    const dcompany = projects.find((p) => p.slug === 'dcompany')!;
+    const tools = dcompany.metrics!.find((m) => m.labelKey === 'tools');
+    const measured = facts.projects.dcompany.mcpTools!;
+    expect(tools?.value).toBe(`${Math.floor(measured / 10) * 10}+`);
   });
 
-  it('projects with problemKey also have solutionKey and resultKey', () => {
-    for (const p of projects) {
-      if (p.problemKey) {
-        expect(p.solutionKey).toBeDefined();
-        expect(p.resultKey).toBeDefined();
+  it('links dalist to its Google Play listing', () => {
+    const dalist = projects.find((p) => p.slug === 'dalist')!;
+    expect(dalist.storeUrl).toBe('https://play.google.com/store/apps/details?id=es.dtpf.dalist');
+  });
+
+  describe('media', () => {
+    const withMedia = ['dcompany', 'dauth', 'dalist', 'airam', 'dstash'];
+
+    it('exists exactly for the projects that have screenshots', () => {
+      for (const p of projects) {
+        if (withMedia.includes(p.slug)) expect(p.media?.length, p.slug).toBeGreaterThan(0);
+        else expect(p.media, p.slug).toBeUndefined();
       }
-    }
+    });
+
+    it('points at webp files that exist under public, inside the project folder', () => {
+      for (const p of projects) {
+        for (const m of p.media ?? []) {
+          expect(m.src, p.slug).toMatch(new RegExp(`^/projects/${p.slug}/[a-z0-9-]+\\.webp$`));
+          expect(fs.existsSync(path.join(__dirname, '../../public', m.src)), m.src).toBe(true);
+          expect(m.width, m.src).toBeGreaterThan(0);
+          expect(m.height, m.src).toBeGreaterThan(0);
+        }
+      }
+    });
+
+    it('has an alt text in both locales for every image', () => {
+      for (const p of projects) {
+        for (const m of p.media ?? []) {
+          expect((es as Record<string, string>)[m.altKey], m.altKey).toBeTruthy();
+          expect((en as Record<string, string>)[m.altKey], m.altKey).toBeTruthy();
+        }
+      }
+    });
   });
 
-  it('all liveUrl values are unique', () => {
-    const urls = projects.map((p) => p.liveUrl);
-    expect(new Set(urls).size).toBe(urls.length);
+  it('every status with a note has its own key', () => {
+    for (const p of projects.filter((p) => p.status === 'beta' || p.status === 'private')) {
+      expect(p.statusNoteKey, p.slug).toBeDefined();
+    }
   });
 });

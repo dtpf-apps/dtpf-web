@@ -1,4 +1,5 @@
 import { screen, waitFor } from '@testing-library/react';
+import { useLocation } from 'react-router';
 import userEvent from '@testing-library/user-event';
 import { renderWithProviders } from '../helpers/renderWithProviders';
 import Header from '../../src/views/components/navigation/Header';
@@ -334,5 +335,58 @@ describe('Header', () => {
       'nav:toggle-theme',
       expect.objectContaining({ theme: expect.any(String) })
     );
+  });
+});
+
+describe('Header language in the URL', () => {
+  function Where() {
+    return <span data-testid="where">{useLocation().pathname}</span>;
+  }
+  const toggle = () =>
+    screen.getAllByRole('button').find((b) => b.textContent === 'EN' || b.textContent === 'ES')!;
+
+  beforeEach(() => {
+    vi.clearAllMocks();
+    localStorage.removeItem('dtpf-lang');
+  });
+
+  it('on a Spanish URL offers EN, navigates to the /en twin, saves the choice and tracks it', async () => {
+    const user = userEvent.setup();
+    renderWithProviders(
+      <>
+        <Header />
+        <Where />
+      </>,
+      { route: '/projects' }
+    );
+    expect(toggle()).toHaveTextContent('EN');
+    await user.click(toggle());
+    expect(screen.getByTestId('where')).toHaveTextContent('/en/projects');
+    expect(localStorage.getItem('dtpf-lang')).toBe('en');
+    expect(trackEvent).toHaveBeenCalledWith('nav:toggle-language', { lang: 'en' });
+  });
+
+  it('on an English URL offers ES and navigates back to the unprefixed twin', async () => {
+    const user = userEvent.setup();
+    renderWithProviders(
+      <>
+        <Header />
+        <Where />
+      </>,
+      { route: '/en/about' }
+    );
+    expect(toggle()).toHaveTextContent('ES');
+    await user.click(toggle());
+    expect(screen.getByTestId('where')).toHaveTextContent(/^\/about$/);
+    expect(localStorage.getItem('dtpf-lang')).toBe('es');
+  });
+
+  it('keeps the four nav links and localizes their hrefs on an English URL', () => {
+    renderWithProviders(<Header />, { route: '/en/about' });
+    const hrefs = screen
+      .getAllByRole('link')
+      .map((a) => a.getAttribute('href'))
+      .filter((h) => h?.startsWith('/'));
+    expect(hrefs).toEqual(expect.arrayContaining(['/en', '/en/projects', '/en/about', '/en/contact']));
   });
 });

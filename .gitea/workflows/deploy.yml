@@ -12,6 +12,9 @@ concurrency:
   cancel-in-progress: false
 
 env:
+  # Set explicitly rather than trusting the runner: the facts.json staleness test
+  # (test/config/facts.test.ts) only enforces its 120-day limit when CI is set.
+  CI: "true"
   # Deploy target (`user@host`) lives in the repository's Actions variables, not
   # in source: this repo is public and the app server sits on a private network.
   APP_SERVER: ${{ vars.APP_SERVER }}
@@ -21,6 +24,8 @@ env:
   # backend IP: the registry host was renumbered once and every pipeline pinned
   # to the old address died with EHOSTUNREACH.
   npm_config_registry: https://verdaccio.dtpf.es
+  # Shared across the runners on this host: each Playwright version downloads its browser once.
+  PLAYWRIGHT_BROWSERS_PATH: /home/runner/.cache/ms-playwright
 
 jobs:
   deploy:
@@ -62,6 +67,9 @@ jobs:
       - name: Install dependencies
         run: pnpm install --frozen-lockfile
 
+      - name: Install Chromium headless shell
+        run: pnpm exec playwright install --only-shell chromium
+
       - name: Run tests
         run: pnpm test
 
@@ -80,6 +88,9 @@ jobs:
           NODE_OPTIONS: "--max-old-space-size=4096"
           VITE_APP_SUFFIX: ${{ steps.env.outputs.app_suffix }}
         run: pnpm build
+
+      - name: Check pre-rendered output
+        run: pnpm postbuild:check
 
       - name: Deploy to app server
         env:

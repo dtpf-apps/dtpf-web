@@ -1,13 +1,18 @@
 import { useTranslation } from 'react-i18next';
-import { Link } from 'react-router';
+import { LocalizedLink as Link } from 'router/LocalizedLink';
+import useRouteLang from 'router/useRouteLang';
 import { paths, projectDetailPath } from 'router/paths';
+import Seo from 'views/components/Seo';
+import { personJsonLd } from 'config/site';
 import { projects } from 'config/projects';
 import { motion } from 'framer-motion';
 import { ArrowRight, ExternalLink } from 'lucide-react';
+import { facts, formatInt, projectVars, roundDownToThousand, yearsSince } from 'config/facts';
 import { trackEvent } from 'utils/analytics';
 import { stagger, fadeUp } from 'utils/animations';
 
-const featured = projects.filter((p) => p.slug !== 'dtpf');
+// The bento grid holds four cards; which four is decided in config/projects.ts, in array order.
+const featured = projects.filter((p) => p.featured);
 
 const stackItems = [
   { abbr: 'R', name: 'React' },
@@ -17,18 +22,29 @@ const stackItems = [
   { abbr: 'TW', name: 'Tailwind' },
   { abbr: 'V', name: 'Vite' },
   { abbr: 'D', name: 'Docker' },
+  { abbr: 'PX', name: 'Proxmox' },
   { abbr: 'GH', name: 'GitHub Actions' },
-  { abbr: 'AI', name: 'Claude' },
+  { abbr: 'AI', name: 'Claude Code' },
   { abbr: 'L', name: 'Linux' },
 ];
 
 export default function Home() {
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
+  const lang = i18n.language;
+  const routeLang = useRouteLang();
+  // Rounded down to the thousand: the exact total is a moving target, the floor is not.
+  const testsFigure = `${formatInt(roundDownToThousand(facts.tests.total), lang)}+`;
+  const saasYears = yearsSince(facts.saasSince);
 
   return (
     <>
-      <title>David T. Pizarro Frick — Software Developer</title>
-      <meta name="description" content={`${t('hero_tagline_1')} ${t('hero_tagline_2')}`} />
+      <Seo
+        title="David T. Pizarro Frick — Senior Full-Stack Engineer"
+        description={t('seo_desc_home')}
+        ogKey="home"
+        type="profile"
+        jsonLd={personJsonLd(routeLang)}
+      />
 
       {/* ── Hero ── */}
       <section className="relative flex min-h-[92vh] flex-col items-center justify-center overflow-hidden px-6 py-20 text-center">
@@ -72,17 +88,32 @@ export default function Home() {
         >
           <span className="flex items-center gap-1.5">
             <span className="inline-block h-1.5 w-1.5 rounded-full bg-success" />
-            <span className="font-semibold text-text-primary">5</span> {t('hero_proof_apps')}
+            <span className="font-semibold text-text-primary">{facts.apps.production}</span>{' '}
+            {t('hero_proof_apps')}
           </span>
           <span className="hidden text-text-muted md:inline">·</span>
           <span>
-            <span className="font-semibold text-text-primary">3+</span> {t('hero_proof_saas')}
+            <span className="font-semibold text-text-primary">{facts.apps.public}</span>{' '}
+            {t('hero_proof_public')}
           </span>
           <span className="hidden text-text-muted md:inline">·</span>
           <span>
-            <span className="font-semibold text-text-primary">6.100+</span> {t('hero_proof_tests')}
+            <span className="font-semibold text-text-primary">{testsFigure}</span> {t('hero_proof_tests')}
+          </span>
+          <span className="hidden text-text-muted md:inline">·</span>
+          <span>
+            <span className="font-semibold text-text-primary">{saasYears}</span> {t('hero_proof_saas')}
           </span>
         </motion.div>
+
+        <motion.p
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ delay: 0.35, duration: 0.4 }}
+          className="relative z-10 mt-4 text-[13px] text-text-secondary"
+        >
+          {t('availability')}
+        </motion.p>
 
         <motion.div
           initial={{ opacity: 0, y: 12 }}
@@ -158,7 +189,7 @@ export default function Home() {
               </div>
               <h3 className="mb-2 font-heading text-[22px] font-bold tracking-tight">{t(p.nameKey)}</h3>
               <p className="mb-4 text-sm leading-relaxed text-text-secondary">
-                {p.featuredKey ? t(p.featuredKey) : t(p.taglineKey)}
+                {p.featuredKey ? t(p.featuredKey, projectVars(p.slug, lang)) : t(p.taglineKey)}
               </p>
               <div className="mb-5 flex flex-wrap gap-1.5">
                 {p.stack.slice(0, 4).map((s) => (
@@ -178,15 +209,17 @@ export default function Home() {
                 >
                   {t('home_projects_case_study')} <ArrowRight size={14} aria-hidden="true" />
                 </Link>
-                <a
-                  href={p.liveUrl}
-                  target="_blank"
-                  rel="noreferrer"
-                  className="inline-flex items-center gap-1.5 rounded-lg border border-border px-4 py-2 text-[13px] font-semibold text-text-primary transition-all hover:border-border-hover hover:bg-bg-tertiary"
-                  onClick={() => trackEvent('home:visit-project', { slug: p.slug })}
-                >
-                  {t('home_projects_visit')} <ExternalLink size={13} aria-hidden="true" />
-                </a>
+                {p.liveUrl && (
+                  <a
+                    href={p.liveUrl}
+                    target="_blank"
+                    rel="noreferrer"
+                    className="inline-flex items-center gap-1.5 rounded-lg border border-border px-4 py-2 text-[13px] font-semibold text-text-primary transition-all hover:border-border-hover hover:bg-bg-tertiary"
+                    onClick={() => trackEvent('home:visit-project', { slug: p.slug })}
+                  >
+                    {t('home_projects_visit')} <ExternalLink size={13} aria-hidden="true" />
+                  </a>
+                )}
               </div>
             </motion.div>
           ))}

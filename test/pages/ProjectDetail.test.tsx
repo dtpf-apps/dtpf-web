@@ -3,8 +3,9 @@ import { render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { MemoryRouter, Routes, Route } from 'react-router';
 import { ThemeProvider } from '../../src/contexts/theme/ThemeContext';
-import '../../src/utils/i18n';
+import i18n from '../../src/utils/i18n';
 import ProjectDetail from '../../src/views/pages/ProjectDetail';
+import { facts, formatInt } from '../../src/config/facts';
 import { trackEvent } from '../../src/utils/analytics';
 
 vi.mock('../../src/utils/analytics', () => ({
@@ -26,6 +27,10 @@ function renderProjectDetail(slug: string) {
   );
 }
 
+function externalLinks() {
+  return screen.getAllByRole('link').filter((l) => l.getAttribute('href')?.startsWith('https://'));
+}
+
 describe('ProjectDetail', () => {
   beforeEach(() => {
     vi.clearAllMocks();
@@ -41,10 +46,31 @@ describe('ProjectDetail', () => {
     expect(screen.getByTestId('projects-page')).toBeInTheDocument();
   });
 
-  it('shows metrics for dauth', () => {
+  it('redirects the retired portfolio slug to the list (the site now lives in the footer)', () => {
+    renderProjectDetail('dtpf');
+    expect(screen.getByTestId('projects-page')).toBeInTheDocument();
+  });
+
+  it('shows metrics for dauth with the measured, language-formatted test count', () => {
     renderProjectDetail('dauth');
     expect(screen.getByText('Active tenants')).toBeInTheDocument();
-    expect(screen.getByText('1.702')).toBeInTheDocument();
+    expect(screen.getByText(formatInt(facts.projects.dauth.tests.total, 'en'))).toBeInTheDocument();
+    expect(screen.queryByText('1.702')).not.toBeInTheDocument();
+  });
+
+  it('uses the long tagline when the project has one', () => {
+    renderProjectDetail('dauth');
+    expect(
+      screen.getByText('A passwordless auth system that serves as infrastructure for all my applications.')
+    ).toBeInTheDocument();
+  });
+
+  it('interpolates every figure of the case study (no raw placeholders)', () => {
+    renderProjectDetail('dauth');
+    expect(
+      screen.getByText(new RegExp(`auth for ${facts.dauthTenants} production apps`))
+    ).toBeInTheDocument();
+    expect(document.body.textContent).not.toMatch(/\{\{/);
   });
 
   it('shows stack tags', () => {
@@ -55,8 +81,7 @@ describe('ProjectDetail', () => {
 
   it('has visit link to live URL', () => {
     renderProjectDetail('dauth');
-    const links = screen.getAllByRole('link');
-    const visitLink = links.find((l) => l.getAttribute('href') === 'https://dauth.ovh');
+    const visitLink = externalLinks().find((l) => l.getAttribute('href') === 'https://dauth.ovh');
     expect(visitLink).toBeDefined();
   });
 
@@ -76,29 +101,113 @@ describe('ProjectDetail', () => {
 
   it('renders description instead of case study for projects without problemKey', () => {
     renderProjectDetail('audity');
-    // audity has no problemKey, so it renders the full description text
     expect(screen.getByText(/Full player, playlists, search, CMS/)).toBeInTheDocument();
-    // Should NOT show problem/solution/result sections
     expect(screen.queryByText(/The problem\./)).not.toBeInTheDocument();
+    expect(screen.getByText("Master's project (2023)")).toBeInTheDocument();
   });
 
   it('has back navigation link to projects page', () => {
     renderProjectDetail('dauth');
-    const links = screen.getAllByRole('link');
-    const backLink = links.find((l) => l.getAttribute('href') === '/projects');
+    const backLink = screen.getAllByRole('link').find((l) => l.getAttribute('href') === '/projects');
     expect(backLink).toBeDefined();
   });
 
-  it('renders metrics for dalist', () => {
+  it('renders metrics for dalist, including the translated encryption value', () => {
     renderProjectDetail('dalist');
     expect(screen.getByText('Data')).toBeInTheDocument();
-    expect(screen.getByText('1.621')).toBeInTheDocument();
+    expect(screen.getByText(formatInt(facts.projects.dalist.tests.total, 'en'))).toBeInTheDocument();
+    expect(screen.getByText('Notes encrypted at rest')).toBeInTheDocument();
+    expect(screen.getByText('Google Play')).toBeInTheDocument();
+  });
+
+  it('links dalist to Google Play and tracks the click', async () => {
+    const user = userEvent.setup();
+    renderProjectDetail('dalist');
+    const storeLink = externalLinks().find((l) => l.getAttribute('href')?.includes('play.google.com'));
+    expect(storeLink).toBeDefined();
+    await user.click(storeLink!);
+    expect(trackEvent).toHaveBeenCalledWith('project:store', { slug: 'dalist' });
+  });
+
+  it('shows the official Google Play badge for dalist, linking to the store and tracked', async () => {
+    const user = userEvent.setup();
+    renderProjectDetail('dalist');
+    const badge = screen.getByRole('img', { name: 'Get it on Google Play' });
+    expect(badge).toHaveAttribute('src', '/badges/google-play-en.png');
+    const link = badge.closest('a')!;
+    expect(link).toHaveAttribute('href', expect.stringContaining('play.google.com'));
+    await user.click(link);
+    expect(trackEvent).toHaveBeenCalledWith('project:store', { slug: 'dalist' });
+  });
+
+  it('serves the Spanish badge artwork when the language is Spanish', async () => {
+    await i18n.changeLanguage('es');
+    try {
+      renderProjectDetail('dalist');
+      const badge = screen.getByRole('img', { name: 'Ver en Google Play' });
+      expect(badge).toHaveAttribute('src', '/badges/google-play-es.png');
+      expect(badge.closest('a')).toHaveAccessibleName('Ver en Google Play');
+    } finally {
+      await i18n.changeLanguage('en');
+    }
+  });
+
+  it('renders the Screenshots section with thumbnails for dcompany', () => {
+    renderProjectDetail('dcompany');
+    expect(screen.getByRole('heading', { level: 2, name: 'Screenshots' })).toBeInTheDocument();
+    expect(screen.getAllByRole('button', { name: /^Enlarge screenshot:/ })).toHaveLength(2);
+  });
+
+  it('renders no Screenshots section for a project without media', () => {
+    renderProjectDetail('dwealth');
+    expect(screen.queryByRole('heading', { name: 'Screenshots' })).not.toBeInTheDocument();
   });
 
   it('renders all dstash metrics', () => {
     renderProjectDetail('dstash');
-    expect(screen.getByText('2.114')).toBeInTheDocument();
+    expect(screen.getByText(formatInt(facts.projects.dstash.tests.total, 'en'))).toBeInTheDocument();
     expect(screen.getByText('Signed URLs + API Keys')).toBeInTheDocument();
+    expect(screen.getByText('Full dashboard')).toBeInTheDocument();
+  });
+
+  it('shows dcompany as a private beta with the measured MCP tool count', () => {
+    renderProjectDetail('dcompany');
+    expect(screen.getByText('Private beta')).toBeInTheDocument();
+    expect(screen.getByText('Private beta · access on request')).toBeInTheDocument();
+    expect(screen.getByText('MCP tools')).toBeInTheDocument();
+    const floored = Math.floor(facts.projects.dcompany.mcpTools! / 10) * 10;
+    expect(screen.getByText(`${floored}+`)).toBeInTheDocument();
+    expect(
+      screen.getByText(new RegExp(`${floored}\\+ MCP tools let you run the company`))
+    ).toBeInTheDocument();
+    expect(screen.getByText(formatInt(facts.projects.dcompany.tests.total, 'en'))).toBeInTheDocument();
+  });
+
+  it('shows dinventory with its measured test count and self-hosted AI', () => {
+    renderProjectDetail('dinventory');
+    expect(screen.getByText(formatInt(facts.projects.dinventory.tests.total, 'en'))).toBeInTheDocument();
+    expect(screen.getByText('Self-hosted vision and voice')).toBeInTheDocument();
+    expect(externalLinks().some((l) => l.getAttribute('href') === 'https://dinventory.dtpf.es')).toBe(true);
+  });
+
+  it('marks petitairam.com as client work for the AIRAM brand', () => {
+    renderProjectDetail('airam');
+    expect(screen.getByText('Client work')).toBeInTheDocument();
+    expect(screen.getByText('AIRAM')).toBeInTheDocument();
+    expect(screen.getByText('Bizum and bank transfer')).toBeInTheDocument();
+    expect(externalLinks().some((l) => l.getAttribute('href') === 'https://petitairam.com')).toBe(true);
+  });
+
+  it('renders dwealth as private: status note, no visit button, measured figures', () => {
+    renderProjectDetail('dwealth');
+    expect(screen.getByText('Private')).toBeInTheDocument();
+    expect(screen.getByText('Private app · no public URL')).toBeInTheDocument();
+    expect(externalLinks()).toHaveLength(0);
+    expect(screen.getByText(formatInt(facts.projects.dwealth.tests.total, 'en'))).toBeInTheDocument();
+    // Decimal128 is both a stack tag and the precision metric; FIFO is the metric alone.
+    expect(screen.getAllByText('Decimal128')).toHaveLength(2);
+    expect(screen.getByText('FIFO')).toBeInTheDocument();
+    expect(document.body.textContent).not.toMatch(/\{\{/);
   });
 
   it('clicking back link tracks project:back event', async () => {
@@ -112,28 +221,14 @@ describe('ProjectDetail', () => {
   it('clicking visit link tracks project:visit-live event', async () => {
     const user = userEvent.setup();
     renderProjectDetail('dauth');
-    const visitLink = screen.getAllByRole('link').find((l) => l.getAttribute('href') === 'https://dauth.ovh');
+    const visitLink = externalLinks().find((l) => l.getAttribute('href') === 'https://dauth.ovh');
     await user.click(visitLink!);
     expect(trackEvent).toHaveBeenCalledWith('project:visit-live', { slug: 'dauth' });
   });
 
-  it('clicking GitHub link tracks project:github event', async () => {
-    const user = userEvent.setup();
-    renderProjectDetail('dtpf');
-    const githubLink = screen
-      .getAllByRole('link')
-      .find((l) => l.getAttribute('href')?.includes('github.com'));
-    if (githubLink) {
-      await user.click(githubLink);
-      expect(trackEvent).toHaveBeenCalledWith('project:github', { slug: 'dtpf' });
-    }
-  });
-
   it('project without githubUrl does not show GitHub link', () => {
     renderProjectDetail('dauth');
-    const githubLinks = screen
-      .getAllByRole('link')
-      .filter((l) => l.getAttribute('href')?.includes('github.com'));
+    const githubLinks = externalLinks().filter((l) => l.getAttribute('href')?.includes('github.com'));
     expect(githubLinks.length).toBe(0);
   });
 });

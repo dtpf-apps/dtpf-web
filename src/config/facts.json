@@ -1,0 +1,177 @@
+{
+  "apps": {
+    "production": 11,
+    "public": 8
+  },
+  "dauthTenants": 6,
+  "generatedAt": "2026-10-13",
+  "projects": {
+    "airam": {
+      "ci": "Gitea Actions",
+      "tests": {
+        "backend": 1167,
+        "e2e": 49,
+        "frontend": 1285,
+        "total": 2501
+      },
+      "versions": {
+        "express": 5,
+        "mongodb": 8,
+        "node": 24,
+        "react": 19,
+        "tailwind": 4,
+        "typescript": 7,
+        "vite": 8
+      }
+    },
+    "audity": {
+      "ci": "GitHub Actions",
+      "tests": {
+        "backend": 251,
+        "frontend": 291,
+        "total": 542
+      },
+      "versions": {
+        "express": 5,
+        "mongodb": 8,
+        "node": 24,
+        "react": 19,
+        "typescript": 7,
+        "vite": 8
+      }
+    },
+    "dalist": {
+      "ci": "GitHub Actions",
+      "tests": {
+        "backend": 2519,
+        "e2e": 120,
+        "frontend": 2463,
+        "total": 5102
+      },
+      "versions": {
+        "express": 5,
+        "mongodb": 8,
+        "node": 24,
+        "react": 19,
+        "tailwind": 4,
+        "typescript": 7,
+        "vite": 8
+      }
+    },
+    "dauth": {
+      "ci": "GitHub Actions",
+      "tests": {
+        "backend": 1258,
+        "e2e": 289,
+        "frontend": 1249,
+        "packages": 374,
+        "total": 3170
+      },
+      "versions": {
+        "express": 5,
+        "mongodb": 8,
+        "node": 24,
+        "react": 19,
+        "tailwind": 4,
+        "typescript": 6,
+        "vite": 8
+      }
+    },
+    "dcompany": {
+      "ci": "GitHub Actions",
+      "mcpTools": 280,
+      "tests": {
+        "backend": 34386,
+        "frontend": 22624,
+        "packages": 2673,
+        "total": 59683
+      },
+      "versions": {
+        "express": 5,
+        "mongodb": 8,
+        "node": 24,
+        "react": 19,
+        "tailwind": 4,
+        "typescript": 6,
+        "vite": 8
+      }
+    },
+    "dinventory": {
+      "ci": "Gitea Actions",
+      "tests": {
+        "backend": 509,
+        "e2e": 118,
+        "frontend": 830,
+        "total": 1457
+      },
+      "versions": {
+        "express": 5,
+        "mongodb": 8,
+        "node": 24,
+        "react": 19,
+        "tailwind": 4,
+        "typescript": 7,
+        "vite": 8
+      }
+    },
+    "dstash": {
+      "ci": "GitHub Actions",
+      "tests": {
+        "backend": 1238,
+        "e2e": 220,
+        "frontend": 2976,
+        "total": 4434
+      },
+      "versions": {
+        "express": 5,
+        "mongodb": 8,
+        "node": 24,
+        "react": 19,
+        "tailwind": 4,
+        "typescript": 7,
+        "vite": 8
+      }
+    },
+    "dtpf": {
+      "ci": "Gitea Actions",
+      "tests": {
+        "backend": 82,
+        "e2e": 16,
+        "frontend": 225,
+        "total": 323
+      },
+      "versions": {
+        "express": 5,
+        "mongodb": 8,
+        "node": 24,
+        "react": 19,
+        "tailwind": 4,
+        "typescript": 7,
+        "vite": 8
+      }
+    },
+    "dwealth": {
+      "ci": "Gitea Actions",
+      "tests": {
+        "backend": 3547,
+        "e2e": 524,
+        "frontend": 4297,
+        "total": 8368
+      },
+      "versions": {
+        "express": 5,
+        "mongodb": 8,
+        "node": 24,
+        "react": 19,
+        "tailwind": 4,
+        "typescript": 7,
+        "vite": 8
+      }
+    }
+  },
+  "saasSince": "2023-07-01",
+  "tests": {
+    "total": 88478
+  },
+  "testsMeasuredAt": "2026-10-13T11:11:48.051Z"
+}

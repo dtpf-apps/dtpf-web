@@ -1,13 +1,14 @@
 import { useTranslation } from 'react-i18next';
-import { Link } from 'react-router';
+import { LocalizedLink as Link } from 'router/LocalizedLink';
 import { paths } from 'router/paths';
+import Seo from 'views/components/Seo';
 
 export default function NotFound() {
   const { t } = useTranslation();
 
   return (
     <>
-      <title>404 — David T. Pizarro Frick</title>
+      <Seo title="404 — David T. Pizarro Frick" description={t('not_found_desc')} ogKey="home" noindex />
       <div className="mx-auto flex max-w-[460px] flex-col items-center px-6 py-40 text-center">
         <span className="mb-5 font-heading text-[140px] font-bold leading-none tracking-[-8px] text-transparent bg-clip-text bg-gradient-to-br from-accent to-warm">
           404

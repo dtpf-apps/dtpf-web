@@ -1,4 +1,5 @@
 # https://www.robotstxt.org/robotstxt.html
 User-agent: *
 Allow: /
-Disallow: /ad1988
+
+Sitemap: https://dtpf.es/sitemap.xml

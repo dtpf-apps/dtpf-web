@@ -1,25 +1,31 @@
 import { memo, useCallback, useEffect, useRef, useState } from 'react';
-import { Link, NavLink } from 'react-router';
+import { useLocation, useNavigate } from 'react-router';
 import { useTranslation } from 'react-i18next';
 import { useTheme } from 'contexts/theme/ThemeContext';
 import { Moon, Sun, Menu, X } from 'lucide-react';
-import { paths } from 'router/paths';
+import { paths, langFromPath, localizePath, stripLang } from 'router/paths';
+import { LocalizedLink as Link, LocalizedNavLink as NavLink } from 'router/LocalizedLink';
 import { motion, AnimatePresence } from 'framer-motion';
 import { trackEvent } from 'utils/analytics';
 
 function Header() {
   const { t, i18n } = useTranslation();
+  const { pathname, search } = useLocation();
+  const navigate = useNavigate();
   const { isDark, toggleTheme } = useTheme();
   const [mobileOpen, setMobileOpen] = useState(false);
   const menuButtonRef = useRef<HTMLButtonElement>(null);
   const closeButtonRef = useRef<HTMLButtonElement>(null);
 
+  // The button names the language the URL is NOT in; i18next only follows the URL.
+  const urlLang = langFromPath(pathname);
   const toggleLang = useCallback(() => {
-    const next = i18n.language === 'es' ? 'en' : 'es';
+    const next = urlLang === 'es' ? 'en' : 'es';
     i18n.changeLanguage(next);
     localStorage.setItem('dtpf-lang', next);
+    navigate(localizePath(stripLang(pathname), next) + search);
     trackEvent('nav:toggle-language', { lang: next });
-  }, [i18n]);
+  }, [i18n, urlLang, pathname, search, navigate]);
 
   useEffect(() => {
     if (mobileOpen) {
@@ -62,7 +68,7 @@ function Header() {
 
   return (
     <>
-      <header className="sticky top-0 z-50 border-b border-border bg-bg-primary/85 backdrop-blur-xl">
+      <header className="sticky top-0 z-50 print:hidden border-b border-border bg-bg-primary/85 backdrop-blur-xl">
         <div className="mx-auto flex max-w-[1200px] items-center justify-between px-6 py-4 md:px-12">
           {/* Logo */}
           <Link
@@ -95,7 +101,7 @@ function Header() {
               aria-label={t('lang_toggle')}
               className="rounded-lg border border-border px-2.5 py-1.5 font-mono text-xs font-semibold tracking-wider text-text-muted transition-colors hover:border-border-hover hover:text-text-secondary"
             >
-              {i18n.language === 'es' ? 'EN' : 'ES'}
+              {urlLang === 'es' ? 'EN' : 'ES'}
             </button>
             <button
               onClick={() => {
@@ -181,7 +187,7 @@ function Header() {
                   aria-label={t('lang_toggle')}
                   className="rounded-lg border border-border px-3 py-2 font-mono text-xs font-semibold text-text-muted"
                 >
-                  {i18n.language === 'es' ? 'EN' : 'ES'}
+                  {urlLang === 'es' ? 'EN' : 'ES'}
                 </button>
                 <button
                   onClick={() => {

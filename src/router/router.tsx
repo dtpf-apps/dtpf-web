@@ -1,5 +1,5 @@
-import { createBrowserRouter } from 'react-router';
-import { paths } from './paths';
+import { createBrowserRouter, type RouteObject } from 'react-router';
+import { paths, localizePath, type Lang } from './paths';
 import PortfolioLayout from 'views/layouts/PortfolioLayout';
 import { Suspense } from 'react';
 import lazyWithRetry from 'utils/lazyWithRetry';
@@ -9,6 +9,7 @@ const Projects = lazyWithRetry(() => import('views/pages/Projects'));
 const ProjectDetail = lazyWithRetry(() => import('views/pages/ProjectDetail'));
 const About = lazyWithRetry(() => import('views/pages/About'));
 const Contact = lazyWithRetry(() => import('views/pages/Contact'));
+const Cv = lazyWithRetry(() => import('views/pages/Cv'));
 const PrivacyPolicy = lazyWithRetry(() => import('views/pages/PrivacyPolicy'));
 const NotFound = lazyWithRetry(() => import('views/pages/NotFound'));
 
@@ -16,66 +17,44 @@ function Lazy({ children }: { children: React.ReactNode }) {
   return <Suspense fallback={null}>{children}</Suspense>;
 }
 
-export const router = createBrowserRouter([
+const pages: { path: string; Page: React.ComponentType }[] = [
+  { path: paths.home, Page: Home },
+  { path: paths.projects, Page: Projects },
+  { path: paths.projectDetail, Page: ProjectDetail },
+  { path: paths.about, Page: About },
+  { path: paths.contact, Page: Contact },
+  { path: paths.cv, Page: Cv },
+  { path: paths.privacyPolicy, Page: PrivacyPolicy },
+];
+
+// One page tree per language, all under the same layout route so toggling the language
+// re-renders the shell instead of remounting it.
+function pageTree(lang: Lang): RouteObject[] {
+  return [
+    ...pages.map(({ path, Page }) => ({
+      path: localizePath(path, lang),
+      element: (
+        <Lazy>
+          <Page />
+        </Lazy>
+      ),
+    })),
+    {
+      path: lang === 'en' ? `${localizePath('/', lang)}/*` : '*',
+      element: (
+        <Lazy>
+          <NotFound />
+        </Lazy>
+      ),
+    },
+  ];
+}
+
+export const routes: RouteObject[] = [
   {
     element: <PortfolioLayout />,
-    children: [
-      {
-        path: paths.home,
-        element: (
-          <Lazy>
-            <Home />
-          </Lazy>
-        ),
-      },
-      {
-        path: paths.projects,
-        element: (
-          <Lazy>
-            <Projects />
-          </Lazy>
-        ),
-      },
-      {
-        path: paths.projectDetail,
-        element: (
-          <Lazy>
-            <ProjectDetail />
-          </Lazy>
-        ),
-      },
-      {
-        path: paths.about,
-        element: (
-          <Lazy>
-            <About />
-          </Lazy>
-        ),
-      },
-      {
-        path: paths.contact,
-        element: (
-          <Lazy>
-            <Contact />
-          </Lazy>
-        ),
-      },
-      {
-        path: paths.privacyPolicy,
-        element: (
-          <Lazy>
-            <PrivacyPolicy />
-          </Lazy>
-        ),
-      },
-      {
-        path: '*',
-        element: (
-          <Lazy>
-            <NotFound />
-          </Lazy>
-        ),
-      },
-    ],
+    children: [...pageTree('es'), ...pageTree('en')],
   },
-]);
+];
+
+export const router = createBrowserRouter(routes);

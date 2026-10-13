@@ -1,5 +1,82 @@
 @import 'tailwindcss';
 
+/* Self-hosted (src/assets/fonts, SIL Open Font License): no request leaves the origin, and the
+   build renders the PDF résumé and the social cards with the same faces, offline. Static
+   instances rather than the variable files on purpose: Chromium prints a variable font as a
+   Type 3 font, which résumé parsers read worse than the CID TrueType a static one yields. Latin
+   subset, which covers every glyph of the Spanish and English copy. */
+@font-face {
+  font-family: 'Inter';
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url('../assets/fonts/inter-400-latin.woff2') format('woff2');
+}
+
+@font-face {
+  font-family: 'Inter';
+  font-style: normal;
+  font-weight: 500;
+  font-display: swap;
+  src: url('../assets/fonts/inter-500-latin.woff2') format('woff2');
+}
+
+@font-face {
+  font-family: 'Inter';
+  font-style: normal;
+  font-weight: 600;
+  font-display: swap;
+  src: url('../assets/fonts/inter-600-latin.woff2') format('woff2');
+}
+
+@font-face {
+  font-family: 'Inter';
+  font-style: normal;
+  font-weight: 700;
+  font-display: swap;
+  src: url('../assets/fonts/inter-700-latin.woff2') format('woff2');
+}
+
+@font-face {
+  font-family: 'Space Grotesk';
+  font-style: normal;
+  font-weight: 500;
+  font-display: swap;
+  src: url('../assets/fonts/space-grotesk-500-latin.woff2') format('woff2');
+}
+
+@font-face {
+  font-family: 'Space Grotesk';
+  font-style: normal;
+  font-weight: 600;
+  font-display: swap;
+  src: url('../assets/fonts/space-grotesk-600-latin.woff2') format('woff2');
+}
+
+@font-face {
+  font-family: 'Space Grotesk';
+  font-style: normal;
+  font-weight: 700;
+  font-display: swap;
+  src: url('../assets/fonts/space-grotesk-700-latin.woff2') format('woff2');
+}
+
+@font-face {
+  font-family: 'JetBrains Mono';
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url('../assets/fonts/jetbrains-mono-400-latin.woff2') format('woff2');
+}
+
+@font-face {
+  font-family: 'JetBrains Mono';
+  font-style: normal;
+  font-weight: 600;
+  font-display: swap;
+  src: url('../assets/fonts/jetbrains-mono-600-latin.woff2') format('woff2');
+}
+
 @theme {
   --font-sans: 'Inter', system-ui, -apple-system, sans-serif;
   --font-heading: 'Space Grotesk', system-ui, sans-serif;
@@ -101,6 +178,38 @@ textarea:focus-visible,
 select:focus-visible {
   outline: 2px solid var(--color-accent);
   outline-offset: 2px;
+}
+
+/* Print: the light palette on white whatever theme the visitor browses in, no texture, no motion.
+   `:root:root` outranks both the theme tokens and `.light`. */
+@page {
+  size: A4;
+  margin: 12mm;
+}
+
+@media print {
+  :root:root {
+    --color-bg-primary: #ffffff;
+    --color-bg-secondary: #ffffff;
+    --color-bg-tertiary: #f1f5f9;
+    --color-bg-surface: #ffffff;
+    --color-text-primary: #0f172a;
+    --color-text-secondary: #334155;
+    --color-text-muted: #64748b;
+    --color-accent: #0d9488;
+    --color-border: #cbd5e1;
+  }
+
+  body::after {
+    display: none;
+  }
+
+  *,
+  *::before,
+  *::after {
+    animation: none !important;
+    transition: none !important;
+  }
 }
 
 /* Reduced motion */

@@ -11,15 +11,19 @@ vi.mock('../../src/utils/analytics', () => ({
   initAnalytics: vi.fn(),
 }));
 
+// External links on the page are the projects' visit links: the footer is not rendered here.
+function visitLinks() {
+  return screen.getAllByRole('link').filter((l) => l.getAttribute('href')?.startsWith('https://'));
+}
+
 describe('Projects', () => {
   beforeEach(() => {
     vi.clearAllMocks();
   });
 
-  it('renders all 5 projects', () => {
+  it('renders every project as a card', () => {
     renderWithProviders(<Projects />);
-    // Each project renders an h3 heading with its translated name
-    const headings = screen.getAllByRole('heading', { level: 3 });
+    const headings = screen.getAllByRole('heading', { level: 2 });
     expect(headings.length).toBe(projects.length);
   });
 
@@ -31,42 +35,46 @@ describe('Projects', () => {
     expect(caseStudyLinks.length).toBe(projects.length);
   });
 
-  it('projects except dtpf have visit link', () => {
+  it('shows a visit link only for projects with a live URL', () => {
     renderWithProviders(<Projects />);
-    const externalLinks = screen.getAllByRole('link').filter((l) => {
-      const href = l.getAttribute('href');
-      return href?.startsWith('https://') && !href?.includes('linkedin') && !href?.includes('github');
-    });
-    // 4 projects (excluding dtpf) should have visit links
-    expect(externalLinks.length).toBe(4);
+    const expected = projects.filter((p) => p.liveUrl).map((p) => p.liveUrl);
+    expect(visitLinks().map((l) => l.getAttribute('href'))).toEqual(expected);
   });
 
-  it('dtpf shows "This site" badge', () => {
+  it('shows one badge per project, matching its status', () => {
     renderWithProviders(<Projects />);
-    expect(screen.getByText('This site')).toBeInTheDocument();
+    const count = (status: string) => projects.filter((p) => p.status === status).length;
+    expect(screen.getAllByText('Production')).toHaveLength(count('production'));
+    expect(screen.getAllByText('Private beta')).toHaveLength(count('beta'));
+    expect(screen.getAllByText('Client work')).toHaveLength(count('client'));
+    expect(screen.getAllByText('Private')).toHaveLength(count('private'));
   });
 
-  it('non-dtpf projects show "Production" badge', () => {
+  it('no longer lists the portfolio itself as a project', () => {
     renderWithProviders(<Projects />);
-    const badges = screen.getAllByText('Production');
-    // 4 non-dtpf projects have production badge
-    expect(badges.length).toBe(4);
+    expect(screen.queryByText('This site')).not.toBeInTheDocument();
+    expect(screen.queryByText('dtpf.es')).not.toBeInTheDocument();
   });
 
   it('renders stack tags for each project', () => {
     renderWithProviders(<Projects />);
-    // dauth has React 19
     expect(screen.getAllByText('React 19').length).toBeGreaterThanOrEqual(1);
-    // audity has Auth0
     expect(screen.getByText('Auth0')).toBeInTheDocument();
-    // dalist has PWA
     expect(screen.getAllByText('PWA').length).toBeGreaterThanOrEqual(1);
+    expect(screen.getByText('MCP')).toBeInTheDocument();
+    expect(screen.getByText('WebXR')).toBeInTheDocument();
+    expect(screen.getByText('Decimal128')).toBeInTheDocument();
   });
 
-  it('renders project descriptions', () => {
+  it('renders project descriptions with every figure interpolated', () => {
     renderWithProviders(<Projects />);
     expect(screen.getByText(/providing passwordless login/)).toBeInTheDocument();
     expect(screen.getByText(/Media storage with folder/)).toBeInTheDocument();
+    expect(screen.getByText(/Multi-tenant AI agent platform/)).toBeInTheDocument();
+    expect(screen.getByText(/Home inventory with exact locations/)).toBeInTheDocument();
+    expect(screen.getByText(/handmade pieces for the AIRAM brand/)).toBeInTheDocument();
+    expect(screen.getByText(/Private personal-wealth app/)).toBeInTheDocument();
+    expect(document.body.textContent).not.toMatch(/\{\{/);
   });
 
   it('clicking case study link tracks projects:case-study event', async () => {
@@ -85,11 +93,7 @@ describe('Projects', () => {
   it('clicking visit link tracks projects:visit-live event', async () => {
     const user = userEvent.setup();
     renderWithProviders(<Projects />);
-    const externalLinks = screen.getAllByRole('link').filter((l) => {
-      const href = l.getAttribute('href');
-      return href?.startsWith('https://') && !href?.includes('linkedin') && !href?.includes('github');
-    });
-    await user.click(externalLinks[0]);
+    await user.click(visitLinks()[0]);
     expect(trackEvent).toHaveBeenCalledWith(
       'projects:visit-live',
       expect.objectContaining({ slug: expect.any(String) })

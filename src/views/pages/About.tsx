@@ -1,45 +1,28 @@
 import { useTranslation } from 'react-i18next';
 import { motion } from 'framer-motion';
+import { facts } from 'config/facts';
 import { trackEvent } from 'utils/analytics';
 import { stagger, fadeUp } from 'utils/animations';
-
-const experience = [
-  {
-    roleKey: 'exp_hub4retail_role',
-    companyKey: 'exp_hub4retail_company',
-    periodKey: 'exp_hub4retail_period',
-    descKey: 'exp_hub4retail_desc',
-  },
-  {
-    roleKey: 'exp_palmira_role',
-    companyKey: 'exp_palmira_company',
-    periodKey: 'exp_palmira_period',
-    descKey: 'exp_palmira_desc',
-  },
-  {
-    roleKey: 'exp_assembler_role',
-    companyKey: 'exp_assembler_company',
-    periodKey: 'exp_assembler_period',
-    descKey: 'exp_assembler_desc',
-  },
-];
-
-const tools: { titleKey: string; items: string[] }[] = [
-  {
-    titleKey: 'about_tools_frontend',
-    items: ['React 19', 'TypeScript', 'Tailwind CSS', 'Framer Motion', 'Vite'],
-  },
-  { titleKey: 'about_tools_backend', items: ['Node.js', 'Express', 'MongoDB', 'REST APIs', 'WebSockets'] },
-  { titleKey: 'about_tools_devops', items: ['Docker', 'GitHub Actions', 'PM2', 'Linux', 'Cloudflare'] },
-  { titleKey: 'about_tools_ai', items: ['Claude', 'Claude Code', 'Cursor', 'Git', 'Grafana'] },
-];
+import useRouteLang from 'router/useRouteLang';
+import Seo from 'views/components/Seo';
+import { personJsonLd } from 'config/site';
+import { experience, tools } from 'config/profile';
+import { LocalizedLink as Link } from 'router/LocalizedLink';
+import { paths } from 'router/paths';
 
 export default function About() {
   const { t } = useTranslation();
+  const routeLang = useRouteLang();
 
   return (
     <>
-      <title>{t('about_title')} — David T. Pizarro Frick</title>
+      <Seo
+        titleKey="about_title"
+        description={t('seo_desc_about')}
+        ogKey="about"
+        type="profile"
+        jsonLd={personJsonLd(routeLang)}
+      />
 
       <div className="mx-auto max-w-[1100px] px-6 pt-14">
         <h1 className="font-heading text-4xl font-bold tracking-tight">{t('about_title')}</h1>
@@ -54,7 +37,8 @@ export default function About() {
           <div className="text-center sm:text-left">
             <p className="mb-0.5 font-heading text-xl font-bold tracking-tight">David T. Pizarro Frick</p>
             <p className="mb-0.5 text-sm font-medium text-accent">{t('about_role')}</p>
-            <p className="mb-3 text-[13px] text-text-muted">{t('about_location')}</p>
+            <p className="text-[13px] text-text-muted">{t('about_location')}</p>
+            <p className="mb-3 text-[13px] text-text-secondary">{t('availability')}</p>
             <div className="flex justify-center gap-2 sm:justify-start">
               <a
                 href="https://www.linkedin.com/in/david-tomas-pizarro-frick"
@@ -74,6 +58,13 @@ export default function About() {
               >
                 GitHub ↗
               </a>
+              <Link
+                to={paths.cv}
+                className="rounded-md border border-border px-3 py-1 text-xs font-medium text-text-secondary transition hover:border-accent hover:text-accent"
+                onClick={() => trackEvent('about:cv')}
+              >
+                {t('about_cv')}
+              </Link>
             </div>
           </div>
         </div>
@@ -81,7 +72,9 @@ export default function About() {
         {/* Bio */}
         <div className="mb-12">
           <p className="mb-3.5 text-[15px] leading-relaxed text-text-secondary">{t('about_bio_p1')}</p>
-          <p className="mb-3.5 text-[15px] leading-relaxed text-text-secondary">{t('about_bio_p2')}</p>
+          <p className="mb-3.5 text-[15px] leading-relaxed text-text-secondary">
+            {t('about_bio_p2', { apps: facts.apps.production, publicApps: facts.apps.public })}
+          </p>
           <p className="text-[15px] leading-relaxed text-text-secondary">{t('about_bio_p3')}</p>
         </div>
 
@@ -120,12 +113,12 @@ export default function About() {
           <h2 className="mb-5 border-b border-border pb-3 font-heading text-xl font-bold tracking-tight">
             {t('about_tools')}
           </h2>
-          <div className="grid grid-cols-2 gap-3 md:grid-cols-4">
+          <div className="grid grid-cols-1 gap-3 sm:grid-cols-2 lg:grid-cols-3">
             {tools.map((group) => (
               <div key={group.titleKey} className="rounded-xl border border-border bg-bg-surface p-5">
-                <h4 className="mb-3 font-mono text-[11px] font-semibold uppercase tracking-[1px] text-text-muted">
+                <h3 className="mb-3 font-mono text-[11px] font-semibold uppercase tracking-[1px] text-text-muted">
                   {t(group.titleKey)}
-                </h4>
+                </h3>
                 <ul className="space-y-1">
                   {group.items.map((item) => (
                     <li key={item} className="flex items-center gap-2 text-[13px] text-text-secondary">

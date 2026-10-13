@@ -268,4 +268,17 @@ describe('Contact', () => {
     await user.click(githubLink!);
     expect(trackEvent).toHaveBeenCalledWith('contact:github');
   });
+
+  it('links to the CV in the current language and tracks contact:cv', async () => {
+    const user = userEvent.setup();
+    const { unmount } = renderWithProviders(<Contact />, { route: '/contact' });
+    const link = screen.getByRole('link', { name: /Résumé/ });
+    expect(link).toHaveAttribute('href', '/cv');
+    await user.click(link);
+    expect(trackEvent).toHaveBeenCalledWith('contact:cv');
+    unmount();
+
+    renderWithProviders(<Contact />, { route: '/en/contact' });
+    expect(screen.getByRole('link', { name: /Résumé/ })).toHaveAttribute('href', '/en/cv');
+  });
 });

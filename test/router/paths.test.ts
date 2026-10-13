@@ -1,4 +1,41 @@
-import { paths, projectDetailPath } from '../../src/router/paths';
+import { paths, projectDetailPath, langFromPath, stripLang, localizePath } from '../../src/router/paths';
+
+describe('language in the URL', () => {
+  it('reads the language from the path prefix, Spanish being the unprefixed default', () => {
+    expect(langFromPath('/')).toBe('es');
+    expect(langFromPath('/about')).toBe('es');
+    expect(langFromPath('/en')).toBe('en');
+    expect(langFromPath('/en/')).toBe('en');
+    expect(langFromPath('/en/projects/dauth')).toBe('en');
+  });
+
+  it('does not mistake a path that merely starts with "en" for the English prefix', () => {
+    expect(langFromPath('/enigma')).toBe('es');
+    expect(langFromPath('/english/about')).toBe('es');
+  });
+
+  it('strips the prefix and returns the root for the bare English home', () => {
+    expect(stripLang('/en')).toBe('/');
+    expect(stripLang('/en/')).toBe('/');
+    expect(stripLang('/en/about')).toBe('/about');
+    expect(stripLang('/about')).toBe('/about');
+    expect(stripLang('/')).toBe('/');
+  });
+
+  it('localizes a path: English gets /en, the home is /en without a trailing slash', () => {
+    expect(localizePath('/', 'en')).toBe('/en');
+    expect(localizePath('/about', 'en')).toBe('/en/about');
+    expect(localizePath('/projects/:slug', 'en')).toBe('/en/projects/:slug');
+    expect(localizePath('/', 'es')).toBe('/');
+    expect(localizePath('/about', 'es')).toBe('/about');
+  });
+
+  it('is idempotent and round-trips through stripLang', () => {
+    expect(localizePath('/en/about', 'en')).toBe('/en/about');
+    expect(localizePath('/en/about', 'es')).toBe('/about');
+    expect(localizePath(stripLang('/en/contact'), 'en')).toBe('/en/contact');
+  });
+});
 
 describe('paths', () => {
   it('defines all required route paths', () => {

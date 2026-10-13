@@ -2,6 +2,7 @@ import { screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { renderWithProviders } from '../helpers/renderWithProviders';
 import Home from '../../src/views/pages/Home';
+import { facts, formatInt, roundDownToThousand, yearsSince } from '../../src/config/facts';
 import { trackEvent } from '../../src/utils/analytics';
 
 vi.mock('../../src/utils/analytics', () => ({
@@ -21,10 +22,26 @@ describe('Home', () => {
     expect(heading).toBeInTheDocument();
   });
 
-  it('shows proof bar with stats', () => {
+  it('shows the measured proof bar: apps, public apps and tests rounded down', () => {
     renderWithProviders(<Home />);
-    expect(screen.getByText('5')).toBeInTheDocument();
-    expect(screen.getByText('6.100+')).toBeInTheDocument();
+    expect(screen.getByText(String(facts.apps.production))).toBeInTheDocument();
+    expect(screen.getByText(String(facts.apps.public))).toBeInTheDocument();
+    expect(
+      screen.getByText(`${formatInt(roundDownToThousand(facts.tests.total), 'en')}+`)
+    ).toBeInTheDocument();
+    expect(screen.queryByText('6.100+')).not.toBeInTheDocument();
+  });
+
+  it('renders the hero tagline and the availability line', () => {
+    renderWithProviders(<Home />);
+    expect(screen.getByText(/from production to the people who use them/)).toBeInTheDocument();
+    expect(screen.getByText('Open to offers · remote or hybrid from Mallorca')).toBeInTheDocument();
+  });
+
+  it('interpolates the dauth tenant count into the featured card', () => {
+    renderWithProviders(<Home />);
+    expect(screen.getByText(new RegExp(`${facts.dauthTenants} tenants connected`))).toBeInTheDocument();
+    expect(document.body.textContent).not.toMatch(/\{\{/);
   });
 
   it('renders featured projects in bento grid', () => {
@@ -47,17 +64,16 @@ describe('Home', () => {
     expect(contactLinks.length).toBeGreaterThanOrEqual(1);
   });
 
-  it('excludes dtpf from featured projects', () => {
+  it('features dcompany, dauth, dinventory and dalist, in that order', () => {
     renderWithProviders(<Home />);
     const headings = screen.getAllByRole('heading', { level: 3 });
-    const headingTexts = headings.map((h) => h.textContent);
-    expect(headingTexts).not.toContain('dtpf.es');
+    expect(headings.map((h) => h.textContent)).toEqual(['dcompany', 'dauth', 'dinventory', 'dalist']);
   });
 
-  it('shows exactly 4 featured projects (all except dtpf)', () => {
+  it('interpolates the MCP tool count into the dcompany card', () => {
     renderWithProviders(<Home />);
-    const headings = screen.getAllByRole('heading', { level: 3 });
-    expect(headings).toHaveLength(4);
+    const floored = Math.floor(facts.projects.dcompany.mcpTools! / 10) * 10;
+    expect(screen.getByText(new RegExp(`${floored}\\+ MCP tools`))).toBeInTheDocument();
   });
 
   it('renders manifesto section', () => {
@@ -72,14 +88,15 @@ describe('Home', () => {
     expect(projectLinks.length).toBeGreaterThanOrEqual(1);
   });
 
-  it('renders all 10 stack items', () => {
+  it('renders all 11 stack items', () => {
     renderWithProviders(<Home />);
     expect(screen.getByText('MongoDB')).toBeInTheDocument();
     expect(screen.getByText('Tailwind')).toBeInTheDocument();
     expect(screen.getByText('Vite')).toBeInTheDocument();
     expect(screen.getByText('Docker')).toBeInTheDocument();
+    expect(screen.getByText('Proxmox')).toBeInTheDocument();
     expect(screen.getByText('GitHub Actions')).toBeInTheDocument();
-    expect(screen.getByText('Claude')).toBeInTheDocument();
+    expect(screen.getByText('Claude Code')).toBeInTheDocument();
     expect(screen.getByText('Linux')).toBeInTheDocument();
   });
 
@@ -88,12 +105,14 @@ describe('Home', () => {
     expect(screen.getByText('R')).toBeInTheDocument();
     expect(screen.getByText('TS')).toBeInTheDocument();
     expect(screen.getByText('N')).toBeInTheDocument();
+    expect(screen.getByText('PX')).toBeInTheDocument();
     expect(screen.getByText('AI')).toBeInTheDocument();
   });
 
-  it('renders proof bar with SaaS years', () => {
+  it('computes the SaaS years from the start date instead of a typed figure', () => {
     renderWithProviders(<Home />);
-    expect(screen.getByText('3+')).toBeInTheDocument();
+    expect(screen.getByText(String(yearsSince(facts.saasSince)))).toBeInTheDocument();
+    expect(screen.queryByText('3+')).not.toBeInTheDocument();
   });
 
   it('renders external visit links for featured projects', () => {
