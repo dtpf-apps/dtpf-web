@@ -122,7 +122,7 @@ Self-hosted Umami analytics (analytics.dtpf.es), loaded only after the user acce
 
 ## Testing
 
-225 tests across 24 files using Vitest 5 with jsdom, @testing-library/react, and jest-dom. Coverage thresholds: 95% (statements, branches, functions, lines).
+226 tests across 24 files using Vitest 5 with jsdom, @testing-library/react, and jest-dom. Coverage thresholds: 95% (statements, branches, functions, lines).
 
 ```bash
 pnpm test
@@ -131,7 +131,7 @@ pnpm test:coverage
 
 ## Deploy
 
-Gitea Actions CI/CD on the self-hosted Gitea (`.gitea/workflows/deploy.yml`). A push runs tests, builds (staging builds get `VITE_APP_SUFFIX=DEV`), and rsyncs `dist/` to the app server. GitHub receives a push-mirror and keeps a disabled workflow (`.github/workflows/deploy.yml.disabled`) as disaster-recovery fallback.
+Gitea Actions CI/CD on the self-hosted Gitea (`.gitea/workflows/deploy.yml`). A push runs tests, builds (staging builds get `VITE_APP_SUFFIX=DEV`), and rsyncs `dist/` to the app server. The deploy target (`user@host`) and the failure-notification room are repository Actions variables (`APP_SERVER`, `CI_MATRIX_ROOM`), never source. GitHub receives a read-only push mirror of this repository.
 
 ```bash
 git push gitea main    # production (dtpf.es)
@@ -144,4 +144,4 @@ Prettier: 110 char width, single quotes, semicolons, trailing commas (es5), 2-sp
 
 ## License
 
-MIT
+[MIT](LICENSE)
