@@ -8,7 +8,8 @@ import { facts, formatInt, projectVars, roundDownToThousand, yearsSince } from '
 import { trackEvent } from 'utils/analytics';
 import { stagger, fadeUp } from 'utils/animations';
 
-const featured = projects.filter((p) => p.slug !== 'dtpf');
+// The bento grid holds four cards; which four is decided in config/projects.ts, in array order.
+const featured = projects.filter((p) => p.featured);
 
 const stackItems = [
   { abbr: 'R', name: 'React' },
@@ -199,15 +200,17 @@ export default function Home() {
                 >
                   {t('home_projects_case_study')} <ArrowRight size={14} aria-hidden="true" />
                 </Link>
-                <a
-                  href={p.liveUrl}
-                  target="_blank"
-                  rel="noreferrer"
-                  className="inline-flex items-center gap-1.5 rounded-lg border border-border px-4 py-2 text-[13px] font-semibold text-text-primary transition-all hover:border-border-hover hover:bg-bg-tertiary"
-                  onClick={() => trackEvent('home:visit-project', { slug: p.slug })}
-                >
-                  {t('home_projects_visit')} <ExternalLink size={13} aria-hidden="true" />
-                </a>
+                {p.liveUrl && (
+                  <a
+                    href={p.liveUrl}
+                    target="_blank"
+                    rel="noreferrer"
+                    className="inline-flex items-center gap-1.5 rounded-lg border border-border px-4 py-2 text-[13px] font-semibold text-text-primary transition-all hover:border-border-hover hover:bg-bg-tertiary"
+                    onClick={() => trackEvent('home:visit-project', { slug: p.slug })}
+                  >
+                    {t('home_projects_visit')} <ExternalLink size={13} aria-hidden="true" />
+                  </a>
+                )}
               </div>
             </motion.div>
           ))}

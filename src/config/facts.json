@@ -6,6 +6,24 @@
   "dauthTenants": 6,
   "generatedAt": "2026-10-13",
   "projects": {
+    "airam": {
+      "ci": "Gitea Actions",
+      "tests": {
+        "backend": 1167,
+        "e2e": 49,
+        "frontend": 1285,
+        "total": 2501
+      },
+      "versions": {
+        "express": 5,
+        "mongodb": 8,
+        "node": 24,
+        "react": 19,
+        "tailwind": 4,
+        "typescript": 7,
+        "vite": 8
+      }
+    },
     "audity": {
       "ci": "GitHub Actions",
       "tests": {
@@ -59,6 +77,43 @@
         "vite": 8
       }
     },
+    "dcompany": {
+      "ci": "GitHub Actions",
+      "mcpTools": 280,
+      "tests": {
+        "backend": 34386,
+        "frontend": 22624,
+        "packages": 2673,
+        "total": 59683
+      },
+      "versions": {
+        "express": 5,
+        "mongodb": 8,
+        "node": 24,
+        "react": 19,
+        "tailwind": 4,
+        "typescript": 6,
+        "vite": 8
+      }
+    },
+    "dinventory": {
+      "ci": "Gitea Actions",
+      "tests": {
+        "backend": 509,
+        "e2e": 118,
+        "frontend": 830,
+        "total": 1457
+      },
+      "versions": {
+        "express": 5,
+        "mongodb": 8,
+        "node": 24,
+        "react": 19,
+        "tailwind": 4,
+        "typescript": 7,
+        "vite": 8
+      }
+    },
     "dstash": {
       "ci": "GitHub Actions",
       "tests": {
@@ -94,11 +149,29 @@
         "typescript": 7,
         "vite": 8
       }
+    },
+    "dwealth": {
+      "ci": "Gitea Actions",
+      "tests": {
+        "backend": 3547,
+        "e2e": 524,
+        "frontend": 4297,
+        "total": 8368
+      },
+      "versions": {
+        "express": 5,
+        "mongodb": 8,
+        "node": 24,
+        "react": 19,
+        "tailwind": 4,
+        "typescript": 7,
+        "vite": 8
+      }
     }
   },
   "saasSince": "2023-07-01",
   "tests": {
-    "total": 87021
+    "total": 88478
   },
-  "testsMeasuredAt": "2026-10-02T22:44:20.697Z"
+  "testsMeasuredAt": "2026-10-13T11:11:48.051Z"
 }

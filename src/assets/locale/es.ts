@@ -47,7 +47,6 @@ export const es = {
   projects_case_study: 'Caso de estudio',
   projects_visit: 'Visitar',
   projects_badge_production: 'Producción',
-  projects_badge_this: 'Este sitio',
   projects_back: 'proyectos',
 
   // Project detail
@@ -121,6 +120,21 @@ export const es = {
   lang_toggle: 'Cambiar idioma',
 
   // Projects data — figures arrive as interpolation values from config/facts.ts
+  project_dcompany_name: 'dcompany',
+  project_dcompany_tagline: 'Compañías de agentes de IA que trabajan solas y solo interrumpen para decidir.',
+  project_dcompany_desc:
+    'Plataforma multi-tenant de agentes de IA: organigrama con roles y delegación, event sourcing, más de {{mcpTools}} herramientas MCP para operar la empresa desde Claude, aprobación humana de los cambios y facturación con Stripe. Un contenedor aislado por empresa. {{tests}} tests.',
+  project_dcompany_featured:
+    'Plataforma de agentes de IA con gobernanza: organigrama con delegación, event sourcing, más de {{mcpTools}} herramientas MCP y aprobación humana en lo delicado. Beta privada en producción.',
+  project_dcompany_problem:
+    'Operar equipos de agentes de IA sin perder el control: saber quién hizo qué, con qué permiso y qué costó, y que lo delicado espere a la decisión de una persona.',
+  project_dcompany_solution:
+    'dcompany es una plataforma multi-tenant: cada empresa corre en su propio contenedor aislado, con un organigrama de agentes con roles y delegación. Todo es event sourcing: cada acción queda registrada y es reproducible. Más de {{mcpTools}} herramientas MCP permiten operar la empresa desde Claude; la salida a internet pasa por lista blanca; los cambios de código se proponen y los aprueba una persona. Facturación autoservicio con Stripe y build farm de imágenes OCI firmadas (podman + Trivy + Cosign).',
+  project_dcompany_result:
+    'En producción en dcompany.tech como beta privada, construida en solitario. {{tests}} tests automatizados ({{backend}} control plane y daemon, {{frontend}} web, {{packages}} paquetes compartidos). Monorepo TypeScript 6 con exactOptionalPropertyTypes; escalera dev → staging → firma → promoción deliberada a producción. CI/CD con GitHub Actions.',
+  project_dcompany_status: 'Beta privada · acceso bajo petición',
+  project_dcompany_url: 'dcompany.tech',
+
   project_dauth_name: 'dauth',
   project_dauth_tagline:
     'Autenticación passwordless multi-tenant. Magic link, passkeys, authorization code flow.',
@@ -133,10 +147,50 @@ export const es = {
   project_dauth_problem:
     'Cada aplicación que construía necesitaba su propio sistema de login. Repetía la misma lógica de autenticación, gestión de tokens y flujos de email. Quería una solución centralizada que pudiera reutilizar.',
   project_dauth_solution:
-    'dauth es autenticación como servicio (AuthaaS): login sin contraseña para cualquier aplicación, con magic link y passkeys (WebAuthn). Cada app conectada obtiene su propio tenant con configuración independiente y authorization code flow.',
+    'dauth es autenticación como servicio (AuthaaS): login sin contraseña para cualquier aplicación, con magic link (con código de verificación cuando el enlace se abre en otro navegador) y passkeys (WebAuthn). Cada app conectada obtiene su propio tenant con configuración independiente y authorization code flow, y se integra con los SDKs dauth-react y dauth-node, publicados en GitHub Packages.',
   project_dauth_result:
     'Hoy gestiona la autenticación de {{tenants}} aplicaciones en producción. {{tests}} tests automatizados ({{backend}} backend, {{frontend}} frontend, {{packages}} paquetes npm, {{e2e}} E2E). Magic link con browser-binding y passkeys WebAuthn. CI/CD completo con GitHub Actions. Monitorización centralizada con Grafana + Loki.',
   project_dauth_url: 'dauth.ovh',
+
+  project_dinventory_name: 'dinventory',
+  project_dinventory_tagline: '¿Dónde tengo…? Inventario de casa y trastero que responde en dos toques.',
+  project_dinventory_desc:
+    'Inventario doméstico con ubicación exacta (lugar › habitación › mueble › balda › caja › delante/detrás), vista en planta a escala real, medición con la cámara (WebXR), búsqueda por voz con Whisper y alta de objetos por foto con un modelo de visión self-hosted. Nada sale de mi infraestructura. {{tests}} tests.',
+  project_dinventory_featured:
+    'Inventario de casa con IA en infraestructura propia: ubicación exacta, medición con la cámara, búsqueda por voz y reconocimiento por foto, sin que nada salga de mi red.',
+  project_dinventory_problem:
+    'Saber exactamente dónde está cada cosa de casa y del trastero — en qué mueble, balda y caja, delante o detrás — sin teclear un inventario entero ni entregar las fotos de mi casa a un servicio externo.',
+  project_dinventory_solution:
+    'dinventory modela la casa como un árbol de ubicaciones (lugar › habitación › mueble › balda › caja › delante/detrás) con medidas reales en centímetros y vista en planta. Una foto basta para dar de alta los objetos: la lee un modelo de visión que corre en mi propia GPU, con degradación explícita si no está disponible. Medición con la cámara vía WebXR, búsqueda por voz con Whisper self-hosted, login con dauth y medios en dstash. Diseñada para el móvil primero.',
+  project_dinventory_result:
+    'En producción pública detrás de dauth desde octubre de 2026. {{tests}} tests automatizados ({{backend}} backend, {{frontend}} frontend, {{e2e}} E2E). Toda la inferencia (visión y voz) corre en infraestructura propia: ninguna foto ni audio sale de la red. CI/CD con Gitea Actions, staging antes de producción.',
+  project_dinventory_url: 'dinventory.dtpf.es',
+
+  project_dalist_name: 'dalist',
+  project_dalist_tagline: 'App de notas colaborativa con checklists, notas compartidas en tiempo real y PWA.',
+  project_dalist_desc:
+    'App de notas y checklists con notas compartidas en tiempo real, historial de versiones, 19 colores, etiquetas, cifrado de notas en reposo, asistente de voz con Whisper self-hosted y notificaciones. PWA instalable y app Android en Google Play. {{tests}} tests.',
+  project_dalist_featured:
+    'Notas y checklists compartidas en tiempo real, cifradas en reposo, con asistente de voz self-hosted. PWA instalable y app Android publicada en Google Play.',
+  project_dalist_problem:
+    'Necesitaba un sitio central para organizar notas y checklists y poder compartirlas — sin la complejidad de Notion ni las limitaciones de Google Keep.',
+  project_dalist_solution:
+    'dalist es una app de notas y checklists con colaboración en tiempo real. Notas compartidas con presencia activa vía Socket.io, historial de versiones con restauración, checklists con variante dev (commit types), 19 colores, etiquetas, cifrado AES-256-GCM de notas en reposo, asistente de voz con Whisper en mi propia GPU, notificaciones por email y en la app, y papelera con borrado automático a los 7 días.',
+  project_dalist_result:
+    'En producción como PWA instalable y como app Android en Google Play (Capacitor). {{tests}} tests automatizados ({{backend}} backend, {{frontend}} frontend, {{e2e}} E2E). Colaboración en tiempo real con Socket.io, historial de versiones, notificaciones por email. Frontend con Tailwind CSS v4. Auth delegada en dauth. CI/CD con GitHub Actions.',
+  project_dalist_url: 'dalist.dtpf.es',
+
+  project_airam_name: 'petitairam.com',
+  project_airam_tagline: 'Tienda online para la marca artesanal AIRAM, con el CMS que la marca usa cada día.',
+  project_airam_desc:
+    'Tienda de piezas artesanales únicas y por encargo para la marca AIRAM: catálogo, carrito, pedido con reserva de pieza, pago por Bizum o transferencia con referencia por pedido, y un CMS de 8 secciones con todo el contenido multilingüe. Trabajo para cliente, en producción. {{tests}} tests.',
+  project_airam_problem:
+    'Una marca artesanal necesita vender piezas únicas y por encargo sin pasarela de pago, y cambiar textos, precios y fotos sin depender de un desarrollador.',
+  project_airam_solution:
+    'petitairam.com es la tienda de la marca AIRAM: catálogo, carrito y pedido con reserva de la pieza, pago por Bizum o transferencia bancaria con referencia única por pedido, caducidad de la reserva y confirmación idempotente desde el panel. Un CMS de 8 secciones guarda todo el contenido — ningún dato de negocio vive en el código — y cada texto es un mapa por idioma, no columnas. Login con dauth, medios en dstash, envíos a todo el mundo.',
+  project_airam_result:
+    'En producción para un cliente real, mantenida por mí. {{tests}} tests automatizados ({{backend}} server, {{frontend}} client, {{e2e}} E2E). Diseño entregado por la marca y portado con fidelidad verificada en móvil, tablet y escritorio. CI/CD con Gitea Actions.',
+  project_airam_url: 'petitairam.com',
 
   project_dstash_name: 'dstash',
   project_dstash_tagline:
@@ -148,32 +202,39 @@ export const es = {
   project_dstash_solution:
     'dstash es una plataforma de almacenamiento de medios propia. Soporta subida drag-and-drop, organización por carpetas, vista previa y API REST para integración externa. Seguridad con signed URLs (HMAC-SHA256), API keys opacas, validación con Zod, rate limiting y registro de auditoría.',
   project_dstash_result:
-    'En producción sirviendo medios a varias aplicaciones. {{tests}} tests automatizados ({{backend}} backend, {{frontend}} frontend, {{e2e}} E2E). Modo protegido con PIN, miniaturas WebP automáticas, sistema de suscripciones. Panel de administración completo. CI/CD con GitHub Actions.',
+    'En producción sirviendo medios a varias aplicaciones, entre ellas dinventory y petitairam.com. {{tests}} tests automatizados ({{backend}} backend, {{frontend}} frontend, {{e2e}} E2E). Modo protegido con PIN, miniaturas WebP automáticas, sistema de suscripciones. Panel de administración completo. CI/CD con GitHub Actions.',
   project_dstash_url: 'dstash.dtpf.es',
 
-  project_dalist_name: 'dalist',
-  project_dalist_tagline: 'App de notas colaborativa con checklists, notas compartidas en tiempo real y PWA.',
-  project_dalist_desc:
-    'App de notas y checklists con notas compartidas en tiempo real, historial de versiones, 19 colores, etiquetas, cifrado de notas en reposo y notificaciones. PWA instalable y app en Google Play. {{tests}} tests.',
-  project_dalist_problem:
-    'Necesitaba un sitio central para organizar notas y checklists y poder compartirlas — sin la complejidad de Notion ni las limitaciones de Google Keep.',
-  project_dalist_solution:
-    'dalist es una app de notas y checklists con colaboración en tiempo real. Notas compartidas con presencia activa vía Socket.io, historial de versiones con restauración, checklists con variante dev (commit types), 19 colores, etiquetas, cifrado AES-256-GCM de notas en reposo, notificaciones por email y en la app, y papelera con borrado automático a los 7 días.',
-  project_dalist_result:
-    'En producción como PWA instalable y en Google Play. {{tests}} tests automatizados ({{backend}} backend, {{frontend}} frontend, {{e2e}} E2E). Colaboración en tiempo real con Socket.io, historial de versiones, notificaciones por email. Frontend con Tailwind CSS v4. Auth delegada en dauth. CI/CD con GitHub Actions.',
-  project_dalist_url: 'dalist.dtpf.es',
-
-  project_portfolio_name: 'dtpf.es',
-  project_portfolio_tagline: 'Portfolio personal, código abierto.',
-  project_portfolio_desc:
-    'Este portfolio. React 19 + Tailwind CSS v4 + Framer Motion, i18n ES/EN, PWA con actualización silenciosa, {{tests}} tests. Código abierto en GitHub, desplegado con Gitea Actions.',
-  project_portfolio_url: 'dtpf.es',
+  project_dwealth_name: 'dwealth',
+  project_dwealth_tagline:
+    'Seguimiento de patrimonio: transacciones dentro; valor, asignación y fiscalidad FIFO fuera.',
+  project_dwealth_desc:
+    'Aplicación privada de patrimonio personal que sustituye a una hoja de cálculo: cantidades Decimal128 (nunca float), moneda original más tipo de cambio del día, posiciones y coste FIFO derivados de las transacciones, transferencias como dos patas enlazadas y precios con marca de tiempo y fuente. {{tests}} tests.',
+  project_dwealth_problem:
+    'Llevar el patrimonio personal en una hoja de cálculo acaba en redondeos silenciosos, conversiones de divisa a ojo y fórmulas que nadie puede auditar. Quería rigor contable con la comodidad de una app en el móvil.',
+  project_dwealth_solution:
+    'dwealth guarda cada cantidad como Decimal128 — nunca un float en el camino del dinero — en su moneda original junto al tipo de cambio del día. Las posiciones y el coste FIFO se derivan de las transacciones, no se editan; una transferencia son dos patas enlazadas; cada precio lleva marca de tiempo y fuente. Las importaciones corren dentro de una transacción MongoDB. Login con dauth, móvil primero.',
+  project_dwealth_result:
+    'Aplicación privada en producción para uso propio, sin URL pública por diseño. {{tests}} tests automatizados ({{backend}} server, {{frontend}} client, {{e2e}} E2E). CI/CD con Gitea Actions.',
+  project_dwealth_status: 'Aplicación privada · sin URL pública',
+  project_dwealth_url: 'aplicación privada',
 
   project_audity_name: 'Audity',
   project_audity_tagline: 'Streaming musical tipo Spotify con reproductor completo, playlists y búsqueda.',
   project_audity_desc:
     'Streaming musical tipo Spotify. Reproductor completo, playlists, búsqueda, CMS. Proyecto colaborativo de fin de máster (2023), desplegado y mantenido desde entonces. {{tests}} tests.',
   project_audity_url: 'audity.dtpf.es',
+
+  // Project status badges and the detail page's extra links
+  projects_badge_beta: 'Beta privada',
+  projects_badge_client: 'Cliente',
+  projects_badge_private: 'Privada',
+  detail_store: 'Ver en Google Play',
+
+  // Footer: the portfolio's own figures
+  footer_site_label: 'Este sitio',
+  footer_site_tests: '{{tests}} tests',
+  footer_site_source: 'código en GitHub',
 
   cookie_text: 'Utilizamos cookies analíticas para mejorar tu experiencia. Puedes aceptar o rechazar su uso.',
   cookie_accept: 'Aceptar',
@@ -206,8 +267,27 @@ export const es = {
   realtime: 'Tiempo real',
   encryption: 'Cifrado',
   store: 'Distribución',
+  tools: 'Herramientas MCP',
+  isolation: 'Aislamiento',
+  billing: 'Facturación',
+  ai: 'IA',
+  media: 'Medios',
+  target: 'Dispositivo',
+  brand: 'Marca',
+  payments: 'Pagos',
+  cms: 'CMS',
+  precision: 'Precisión',
+  fx: 'Divisa',
+  tax: 'Fiscalidad',
+  origin: 'Origen',
 
   // Metric values
   metric_admin_full: 'Panel completo',
   metric_encryption_at_rest: 'Notas cifradas en reposo',
+  metric_isolation_tenant: 'Un contenedor por empresa',
+  metric_ai_self_hosted: 'Visión y voz self-hosted',
+  metric_mobile_first: 'Móvil primero',
+  metric_payments_bizum: 'Bizum y transferencia',
+  metric_cms_sections: '8 secciones editables',
+  metric_masters_project: 'Proyecto de máster (2023)',
 };

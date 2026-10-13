@@ -64,17 +64,16 @@ describe('Home', () => {
     expect(contactLinks.length).toBeGreaterThanOrEqual(1);
   });
 
-  it('excludes dtpf from featured projects', () => {
+  it('features dcompany, dauth, dinventory and dalist, in that order', () => {
     renderWithProviders(<Home />);
     const headings = screen.getAllByRole('heading', { level: 3 });
-    const headingTexts = headings.map((h) => h.textContent);
-    expect(headingTexts).not.toContain('dtpf.es');
+    expect(headings.map((h) => h.textContent)).toEqual(['dcompany', 'dauth', 'dinventory', 'dalist']);
   });
 
-  it('shows exactly 4 featured projects (all except dtpf)', () => {
+  it('interpolates the MCP tool count into the dcompany card', () => {
     renderWithProviders(<Home />);
-    const headings = screen.getAllByRole('heading', { level: 3 });
-    expect(headings).toHaveLength(4);
+    const floored = Math.floor(facts.projects.dcompany.mcpTools! / 10) * 10;
+    expect(screen.getByText(new RegExp(`${floored}\\+ MCP tools`))).toBeInTheDocument();
   });
 
   it('renders manifesto section', () => {

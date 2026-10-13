@@ -27,6 +27,8 @@ export interface ProjectFacts {
   tests: ProjectTests;
   versions: ProjectVersions;
   ci: string;
+  /** dcompany only: MCP tool definitions counted in its control-plane source. */
+  mcpTools?: number;
 }
 
 export interface Facts {
@@ -55,6 +57,10 @@ export function roundDownToThousand(n: number): number {
   return Math.floor(n / 1000) * 1000;
 }
 
+export function roundDownToTen(n: number): number {
+  return Math.floor(n / 10) * 10;
+}
+
 const DAY_MS = 86_400_000;
 
 /** Age of an ISO date in days — what the CI staleness test compares against its limit. */
@@ -75,15 +81,19 @@ export function yearsSince(isoDate: string, now: Date = new Date()): number {
 
 /**
  * Interpolation values for a project's translated copy: `{{tests}}`, `{{backend}}`,
- * `{{frontend}}`, `{{e2e}}`, `{{packages}}` and `{{tenants}}`, already formatted for the
- * language, so the locale strings carry no digits of their own.
+ * `{{frontend}}`, `{{e2e}}`, `{{packages}}`, `{{tenants}}` and, where measured,
+ * `{{mcpTools}}` (floored to the ten, for a "more than N" sentence), already formatted
+ * for the language, so the locale strings carry no digits of their own.
  */
 export function projectVars(slug: string, lang: string): Record<string, string> {
   const vars: Record<string, string> = { tenants: String(facts.dauthTenants) };
-  const tests = facts.projects[slug]?.tests;
-  if (!tests) return vars;
-  for (const [group, count] of Object.entries(tests)) {
+  const project = facts.projects[slug];
+  if (!project) return vars;
+  for (const [group, count] of Object.entries(project.tests)) {
     vars[group === 'total' ? 'tests' : group] = formatInt(count, lang);
+  }
+  if (project.mcpTools !== undefined) {
+    vars.mcpTools = formatInt(roundDownToTen(project.mcpTools), lang);
   }
   return vars;
 }

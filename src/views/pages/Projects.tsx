@@ -7,6 +7,7 @@ import { motion } from 'framer-motion';
 import { ArrowRight, ExternalLink } from 'lucide-react';
 import { trackEvent } from 'utils/analytics';
 import { stagger, fadeUp } from 'utils/animations';
+import ProjectStatusBadge from 'views/components/ProjectStatusBadge';
 
 export default function Projects() {
   const { t, i18n } = useTranslation();
@@ -38,15 +39,7 @@ export default function Projects() {
             <div>
               <div className="mb-2 flex items-center gap-3">
                 <span className="font-mono text-xs text-text-muted">{t(p.urlKey)}</span>
-                <span
-                  className={`rounded px-2 py-0.5 text-[10px] font-semibold uppercase tracking-wider ${
-                    p.slug === 'dtpf'
-                      ? 'border border-accent/20 bg-accent-subtle text-accent'
-                      : 'border border-success/20 bg-success/10 text-success'
-                  }`}
-                >
-                  {p.slug === 'dtpf' ? t('projects_badge_this') : t('projects_badge_production')}
-                </span>
+                <ProjectStatusBadge status={p.status} />
               </div>
               <h3 className="mb-1.5 font-heading text-[22px] font-bold tracking-tight">{t(p.nameKey)}</h3>
               <p className="mb-3.5 max-w-[620px] text-sm leading-relaxed text-text-secondary">
@@ -72,7 +65,7 @@ export default function Projects() {
               >
                 {t('projects_case_study')} <ArrowRight size={14} aria-hidden="true" />
               </Link>
-              {p.slug !== 'dtpf' && (
+              {p.liveUrl && (
                 <a
                   href={p.liveUrl}
                   target="_blank"

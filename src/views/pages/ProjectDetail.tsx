@@ -6,6 +6,7 @@ import { paths } from 'router/paths';
 import { motion } from 'framer-motion';
 import { ArrowLeft, ExternalLink } from 'lucide-react';
 import { trackEvent } from 'utils/analytics';
+import ProjectStatusBadge from 'views/components/ProjectStatusBadge';
 
 export default function ProjectDetail() {
   const { slug } = useParams<{ slug: string }>();
@@ -15,6 +16,8 @@ export default function ProjectDetail() {
   if (!project) return <Navigate to={paths.projects} replace />;
 
   const vars = projectVars(project.slug, i18n.language);
+  // A private app has nothing a visitor can open: no button row at all, rather than a dead one.
+  const hasLinks = Boolean(project.liveUrl || project.storeUrl || project.githubUrl);
 
   return (
     <>
@@ -35,32 +38,53 @@ export default function ProjectDetail() {
         </Link>
 
         <h1 className="mb-3 font-heading text-5xl font-bold tracking-[-2px]">{t(project.nameKey)}</h1>
-        <p className="mb-7 text-lg leading-relaxed text-text-secondary">
-          {project.slug === 'dauth' ? t('project_dauth_tagline_long') : t(project.taglineKey)}
-        </p>
-
-        <div className="mb-12 flex gap-3">
-          <a
-            href={project.liveUrl}
-            target="_blank"
-            rel="noreferrer"
-            className="inline-flex items-center gap-2 rounded-[10px] bg-accent px-6 py-3 text-sm font-semibold text-[#0B0F19] transition hover:bg-accent-hover"
-            onClick={() => trackEvent('project:visit-live', { slug: project.slug })}
-          >
-            {t('detail_visit')} {t(project.urlKey)} <ExternalLink size={14} aria-hidden="true" />
-          </a>
-          {project.githubUrl && (
-            <a
-              href={project.githubUrl}
-              target="_blank"
-              rel="noreferrer"
-              className="inline-flex items-center gap-2 rounded-[10px] border border-border px-6 py-3 text-sm font-semibold text-text-primary transition hover:border-border-hover hover:bg-bg-tertiary"
-              onClick={() => trackEvent('project:github', { slug: project.slug })}
-            >
-              {t('detail_github')} <ExternalLink size={14} aria-hidden="true" />
-            </a>
+        <div className="mb-4 flex flex-wrap items-center gap-3">
+          <ProjectStatusBadge status={project.status} />
+          {project.statusNoteKey && (
+            <span className="font-mono text-[13px] text-text-muted">{t(project.statusNoteKey)}</span>
           )}
         </div>
+        <p className={`${hasLinks ? 'mb-7' : 'mb-12'} text-lg leading-relaxed text-text-secondary`}>
+          {t(project.taglineLongKey ?? project.taglineKey)}
+        </p>
+
+        {hasLinks && (
+          <div className="mb-12 flex flex-wrap gap-3">
+            {project.liveUrl && (
+              <a
+                href={project.liveUrl}
+                target="_blank"
+                rel="noreferrer"
+                className="inline-flex items-center gap-2 rounded-[10px] bg-accent px-6 py-3 text-sm font-semibold text-[#0B0F19] transition hover:bg-accent-hover"
+                onClick={() => trackEvent('project:visit-live', { slug: project.slug })}
+              >
+                {t('detail_visit')} {t(project.urlKey)} <ExternalLink size={14} aria-hidden="true" />
+              </a>
+            )}
+            {project.storeUrl && (
+              <a
+                href={project.storeUrl}
+                target="_blank"
+                rel="noreferrer"
+                className="inline-flex items-center gap-2 rounded-[10px] border border-border px-6 py-3 text-sm font-semibold text-text-primary transition hover:border-border-hover hover:bg-bg-tertiary"
+                onClick={() => trackEvent('project:store', { slug: project.slug })}
+              >
+                {t('detail_store')} <ExternalLink size={14} aria-hidden="true" />
+              </a>
+            )}
+            {project.githubUrl && (
+              <a
+                href={project.githubUrl}
+                target="_blank"
+                rel="noreferrer"
+                className="inline-flex items-center gap-2 rounded-[10px] border border-border px-6 py-3 text-sm font-semibold text-text-primary transition hover:border-border-hover hover:bg-bg-tertiary"
+                onClick={() => trackEvent('project:github', { slug: project.slug })}
+              >
+                {t('detail_github')} <ExternalLink size={14} aria-hidden="true" />
+              </a>
+            )}
+          </div>
+        )}
 
         <hr className="border-border" />
 

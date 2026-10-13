@@ -3,6 +3,7 @@ import {
   facts,
   formatInt,
   projectVars,
+  roundDownToTen,
   roundDownToThousand,
   yearsSince,
 } from '../../src/config/facts';
@@ -97,6 +98,20 @@ describe('yearsSince', () => {
   });
 });
 
+describe('roundDownToTen', () => {
+  it('floors to the ten', () => {
+    expect(roundDownToTen(280)).toBe(280);
+    expect(roundDownToTen(289)).toBe(280);
+    expect(roundDownToTen(9)).toBe(0);
+  });
+});
+
+describe('dcompany MCP tool count', () => {
+  it('is measured and large enough to be a real catalogue, not a regex that matched nothing', () => {
+    expect(facts.projects.dcompany.mcpTools).toBeGreaterThanOrEqual(100);
+  });
+});
+
 describe('projectVars', () => {
   it('formats every test figure of a project for the language', () => {
     const vars = projectVars('dauth', 'es');
@@ -104,6 +119,12 @@ describe('projectVars', () => {
     expect(vars.backend).toBe(formatInt(facts.projects.dauth.tests.backend!, 'es'));
     expect(vars.packages).toBe(formatInt(facts.projects.dauth.tests.packages!, 'es'));
     expect(vars.tenants).toBe(String(facts.dauthTenants));
+  });
+
+  it('exposes the MCP tool count floored to the ten only where it is measured', () => {
+    const floored = Math.floor(facts.projects.dcompany.mcpTools! / 10) * 10;
+    expect(projectVars('dcompany', 'en').mcpTools).toBe(formatInt(floored, 'en'));
+    expect(projectVars('dauth', 'en').mcpTools).toBeUndefined();
   });
 
   it('still provides the tenant count for a slug without facts', () => {
