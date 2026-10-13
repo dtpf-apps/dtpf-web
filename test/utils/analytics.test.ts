@@ -67,7 +67,7 @@ describe('analytics', () => {
 
     it('does NOT inject script for local IPs', () => {
       Object.defineProperty(window, 'location', {
-        value: { hostname: '10.5.0.44' },
+        value: { hostname: '10.0.0.44' },
         writable: true,
         configurable: true,
       });

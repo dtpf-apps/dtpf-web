@@ -38,7 +38,7 @@ describe('isLocalhost', () => {
   });
 
   it('detects 10.x.x.x addresses', async () => {
-    expect(await loadWithHostname('10.5.0.44')).toBe(true);
+    expect(await loadWithHostname('10.0.0.44')).toBe(true);
   });
 
   it('returns false for production domain', async () => {

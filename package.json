@@ -1,9 +1,14 @@
 {
   "name": "dtpf-web",
-  "version": "0.6.16",
-  "description": "Portfolio de David T. Pizarro Frick",
+  "version": "0.6.17",
+  "description": "Frontend of dtpf.es, the personal portfolio of David T. Pizarro Frick",
   "author": "David T. Pizarro Frick",
   "license": "MIT",
+  "homepage": "https://dtpf.es",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/dtpf-apps/dtpf-web.git"
+  },
   "private": true,
   "type": "module",
   "engines": {
