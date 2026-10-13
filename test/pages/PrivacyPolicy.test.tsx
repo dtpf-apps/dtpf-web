@@ -5,7 +5,7 @@ import PrivacyPolicy from '../../src/views/pages/PrivacyPolicy';
 describe('PrivacyPolicy', () => {
   it('renders privacy policy heading', () => {
     renderWithProviders(<PrivacyPolicy />);
-    expect(screen.getByRole('heading', { level: 1 })).toHaveTextContent(/Politica de Privacidad/i);
+    expect(screen.getByRole('heading', { level: 1 })).toHaveTextContent(/Política de Privacidad/i);
   });
 
   it('mentions RGPD/LOPD', () => {

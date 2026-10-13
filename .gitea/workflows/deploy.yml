@@ -12,6 +12,9 @@ concurrency:
   cancel-in-progress: false
 
 env:
+  # Set explicitly rather than trusting the runner: the facts.json staleness test
+  # (test/config/facts.test.ts) only enforces its 120-day limit when CI is set.
+  CI: "true"
   # Deploy target (`user@host`) lives in the repository's Actions variables, not
   # in source: this repo is public and the app server sits on a private network.
   APP_SERVER: ${{ vars.APP_SERVER }}

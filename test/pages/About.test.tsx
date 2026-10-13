@@ -2,6 +2,7 @@ import { screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { renderWithProviders } from '../helpers/renderWithProviders';
 import About from '../../src/views/pages/About';
+import { facts } from '../../src/config/facts';
 import { trackEvent } from '../../src/utils/analytics';
 
 vi.mock('../../src/utils/analytics', () => ({
@@ -27,13 +28,23 @@ describe('About', () => {
     expect(experienceHeadings.length).toBe(3);
   });
 
-  it('renders tools grid with 4 categories', () => {
+  it('renders tools grid with 5 categories', () => {
     renderWithProviders(<About />);
-    // Tools section has 4 groups of tech items
+    expect(screen.getAllByRole('heading', { level: 4 })).toHaveLength(5);
     expect(screen.getByText('React 19')).toBeInTheDocument();
     expect(screen.getByText('Node.js')).toBeInTheDocument();
     expect(screen.getByText('Docker')).toBeInTheDocument();
-    expect(screen.getByText('Claude')).toBeInTheDocument();
+    expect(screen.getByText('Claude Code')).toBeInTheDocument();
+    expect(screen.getByText('Vitest')).toBeInTheDocument();
+  });
+
+  it('names the stack of the day job and the self-hosted inference models', () => {
+    renderWithProviders(<About />);
+    expect(screen.getByText('Next.js')).toBeInTheDocument();
+    expect(screen.getByText('NestJS')).toBeInTheDocument();
+    expect(screen.getByText('Jest')).toBeInTheDocument();
+    expect(screen.getByText('Whisper')).toBeInTheDocument();
+    expect(screen.getByText('Gitea Actions')).toBeInTheDocument();
   });
 
   it('has LinkedIn and GitHub links', () => {
@@ -47,7 +58,8 @@ describe('About', () => {
 
   it('renders all 3 experience entries with company names', () => {
     renderWithProviders(<About />);
-    expect(screen.getByText('Hub4Retail')).toBeInTheDocument();
+    expect(screen.getByText('Storaia')).toBeInTheDocument();
+    expect(screen.queryByText(/Hub4Retail/)).not.toBeInTheDocument();
     expect(screen.getByText('Palmira')).toBeInTheDocument();
     expect(screen.getByText('Assembler Institute of Technology')).toBeInTheDocument();
   });
@@ -61,7 +73,10 @@ describe('About', () => {
 
   it('renders experience role descriptions', () => {
     renderWithProviders(<About />);
-    expect(screen.getByText(/SaaS platform for fashion retail/)).toBeInTheDocument();
+    expect(
+      screen.getByText(/one platform for catalogue, orders, pricing and sell-out data/)
+    ).toBeInTheDocument();
+    expect(screen.getByText(/Next\.js \+ NestJS \+ TypeScript/)).toBeInTheDocument();
     expect(screen.getByText(/Mobile and web apps/)).toBeInTheDocument();
   });
 
@@ -81,17 +96,23 @@ describe('About', () => {
     expect(screen.getByText('WebSockets')).toBeInTheDocument();
   });
 
-  it('renders bio paragraphs', () => {
+  it('renders bio paragraphs with the measured app census', () => {
     renderWithProviders(<About />);
-    expect(screen.getByText(/software developer at Hub4Retail/)).toBeInTheDocument();
-    expect(screen.getByText(/5 production apps/)).toBeInTheDocument();
+    expect(screen.getByText(/full-stack engineer at Storaia/)).toBeInTheDocument();
+    expect(
+      screen.getByText(
+        new RegExp(`${facts.apps.production} apps of my own in production \\(${facts.apps.public} public\\)`)
+      )
+    ).toBeInTheDocument();
     expect(screen.getByText(/taking an idea from zero/)).toBeInTheDocument();
+    expect(document.body.textContent).not.toMatch(/\{\{/);
   });
 
-  it('shows role and location', () => {
+  it('shows role, location and availability', () => {
     renderWithProviders(<About />);
-    expect(screen.getByText('Software Developer')).toBeInTheDocument();
+    expect(screen.getByText('Senior Full-Stack Engineer')).toBeInTheDocument();
     expect(screen.getByText('Mallorca, Spain')).toBeInTheDocument();
+    expect(screen.getByText('Open to offers · remote or hybrid from Mallorca')).toBeInTheDocument();
   });
 
   it('clicking LinkedIn tracks about:linkedin event', async () => {

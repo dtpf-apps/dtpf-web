@@ -1,14 +1,15 @@
 import { useTranslation } from 'react-i18next';
 import { motion } from 'framer-motion';
+import { facts } from 'config/facts';
 import { trackEvent } from 'utils/analytics';
 import { stagger, fadeUp } from 'utils/animations';
 
 const experience = [
   {
-    roleKey: 'exp_hub4retail_role',
-    companyKey: 'exp_hub4retail_company',
-    periodKey: 'exp_hub4retail_period',
-    descKey: 'exp_hub4retail_desc',
+    roleKey: 'exp_storaia_role',
+    companyKey: 'exp_storaia_company',
+    periodKey: 'exp_storaia_period',
+    descKey: 'exp_storaia_desc',
   },
   {
     roleKey: 'exp_palmira_role',
@@ -27,11 +28,24 @@ const experience = [
 const tools: { titleKey: string; items: string[] }[] = [
   {
     titleKey: 'about_tools_frontend',
-    items: ['React 19', 'TypeScript', 'Tailwind CSS', 'Framer Motion', 'Vite'],
+    items: ['React 19', 'Next.js', 'TypeScript', 'Tailwind CSS', 'Framer Motion', 'Vite'],
   },
-  { titleKey: 'about_tools_backend', items: ['Node.js', 'Express', 'MongoDB', 'REST APIs', 'WebSockets'] },
-  { titleKey: 'about_tools_devops', items: ['Docker', 'GitHub Actions', 'PM2', 'Linux', 'Cloudflare'] },
-  { titleKey: 'about_tools_ai', items: ['Claude', 'Claude Code', 'Cursor', 'Git', 'Grafana'] },
+  {
+    titleKey: 'about_tools_backend',
+    items: ['Node.js', 'Express', 'NestJS', 'MongoDB', 'REST APIs', 'WebSockets'],
+  },
+  {
+    titleKey: 'about_tools_platform',
+    items: ['Proxmox', 'Docker', 'PM2', 'GitHub Actions', 'Gitea Actions', 'Cloudflare', 'Grafana + Loki'],
+  },
+  {
+    titleKey: 'about_tools_ai',
+    items: ['Claude Code', 'Claude API + MCP', 'Whisper', 'pyannote', 'llama.cpp'],
+  },
+  {
+    titleKey: 'about_tools_quality',
+    items: ['Vitest', 'Jest', 'Playwright', 'Testing Library', 'Prettier', 'ESLint'],
+  },
 ];
 
 export default function About() {
@@ -54,7 +68,8 @@ export default function About() {
           <div className="text-center sm:text-left">
             <p className="mb-0.5 font-heading text-xl font-bold tracking-tight">David T. Pizarro Frick</p>
             <p className="mb-0.5 text-sm font-medium text-accent">{t('about_role')}</p>
-            <p className="mb-3 text-[13px] text-text-muted">{t('about_location')}</p>
+            <p className="text-[13px] text-text-muted">{t('about_location')}</p>
+            <p className="mb-3 text-[13px] text-text-secondary">{t('availability')}</p>
             <div className="flex justify-center gap-2 sm:justify-start">
               <a
                 href="https://www.linkedin.com/in/david-tomas-pizarro-frick"
@@ -81,7 +96,9 @@ export default function About() {
         {/* Bio */}
         <div className="mb-12">
           <p className="mb-3.5 text-[15px] leading-relaxed text-text-secondary">{t('about_bio_p1')}</p>
-          <p className="mb-3.5 text-[15px] leading-relaxed text-text-secondary">{t('about_bio_p2')}</p>
+          <p className="mb-3.5 text-[15px] leading-relaxed text-text-secondary">
+            {t('about_bio_p2', { apps: facts.apps.production, publicApps: facts.apps.public })}
+          </p>
           <p className="text-[15px] leading-relaxed text-text-secondary">{t('about_bio_p3')}</p>
         </div>
 
@@ -120,7 +137,7 @@ export default function About() {
           <h2 className="mb-5 border-b border-border pb-3 font-heading text-xl font-bold tracking-tight">
             {t('about_tools')}
           </h2>
-          <div className="grid grid-cols-2 gap-3 md:grid-cols-4">
+          <div className="grid grid-cols-1 gap-3 sm:grid-cols-2 lg:grid-cols-3">
             {tools.map((group) => (
               <div key={group.titleKey} className="rounded-xl border border-border bg-bg-surface p-5">
                 <h4 className="mb-3 font-mono text-[11px] font-semibold uppercase tracking-[1px] text-text-muted">

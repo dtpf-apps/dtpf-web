@@ -5,6 +5,7 @@ import { MemoryRouter, Routes, Route } from 'react-router';
 import { ThemeProvider } from '../../src/contexts/theme/ThemeContext';
 import '../../src/utils/i18n';
 import ProjectDetail from '../../src/views/pages/ProjectDetail';
+import { facts, formatInt } from '../../src/config/facts';
 import { trackEvent } from '../../src/utils/analytics';
 
 vi.mock('../../src/utils/analytics', () => ({
@@ -41,10 +42,19 @@ describe('ProjectDetail', () => {
     expect(screen.getByTestId('projects-page')).toBeInTheDocument();
   });
 
-  it('shows metrics for dauth', () => {
+  it('shows metrics for dauth with the measured, language-formatted test count', () => {
     renderProjectDetail('dauth');
     expect(screen.getByText('Active tenants')).toBeInTheDocument();
-    expect(screen.getByText('1.702')).toBeInTheDocument();
+    expect(screen.getByText(formatInt(facts.projects.dauth.tests.total, 'en'))).toBeInTheDocument();
+    expect(screen.queryByText('1.702')).not.toBeInTheDocument();
+  });
+
+  it('interpolates every figure of the case study (no raw placeholders)', () => {
+    renderProjectDetail('dauth');
+    expect(
+      screen.getByText(new RegExp(`auth for ${facts.dauthTenants} production apps`))
+    ).toBeInTheDocument();
+    expect(document.body.textContent).not.toMatch(/\{\{/);
   });
 
   it('shows stack tags', () => {
@@ -89,16 +99,19 @@ describe('ProjectDetail', () => {
     expect(backLink).toBeDefined();
   });
 
-  it('renders metrics for dalist', () => {
+  it('renders metrics for dalist, including the translated encryption value', () => {
     renderProjectDetail('dalist');
     expect(screen.getByText('Data')).toBeInTheDocument();
-    expect(screen.getByText('1.621')).toBeInTheDocument();
+    expect(screen.getByText(formatInt(facts.projects.dalist.tests.total, 'en'))).toBeInTheDocument();
+    expect(screen.getByText('Notes encrypted at rest')).toBeInTheDocument();
+    expect(screen.getByText('Google Play')).toBeInTheDocument();
   });
 
   it('renders all dstash metrics', () => {
     renderProjectDetail('dstash');
-    expect(screen.getByText('2.114')).toBeInTheDocument();
+    expect(screen.getByText(formatInt(facts.projects.dstash.tests.total, 'en'))).toBeInTheDocument();
     expect(screen.getByText('Signed URLs + API Keys')).toBeInTheDocument();
+    expect(screen.getByText('Full dashboard')).toBeInTheDocument();
   });
 
   it('clicking back link tracks project:back event', async () => {
@@ -123,10 +136,10 @@ describe('ProjectDetail', () => {
     const githubLink = screen
       .getAllByRole('link')
       .find((l) => l.getAttribute('href')?.includes('github.com'));
-    if (githubLink) {
-      await user.click(githubLink);
-      expect(trackEvent).toHaveBeenCalledWith('project:github', { slug: 'dtpf' });
-    }
+    expect(githubLink).toBeDefined();
+    expect(githubLink!.getAttribute('href')).toBe('https://github.com/dtpf-apps/dtpf-web');
+    await user.click(githubLink!);
+    expect(trackEvent).toHaveBeenCalledWith('project:github', { slug: 'dtpf' });
   });
 
   it('project without githubUrl does not show GitHub link', () => {

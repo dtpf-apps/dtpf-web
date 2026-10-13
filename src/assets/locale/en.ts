@@ -7,39 +7,42 @@ export const en = {
 
   // Hero
   hero_name: 'David T.\nPizarro Frick',
-  hero_tagline_1: 'I build web products that work,',
-  hero_tagline_2: 'from idea to production',
+  hero_tagline_1: 'I build and run web products: from idea to production,',
+  hero_tagline_2: 'and from production to the people who use them',
   hero_proof_apps: 'apps in production',
-  hero_proof_saas: 'years in enterprise SaaS',
-  hero_proof_tests: 'tests',
+  hero_proof_public: 'public',
+  hero_proof_tests: 'automated tests',
+  hero_proof_saas: 'years in B2B SaaS',
   hero_cta_projects: "See what I've built",
   hero_cta_contact: "Let's talk",
+  availability: 'Open to offers · remote or hybrid from Mallorca',
 
   // Home: Projects section
   home_projects_label: 'Projects',
   home_projects_heading: 'Deployed, monitored, maintained',
-  home_projects_desc: 'Each of these is deployed, with real users, CI/CD, and monitoring.',
+  home_projects_desc: 'Each of these is deployed, with real users, CI/CD and monitoring.',
   home_projects_case_study: 'Case study',
   home_projects_visit: 'Visit',
   // Home: Manifesto
   manifesto_line1: "I don't collect side projects.",
   manifesto_line2: 'I ship them to production.',
   manifesto_body:
-    'Every app I build has its own CI/CD, Grafana monitoring, and automated deploys. I use AI as a force multiplier throughout development — not as a shortcut, but as part of a rigorous engineering process.',
+    'Every app I build has its own CI/CD, a staging environment before production, Grafana monitoring and automated deploys. I use AI as part of the engineering process — governed by tests, review and gates — not as a shortcut.',
 
   // Home: Stack
   home_stack_label: 'Stack',
   home_stack_heading: 'Daily tools',
-  home_stack_desc: 'What I use to build, deploy, and maintain.',
+  home_stack_desc: 'What I use to build, deploy and maintain.',
 
   // Home: CTA
-  home_cta_title: 'Looking for new opportunities',
-  home_cta_desc: "If you need a developer who ships products from idea to production, let's talk.",
+  home_cta_title: 'Open to new opportunities',
+  home_cta_desc:
+    "If you need someone who takes products from idea to production and keeps them running, let's talk.",
   home_cta_button: 'Get in touch',
 
   // Projects page
   projects_title: 'Projects',
-  projects_desc: '5 applications deployed and maintained in production.',
+  projects_desc: 'A selection of the applications I build and keep in production.',
   projects_case_study: 'Case study',
   projects_visit: 'Visit',
   projects_badge_production: 'Production',
@@ -58,31 +61,32 @@ export const en = {
   // About
   about_title: 'About',
   about_bio_p1:
-    "I'm a software developer at Hub4Retail, a SaaS platform for the fashion retail industry with clients like Lacoste, Camper, and Ecoalf. I lead the frontend with React and TypeScript.",
+    "I'm a full-stack engineer at Storaia, a fashion-tech SaaS for the European fashion trade. I work across the whole product, from the backend to the UI, with Next.js, NestJS and TypeScript.",
   about_bio_p2:
-    "Outside of work, I build and maintain 5 production apps — from a multi-tenant auth system to a music streaming platform. These aren't tutorials or exercises: they have real users, CI/CD, monitoring, and automated deploys.",
+    "Outside work I build and run {{apps}} apps of my own in production ({{publicApps}} public) — from a multi-tenant auth system to an AI agent platform — on infrastructure I also run myself. These aren't exercises: they have real users, CI/CD, staging, monitoring and automated deploys.",
   about_bio_p3:
-    'What motivates me most is taking an idea from zero to a working product. I use AI tools like Claude and Cursor as a natural part of my workflow — at the same level as Git or Docker.',
-  about_role: 'Software Developer',
+    'What drives me is taking an idea from zero to a working product, and keeping it working. I use AI — Claude Code day to day, and self-hosted models on my own GPUs — as part of the engineering process, under the same tests and gates as the rest of the code.',
+  about_role: 'Senior Full-Stack Engineer',
   about_location: 'Mallorca, Spain',
   about_experience: 'Experience',
   about_tools: 'Tools',
   about_tools_frontend: 'Frontend',
   about_tools_backend: 'Backend',
-  about_tools_devops: 'DevOps',
-  about_tools_ai: 'AI & Tools',
+  about_tools_platform: 'Platform & DevOps',
+  about_tools_ai: 'AI & inference',
+  about_tools_quality: 'Quality',
 
   // Experience
-  exp_hub4retail_role: 'Frontend Developer',
-  exp_hub4retail_company: 'Hub4Retail',
-  exp_hub4retail_period: 'Jul 2023 — Present',
-  exp_hub4retail_desc:
-    'SaaS platform for fashion retail. 20+ enterprise clients including Lacoste, Camper, Ecoalf. React + TypeScript + testing.',
-  exp_palmira_role: 'Full Stack Developer',
+  exp_storaia_role: 'Full-Stack Engineer',
+  exp_storaia_company: 'Storaia',
+  exp_storaia_period: 'Jul 2023 — Present',
+  exp_storaia_desc:
+    'Storaia is a fashion-tech SaaS for the European fashion trade: one platform for catalogue, orders, pricing and sell-out data, used by brands, multi-brand retailers and sales agents, and connected to 40+ systems (e-commerce, ERP, POS). Next.js + NestJS + TypeScript, tested with Jest.',
+  exp_palmira_role: 'Full-Stack Developer',
   exp_palmira_company: 'Palmira',
   exp_palmira_period: 'Jun 2021 — Jun 2023',
-  exp_palmira_desc: 'Mobile and web apps with React Native, Node.js, and MongoDB.',
-  exp_assembler_role: 'Master Full Stack Development',
+  exp_palmira_desc: 'Mobile and web apps with React Native, Node.js and MongoDB.',
+  exp_assembler_role: 'Master in Full-Stack Development',
   exp_assembler_company: 'Assembler Institute of Technology',
   exp_assembler_period: 'Oct 2022 — May 2023',
   exp_assembler_desc: '1200+ hours, 30+ projects. MERN stack, agile methodologies.',
@@ -115,57 +119,57 @@ export const en = {
   theme_toggle: 'Toggle theme',
   lang_toggle: 'Toggle language',
 
-  // Projects data
+  // Projects data — figures arrive as interpolation values from config/facts.ts
   project_dauth_name: 'dauth',
-  project_dauth_tagline: 'Multi-tenant passwordless auth. Magic link, passkey, OAuth.',
+  project_dauth_tagline: 'Multi-tenant passwordless auth. Magic link, passkeys, authorization code flow.',
   project_dauth_tagline_long:
     'A passwordless auth system that serves as infrastructure for all my applications.',
   project_dauth_desc:
-    'Complete auth system providing passwordless login to 4 apps. Authorization code flow, license management, and subscriptions. 1,702 tests, full CI/CD.',
+    'Complete auth system providing passwordless login to {{tenants}} apps. Authorization code flow, license management and subscriptions. {{tests}} tests, full CI/CD.',
   project_dauth_featured:
-    'Multi-tenant passwordless auth. Magic link, passkey, OAuth. I use it as infrastructure for my other apps — 4 tenants connected.',
+    'Multi-tenant passwordless auth. Magic link, passkeys, authorization code flow. It is the login infrastructure for my other apps — {{tenants}} tenants connected.',
   project_dauth_problem:
-    'Every app I built needed its own login system. I kept repeating the same auth logic, token management, and email flows. I wanted a centralized solution I could reuse.',
+    'Every app I built needed its own login system. I kept repeating the same auth logic, token management and email flows. I wanted a centralized solution I could reuse.',
   project_dauth_solution:
-    'dauth is an authentication-as-a-service (AuthaaS) providing passwordless login to any app. Supports magic link and passkey (WebAuthn). Each connected app gets its own tenant with independent config and authorization code flow.',
+    'dauth is authentication-as-a-service (AuthaaS): passwordless login for any app, with magic link and passkeys (WebAuthn). Each connected app gets its own tenant with independent config and authorization code flow.',
   project_dauth_result:
-    'Currently managing auth for 4 production apps. 1,702 automated tests (636 backend, 740 frontend, 253 npm packages, 73 E2E). Magic link with browser-binding and WebAuthn passkeys. Full CI/CD with GitHub Actions. Centralized monitoring with Grafana + Loki.',
+    'Today it handles auth for {{tenants}} production apps. {{tests}} automated tests ({{backend}} backend, {{frontend}} frontend, {{packages}} npm packages, {{e2e}} E2E). Magic link with browser-binding and WebAuthn passkeys. Full CI/CD with GitHub Actions. Centralized monitoring with Grafana + Loki.',
   project_dauth_url: 'dauth.ovh',
 
   project_dstash_name: 'dstash',
-  project_dstash_tagline: 'Media storage platform with secure REST API, admin dashboard, and signed URLs.',
+  project_dstash_tagline: 'Media storage platform with secure REST API, admin dashboard and signed URLs.',
   project_dstash_desc:
-    'Media storage with folder organization, drag-and-drop, REST API with signed URLs and opaque API keys. Protected mode, thumbnails, subscriptions. Full admin dashboard. 2,114 tests.',
+    'Media storage with folder organization, drag-and-drop, REST API with signed URLs and opaque API keys. Protected mode, thumbnails, subscriptions. Full admin dashboard. {{tests}} tests.',
   project_dstash_problem:
-    'I needed to store and serve files (images, documents, media) for multiple apps, with access control and without depending on external services like S3.',
+    'I needed to store and serve files (images, documents, media) for several apps, with access control and without depending on external services like S3.',
   project_dstash_solution:
-    'dstash is a self-hosted media storage platform. Supports drag-and-drop upload, folder organization, preview, and REST API for external integration. Security with signed URLs (HMAC-SHA256), opaque API keys, Zod validation, rate limiting, and audit logging.',
+    'dstash is a self-hosted media storage platform. Supports drag-and-drop upload, folder organization, preview and a REST API for external integration. Security with signed URLs (HMAC-SHA256), opaque API keys, Zod validation, rate limiting and audit logging.',
   project_dstash_result:
-    'In production serving media for multiple applications. 2,114 automated tests (841 backend, 1,166 frontend, 107 E2E). Protected mode with PIN, auto-generated WebP thumbnails, subscription system. Full admin dashboard. CI/CD with GitHub Actions.',
+    'In production serving media for several applications. {{tests}} automated tests ({{backend}} backend, {{frontend}} frontend, {{e2e}} E2E). Protected mode with PIN, auto-generated WebP thumbnails, subscription system. Full admin dashboard. CI/CD with GitHub Actions.',
   project_dstash_url: 'dstash.dtpf.es',
 
   project_dalist_name: 'dalist',
-  project_dalist_tagline: 'Collaborative notes app with checklists, real-time shared notes, and PWA.',
+  project_dalist_tagline: 'Collaborative notes app with checklists, real-time shared notes and PWA.',
   project_dalist_desc:
-    'Notes and checklists app with real-time shared notes, version history, 19 colors, labels, notes encrypted at rest, and notifications. Installable PWA. 1,621 tests.',
+    'Notes and checklists app with real-time shared notes, version history, 19 colors, labels, notes encrypted at rest and notifications. Installable PWA and Google Play app. {{tests}} tests.',
   project_dalist_problem:
-    'I needed a central place to organize notes and checklists with the ability to share them — without the complexity of Notion or the limitations of Google Keep.',
+    'I needed a central place to organize notes and checklists and share them — without the complexity of Notion or the limitations of Google Keep.',
   project_dalist_solution:
-    'dalist is a notes and checklists app with real-time collaboration. Shared notes with active presence via Socket.io, version history with restore, checklists with dev variant (commit types), 19 colors, labels, AES-256-GCM encryption of notes at rest, email and in-app notifications, and trash with auto-deletion after 7 days.',
+    'dalist is a notes and checklists app with real-time collaboration. Shared notes with active presence via Socket.io, version history with restore, checklists with a dev variant (commit types), 19 colors, labels, AES-256-GCM encryption of notes at rest, email and in-app notifications, and a trash with auto-deletion after 7 days.',
   project_dalist_result:
-    'In production as an installable PWA. 1,621 automated tests (349 backend, 1,227 frontend, 45 E2E). Real-time collaboration with Socket.io, version history, email notifications. Frontend with Tailwind CSS v4. Auth delegated to dauth. CI/CD with GitHub Actions.',
+    'In production as an installable PWA and on Google Play. {{tests}} automated tests ({{backend}} backend, {{frontend}} frontend, {{e2e}} E2E). Real-time collaboration with Socket.io, version history, email notifications. Frontend with Tailwind CSS v4. Auth delegated to dauth. CI/CD with GitHub Actions.',
   project_dalist_url: 'dalist.dtpf.es',
 
   project_portfolio_name: 'dtpf.es',
-  project_portfolio_tagline: 'Personal portfolio.',
+  project_portfolio_tagline: 'Personal portfolio, open source.',
   project_portfolio_desc:
-    'This portfolio. Space Grotesk + Tailwind CSS v4 + Framer Motion. Dark mode, i18n ES/EN, grain texture.',
+    'This portfolio. React 19 + Tailwind CSS v4 + Framer Motion, ES/EN i18n, PWA with silent updates, {{tests}} tests. Open source on GitHub, deployed with Gitea Actions.',
   project_portfolio_url: 'dtpf.es',
 
   project_audity_name: 'Audity',
-  project_audity_tagline: 'Spotify-like music streaming with full player, playlists, and search.',
+  project_audity_tagline: 'Spotify-like music streaming with full player, playlists and search.',
   project_audity_desc:
-    "Spotify-like music streaming. Full player, playlists, search, CMS. Collaborative master's final project, deployed and maintained.",
+    "Spotify-like music streaming. Full player, playlists, search, CMS. Collaborative master's final project (2023), deployed and maintained since. {{tests}} tests.",
   project_audity_url: 'audity.dtpf.es',
 
   cookie_text: 'We use analytics cookies to improve your experience. You can accept or decline their use.',
@@ -198,4 +202,9 @@ export const en = {
   admin: 'Admin',
   realtime: 'Real-time',
   encryption: 'Encryption',
+  store: 'Distribution',
+
+  // Metric values
+  metric_admin_full: 'Full dashboard',
+  metric_encryption_at_rest: 'Notes encrypted at rest',
 };

@@ -1,6 +1,7 @@
 import { useTranslation } from 'react-i18next';
 import { useParams, Link, Navigate } from 'react-router';
 import { projects } from 'config/projects';
+import { formatInt, projectVars } from 'config/facts';
 import { paths } from 'router/paths';
 import { motion } from 'framer-motion';
 import { ArrowLeft, ExternalLink } from 'lucide-react';
@@ -8,10 +9,12 @@ import { trackEvent } from 'utils/analytics';
 
 export default function ProjectDetail() {
   const { slug } = useParams<{ slug: string }>();
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
   const project = projects.find((p) => p.slug === slug);
 
   if (!project) return <Navigate to={paths.projects} replace />;
+
+  const vars = projectVars(project.slug, i18n.language);
 
   return (
     <>
@@ -65,19 +68,22 @@ export default function ProjectDetail() {
         {project.problemKey && (
           <div className="mt-9">
             <p className="mb-4 text-base leading-[1.85] text-text-secondary">
-              <strong className="text-text-primary">{t('detail_problem')}</strong> {t(project.problemKey)}
+              <strong className="text-text-primary">{t('detail_problem')}</strong>{' '}
+              {t(project.problemKey, vars)}
             </p>
             <p className="mb-4 text-base leading-[1.85] text-text-secondary">
-              <strong className="text-text-primary">{t('detail_solution')}</strong> {t(project.solutionKey!)}
+              <strong className="text-text-primary">{t('detail_solution')}</strong>{' '}
+              {t(project.solutionKey!, vars)}
             </p>
             <p className="mb-4 text-base leading-[1.85] text-text-secondary">
-              <strong className="text-text-primary">{t('detail_result')}</strong> {t(project.resultKey!)}
+              <strong className="text-text-primary">{t('detail_result')}</strong>{' '}
+              {t(project.resultKey!, vars)}
             </p>
           </div>
         )}
 
         {!project.problemKey && (
-          <p className="mt-9 text-base leading-[1.85] text-text-secondary">{t(project.descKey)}</p>
+          <p className="mt-9 text-base leading-[1.85] text-text-secondary">{t(project.descKey, vars)}</p>
         )}
 
         <hr className="mt-9 border-border" />
@@ -111,7 +117,13 @@ export default function ProjectDetail() {
                   className="flex justify-between border-b border-border py-2.5 text-sm last:border-b-0"
                 >
                   <span className="text-text-secondary">{t(m.labelKey)}</span>
-                  <span className="font-semibold text-text-primary">{m.value}</span>
+                  <span className="font-semibold text-text-primary">
+                    {m.valueKey
+                      ? t(m.valueKey)
+                      : typeof m.value === 'number'
+                        ? formatInt(m.value, i18n.language)
+                        : m.value}
+                  </span>
                 </div>
               ))}
             </div>

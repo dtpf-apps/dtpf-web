@@ -1,6 +1,7 @@
 import { useTranslation } from 'react-i18next';
 import { Link } from 'react-router';
 import { projects } from 'config/projects';
+import { projectVars } from 'config/facts';
 import { projectDetailPath } from 'router/paths';
 import { motion } from 'framer-motion';
 import { ArrowRight, ExternalLink } from 'lucide-react';
@@ -8,7 +9,7 @@ import { trackEvent } from 'utils/analytics';
 import { stagger, fadeUp } from 'utils/animations';
 
 export default function Projects() {
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
 
   return (
     <>
@@ -49,7 +50,7 @@ export default function Projects() {
               </div>
               <h3 className="mb-1.5 font-heading text-[22px] font-bold tracking-tight">{t(p.nameKey)}</h3>
               <p className="mb-3.5 max-w-[620px] text-sm leading-relaxed text-text-secondary">
-                {t(p.descKey)}
+                {t(p.descKey, projectVars(p.slug, i18n.language))}
               </p>
               <div className="flex flex-wrap gap-1.5">
                 {p.stack.map((s) => (

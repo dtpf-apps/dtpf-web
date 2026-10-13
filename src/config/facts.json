@@ -1,0 +1,104 @@
+{
+  "apps": {
+    "production": 11,
+    "public": 8
+  },
+  "dauthTenants": 6,
+  "generatedAt": "2026-10-13",
+  "projects": {
+    "audity": {
+      "ci": "GitHub Actions",
+      "tests": {
+        "backend": 251,
+        "frontend": 291,
+        "total": 542
+      },
+      "versions": {
+        "express": 5,
+        "mongodb": 8,
+        "node": 24,
+        "react": 19,
+        "typescript": 7,
+        "vite": 8
+      }
+    },
+    "dalist": {
+      "ci": "GitHub Actions",
+      "tests": {
+        "backend": 2519,
+        "e2e": 120,
+        "frontend": 2463,
+        "total": 5102
+      },
+      "versions": {
+        "express": 5,
+        "mongodb": 8,
+        "node": 24,
+        "react": 19,
+        "tailwind": 4,
+        "typescript": 7,
+        "vite": 8
+      }
+    },
+    "dauth": {
+      "ci": "GitHub Actions",
+      "tests": {
+        "backend": 1258,
+        "e2e": 289,
+        "frontend": 1249,
+        "packages": 374,
+        "total": 3170
+      },
+      "versions": {
+        "express": 5,
+        "mongodb": 8,
+        "node": 24,
+        "react": 19,
+        "tailwind": 4,
+        "typescript": 6,
+        "vite": 8
+      }
+    },
+    "dstash": {
+      "ci": "GitHub Actions",
+      "tests": {
+        "backend": 1238,
+        "e2e": 220,
+        "frontend": 2976,
+        "total": 4434
+      },
+      "versions": {
+        "express": 5,
+        "mongodb": 8,
+        "node": 24,
+        "react": 19,
+        "tailwind": 4,
+        "typescript": 7,
+        "vite": 8
+      }
+    },
+    "dtpf": {
+      "ci": "Gitea Actions",
+      "tests": {
+        "backend": 82,
+        "e2e": 16,
+        "frontend": 225,
+        "total": 323
+      },
+      "versions": {
+        "express": 5,
+        "mongodb": 8,
+        "node": 24,
+        "react": 19,
+        "tailwind": 4,
+        "typescript": 7,
+        "vite": 8
+      }
+    }
+  },
+  "saasSince": "2023-07-01",
+  "tests": {
+    "total": 87021
+  },
+  "testsMeasuredAt": "2026-10-02T22:44:20.697Z"
+}
