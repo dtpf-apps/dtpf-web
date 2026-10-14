@@ -12,4 +12,14 @@ describe('PrivacyPolicy', () => {
     renderWithProviders(<PrivacyPolicy />);
     expect(screen.getByText(/RGPD/)).toBeInTheDocument();
   });
+
+  it('declares the cookieless analytics instead of asking for consent', () => {
+    renderWithProviders(<PrivacyPolicy />);
+    const analytics = screen.getByRole('heading', { level: 2, name: /Analítica/ });
+    const section = analytics.nextElementSibling?.textContent ?? '';
+    expect(section).toMatch(/Umami/);
+    expect(section).toMatch(/sin cookies/i);
+    expect(section).toMatch(/no se almacena tu dirección IP/i);
+    expect(screen.queryByText(/si aceptas las cookies/i)).not.toBeInTheDocument();
+  });
 });

@@ -257,16 +257,13 @@ export const en = {
   footer_site_label: 'This site',
   footer_site_tests: '{{tests}} tests',
   footer_site_source: 'source on GitHub',
-
-  cookie_text: 'We use analytics cookies to improve your experience. You can accept or decline their use.',
-  cookie_accept: 'Accept',
-  cookie_necessary_only: 'Necessary only',
+  footer_analytics: 'Cookie-free analytics with Umami',
+  footer_privacy: 'privacy policy',
 
   // Accessibility
   skip_to_content: 'Skip to main content',
   close_menu: 'Close menu',
   nav_mobile_menu: 'Navigation menu',
-  cookie_banner_title: 'Cookie settings',
   required: 'required',
   contact_sending: 'Sending...',
   contact_timeout: 'Request timed out. Please try again.',

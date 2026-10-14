@@ -263,16 +263,13 @@ export const es = {
   footer_site_label: 'Este sitio',
   footer_site_tests: '{{tests}} tests',
   footer_site_source: 'código en GitHub',
-
-  cookie_text: 'Utilizamos cookies analíticas para mejorar tu experiencia. Puedes aceptar o rechazar su uso.',
-  cookie_accept: 'Aceptar',
-  cookie_necessary_only: 'Solo necesarias',
+  footer_analytics: 'Analítica sin cookies con Umami',
+  footer_privacy: 'política de privacidad',
 
   // Accessibility
   skip_to_content: 'Ir al contenido principal',
   close_menu: 'Cerrar menú',
   nav_mobile_menu: 'Menú de navegación',
-  cookie_banner_title: 'Configuración de cookies',
   required: 'obligatorio',
   contact_sending: 'Enviando...',
   contact_timeout: 'La solicitud ha tardado demasiado. Inténtalo de nuevo.',

@@ -79,4 +79,19 @@ describe('Footer', () => {
     await user.click(link!);
     expect(trackEvent).toHaveBeenCalledWith('footer:site-source');
   });
+
+  it('tells the visitor the analytics is cookieless and links to the privacy policy', async () => {
+    const user = userEvent.setup();
+    renderWithProviders(<Footer />);
+    expect(screen.getByText(/Cookie-free analytics with Umami/)).toBeInTheDocument();
+    const link = screen.getByText('privacy policy');
+    expect(link).toHaveAttribute('href', '/privacy-policy');
+    await user.click(link);
+    expect(trackEvent).toHaveBeenCalledWith('footer:privacy');
+  });
+
+  it('keeps the privacy link under the English prefix', () => {
+    renderWithProviders(<Footer />, { route: '/en' });
+    expect(screen.getByText('privacy policy')).toHaveAttribute('href', '/en/privacy-policy');
+  });
 });

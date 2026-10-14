@@ -1,7 +1,10 @@
 import {
   ageInDays,
   facts,
+  formatDate,
+  formatDecimal,
   formatInt,
+  platformVars,
   projectVars,
   roundDownToTen,
   roundDownToThousand,
@@ -49,6 +52,52 @@ describe('facts.json', () => {
   it('keeps the site total at or above the sum of the project totals', () => {
     const sum = Object.values(facts.projects).reduce((acc, p) => acc + p.tests.total, 0);
     expect(facts.tests.total).toBeGreaterThanOrEqual(sum);
+  });
+
+  it('measures the platform, with no figure left at the zero an unreachable exporter would leave', () => {
+    const p = facts.platform;
+    expect(p.nodes).toBeGreaterThan(0);
+    expect(p.guests.lxc + p.guests.vm).toBeGreaterThan(p.nodes);
+    expect(p.replicationJobs).toBeGreaterThan(0);
+    expect(p.guestsWithoutBackup).toBeGreaterThanOrEqual(0);
+    expect(p.backup.datastores).toBeGreaterThan(0);
+    expect(p.backup.usedBytes).toBeGreaterThan(1e9);
+    expect(p.monitoring.alertRules).toBeGreaterThan(0);
+    expect(p.monitoring.probes).toBeLessThanOrEqual(p.monitoring.targets);
+    expect(p.monitoring.jobs).toBeLessThanOrEqual(p.monitoring.targets);
+    expect(p.ci.workflows).toBeGreaterThanOrEqual(p.ci.repos);
+    expect(p.ci.forges).toBe(2);
+  });
+});
+
+describe('formatDecimal', () => {
+  it('uses the comma in Spanish and the point in English', () => {
+    expect(formatDecimal(2.787, 'es')).toBe('2,8');
+    expect(formatDecimal(2.787, 'en')).toBe('2.8');
+    expect(formatDecimal(2, 'en', 2)).toBe('2.00');
+  });
+});
+
+describe('formatDate', () => {
+  it('writes the long date in the language of the UI, on the day the ISO string names', () => {
+    expect(formatDate('2026-10-14', 'es')).toBe('14 de octubre de 2026');
+    expect(formatDate('2026-10-14', 'en')).toBe('14 October 2026');
+    expect(formatDate('2026-01-01', 'en')).toBe('1 January 2026');
+  });
+});
+
+describe('platformVars', () => {
+  it('formats every platform figure for the language and the backups in terabytes to one decimal', () => {
+    const p = facts.platform;
+    const es = platformVars('es');
+    expect(es.guests).toBe(formatInt(p.guests.lxc + p.guests.vm, 'es'));
+    expect(es.backupTb).toMatch(/^\d+,\d$/);
+    expect(parseFloat(es.backupTb.replace(',', '.')) * 1e12).toBeCloseTo(p.backup.usedBytes, -11);
+    expect(es.measuredAt).toBe(formatDate(facts.generatedAt, 'es'));
+    expect(platformVars('en').backupTb).toMatch(/^\d+\.\d$/);
+    for (const [key, value] of Object.entries(es)) {
+      expect(value, key).not.toMatch(/undefined|NaN|\{\{/);
+    }
   });
 });
 

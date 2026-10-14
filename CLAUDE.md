@@ -23,14 +23,14 @@ pnpm test:coverage    # Run tests with v8 coverage report (HTML in coverage/)
 
 ### Testing
 
-Vitest 5 with jsdom environment, @testing-library/react, and jest-dom matchers. **405 tests** across 43 test files (one, the `facts.json` staleness check, runs only when `CI` is set). `test/postbuild/*` imports the build scripts and `test/styles/fonts.test.ts` reads `index.html` and the CSS from disk, so the suite runs from the package root (as `pnpm test` does). Coverage thresholds: 95% (statements, branches, functions, lines) — `pnpm test:coverage` currently FAILS them (72.9% stmts overall; `useSWUpdate.ts` and `lazyWithRetry.ts` are largely uncovered). CI runs `pnpm test` (no coverage gate) before deploy.
+Vitest 5 with jsdom environment, @testing-library/react, and jest-dom matchers. **394 tests** across 41 test files (one, the `facts.json` staleness check, runs only when `CI` is set). `test/postbuild/*` imports the build scripts and `test/styles/fonts.test.ts` reads `index.html` and the CSS from disk, so the suite runs from the package root (as `pnpm test` does). Coverage thresholds: 95% (statements, branches, functions, lines) — `pnpm test:coverage` currently FAILS them (72.9% stmts overall; `useSWUpdate.ts` and `lazyWithRetry.ts` are largely uncovered). CI runs `pnpm test` (no coverage gate) before deploy.
 
 ```
 test/
 ├── setup.ts                          # IntersectionObserver + matchMedia mocks; switches i18n to `en` for the jsdom renders
 ├── helpers/renderWithProviders.tsx    # MemoryRouter + ThemeProvider + i18n wrapper
 ├── config/
-│   ├── facts.test.ts                 # 19 tests — facts.json consistency, 120-day staleness (CI only), formatting helpers, MCP count
+│   ├── facts.test.ts                 # 23 tests — facts.json consistency, 120-day staleness (CI only), platform figures, formatting helpers, MCP count
 │   ├── projects.test.ts              # 18 tests — order, featured four, status vs. liveUrl, no undefined version in a tag
 │   └── site.test.ts                  # 10 tests — canonical/OG path helpers, JSON-LD builders and `<` escaping
 ├── contexts/theme.test.tsx           # 11 tests — ThemeProvider + useTheme
@@ -50,7 +50,6 @@ test/
 │   └── pdf.test.ts                   # 3 tests — CV routes, file names, size floor
 ├── utils/
 │   ├── analytics.test.ts             # 13 tests — Umami analytics init/tracking
-│   ├── cookieConsent.test.ts         # 12 tests — analytics is opt-in
 │   ├── errorTracking.test.ts         # 24 tests — error tracking init/reporting/batching
 │   ├── i18n.test.ts                  # 6 tests — key parity, accents, placeholders, <html lang> sync
 │   ├── isLocalhost.test.ts           # 6 tests
@@ -60,14 +59,13 @@ test/
 ├── hooks/
 │   └── useAnalyticsPageView.test.tsx # 6 tests
 ├── components/
-│   ├── CookieConsentBanner.test.tsx  # 6 tests
 │   ├── ErrorBoundary.test.tsx        # 8 tests — error boundary + fallback UI
 │   ├── Header.test.tsx               # 27 tests — nav, mobile menu, language toggle navigates to the other URL, trackEvent
-│   ├── Footer.test.tsx               # 9 tests — links, "This site" line from facts, trackEvent
+│   ├── Footer.test.tsx               # 11 tests — links, "This site" line from facts, cookieless-analytics line, trackEvent
 │   ├── ProjectGallery.test.tsx       # 11 tests — thumbnails, lightbox, keyboard, focus
 │   ├── Seo.test.tsx                  # 10 tests — title, description, canonical, hreflang, OG/Twitter, JSON-LD, noindex, esOnly
 │   ├── StagingBadge.test.tsx         # 3 tests — staging hostname badge
-│   └── printHidden.test.tsx          # 3 tests — header, footer and banners carry print:hidden
+│   └── printHidden.test.tsx          # 3 tests — header, footer and staging badge carry print:hidden
 └── pages/
     ├── Home.test.tsx                  # 21 tests — proof bar from facts, sections, CTAs, trackEvent
     ├── About.test.tsx                 # 15 tests — profile, experience, tools, CV button, trackEvent
@@ -78,7 +76,7 @@ test/
     ├── pageSeo.test.tsx               # 7 tests — every page renders <Seo> with its own title and description
     ├── headingOutline.test.tsx        # 8 tests — every page opens with its only h1 and never skips a heading level
     ├── NotFound.test.tsx              # 2 tests
-    └── PrivacyPolicy.test.tsx         # 2 tests
+    └── PrivacyPolicy.test.tsx         # 3 tests — heading, RGPD, cookieless analytics declared
 ```
 
 Key patterns: `renderWithProviders()` wraps components in router/theme/i18n, relative imports from test/ (path aliases only work inside src/), `document.querySelector` for inputs without label association.
@@ -141,7 +139,7 @@ A crawler or link-preview bot that does not run JavaScript sees none of that, so
 
 `src/config/projects.ts` — Typed `Project` interface with 8 projects in display order: dcompany, dauth, dinventory, dalist (the four with `featured: true`, which the Home bento grid renders in array order), then petitairam.com (`airam`), dstash, dwealth, audity. Each has i18n keys for name, tagline (optionally a longer `taglineLongKey` for the detail header), description, case study sections (problemKey, solutionKey, resultKey), stack array, metrics, and a `status` — `production` | `beta` | `client` | `private` — that drives the badge (`views/components/ProjectStatusBadge.tsx`) and whether a visit link is rendered at all: `liveUrl` is optional and absent for `private` apps (dwealth), `statusNoteKey` adds a one-line access note under the detail title (dcompany, dwealth), `storeUrl` renders the official Google Play badge (`public/badges/google-play-{es,en}.png`, served as supplied, never restyled) on dalist. An optional `media` array (`ProjectMedia`: `src` under `public/projects/<slug>/`, `altKey` in both locales, intrinsic `width`/`height`) feeds the "Screenshots" section of the detail page (`views/components/ProjectGallery.tsx`: thumbnail buttons + lightbox dialog with Esc/arrows/focus trap/focus return); no `media` means no section. Captures come from public pages or demo data only, never real user data, and are WebP outside the PWA precache glob. The portfolio itself is not a project card: the footer's "This site" line shows its stack and test count from `facts.projects.dtpf` and links to the public repo. Content rules: the AIRAM client is named only as the brand, never the person; dwealth has no public URL by design.
 
-**No figure is typed in source.** Stack versions, test counts, the dauth tenant count and the app census ("11 in production · 8 public") come from `src/config/facts.json`, generated by `scripts/utils/portfolio-facts.py` in the d-context workspace (ops-dashboard results + each repo's `package.json` + the public dauth `get-domain` endpoint with a negative control). `src/config/facts.ts` types it and formats numbers per language (`formatInt`: `87.021` in Spanish, `87,021` in English — deliberately not `Intl`, whose es-ES rule leaves four-digit numbers ungrouped). Locale strings carry `{{tests}}`, `{{backend}}`, `{{tenants}}`… and the pages pass `projectVars(slug, lang)`; the hero's "years in SaaS" is `yearsSince(facts.saasSince)`. `test/config/facts.test.ts` fails the CI build (the workflow sets `CI=true`) when `generatedAt` is older than 120 days — regenerate the file, commit, done.
+**No figure is typed in source.** Stack versions, test counts, the dauth tenant count and the app census ("11 in production · 8 public") come from `src/config/facts.json`, generated by `scripts/utils/portfolio-facts.py` in the d-context workspace (ops-dashboard results + each repo's `package.json` + the public dauth `get-domain` endpoint with a negative control). `src/config/facts.ts` types it and formats numbers per language (`formatInt`: `87.021` in Spanish, `87,021` in English — deliberately not `Intl`, whose es-ES rule leaves four-digit numbers ungrouped). Locale strings carry `{{tests}}`, `{{backend}}`, `{{tenants}}`… and the pages pass `projectVars(slug, lang)`; the hero's "years in SaaS" is `yearsSince(facts.saasSince)`. The platform page reads `facts.platform` (Proxmox nodes and guests, replication jobs, PBS datastores and bytes, Prometheus targets/probes/alert rules, CI workflow files — measured by the same script against Prometheus and the local checkouts) through `platformVars(lang)`, which also formats the backup usage in TB (`formatDecimal`) and the generation day as a long date (`formatDate`). `test/config/facts.test.ts` fails the CI build (the workflow sets `CI=true`) when `generatedAt` is older than 120 days — regenerate the file, commit, done.
 
 ### API
 
@@ -155,10 +153,9 @@ The contact form includes:
 - Time trap (`_t` timestamp) — rejects submissions faster than 3 seconds
 - Backend rate limits: 3/hour per IP, 1/24h per email, max 5 URLs in message
 
-### Analytics, Consent & Error Tracking
+### Analytics & Error Tracking
 
-- `src/utils/analytics.ts` — Umami (analytics.dtpf.es) with separate website IDs for dtpf.es and dev.dtpf.es. Script injected only after analytics consent (`data-auto-track` off). `useAnalyticsPageView` tracks SPA page views on route change plus one `perf:page-load` event.
-- `src/utils/cookieConsent.ts` + `views/components/CookieConsentBanner.tsx` — consent persisted in localStorage (`dtpf-cookie-consent`); accepting analytics initializes Umami.
+- `src/utils/analytics.ts` — Umami (analytics.dtpf.es) with separate website IDs for dtpf.es and dev.dtpf.es, injected on every visit from `App` (`data-auto-track` off). **No consent banner**: Umami sets no cookies and stores nothing in the browser, the IP is never stored (hashed with the user agent and a rotating salt), so the site declares it instead of asking — a footer line ("cookieless analytics with Umami · privacy policy") and the "Analítica web" section of `/privacy-policy`. Any change that makes the analytics identify people brings the consent question back. `useAnalyticsPageView` tracks SPA page views on route change plus one `perf:page-load` event.
 - `src/utils/errorTracking.ts` — `window` error/unhandledrejection listeners, dedup + batching, `POST /api/v1/client-errors`, flush on `beforeunload`. `src/ErrorBoundary.tsx` reports render errors and shows a fallback UI.
 - `views/components/StagingBadge.tsx` — fixed "Staging" pill when the hostname starts with `dev.`/`dev-` (`utils/isStaging.ts`).
 
@@ -207,7 +204,6 @@ src/
 │   ├── analytics.ts             # Umami init + trackPageView/trackEvent
 │   ├── animations.ts            # Shared Framer Motion variants (stagger, fadeUp, fadeIn)
 │   ├── chunkError.ts            # Chunk-load error detection
-│   ├── cookieConsent.ts         # Consent storage helpers (dtpf-cookie-consent)
 │   ├── errorTracking.ts         # Client error reporting (batched POST /client-errors)
 │   ├── i18n.ts                  # i18next config (language from the URL)
 │   ├── isLocalhost.ts           # Localhost detection helper
@@ -218,7 +214,6 @@ src/
 │   ├── layouts/PortfolioLayout.tsx  # Header + page transitions + footer; syncs i18n to the URL, saved-language redirect
 │   ├── components/
 │   │   ├── navigation/{Header,Footer}.tsx
-│   │   ├── CookieConsentBanner.tsx
 │   │   ├── ProjectGallery.tsx   # Screenshot thumbnails + lightbox dialog (Esc/arrows/focus trap/focus return)
 │   │   ├── ProjectStatusBadge.tsx # Production / Private beta / Client work / Private pill per project status
 │   │   ├── Seo.tsx              # Per-page head: title, description, canonical, hreflang, OG/Twitter, JSON-LD
@@ -228,7 +223,7 @@ src/
 ├── service-worker.ts            # Workbox service worker (injectManifest)
 ├── serviceWorkerRegistration.ts # SW registration
 ├── main.tsx                     # Entry point (removePrerendered, then createRoot; registers SW)
-└── App.tsx                      # ErrorBoundary > MotionConfig > ThemeProvider > RouterProvider + Toaster + CookieConsentBanner + StagingBadge
+└── App.tsx                      # ErrorBoundary > MotionConfig > ThemeProvider > RouterProvider + Toaster + StagingBadge; starts Umami
 ```
 
 ## Code Style

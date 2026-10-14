@@ -23,17 +23,27 @@ export default function PrivacyPolicy() {
           </p>
           <h2 className="font-heading text-xl font-bold text-text-primary">Responsable del tratamiento</h2>
           <p>David T. Pizarro Frick — davidpizarrofrick@gmail.com</p>
-          <h2 className="font-heading text-xl font-bold text-text-primary">Datos que recopilamos</h2>
+          <h2 className="font-heading text-xl font-bold text-text-primary">Formulario de contacto</h2>
           <p>
-            Solo recopilamos los datos que nos envías voluntariamente a través del formulario de contacto:
-            nombre, email y mensaje. Utilizamos Umami Analytics, una herramienta de analítica web respetuosa
-            con la privacidad, alojada en nuestros propios servidores. No se utilizan cookies de seguimiento
-            persistentes. Solo se recopilan datos anónimos de navegación si aceptas las cookies analíticas.
+            Los únicos datos personales que recopilamos son los que nos envías voluntariamente a través del
+            formulario de contacto: nombre, email y mensaje.
+          </p>
+          <h2 className="font-heading text-xl font-bold text-text-primary">Analítica web</h2>
+          <p>
+            Este sitio mide sus visitas con Umami, una herramienta de analítica de código abierto alojada en
+            nuestros propios servidores. Funciona sin cookies y sin guardar ningún identificador en tu
+            navegador; por eso no verás un aviso de cookies. No se almacena tu dirección IP: junto con el
+            navegador se convierte en un hash con una sal que rota de forma periódica, de modo que no es
+            posible identificarte y el hash solo sirve para contar visitantes durante ese periodo. Lo que
+            queda registrado es agregado: página visitada, procedencia (por ejemplo, un buscador o LinkedIn),
+            país, tipo de dispositivo, navegador e idioma. Ningún dato sale de nuestra infraestructura ni se
+            cede a terceros. Al no tratarse datos personales ni usarse cookies, no se solicita consentimiento.
           </p>
           <h2 className="font-heading text-xl font-bold text-text-primary">Finalidad</h2>
           <p>
-            Los datos recopilados se utilizan exclusivamente para responder a tu consulta. No se comparten con
-            terceros ni se utilizan con fines comerciales.
+            Los datos del formulario se utilizan exclusivamente para responder a tu consulta; los de la
+            analítica, para saber qué páginas se visitan y desde dónde llegan las visitas. Nada se comparte
+            con terceros ni se utiliza con fines comerciales.
           </p>
           <h2 className="font-heading text-xl font-bold text-text-primary">Derechos</h2>
           <p>
