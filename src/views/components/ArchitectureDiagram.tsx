@@ -153,8 +153,9 @@ export default function ArchitectureDiagram({ headingId, vars }: { headingId: st
 
           <motion.li variants={fadeUp}>
             <Arrow />
-            <div className="relative rounded-xl border border-border-hover p-3 pt-7 md:p-5 md:pt-8">
-              <p className="absolute -top-2.5 left-3 inline-flex items-center gap-1.5 bg-bg-primary px-2 font-mono text-[11px] font-semibold uppercase tracking-[1px] text-text-secondary">
+            {/* Below 360px the frame label would wrap over the border, so it sits inside as a plain line */}
+            <div className="relative rounded-xl border border-border-hover p-3 min-[360px]:pt-7 md:p-5 md:pt-8">
+              <p className="mb-2 inline-flex items-center gap-1.5 bg-bg-primary px-2 font-mono text-[11px] font-semibold uppercase tracking-[1px] text-text-secondary min-[360px]:absolute min-[360px]:-top-2.5 min-[360px]:left-3 min-[360px]:mb-0">
                 <Network size={12} aria-hidden="true" />
                 {t(clusterFrameKey, vars)}
               </p>
@@ -163,7 +164,11 @@ export default function ArchitectureDiagram({ headingId, vars }: { headingId: st
                 <motion.li variants={fadeUp}>
                   <p className={captionClass}>{t(firewall.captionKey)}</p>
                   <div className="relative">
-                    <ul role="list" className="grid grid-cols-2 gap-8 md:gap-20">
+                    {/* Two 90px boxes cannot hold the node text at 320px, so the pair stacks until 360px */}
+                    <ul
+                      role="list"
+                      className="grid grid-cols-1 gap-3 min-[360px]:grid-cols-2 min-[360px]:gap-8 md:gap-20"
+                    >
                       {firewall.nodes.map((n) => (
                         <li key={n.id}>
                           <NodeBox node={n} vars={vars} />
@@ -173,7 +178,7 @@ export default function ArchitectureDiagram({ headingId, vars }: { headingId: st
                     <span
                       aria-hidden="true"
                       data-connector="carp"
-                      className="pointer-events-none absolute left-1/2 top-1/2 h-0.5 w-8 -translate-x-1/2 -translate-y-1/2 bg-accent md:w-20"
+                      className="pointer-events-none absolute left-1/2 top-1/2 hidden h-0.5 w-8 -translate-x-1/2 -translate-y-1/2 bg-accent min-[360px]:block md:w-20"
                     >
                       {/* The pill is wider than the mobile gap, so below md the tier caption alone names CARP */}
                       <span className="absolute left-1/2 top-1/2 hidden -translate-x-1/2 -translate-y-1/2 rounded-full border border-accent bg-bg-primary px-2 py-0.5 font-mono text-[11px] font-semibold text-text-primary md:block">
