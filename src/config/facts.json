@@ -8,7 +8,7 @@
   "platform": {
     "backup": {
       "datastores": 3,
-      "usedBytes": 2787175407616
+      "usedBytes": 2788824113152
     },
     "ci": {
       "forges": 2,
@@ -159,10 +159,10 @@
     "dtpf": {
       "ci": "Gitea Actions",
       "tests": {
-        "backend": 82,
-        "e2e": 16,
-        "frontend": 225,
-        "total": 323
+        "backend": 69,
+        "e2e": 62,
+        "frontend": 488,
+        "total": 619
       },
       "versions": {
         "express": 5,
@@ -195,7 +195,7 @@
   },
   "saasSince": "2023-07-01",
   "tests": {
-    "total": 88478
+    "total": 88774
   },
-  "testsMeasuredAt": "2026-10-13T11:11:48.051Z"
+  "testsMeasuredAt": "2026-10-14T12:57:50.572Z"
 }
