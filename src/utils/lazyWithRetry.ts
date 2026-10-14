@@ -5,41 +5,64 @@ import { isChunkError } from 'utils/chunkError';
 
 const RETRY_KEY = 'chunk-retry';
 
+// sessionStorage throws where the visitor blocks site data. The flag is what stops a second
+// reload, so when it cannot be kept the error goes to the boundary, whose Reload button is the
+// same way out, instead of risking a reload loop.
+
+function hasRetried(): boolean {
+  try {
+    return sessionStorage.getItem(RETRY_KEY) !== null;
+  } catch {
+    return false;
+  }
+}
+
+/** Remembers the automatic reload across it; false when sessionStorage cannot keep it. */
+function markRetried(): boolean {
+  try {
+    sessionStorage.setItem(RETRY_KEY, '1');
+    return true;
+  } catch {
+    return false;
+  }
+}
+
+function clearRetried(): void {
+  try {
+    sessionStorage.removeItem(RETRY_KEY);
+  } catch {
+    // Nothing was kept.
+  }
+}
+
 export default function lazyWithRetry(importFn: () => Promise<{ default: ComponentType<object> }>) {
   return lazy(() =>
     importFn().catch((error: unknown) => {
-      const isChunk = error instanceof Error && isChunkError(error);
+      if (!(error instanceof Error) || !isChunkError(error)) throw error;
 
-      if (!isChunk) throw error;
-
-      const hasRetried = sessionStorage.getItem(RETRY_KEY);
+      const retried = hasRetried();
+      const reloading = !retried && markRetried();
 
       trackEvent('error:chunk-load', {
-        message: error instanceof Error ? error.message.slice(0, 100) : 'unknown',
-        retry: hasRetried ? 'second' : 'first',
+        message: error.message.slice(0, 100),
+        retry: reloading ? 'first' : retried ? 'second' : 'no-storage',
         path: window.location.pathname,
       });
+      reportError(error, 'unhandled-error');
 
-      if (error instanceof Error) {
-        reportError(error, 'unhandled-error');
-      }
-
-      if (!hasRetried) {
-        sessionStorage.setItem(RETRY_KEY, '1');
+      if (reloading) {
         window.location.reload();
         return new Promise(() => {});
       }
 
-      sessionStorage.removeItem(RETRY_KEY);
+      clearRetried();
       throw error;
     })
   );
 }
 
 export function checkChunkRecovery() {
-  const hadRetry = sessionStorage.getItem(RETRY_KEY);
-  if (hadRetry) {
-    sessionStorage.removeItem(RETRY_KEY);
-    trackEvent('error:chunk-load-recovered', { path: window.location.pathname });
-  }
+  if (!hasRetried()) return;
+  clearRetried();
+  trackEvent('error:chunk-load-recovered', { path: window.location.pathname });
 }

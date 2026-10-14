@@ -64,7 +64,7 @@ test/
 │   ├── focusTrap.test.tsx            # Tab/Shift+Tab wrap, inner moves left to the browser, focus on the container itself
 │   ├── i18n.test.ts                  # key parity, accents, placeholders, <html lang> sync
 │   ├── isStaging.test.ts
-│   ├── lazyWithRetry.test.tsx        # one reload per stale chunk (three browser wordings), then the error boundary
+│   ├── lazyWithRetry.test.tsx        # one reload per stale chunk (three browser wordings), then the error boundary; none without sessionStorage
 │   ├── removePrerendered.test.ts     # build-time head tags removed before React renders
 │   └── storage.test.ts               # a localStorage that throws never breaks the page
 ├── hooks/
@@ -99,7 +99,7 @@ Key patterns: `renderWithProviders()` wraps components in router/theme/i18n, rel
 
 ### Routing
 
-React Router v8 with `createBrowserRouter` and lazy-loaded routes via `lazyWithRetry()` + `Suspense`. Everything imports from `react-router` (v8 consolidated the `react-router-dom` surface into it); library mode only, no loaders or framework mode. `lazyWithRetry` (src/utils/lazyWithRetry.ts) wraps `React.lazy` and reloads the page once on chunk-load errors (stale deploy assets), reporting the error and tracking the retry. Routes defined in `src/router/router.tsx`, paths centralized in `src/router/paths.ts`.
+React Router v8 with `createBrowserRouter` and lazy-loaded routes via `lazyWithRetry()` + `Suspense`. Everything imports from `react-router` (v8 consolidated the `react-router-dom` surface into it); library mode only, no loaders or framework mode. `lazyWithRetry` (src/utils/lazyWithRetry.ts) wraps `React.lazy` and reloads the page once on chunk-load errors (stale deploy assets), reporting the error and tracking the retry. The "already reloaded" flag lives in sessionStorage; where the visitor blocks site data it cannot be kept, so the error goes to the boundary's Reload button instead of risking a reload loop, and `checkChunkRecovery` (App's mount effect, outside every boundary) never throws. Routes defined in `src/router/router.tsx`, paths centralized in `src/router/paths.ts`.
 
 The language lives in the URL: `/` is Spanish (canonical) and `/en/...` is English. `router.tsx` builds the same page tree twice (`pageTree('')` and `pageTree('/en')`) under one `PortfolioLayout`, each with its own `*` 404. `useRouteLang()` reads the language from the location; `langFromPath`/`stripLang`/`localizePath` in `paths.ts` convert paths; links go through `LocalizedLink`/`LocalizedNavLink`/`LocalizedNavigate` (`src/router/LocalizedLink.tsx`), which keep the prefix — `test/router/noRawRouterLinks.test.ts` fails any page or component importing `Link`/`NavLink`/`Navigate` from `react-router` directly.
 

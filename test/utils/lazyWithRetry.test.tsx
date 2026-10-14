@@ -27,6 +27,16 @@ class Catch extends Component<{ children: ReactNode }, { error: Error | null }> 
   }
 }
 
+/** sessionStorage as a browser with site data blocked exposes it: every call throws. */
+function blockSessionStorage() {
+  const denied = () => {
+    throw new DOMException('The operation is insecure.', 'SecurityError');
+  };
+  vi.spyOn(Storage.prototype, 'getItem').mockImplementation(denied);
+  vi.spyOn(Storage.prototype, 'setItem').mockImplementation(denied);
+  vi.spyOn(Storage.prototype, 'removeItem').mockImplementation(denied);
+}
+
 function renderLazy(importFn: () => Promise<never>) {
   const Page = lazyWithRetry(importFn);
   render(
@@ -96,6 +106,19 @@ describe('lazyWithRetry', () => {
     await vi.waitFor(() => expect(reload).toHaveBeenCalledTimes(1));
   });
 
+  // A visitor who blocks site data: sessionStorage throws, so the one reload cannot be remembered.
+  it('without sessionStorage, hands a stale chunk to the boundary instead of risking a reload loop', async () => {
+    blockSessionStorage();
+    renderLazy(() => Promise.reject(new Error(CHUNK_ERROR)));
+
+    expect(await screen.findByText(`caught: ${CHUNK_ERROR}`)).toBeInTheDocument();
+    expect(reload).not.toHaveBeenCalled();
+    expect(trackEvent).toHaveBeenCalledWith(
+      'error:chunk-load',
+      expect.objectContaining({ retry: 'no-storage' })
+    );
+  });
+
   it('passes any other error straight to the boundary, without reloading or tracking', async () => {
     renderLazy(() => Promise.reject(new Error('boom')));
 
@@ -109,6 +132,10 @@ describe('checkChunkRecovery', () => {
   beforeEach(() => {
     sessionStorage.clear();
     vi.clearAllMocks();
+  });
+
+  afterEach(() => {
+    vi.restoreAllMocks();
   });
 
   it('does nothing when no retry flag in sessionStorage', () => {
@@ -125,5 +152,11 @@ describe('checkChunkRecovery', () => {
     vi.clearAllMocks();
     checkChunkRecovery();
     expect(trackEvent).not.toHaveBeenCalled();
+  });
+
+  // It runs in App's mount effect, outside every error boundary: a throw there blanks the page.
+  it('never throws when sessionStorage does', () => {
+    blockSessionStorage();
+    expect(() => checkChunkRecovery()).not.toThrow();
   });
 });
