@@ -40,10 +40,13 @@ pnpm install
 | `pnpm build`           | Production build (`tsc` + `vite build` + the post-build pipeline in `scripts/postbuild/`)  |
 | `pnpm postbuild:check` | Verify `dist/` after a build: per-route head tags, OG images, sitemap (fails when missing) |
 | `pnpm preview`         | Preview production build locally                                                           |
-| `pnpm format`          | Format source and `scripts/**/*.mjs` with Prettier                                         |
+| `pnpm format`          | Format `src`, `test`, `scripts` and `vite.config.ts` with Prettier                         |
+| `pnpm format:check`    | Same files, check only                                                                     |
+| `pnpm lint`            | oxlint (`.oxlintrc.json`); warnings fail                                                   |
+| `pnpm typecheck`       | Type-check the tests and `vite.config.ts` along with `src`                                 |
 | `pnpm test`            | Run tests with Vitest                                                                      |
 | `pnpm test:watch`      | Run tests in watch mode                                                                    |
-| `pnpm test:coverage`   | Run tests with v8 coverage report                                                          |
+| `pnpm test:coverage`   | Run tests with v8 coverage; fails below 95% statements, branches, functions or lines       |
 
 ## Environment Variables
 
@@ -56,12 +59,15 @@ No env vars are needed for local development. No `VITE_*` variables are read by 
 ## Project Structure
 
 ```
+design/                              # Logo sources and the mockup the current design came from; not part of the
+│                                    #   build. generate-icons.mjs rewrites the favicons and PWA icons in public/
+│                                    #   (it needs `sharp`, which is not a dependency: `pnpm dlx` or a scratch install)
 scripts/postbuild/                   # Post-build pipeline (plain Node ESM, run by `pnpm build`): crawls each
 │                                    #   route in headless Chromium, writes dist/<route>/index.html with the head
 │                                    #   tags pre-rendered, dist/og/<lang>/<key>.png cards, dist/sitemap.xml and
 │                                    #   the two CV PDFs; check.mjs verifies dist/ afterwards
 src/
-├── api/utils/config.ts              # basePath + apiVersion + apiUrl() (auto-detects localhost)
+├── api/utils/config.ts              # apiUrl(): same-origin /api/v1 (Vite proxies /api to port 3998 in dev)
 ├── assets/fonts/                    # Self-hosted Inter, Space Grotesk, JetBrains Mono (static latin woff2 + OFL)
 ├── assets/locale/{es,en}.ts         # i18n translations (~315 keys each)
 ├── config/facts.json                # Measured figures (tests, versions, tenants) — generated, never hand-edited
@@ -86,11 +92,12 @@ src/
 │   ├── animations.ts                # Shared Framer Motion variants
 │   ├── chunkError.ts                # Chunk-load error detection
 │   ├── errorTracking.ts             # Client error reporting (batched)
+│   ├── focusTrap.ts                 # Keeps Tab inside a modal (mobile menu, gallery lightbox)
 │   ├── i18n.ts                      # i18next configuration
-│   ├── isLocalhost.ts               # Localhost detection helper
 │   ├── isStaging.ts                 # Staging hostname detection
 │   ├── lazyWithRetry.ts             # React.lazy with reload retry on chunk errors
-│   └── removePrerendered.ts         # Drops build-time head tags before React renders them itself
+│   ├── removePrerendered.ts         # Drops build-time head tags before React renders them itself
+│   └── storage.ts                   # localStorage keys and access that never throws
 ├── views/
 │   ├── layouts/PortfolioLayout.tsx   # Sticky header + AnimatePresence + footer
 │   ├── components/
@@ -98,11 +105,12 @@ src/
 │   │   ├── navigation/              # Header, Footer
 │   │   ├── ProjectGallery.tsx       # Screenshot thumbnails + accessible lightbox
 │   │   ├── ProjectStatusBadge.tsx   # Production / beta / client / private pill
+│   │   ├── SectionHeader.tsx        # Label + heading + intro that open a content section
 │   │   ├── Seo.tsx                  # Per-page title, description, canonical, hreflang, OG/Twitter, JSON-LD
 │   │   └── StagingBadge.tsx         # "Staging" pill on dev.* hostnames
 │   └── pages/                       # Home, Projects, ProjectDetail, Platform, About,
 │                                    # Contact, Cv, NotFound, PrivacyPolicy
-├── ErrorBoundary.tsx                # Top-level error boundary + fallback UI
+├── ErrorBoundary.tsx                # Error boundary + the router's errorElement, one fallback with Reload
 ├── service-worker.ts                # Workbox service worker (injectManifest)
 ├── serviceWorkerRegistration.ts     # SW registration
 ├── main.tsx                         # Entry point (registers SW)
@@ -141,7 +149,7 @@ Self-hosted Umami analytics (analytics.dtpf.es), loaded on every visit without a
 
 ## Testing
 
-451 tests across 45 files using Vitest 5 with jsdom, @testing-library/react, and jest-dom (one test, the `facts.json` staleness check, runs only when `CI` is set). The coverage thresholds in the Vitest config are 95%; `pnpm test:coverage` is below them today (the figure is tracked in `CLAUDE.md`) and CI does not gate on coverage, only on `pnpm test`, the build and `pnpm postbuild:check`.
+Vitest 5 with jsdom, @testing-library/react, and jest-dom (one test, the `facts.json` staleness check, runs only when `CI` is set). CI runs the suite with coverage, and it fails below 95% statements, branches, functions or lines.
 
 Every figure the site shows (test counts, framework versions, dauth tenants, the app census) lives in `src/config/facts.json`, which is generated by a script in the d-context workspace (`scripts/utils/portfolio-facts.py`) from the ops dashboard, each repo's `package.json` and the public dauth domain endpoint. One test only runs when `CI` is set and fails the build if that file is older than 120 days, so a stale figure is a red deploy, not a forgotten edit.
 
@@ -152,7 +160,7 @@ pnpm test:coverage
 
 ## Deploy
 
-Gitea Actions CI/CD on the self-hosted Gitea (`.gitea/workflows/deploy.yml`). A push runs tests, installs the Playwright Chromium headless shell (cached per version, never `--with-deps`), builds (staging builds get `VITE_APP_SUFFIX=DEV`; the build includes the pre-render and OG-card pipeline), runs `pnpm postbuild:check` on the result, and rsyncs `dist/` to the app server. The deploy target (`user@host`) and the failure-notification room are repository Actions variables (`APP_SERVER`, `CI_MATRIX_ROOM`), never source. GitHub receives a read-only push mirror of this repository.
+Gitea Actions CI/CD on the self-hosted Gitea (`.gitea/workflows/deploy.yml`). A push runs `format:check`, `lint`, `typecheck` and the tests with coverage thresholds, installs the Playwright Chromium headless shell (cached per version, never `--with-deps`), builds (staging builds get `VITE_APP_SUFFIX=DEV`; the build includes the pre-render and OG-card pipeline), runs `pnpm postbuild:check` on the result, and rsyncs `dist/` to the app server. The deploy target (`user@host`) and the failure-notification room are repository Actions variables (`APP_SERVER`, `CI_MATRIX_ROOM`), never source. GitHub receives a read-only push mirror of this repository.
 
 ```bash
 git push gitea main    # production (dtpf.es)
@@ -161,7 +169,7 @@ git push gitea dev     # staging (dev.dtpf.es)
 
 ## Code Style
 
-Prettier: 110 char width, single quotes, semicolons, trailing commas (es5), 2-space indent.
+Prettier: 110 char width, single quotes, semicolons, trailing commas (es5), 2-space indent. oxlint with React hooks, jsx-a11y and Vitest rules (`.oxlintrc.json`). Both run in CI.
 
 ## License
 

@@ -122,6 +122,22 @@ export const es = {
   contact_submit: 'Enviar mensaje',
   contact_success: 'Mensaje enviado. Te respondo pronto.',
   contact_error: 'Error al enviar. Inténtalo de nuevo.',
+  contact_error_invalid_email: 'Revisa el email: no parece una dirección válida.',
+  contact_error_name_too_long: 'Acorta el nombre: admite hasta {{nameMax}} caracteres.',
+  contact_error_message_required: 'Escribe un mensaje antes de enviarlo.',
+  contact_error_message_too_short: 'Alarga el mensaje: necesita al menos {{messageMin}} caracteres.',
+  contact_error_message_too_long: 'Acorta el mensaje: admite hasta {{messageMax}} caracteres.',
+  contact_error_too_many_links: 'Quita algunos enlaces: el mensaje admite {{links}} como máximo.',
+  contact_error_payload_too_large:
+    'El mensaje es demasiado grande para enviarlo. Acórtalo o escríbeme por email.',
+  contact_error_server_error:
+    'El servidor no ha podido guardar el mensaje. Inténtalo en unos minutos o escríbeme por email.',
+  contact_error_service_unavailable:
+    'El servicio no está disponible ahora mismo. Inténtalo en unos minutos o escríbeme por email.',
+  contact_error_rate_limited:
+    'Has enviado varios mensajes seguidos. Podrás enviar otro en {{wait}}, o escríbeme por email.',
+  contact_error_email_cooldown:
+    'Ya me llegó un mensaje desde este email en las últimas 24 horas. Podrás enviar otro en {{wait}}, o escríbeme por email.',
   contact_or: 'o directamente',
 
   // 404
@@ -285,6 +301,7 @@ export const es = {
 
   // Accessibility
   skip_to_content: 'Ir al contenido principal',
+  open_menu: 'Abrir menú',
   close_menu: 'Cerrar menú',
   nav_mobile_menu: 'Menú de navegación',
   required: 'obligatorio',
@@ -296,7 +313,6 @@ export const es = {
   error_boundary_title: 'Algo salió mal',
   error_boundary_description: 'Ha ocurrido un error inesperado. Por favor, inténtalo de nuevo.',
   error_boundary_reload: 'Recargar',
-  updating_app: 'Actualizando la aplicación...',
 
   // Metric labels
   tenants: 'Tenants activos',

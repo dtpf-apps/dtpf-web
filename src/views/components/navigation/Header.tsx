@@ -1,4 +1,4 @@
-import { memo, useCallback, useEffect, useRef, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { useLocation, useNavigate } from 'react-router';
 import { useTranslation } from 'react-i18next';
 import { useTheme } from 'contexts/theme/ThemeContext';
@@ -6,9 +6,15 @@ import { Moon, Sun, Menu, X } from 'lucide-react';
 import { paths, langFromPath, localizePath, stripLang } from 'router/paths';
 import { LocalizedLink as Link, LocalizedNavLink as NavLink } from 'router/LocalizedLink';
 import { motion, AnimatePresence } from 'framer-motion';
+import { AUTHOR } from 'config/site';
 import { trackEvent } from 'utils/analytics';
+import { trapFocus } from 'utils/focusTrap';
+import { STORAGE_KEYS, writeStored } from 'utils/storage';
 
-function Header() {
+const linkClass = ({ isActive }: { isActive: boolean }) =>
+  `text-sm font-medium transition-colors ${isActive ? 'text-text-primary' : 'text-text-secondary hover:text-text-primary'}`;
+
+export default function Header() {
   const { t, i18n } = useTranslation();
   const { pathname, search } = useLocation();
   const navigate = useNavigate();
@@ -16,23 +22,29 @@ function Header() {
   const [mobileOpen, setMobileOpen] = useState(false);
   const menuButtonRef = useRef<HTMLButtonElement>(null);
   const closeButtonRef = useRef<HTMLButtonElement>(null);
+  const wasOpenRef = useRef(false);
 
   // The button names the language the URL is NOT in; i18next only follows the URL.
   const urlLang = langFromPath(pathname);
-  const toggleLang = useCallback(() => {
+  function toggleLang() {
     const next = urlLang === 'es' ? 'en' : 'es';
-    i18n.changeLanguage(next);
-    localStorage.setItem('dtpf-lang', next);
+    void i18n.changeLanguage(next);
+    writeStored(STORAGE_KEYS.lang, next);
     navigate(localizePath(stripLang(pathname), next) + search);
     trackEvent('nav:toggle-language', { lang: next });
-  }, [i18n, urlLang, pathname, search, navigate]);
+  }
 
+  function onToggleTheme() {
+    toggleTheme();
+    trackEvent('nav:toggle-theme', { theme: isDark ? 'light' : 'dark' });
+  }
+
+  // Opening moves focus into the dialog; closing returns it to the button that opened it.
+  // On a plain page load nothing was open, so focus stays where the browser put it.
   useEffect(() => {
-    if (mobileOpen) {
-      closeButtonRef.current?.focus();
-    } else {
-      menuButtonRef.current?.focus();
-    }
+    if (mobileOpen) closeButtonRef.current?.focus();
+    else if (wasOpenRef.current) menuButtonRef.current?.focus();
+    wasOpenRef.current = mobileOpen;
   }, [mobileOpen]);
 
   const navLinks = [
@@ -43,28 +55,12 @@ function Header() {
     { to: paths.contact, label: t('nav_contact') },
   ];
 
-  const linkClass = ({ isActive }: { isActive: boolean }) =>
-    `text-sm font-medium transition-colors ${isActive ? 'text-text-primary' : 'text-text-secondary hover:text-text-primary'}`;
-
   function handleMobileKeyDown(e: React.KeyboardEvent<HTMLDivElement>) {
     if (e.key === 'Escape') {
       setMobileOpen(false);
       return;
     }
-    if (e.key !== 'Tab') return;
-    const focusable = e.currentTarget.querySelectorAll<HTMLElement>(
-      'a[href], button, input, textarea, select, [tabindex]:not([tabindex="-1"])'
-    );
-    if (focusable.length === 0) return;
-    const first = focusable[0];
-    const last = focusable[focusable.length - 1];
-    if (e.shiftKey && document.activeElement === first) {
-      e.preventDefault();
-      last.focus();
-    } else if (!e.shiftKey && document.activeElement === last) {
-      e.preventDefault();
-      first.focus();
-    }
+    trapFocus(e);
   }
 
   return (
@@ -105,10 +101,7 @@ function Header() {
               {urlLang === 'es' ? 'EN' : 'ES'}
             </button>
             <button
-              onClick={() => {
-                toggleTheme();
-                trackEvent('nav:toggle-theme', { theme: isDark ? 'light' : 'dark' });
-              }}
+              onClick={onToggleTheme}
               aria-label={t('theme_toggle')}
               className="flex h-9 w-9 items-center justify-center rounded-lg border border-border text-text-muted transition-colors hover:border-border-hover hover:text-text-secondary"
             >
@@ -124,7 +117,7 @@ function Header() {
               trackEvent('nav:mobile-menu-open');
             }}
             className="flex h-9 w-9 items-center justify-center rounded-lg border border-border text-text-primary md:hidden"
-            aria-label="Menu"
+            aria-label={t('open_menu')}
           >
             <Menu size={18} aria-hidden="true" />
           </button>
@@ -191,10 +184,8 @@ function Header() {
                   {urlLang === 'es' ? 'EN' : 'ES'}
                 </button>
                 <button
-                  onClick={() => {
-                    toggleTheme();
-                    trackEvent('nav:toggle-theme', { theme: isDark ? 'light' : 'dark' });
-                  }}
+                  onClick={onToggleTheme}
+                  aria-label={t('theme_toggle')}
                   className="flex h-9 w-9 items-center justify-center rounded-lg border border-border text-text-muted"
                 >
                   {isDark ? <Sun size={16} aria-hidden="true" /> : <Moon size={16} aria-hidden="true" />}
@@ -202,22 +193,24 @@ function Header() {
               </div>
               <div className="mt-4 flex gap-5">
                 <a
-                  href="https://www.linkedin.com/in/david-tomas-pizarro-frick"
+                  href={AUTHOR.linkedin}
                   target="_blank"
                   rel="noreferrer"
                   className="text-sm text-text-muted hover:text-accent"
                   onClick={() => trackEvent('nav:mobile-linkedin')}
                 >
                   LinkedIn
+                  <span className="sr-only"> ({t('open_new_window')})</span>
                 </a>
                 <a
-                  href="https://github.com/DTPF"
+                  href={AUTHOR.github}
                   target="_blank"
                   rel="noreferrer"
                   className="text-sm text-text-muted hover:text-accent"
                   onClick={() => trackEvent('nav:mobile-github')}
                 >
                   GitHub
+                  <span className="sr-only"> ({t('open_new_window')})</span>
                 </a>
               </div>
             </nav>
@@ -227,5 +220,3 @@ function Header() {
     </>
   );
 }
-
-export default memo(Header);

@@ -6,13 +6,13 @@ import { Toaster } from 'sonner';
 import { router } from 'router/router';
 import ErrorBoundary from './ErrorBoundary';
 import { initErrorTracking } from 'utils/errorTracking';
-import { basePath, apiVersion } from 'api/utils/config';
+import { apiUrl } from 'api/utils/config';
 import StagingBadge from 'views/components/StagingBadge';
 import { initAnalytics } from 'utils/analytics';
 import { checkChunkRecovery } from 'utils/lazyWithRetry';
 import useSWUpdate from 'hooks/useSWUpdate';
 
-initErrorTracking(`${basePath}/${apiVersion}`);
+initErrorTracking(apiUrl('/client-errors'));
 
 export default function App() {
   useSWUpdate();

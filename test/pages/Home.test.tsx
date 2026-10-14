@@ -214,32 +214,4 @@ describe('Home', () => {
     await user.click(contactLinks[contactLinks.length - 1]);
     expect(trackEvent).toHaveBeenCalledWith('home:final-cta');
   });
-
-  it('"How I work" onViewportEnter fires trackEvent when the grid enters the viewport', () => {
-    // Override IntersectionObserver to immediately call callback with isIntersecting: true
-    const originalIO = globalThis.IntersectionObserver;
-    globalThis.IntersectionObserver = class MockIO {
-      constructor(callback: IntersectionObserverCallback) {
-        // Auto-trigger with all entries intersecting
-        setTimeout(() => {
-          callback(
-            [{ isIntersecting: true, intersectionRatio: 1 }] as IntersectionObserverEntry[],
-            this as unknown as IntersectionObserver
-          );
-        }, 0);
-      }
-      observe = vi.fn();
-      unobserve = vi.fn();
-      disconnect = vi.fn();
-      readonly root = null;
-      readonly rootMargin = '';
-      readonly thresholds: ReadonlyArray<number> = [];
-      takeRecords = vi.fn().mockReturnValue([]);
-    } as unknown as typeof IntersectionObserver;
-
-    renderWithProviders(<Home />);
-
-    // Restore original mock
-    globalThis.IntersectionObserver = originalIO;
-  });
 });

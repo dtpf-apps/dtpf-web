@@ -121,6 +121,21 @@ export const en = {
   contact_submit: 'Send message',
   contact_success: "Message sent. I'll reply soon.",
   contact_error: 'Error sending. Please try again.',
+  contact_error_invalid_email: 'Check the email: it does not look like a valid address.',
+  contact_error_name_too_long: 'Shorten the name: it takes up to {{nameMax}} characters.',
+  contact_error_message_required: 'Write a message before sending it.',
+  contact_error_message_too_short: 'Make the message longer: it needs at least {{messageMin}} characters.',
+  contact_error_message_too_long: 'Shorten the message: it takes up to {{messageMax}} characters.',
+  contact_error_too_many_links: 'Remove some links: a message can carry {{links}} at most.',
+  contact_error_payload_too_large: 'The message is too large to send. Shorten it or email me instead.',
+  contact_error_server_error:
+    'The server could not save the message. Try again in a few minutes or email me instead.',
+  contact_error_service_unavailable:
+    'The service is unavailable right now. Try again in a few minutes or email me instead.',
+  contact_error_rate_limited:
+    'You have sent several messages in a row. You can send another in {{wait}}, or email me instead.',
+  contact_error_email_cooldown:
+    'A message from this email already reached me in the last 24 hours. You can send another in {{wait}}, or email me instead.',
   contact_or: 'or directly',
 
   // 404
@@ -279,6 +294,7 @@ export const en = {
 
   // Accessibility
   skip_to_content: 'Skip to main content',
+  open_menu: 'Open menu',
   close_menu: 'Close menu',
   nav_mobile_menu: 'Navigation menu',
   required: 'required',
@@ -290,7 +306,6 @@ export const en = {
   error_boundary_title: 'Something went wrong',
   error_boundary_description: 'An unexpected error occurred. Please try again.',
   error_boundary_reload: 'Reload',
-  updating_app: 'Updating app...',
 
   // Metric labels
   tenants: 'Active tenants',

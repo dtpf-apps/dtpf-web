@@ -65,7 +65,7 @@ describe('Header', () => {
     const user = userEvent.setup();
     renderWithProviders(<Header />);
 
-    const menuBtn = screen.getByRole('button', { name: 'Menu' });
+    const menuBtn = screen.getByRole('button', { name: 'Open menu' });
     await user.click(menuBtn);
 
     // Mobile menu should show navigation links (duplicated from desktop)
@@ -81,7 +81,7 @@ describe('Header', () => {
     renderWithProviders(<Header />);
 
     // Open mobile menu
-    const menuBtn = screen.getByRole('button', { name: 'Menu' });
+    const menuBtn = screen.getByRole('button', { name: 'Open menu' });
     await user.click(menuBtn);
 
     // Mobile menu has nav links - clicking one closes the menu
@@ -101,7 +101,7 @@ describe('Header', () => {
     const user = userEvent.setup();
     renderWithProviders(<Header />);
 
-    await user.click(screen.getByRole('button', { name: 'Menu' }));
+    await user.click(screen.getByRole('button', { name: 'Open menu' }));
 
     await waitFor(() => {
       // Mobile overlay shows Home, Projects, Platform, About, Contact links + LinkedIn + GitHub
@@ -127,7 +127,7 @@ describe('Header', () => {
     const user = userEvent.setup();
     renderWithProviders(<Header />);
 
-    await user.click(screen.getByRole('button', { name: 'Menu' }));
+    await user.click(screen.getByRole('button', { name: 'Open menu' }));
 
     await waitFor(() => {
       // Should have two lang toggle buttons (desktop + mobile)
@@ -142,20 +142,45 @@ describe('Header', () => {
     const user = userEvent.setup();
     renderWithProviders(<Header />);
 
-    await user.click(screen.getByRole('button', { name: 'Menu' }));
+    await user.click(screen.getByRole('button', { name: 'Open menu' }));
 
+    // The desktop toggle stays in the DOM, so the open menu adds a second one with the same name.
     await waitFor(() => {
-      // Should have theme buttons (desktop has aria-label, mobile doesn't)
-      const buttons = screen.getAllByRole('button');
-      expect(buttons.length).toBeGreaterThanOrEqual(4);
+      expect(screen.getAllByRole('button', { name: 'Toggle theme' })).toHaveLength(2);
     });
+  });
+
+  it('Escape closes the mobile menu and gives focus back to the button that opened it', async () => {
+    const user = userEvent.setup();
+    renderWithProviders(<Header />);
+    const menuBtn = screen.getByRole('button', { name: 'Open menu' });
+
+    await user.click(menuBtn);
+    expect(screen.getByRole('button', { name: 'Close menu' })).toHaveFocus();
+
+    await user.keyboard('{Escape}');
+    await waitFor(() => expect(screen.queryByRole('dialog')).not.toBeInTheDocument());
+    expect(menuBtn).toHaveFocus();
+  });
+
+  it('keeps Tab inside the open mobile menu', async () => {
+    const user = userEvent.setup();
+    renderWithProviders(<Header />);
+    await user.click(screen.getByRole('button', { name: 'Open menu' }));
+    const dialog = screen.getByRole('dialog');
+    const close = within(dialog).getByRole('button', { name: 'Close menu' });
+
+    await user.tab({ shift: true });
+    expect(within(dialog).getByRole('link', { name: /GitHub/ })).toHaveFocus();
+    await user.tab();
+    expect(close).toHaveFocus();
   });
 
   it('mobile menu has LinkedIn and GitHub links', async () => {
     const user = userEvent.setup();
     renderWithProviders(<Header />);
 
-    await user.click(screen.getByRole('button', { name: 'Menu' }));
+    await user.click(screen.getByRole('button', { name: 'Open menu' }));
 
     await waitFor(() => {
       expect(screen.getByText('LinkedIn')).toBeInTheDocument();
@@ -203,9 +228,9 @@ describe('Header', () => {
     expect(['es', 'en']).toContain(savedLang);
   });
 
-  it('hamburger button is visible (has aria-label Menu)', () => {
+  it('names the hamburger button for screen readers', () => {
     renderWithProviders(<Header />);
-    const menuBtn = screen.getByRole('button', { name: 'Menu' });
+    const menuBtn = screen.getByRole('button', { name: 'Open menu' });
     expect(menuBtn).toBeInTheDocument();
   });
 
@@ -235,14 +260,14 @@ describe('Header', () => {
   it('hamburger open tracks nav:mobile-menu-open event', async () => {
     const user = userEvent.setup();
     renderWithProviders(<Header />);
-    await user.click(screen.getByRole('button', { name: 'Menu' }));
+    await user.click(screen.getByRole('button', { name: 'Open menu' }));
     expect(trackEvent).toHaveBeenCalledWith('nav:mobile-menu-open');
   });
 
   it('mobile close button (X) tracks nav:mobile-menu-close event', async () => {
     const user = userEvent.setup();
     renderWithProviders(<Header />);
-    await user.click(screen.getByRole('button', { name: 'Menu' }));
+    await user.click(screen.getByRole('button', { name: 'Open menu' }));
 
     await waitFor(() => {
       const allButtons = screen.getAllByRole('button');
@@ -262,7 +287,7 @@ describe('Header', () => {
   it('mobile LinkedIn link tracks nav:mobile-linkedin event', async () => {
     const user = userEvent.setup();
     renderWithProviders(<Header />);
-    await user.click(screen.getByRole('button', { name: 'Menu' }));
+    await user.click(screen.getByRole('button', { name: 'Open menu' }));
 
     await waitFor(() => {
       expect(screen.getByText('LinkedIn')).toBeInTheDocument();
@@ -275,7 +300,7 @@ describe('Header', () => {
   it('mobile GitHub link tracks nav:mobile-github event', async () => {
     const user = userEvent.setup();
     renderWithProviders(<Header />);
-    await user.click(screen.getByRole('button', { name: 'Menu' }));
+    await user.click(screen.getByRole('button', { name: 'Open menu' }));
 
     await waitFor(() => {
       expect(screen.getByText('GitHub')).toBeInTheDocument();
@@ -309,7 +334,7 @@ describe('Header', () => {
   it('mobile nav link tracks nav:mobile-navigate event', async () => {
     const user = userEvent.setup();
     renderWithProviders(<Header />);
-    await user.click(screen.getByRole('button', { name: 'Menu' }));
+    await user.click(screen.getByRole('button', { name: 'Open menu' }));
 
     await waitFor(() => {
       const links = screen.getAllByRole('link').filter((l) => l.getAttribute('href') === '/about');
@@ -325,7 +350,7 @@ describe('Header', () => {
   it('mobile theme toggle tracks nav:toggle-theme event', async () => {
     const user = userEvent.setup();
     renderWithProviders(<Header />);
-    await user.click(screen.getByRole('button', { name: 'Menu' }));
+    await user.click(screen.getByRole('button', { name: 'Open menu' }));
 
     await waitFor(() => {
       // Mobile lang toggle should be visible

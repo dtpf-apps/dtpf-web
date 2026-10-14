@@ -11,7 +11,7 @@ export default function useAnalyticsPageView(): void {
     if (!perfTracked && performance?.getEntriesByType) {
       const entries = performance.getEntriesByType('navigation') as PerformanceNavigationTiming[];
       const nav = entries[0];
-      if (nav?.loadEventEnd > 0) {
+      if (nav && nav.loadEventEnd > 0) {
         trackEvent('perf:page-load', {
           duration: Math.round(nav.loadEventEnd - nav.startTime),
           path: location.pathname,

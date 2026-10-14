@@ -103,9 +103,15 @@ export default defineConfig({
       },
     },
   },
+  // The client always calls /api on its own origin (src/api/utils/config.ts); locally these
+  // forward it to dtpf-api's dev server, which sends no CORS headers.
   server: {
     host: '0.0.0.0',
     port: 3000,
+    proxy: { '/api': 'http://localhost:3998' },
+  },
+  preview: {
+    proxy: { '/api': 'http://localhost:3998' },
   },
   test: {
     globals: true,
@@ -125,7 +131,6 @@ export default defineConfig({
         'src/styles/**',
         'src/router/router.tsx',
         'src/views/layouts/**',
-        'src/api/utils/config.ts',
       ],
       thresholds: {
         statements: 95,

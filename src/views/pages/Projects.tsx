@@ -15,7 +15,7 @@ export default function Projects() {
 
   return (
     <>
-      <Seo titleKey="projects_title" description={t('seo_desc_projects')} ogKey="projects" />
+      <Seo pageName={t('projects_title')} description={t('seo_desc_projects')} ogKey="projects" />
 
       <div className="mx-auto max-w-[1100px] px-6 pt-14">
         <h1 className="mb-2 font-heading text-4xl font-bold tracking-tight">{t('projects_title')}</h1>

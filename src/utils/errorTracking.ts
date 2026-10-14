@@ -1,4 +1,4 @@
-type ErrorSource = 'error-boundary' | 'unhandled-error' | 'unhandled-rejection' | 'fetch-error';
+type ErrorSource = 'error-boundary' | 'unhandled-error' | 'unhandled-rejection';
 
 interface ClientError {
   message: string;
@@ -9,15 +9,15 @@ interface ClientError {
   timestamp: number;
 }
 
-let apiUrl = '';
+let endpoint = '';
 let initialized = false;
 const reported = new Set<string>();
 const queue: ClientError[] = [];
 let flushTimer: ReturnType<typeof setTimeout> | null = null;
 
-export function initErrorTracking(baseApiUrl: string): void {
+export function initErrorTracking(clientErrorsUrl: string): void {
   if (initialized) return;
-  apiUrl = `${baseApiUrl}/client-errors`;
+  endpoint = clientErrorsUrl;
   initialized = true;
 
   window.addEventListener('error', (event) => {
@@ -38,7 +38,9 @@ export function initErrorTracking(baseApiUrl: string): void {
     });
   });
 
-  window.addEventListener('beforeunload', () => flush());
+  // pagehide, not beforeunload: it also fires when a mobile browser discards the tab, and a
+  // beforeunload listener keeps the page out of the back/forward cache in some browsers.
+  window.addEventListener('pagehide', () => flush());
 }
 
 export function reportError(error: Error, source: ErrorSource = 'error-boundary'): void {
@@ -49,17 +51,10 @@ export function reportError(error: Error, source: ErrorSource = 'error-boundary'
   });
 }
 
-export function reportFetchError(url: string, status: number): void {
-  report({
-    message: `Fetch failed: ${status} ${url}`,
-    source: 'fetch-error',
-  });
-}
-
 function report(partial: { message: string; stack?: string; source: ErrorSource }): void {
   if (!initialized) return;
 
-  // Dedup: don't report the same error message twice per session
+  // The same error is reported once per page load.
   const key = `${partial.source}:${partial.message}`;
   if (reported.has(key)) return;
   reported.add(key);
@@ -73,26 +68,25 @@ function report(partial: { message: string; stack?: string; source: ErrorSource 
     timestamp: Date.now(),
   });
 
-  // Batch: flush after 2s to avoid flooding
+  // A burst of errors (one failure cascading) leaves in one flush two seconds later.
   if (!flushTimer) {
     flushTimer = setTimeout(flush, 2000);
   }
 }
 
 function flush(): void {
+  if (flushTimer) clearTimeout(flushTimer);
   flushTimer = null;
-  const batch = queue.splice(0);
-  for (const error of batch) {
+  for (const error of queue.splice(0)) {
     try {
-      fetch(apiUrl, {
+      fetch(endpoint, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(error),
-        credentials: 'include',
         keepalive: true,
       }).catch(() => {});
     } catch {
-      // Never throw from error tracking
+      // Reporting an error must never raise another one.
     }
   }
 }

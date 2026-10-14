@@ -1,61 +1,12 @@
-import { isLocalhost } from './utils/isLocalhost';
+// Registration only installs the worker. When the page moves to a new build is decided in
+// one place, hooks/useSWUpdate (next navigation or tab re-focus, never mid-interaction), so
+// nothing here reloads the page.
+export function registerServiceWorker(): void {
+  if (!import.meta.env.PROD || !('serviceWorker' in navigator)) return;
 
-export function register() {
-  if (import.meta.env.PROD && 'serviceWorker' in navigator) {
-    const publicUrl = new URL(import.meta.env.BASE_URL, window.location.href);
-    if (publicUrl.origin !== window.location.origin) {
-      return;
-    }
-
-    // Silent auto-update: when a new SW takes control, reload to get fresh content.
-    // Skip the first controllerchange (initial SW installation on first visit).
-    let hasController = !!navigator.serviceWorker.controller;
-    navigator.serviceWorker.addEventListener('controllerchange', () => {
-      if (!hasController) {
-        hasController = true;
-        return;
-      }
-      window.location.reload();
+  window.addEventListener('load', () => {
+    navigator.serviceWorker.register(`${import.meta.env.BASE_URL}service-worker.js`).catch(() => {
+      // Some private modes refuse service workers; the site works the same without one.
     });
-
-    window.addEventListener('load', () => {
-      const swUrl = `${import.meta.env.BASE_URL}service-worker.js`;
-
-      if (isLocalhost) {
-        checkValidServiceWorker(swUrl);
-        navigator.serviceWorker.ready.then(() => {
-          console.log('This web app is being served cache-first by a service worker.');
-        });
-      } else {
-        registerValidSW(swUrl);
-      }
-    });
-  }
-}
-
-function registerValidSW(swUrl: string) {
-  navigator.serviceWorker.register(swUrl).catch((error) => {
-    console.error('Error during service worker registration:', error);
   });
-}
-
-function checkValidServiceWorker(swUrl: string) {
-  fetch(swUrl, {
-    headers: { 'Service-Worker': 'script' },
-  })
-    .then((response) => {
-      const contentType = response.headers.get('content-type');
-      if (response.status === 404 || (contentType != null && contentType.indexOf('javascript') === -1)) {
-        navigator.serviceWorker.ready.then((registration) => {
-          registration.unregister().then(() => {
-            window.location.reload();
-          });
-        });
-      } else {
-        registerValidSW(swUrl);
-      }
-    })
-    .catch(() => {
-      console.log('No internet connection found. App is running in offline mode.');
-    });
 }

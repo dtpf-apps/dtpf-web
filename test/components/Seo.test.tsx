@@ -14,7 +14,7 @@ describe('Seo on a Spanish route', () => {
   });
 
   it('writes title, description, canonical and the hreflang trio into <head>', async () => {
-    renderWithProviders(<Seo titleKey="about_title" description="Perfil" ogKey="about" />, {
+    renderWithProviders(<Seo pageName="Sobre mí" description="Perfil" ogKey="about" />, {
       route: '/about',
     });
     expect(document.title).toBe('Sobre mí — David T. Pizarro Frick');
@@ -26,7 +26,7 @@ describe('Seo on a Spanish route', () => {
   });
 
   it('writes the Open Graph and Twitter Card tags', () => {
-    renderWithProviders(<Seo titleKey="about_title" description="Perfil" ogKey="about" />, {
+    renderWithProviders(<Seo pageName="Sobre mí" description="Perfil" ogKey="about" />, {
       route: '/about',
     });
     expect(meta('meta[property="og:type"]')).toBe('website');
@@ -46,14 +46,14 @@ describe('Seo on a Spanish route', () => {
   });
 
   it('does not ask for indexing exclusion by default', () => {
-    renderWithProviders(<Seo titleKey="about_title" description="d" ogKey="about" />, { route: '/about' });
+    renderWithProviders(<Seo pageName="Sobre mí" description="d" ogKey="about" />, { route: '/about' });
     expect(document.head.querySelector('meta[name="robots"]')).toBeNull();
   });
 });
 
 describe('Seo on an English route', () => {
   it('points the canonical and og:url at the English URL and swaps the locales', () => {
-    renderWithProviders(<Seo titleKey="about_title" description="Profile" ogKey="about" />, {
+    renderWithProviders(<Seo pageName="About" description="Profile" ogKey="about" />, {
       route: '/en/about',
     });
     expect(link('link[rel="canonical"]')).toBe('https://dtpf.es/en/about');
@@ -73,15 +73,19 @@ describe('Seo on an English route', () => {
 
 describe('Seo options', () => {
   it('esOnly keeps the Spanish canonical on the English URL and drops the alternates', () => {
-    renderWithProviders(<Seo titleKey="about_title" description="d" ogKey="privacy-policy" esOnly />, {
-      route: '/en/privacy-policy',
-    });
+    renderWithProviders(
+      <Seo pageName="Política de Privacidad" description="d" ogKey="privacy-policy" esOnly />,
+      {
+        route: '/en/privacy-policy',
+      }
+    );
     expect(link('link[rel="canonical"]')).toBe('https://dtpf.es/privacy-policy');
     expect(document.head.querySelector('link[rel="alternate"]')).toBeNull();
   });
 
   it('noindex emits robots noindex and no canonical or alternates', () => {
-    renderWithProviders(<Seo title="404" description="d" ogKey="home" noindex />, { route: '/nope' });
+    renderWithProviders(<Seo pageName="404" description="d" ogKey="home" noindex />, { route: '/nope' });
+    expect(document.title).toBe('404 — David T. Pizarro Frick');
     expect(meta('meta[name="robots"]')).toBe('noindex');
     expect(document.head.querySelector('link[rel="canonical"]')).toBeNull();
     expect(document.head.querySelector('link[rel="alternate"]')).toBeNull();

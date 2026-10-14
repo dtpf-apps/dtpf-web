@@ -1,54 +1,30 @@
-import { Component, type ErrorInfo, type ReactNode } from 'react';
+import { Component, useEffect, type ReactNode } from 'react';
+import { useRouteError } from 'react-router';
 import { trackEvent } from 'utils/analytics';
-import { isChunkError } from 'utils/chunkError';
+import { reportError } from 'utils/errorTracking';
 import i18n from 'utils/i18n';
 
-interface Props {
-  children: ReactNode;
+function reportCrash(error: Error) {
+  reportError(error, 'error-boundary');
+  trackEvent('error:boundary', {
+    message: error.message.slice(0, 100),
+    path: window.location.pathname,
+  });
 }
 
-interface State {
-  hasError: boolean;
-  error: Error | null;
-}
-
-function ErrorFallback({ error }: { error: Error | null }) {
-  if (error && isChunkError(error)) {
-    return (
-      <div style={{ display: 'grid', placeContent: 'center', height: '100vh', textAlign: 'center' }}>
-        <div
-          style={{
-            width: 32,
-            height: 32,
-            border: '3px solid #e5e7eb',
-            borderTopColor: '#6366f1',
-            borderRadius: '50%',
-            animation: 'spin 0.8s linear infinite',
-            margin: '0 auto 16px',
-          }}
-        />
-        <style>{`@keyframes spin { to { transform: rotate(360deg) } }`}</style>
-        <p style={{ color: '#6b7280' }}>{i18n.t('updating_app')}</p>
-      </div>
-    );
-  }
-
+// Rendered outside the router and the theme provider, so it reads i18n directly and styles
+// itself with the theme tokens, which live on <html> whatever crashed. A chunk that failed to
+// load lands here only after lazyWithRetry's one automatic reload, so the way out is the same
+// for every error: reload.
+function ErrorFallback() {
   return (
-    <div style={{ display: 'grid', placeContent: 'center', height: '100vh', textAlign: 'center' }}>
-      <h1 style={{ fontSize: '1.25rem', fontWeight: 600, marginBottom: 8 }}>
-        {i18n.t('error_boundary_title')}
-      </h1>
-      <p style={{ color: '#6b7280', marginBottom: 16 }}>{i18n.t('error_boundary_description')}</p>
+    <div className="grid min-h-screen place-content-center px-6 text-center">
+      <h1 className="mb-2 font-heading text-xl font-bold">{i18n.t('error_boundary_title')}</h1>
+      <p className="mb-6 text-text-secondary">{i18n.t('error_boundary_description')}</p>
       <button
+        type="button"
         onClick={() => window.location.reload()}
-        style={{
-          padding: '8px 24px',
-          borderRadius: 8,
-          border: '1px solid #d1d5db',
-          background: '#f9fafb',
-          cursor: 'pointer',
-          fontSize: '0.875rem',
-        }}
+        className="mx-auto inline-flex items-center rounded-[10px] bg-accent px-6 py-3 text-sm font-semibold text-on-accent transition hover:bg-accent-hover"
       >
         {i18n.t('error_boundary_reload')}
       </button>
@@ -56,28 +32,39 @@ function ErrorFallback({ error }: { error: Error | null }) {
   );
 }
 
-class ErrorBoundary extends Component<Props, State> {
-  state: State = { hasError: false, error: null };
+// The router catches what a page throws while rendering, so a page crash never reaches the
+// class boundary below; this is the router's half (errorElement in router/router.tsx).
+export function RouteErrorFallback() {
+  const routeError = useRouteError();
 
-  static getDerivedStateFromError(error: Error): State {
-    return { hasError: true, error };
+  useEffect(() => {
+    reportCrash(routeError instanceof Error ? routeError : new Error(String(routeError)));
+  }, [routeError]);
+
+  return <ErrorFallback />;
+}
+
+interface Props {
+  children: ReactNode;
+}
+
+interface State {
+  hasError: boolean;
+}
+
+export default class ErrorBoundary extends Component<Props, State> {
+  state: State = { hasError: false };
+
+  static getDerivedStateFromError(): State {
+    return { hasError: true };
   }
 
-  componentDidCatch(error: Error, errorInfo: ErrorInfo) {
-    console.error('ErrorBoundary caught:', error, errorInfo);
-    import('./utils/errorTracking').then(({ reportError }) => reportError(error, 'error-boundary'));
-    trackEvent('error:boundary', {
-      message: error.message.slice(0, 100),
-      path: window.location.pathname,
-    });
+  // React already logs the error to the console; this only sends it to the API and Umami.
+  componentDidCatch(error: Error) {
+    reportCrash(error);
   }
 
   render() {
-    if (this.state.hasError) {
-      return <ErrorFallback error={this.state.error} />;
-    }
-    return this.props.children;
+    return this.state.hasError ? <ErrorFallback /> : this.props.children;
   }
 }
-
-export default ErrorBoundary;

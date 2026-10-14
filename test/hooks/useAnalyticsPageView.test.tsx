@@ -61,7 +61,6 @@ describe('useAnalyticsPageView', () => {
   });
 
   it('tracks perf:page-load when loadEventEnd > 0', () => {
-    const originalGetEntriesByType = performance.getEntriesByType;
     vi.spyOn(performance, 'getEntriesByType').mockReturnValue([
       { loadEventEnd: 500, startTime: 0 } as PerformanceNavigationTiming,
     ]);

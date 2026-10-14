@@ -4,6 +4,7 @@ import {
   formatDate,
   formatDecimal,
   formatInt,
+  isMeasuredProject,
   platformVars,
   projectVars,
   roundDownToTen,
@@ -23,6 +24,7 @@ describe('facts.json', () => {
   // Only in CI: a developer's checkout must not go red because the file aged while they
   // were working on something else, but a deploy with figures older than four months must.
   it.runIf(process.env.CI)(`was regenerated within the last ${MAX_AGE_DAYS} days`, () => {
+    // oxlint-disable-next-line vitest/no-standalone-expect -- it.runIf(...)(...) is a test block the rule does not recognise
     expect(ageInDays(facts.generatedAt)).toBeLessThanOrEqual(MAX_AGE_DAYS);
   });
 
@@ -37,7 +39,7 @@ describe('facts.json', () => {
 
   it('has an entry for every project card that shows metrics', () => {
     for (const p of projects.filter((p) => p.metrics)) {
-      expect(facts.projects[p.slug], `facts.projects.${p.slug}`).toBeDefined();
+      expect(isMeasuredProject(p.slug), `facts.projects.${p.slug}`).toBe(true);
     }
   });
 

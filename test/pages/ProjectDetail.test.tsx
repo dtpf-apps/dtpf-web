@@ -41,14 +41,15 @@ describe('ProjectDetail', () => {
     expect(screen.getByText('React 19')).toBeInTheDocument();
   });
 
-  it('redirects to /projects for invalid slug', () => {
+  it('shows the 404 page, kept out of the index, for an unknown slug', () => {
     renderProjectDetail('nonexistent');
-    expect(screen.getByTestId('projects-page')).toBeInTheDocument();
+    expect(screen.getByRole('heading', { level: 1, name: 'Page not found' })).toBeInTheDocument();
+    expect(document.querySelector('meta[name="robots"]')).toHaveAttribute('content', 'noindex');
   });
 
-  it('redirects the retired portfolio slug to the list (the site now lives in the footer)', () => {
+  it('shows the 404 page for the retired portfolio slug (the site now lives in the footer)', () => {
     renderProjectDetail('dtpf');
-    expect(screen.getByTestId('projects-page')).toBeInTheDocument();
+    expect(screen.getByRole('heading', { level: 1, name: 'Page not found' })).toBeInTheDocument();
   });
 
   it('shows metrics for dauth with the measured, language-formatted test count', () => {
@@ -99,7 +100,7 @@ describe('ProjectDetail', () => {
     expect(screen.getByText(/The result\./)).toBeInTheDocument();
   });
 
-  it('renders description instead of case study for projects without problemKey', () => {
+  it('renders description instead of case study for projects without one', () => {
     renderProjectDetail('audity');
     expect(screen.getByText(/Full player, playlists, search, CMS/)).toBeInTheDocument();
     expect(screen.queryByText(/The problem\./)).not.toBeInTheDocument();

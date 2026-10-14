@@ -1,7 +1,8 @@
-import { useState, useEffect, useLayoutEffect } from 'react';
+import { useState, useEffect, useLayoutEffect, useRef } from 'react';
 import { Outlet, useLocation, useNavigate } from 'react-router';
 import { useTranslation } from 'react-i18next';
 import { langFromPath, localizePath, stripLang } from 'router/paths';
+import { readStored, STORAGE_KEYS } from 'utils/storage';
 import Header from 'views/components/navigation/Header';
 import Footer from 'views/components/navigation/Footer';
 import { AnimatePresence, motion } from 'framer-motion';
@@ -22,13 +23,17 @@ export default function PortfolioLayout() {
   }, [i18n, urlLang]);
 
   // Only an explicit choice (the toggle) is saved, so only that redirects: a crawler has no
-  // storage and keeps the URL it asked for. Runs once, on arrival.
+  // storage and keeps the URL it asked for. On arrival only: after that, every URL the
+  // visitor reaches is one they chose, in the language its prefix says.
+  const arrivedRef = useRef(false);
   useEffect(() => {
-    const saved = localStorage.getItem('dtpf-lang');
+    if (arrivedRef.current) return;
+    arrivedRef.current = true;
+    const saved = readStored(STORAGE_KEYS.lang);
     if ((saved === 'es' || saved === 'en') && saved !== urlLang) {
       navigate(localizePath(stripLang(pathname), saved) + search + hash, { replace: true });
     }
-  }, []);
+  }, [navigate, pathname, search, hash, urlLang]);
 
   useEffect(() => {
     const timer = setTimeout(() => setAnnouncement(document.title), 100);

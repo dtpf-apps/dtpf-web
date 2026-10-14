@@ -50,9 +50,11 @@ describe('projects config', () => {
   });
 
   it('only private projects lack a live URL', () => {
-    for (const p of projects) {
-      if (p.status === 'private') expect(p.liveUrl, p.slug).toBeUndefined();
-      else expect(p.liveUrl, p.slug).toMatch(/^https:\/\//);
+    const withoutUrl = projects.filter((p) => !p.liveUrl).map((p) => p.slug);
+    const privateOnes = projects.filter((p) => p.status === 'private').map((p) => p.slug);
+    expect(withoutUrl).toEqual(privateOnes);
+    for (const p of projects.filter((p) => p.liveUrl)) {
+      expect(p.liveUrl, p.slug).toMatch(/^https:\/\//);
     }
   });
 
@@ -67,18 +69,15 @@ describe('projects config', () => {
 
   it('dauth has metrics and case study', () => {
     const dauth = projects.find((p) => p.slug === 'dauth');
-    expect(dauth).toBeDefined();
-    expect(dauth!.metrics!.length).toBeGreaterThan(0);
-    expect(dauth!.problemKey).toBeDefined();
-    expect(dauth!.solutionKey).toBeDefined();
-    expect(dauth!.resultKey).toBeDefined();
+    expect(dauth?.metrics?.length).toBeGreaterThan(0);
+    expect(dauth?.caseStudy).toBeDefined();
   });
 
-  it('every project with a case study has all three sections', () => {
+  it('has every case-study key in both locales', () => {
     for (const p of projects) {
-      if (p.problemKey) {
-        expect(p.solutionKey, p.slug).toBeDefined();
-        expect(p.resultKey, p.slug).toBeDefined();
+      for (const key of Object.values(p.caseStudy ?? {})) {
+        expect((es as Record<string, string>)[key], key).toBeTruthy();
+        expect((en as Record<string, string>)[key], key).toBeTruthy();
       }
     }
   });
@@ -114,9 +113,10 @@ describe('projects config', () => {
     const withMedia = ['dcompany', 'dauth', 'dalist', 'airam', 'dstash'];
 
     it('exists exactly for the projects that have screenshots', () => {
-      for (const p of projects) {
-        if (withMedia.includes(p.slug)) expect(p.media?.length, p.slug).toBeGreaterThan(0);
-        else expect(p.media, p.slug).toBeUndefined();
+      const slugsWithMedia = projects.filter((p) => p.media).map((p) => p.slug);
+      expect(slugsWithMedia.sort()).toEqual([...withMedia].sort());
+      for (const p of projects.filter((p) => p.media)) {
+        expect(p.media?.length, p.slug).toBeGreaterThan(0);
       }
     });
 

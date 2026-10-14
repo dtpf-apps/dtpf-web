@@ -3,7 +3,8 @@ import { LocalizedLink as Link } from 'router/LocalizedLink';
 import useRouteLang from 'router/useRouteLang';
 import { paths, projectDetailPath } from 'router/paths';
 import Seo from 'views/components/Seo';
-import { personJsonLd } from 'config/site';
+import SectionHeader from 'views/components/SectionHeader';
+import { AUTHOR, personJsonLd } from 'config/site';
 import { projects } from 'config/projects';
 import { motion } from 'framer-motion';
 import { Activity, ArrowRight, Cpu, ExternalLink, FlaskConical, GitBranch } from 'lucide-react';
@@ -14,14 +15,41 @@ import { stagger, fadeUp } from 'utils/animations';
 // The bento grid holds four cards; which four is decided in config/projects.ts, in array order.
 const featured = projects.filter((p) => p.featured);
 
-// "How I work": four habits, each pointing at the page that proves it. The copy lives in the
-// locales under home_how_<n>_*; the figures it interpolates come from facts.json.
+// "How I work": four habits, each linking to the page that proves it. The figures the copy
+// interpolates come from facts.json; `n` is what the analytics event reports.
 const howCards = [
-  { n: 1, Icon: FlaskConical, to: paths.projects },
-  { n: 2, Icon: GitBranch, to: projectDetailPath('dcompany') },
-  { n: 3, Icon: Activity, to: paths.platform },
-  { n: 4, Icon: Cpu, to: projectDetailPath('dcompany'), alt: projectDetailPath('dinventory') },
-] as const;
+  {
+    n: 1,
+    Icon: FlaskConical,
+    titleKey: 'home_how_1_title',
+    bodyKey: 'home_how_1_body',
+    links: [{ to: paths.projects, labelKey: 'home_how_1_link' }],
+  },
+  {
+    n: 2,
+    Icon: GitBranch,
+    titleKey: 'home_how_2_title',
+    bodyKey: 'home_how_2_body',
+    links: [{ to: projectDetailPath('dcompany'), labelKey: 'home_how_2_link' }],
+  },
+  {
+    n: 3,
+    Icon: Activity,
+    titleKey: 'home_how_3_title',
+    bodyKey: 'home_how_3_body',
+    links: [{ to: paths.platform, labelKey: 'home_how_3_link' }],
+  },
+  {
+    n: 4,
+    Icon: Cpu,
+    titleKey: 'home_how_4_title',
+    bodyKey: 'home_how_4_body',
+    links: [
+      { to: projectDetailPath('dcompany'), labelKey: 'home_how_4_link' },
+      { to: projectDetailPath('dinventory'), labelKey: 'home_how_4_link_alt' },
+    ],
+  },
+];
 
 const stackItems = [
   { abbr: 'R', name: 'React' },
@@ -49,7 +77,7 @@ export default function Home() {
   return (
     <>
       <Seo
-        title="David T. Pizarro Frick — Senior Full-Stack Engineer"
+        title={`${AUTHOR.name} — ${AUTHOR.jobTitle}`}
         description={t('seo_desc_home')}
         ogKey="home"
         type="profile"
@@ -161,33 +189,26 @@ export default function Home() {
 
       {/* ── Featured Projects — Bento Grid ── */}
       <section className="mx-auto max-w-[1100px] px-6 py-20">
-        <p className="mb-3 font-mono text-xs font-medium uppercase tracking-[2px] text-accent">
-          {t('home_projects_label')}
-        </p>
-        <h2 className="mb-2 font-heading text-[32px] font-bold tracking-tight">
-          {t('home_projects_heading')}
-        </h2>
-        <p className="mb-12 max-w-[520px] text-base text-text-secondary">{t('home_projects_desc')}</p>
+        <SectionHeader
+          label={t('home_projects_label')}
+          heading={t('home_projects_heading')}
+          desc={t('home_projects_desc')}
+        />
 
         <motion.div
           variants={stagger}
           initial="hidden"
           whileInView="visible"
           viewport={{ once: true, margin: '-50px' }}
-          className="grid grid-cols-12 gap-4"
+          className="mt-12 grid grid-cols-12 gap-4"
         >
           {featured.map((p, i) => (
             <motion.div
               key={p.slug}
               variants={fadeUp}
-              className={`group relative overflow-hidden rounded-2xl border border-border bg-bg-surface p-7 transition-all duration-300 hover:-translate-y-0.5 hover:border-border-hover hover:shadow-[0_16px_48px_rgba(0,0,0,0.2)] ${
-                i === 0
-                  ? 'col-span-12 md:col-span-7'
-                  : i === 1
-                    ? 'col-span-12 md:col-span-5'
-                    : i === 2
-                      ? 'col-span-12 md:col-span-5'
-                      : 'col-span-12 md:col-span-7'
+              // Wide, narrow, then narrow, wide: the four cards zig-zag across two rows.
+              className={`group relative col-span-12 overflow-hidden rounded-2xl border border-border bg-bg-surface p-7 transition-all duration-300 hover:-translate-y-0.5 hover:border-border-hover hover:shadow-[0_16px_48px_rgba(0,0,0,0.2)] ${
+                i === 0 || i === 3 ? 'md:col-span-7' : 'md:col-span-5'
               }`}
             >
               {/* Top hover line */}
@@ -238,11 +259,11 @@ export default function Home() {
 
       {/* ── How I work ── */}
       <section className="mx-auto max-w-[1100px] px-6 py-20">
-        <p className="mb-3 font-mono text-xs font-medium uppercase tracking-[2px] text-accent">
-          {t('home_how_label')}
-        </p>
-        <h2 className="mb-2 font-heading text-[32px] font-bold tracking-tight">{t('home_how_heading')}</h2>
-        <p className="mb-12 max-w-[520px] text-base text-text-secondary">{t('home_how_desc')}</p>
+        <SectionHeader
+          label={t('home_how_label')}
+          heading={t('home_how_heading')}
+          desc={t('home_how_desc')}
+        />
 
         <motion.div
           variants={stagger}
@@ -250,7 +271,7 @@ export default function Home() {
           whileInView="visible"
           viewport={{ once: true, margin: '-50px' }}
           onViewportEnter={() => trackEvent('home:how-visible')}
-          className="grid gap-4 md:grid-cols-2"
+          className="mt-12 grid gap-4 md:grid-cols-2"
         >
           {howCards.map((card) => (
             <motion.article
@@ -261,29 +282,19 @@ export default function Home() {
               <div className="mb-4 flex h-10 w-10 items-center justify-center rounded-xl bg-accent-subtle text-accent">
                 <card.Icon size={20} aria-hidden="true" />
               </div>
-              <h3 className="mb-2 font-heading text-[20px] font-bold tracking-tight">
-                {t(`home_how_${card.n}_title`)}
-              </h3>
-              <p className="mb-5 text-sm leading-relaxed text-text-secondary">
-                {t(`home_how_${card.n}_body`, howVars)}
-              </p>
+              <h3 className="mb-2 font-heading text-[20px] font-bold tracking-tight">{t(card.titleKey)}</h3>
+              <p className="mb-5 text-sm leading-relaxed text-text-secondary">{t(card.bodyKey, howVars)}</p>
               <div className="flex flex-wrap items-center gap-x-5 gap-y-2">
-                <Link
-                  to={card.to}
-                  onClick={() => trackEvent('home:how-card', { card: card.n })}
-                  className="inline-flex items-center gap-1.5 text-[13px] font-semibold text-accent transition-colors hover:text-accent-hover"
-                >
-                  {t(`home_how_${card.n}_link`)} <ArrowRight size={14} aria-hidden="true" />
-                </Link>
-                {'alt' in card && (
+                {card.links.map((link) => (
                   <Link
-                    to={card.alt}
+                    key={link.labelKey}
+                    to={link.to}
                     onClick={() => trackEvent('home:how-card', { card: card.n })}
                     className="inline-flex items-center gap-1.5 text-[13px] font-semibold text-accent transition-colors hover:text-accent-hover"
                   >
-                    {t(`home_how_${card.n}_link_alt`)} <ArrowRight size={14} aria-hidden="true" />
+                    {t(link.labelKey)} <ArrowRight size={14} aria-hidden="true" />
                   </Link>
-                )}
+                ))}
               </div>
             </motion.article>
           ))}
@@ -292,18 +303,18 @@ export default function Home() {
 
       {/* ── Stack ── */}
       <section className="mx-auto max-w-[1100px] px-6 py-20">
-        <p className="mb-3 font-mono text-xs font-medium uppercase tracking-[2px] text-accent">
-          {t('home_stack_label')}
-        </p>
-        <h2 className="mb-2 font-heading text-[32px] font-bold tracking-tight">{t('home_stack_heading')}</h2>
-        <p className="mb-12 max-w-[520px] text-base text-text-secondary">{t('home_stack_desc')}</p>
+        <SectionHeader
+          label={t('home_stack_label')}
+          heading={t('home_stack_heading')}
+          desc={t('home_stack_desc')}
+        />
 
         <motion.div
           variants={stagger}
           initial="hidden"
           whileInView="visible"
           viewport={{ once: true, margin: '-30px' }}
-          className="flex flex-wrap justify-center gap-3"
+          className="mt-12 flex flex-wrap justify-center gap-3"
         >
           {stackItems.map((item) => (
             <motion.div

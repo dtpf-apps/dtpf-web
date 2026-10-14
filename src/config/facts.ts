@@ -50,6 +50,9 @@ export interface PlatformFacts {
   ci: { workflows: number; repos: number; forges: number };
 }
 
+/** Every project the generator measures; a page naming one it does not know fails to type-check. */
+export type MeasuredProject = keyof typeof factsJson.projects;
+
 export interface Facts {
   generatedAt: string;
   testsMeasuredAt: string;
@@ -57,11 +60,15 @@ export interface Facts {
   tests: { total: number };
   dauthTenants: number;
   saasSince: string;
-  projects: Record<string, ProjectFacts>;
+  projects: Record<MeasuredProject, ProjectFacts>;
   platform: PlatformFacts;
 }
 
 export const facts: Facts = factsJson;
+
+export function isMeasuredProject(slug: string): slug is MeasuredProject {
+  return Object.prototype.hasOwnProperty.call(facts.projects, slug);
+}
 
 /**
  * Thousands separator by UI language: 87021 → "87.021" (es) / "87,021" (en).
@@ -126,8 +133,8 @@ export function yearsSince(isoDate: string, now: Date = new Date()): number {
  */
 export function projectVars(slug: string, lang: string): Record<string, string> {
   const vars: Record<string, string> = { tenants: String(facts.dauthTenants) };
+  if (!isMeasuredProject(slug)) return vars;
   const project = facts.projects[slug];
-  if (!project) return vars;
   for (const [group, count] of Object.entries(project.tests)) {
     vars[group === 'total' ? 'tests' : group] = formatInt(count, lang);
   }

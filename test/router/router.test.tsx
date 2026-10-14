@@ -1,5 +1,6 @@
 import { matchRoutes } from 'react-router';
 import { routes } from '../../src/router/router';
+import { RouteErrorFallback } from '../../src/ErrorBoundary';
 
 function leafPath(url: string) {
   const matches = matchRoutes(routes, url);
@@ -29,6 +30,10 @@ describe('route table', () => {
     ['/en/privacy-policy', '/en/privacy-policy'],
   ])('serves %s in English', (url, expected) => {
     expect(leafPath(url)).toBe(expected);
+  });
+
+  it('gives the layout route the app fallback, since a page crash never reaches the class boundary', () => {
+    expect(routes[0]?.errorElement).toEqual(<RouteErrorFallback />);
   });
 
   it('falls through to a not-found route inside each language tree', () => {

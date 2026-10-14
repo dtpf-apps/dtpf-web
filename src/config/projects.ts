@@ -34,11 +34,17 @@ export interface Project {
   githubUrl?: string;
   stack: string[];
   metrics?: ProjectMetric[];
-  problemKey?: string;
-  solutionKey?: string;
-  resultKey?: string;
+  /** Absent means the detail page shows the description instead. */
+  caseStudy?: CaseStudy;
   /** Screenshots shown in the detail page gallery; absent means no gallery section. */
   media?: ProjectMedia[];
+}
+
+/** The detail page's Problem → Solution → Result: i18n keys, all three or none. */
+export interface CaseStudy {
+  problemKey: string;
+  solutionKey: string;
+  resultKey: string;
 }
 
 export interface ProjectMedia {
@@ -114,9 +120,11 @@ export const projects: Project[] = [
       { labelKey: 'billing', value: 'Stripe' },
       { labelKey: 'deploy', value: dcompany.ci },
     ],
-    problemKey: 'project_dcompany_problem',
-    solutionKey: 'project_dcompany_solution',
-    resultKey: 'project_dcompany_result',
+    caseStudy: {
+      problemKey: 'project_dcompany_problem',
+      solutionKey: 'project_dcompany_solution',
+      resultKey: 'project_dcompany_result',
+    },
     media: landingPair('dcompany'),
   },
   {
@@ -138,9 +146,11 @@ export const projects: Project[] = [
       { labelKey: 'monitoring', value: 'Grafana + Loki' },
       { labelKey: 'deploy', value: dauth.ci },
     ],
-    problemKey: 'project_dauth_problem',
-    solutionKey: 'project_dauth_solution',
-    resultKey: 'project_dauth_result',
+    caseStudy: {
+      problemKey: 'project_dauth_problem',
+      solutionKey: 'project_dauth_solution',
+      resultKey: 'project_dauth_result',
+    },
     media: landingPair('dauth'),
   },
   {
@@ -162,9 +172,11 @@ export const projects: Project[] = [
       { labelKey: 'target', valueKey: 'metric_mobile_first' },
       { labelKey: 'deploy', value: dinventory.ci },
     ],
-    problemKey: 'project_dinventory_problem',
-    solutionKey: 'project_dinventory_solution',
-    resultKey: 'project_dinventory_result',
+    caseStudy: {
+      problemKey: 'project_dinventory_problem',
+      solutionKey: 'project_dinventory_solution',
+      resultKey: 'project_dinventory_result',
+    },
   },
   {
     slug: 'dalist',
@@ -192,9 +204,11 @@ export const projects: Project[] = [
       { labelKey: 'store', value: 'Google Play' },
       { labelKey: 'deploy', value: dalist.ci },
     ],
-    problemKey: 'project_dalist_problem',
-    solutionKey: 'project_dalist_solution',
-    resultKey: 'project_dalist_result',
+    caseStudy: {
+      problemKey: 'project_dalist_problem',
+      solutionKey: 'project_dalist_solution',
+      resultKey: 'project_dalist_result',
+    },
     media: landingPair('dalist'),
   },
   {
@@ -213,9 +227,11 @@ export const projects: Project[] = [
       { labelKey: 'cms', valueKey: 'metric_cms_sections' },
       { labelKey: 'deploy', value: airam.ci },
     ],
-    problemKey: 'project_airam_problem',
-    solutionKey: 'project_airam_solution',
-    resultKey: 'project_airam_result',
+    caseStudy: {
+      problemKey: 'project_airam_problem',
+      solutionKey: 'project_airam_solution',
+      resultKey: 'project_airam_result',
+    },
     media: [
       {
         src: '/projects/airam/product-desktop.webp',
@@ -246,9 +262,11 @@ export const projects: Project[] = [
       { labelKey: 'admin', valueKey: 'metric_admin_full' },
       { labelKey: 'deploy', value: dstash.ci },
     ],
-    problemKey: 'project_dstash_problem',
-    solutionKey: 'project_dstash_solution',
-    resultKey: 'project_dstash_result',
+    caseStudy: {
+      problemKey: 'project_dstash_problem',
+      solutionKey: 'project_dstash_solution',
+      resultKey: 'project_dstash_result',
+    },
     media: landingPair('dstash'),
   },
   {
@@ -267,9 +285,11 @@ export const projects: Project[] = [
       { labelKey: 'tax', value: 'FIFO' },
       { labelKey: 'deploy', value: dwealth.ci },
     ],
-    problemKey: 'project_dwealth_problem',
-    solutionKey: 'project_dwealth_solution',
-    resultKey: 'project_dwealth_result',
+    caseStudy: {
+      problemKey: 'project_dwealth_problem',
+      solutionKey: 'project_dwealth_solution',
+      resultKey: 'project_dwealth_result',
+    },
   },
   {
     slug: 'audity',
