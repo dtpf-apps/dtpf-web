@@ -6,6 +6,7 @@ import { resolve } from 'node:path';
 export const FIXED_PAGES = [
   { key: 'home', path: '/' },
   { key: 'projects', path: '/projects' },
+  { key: 'platform', path: '/platform' },
   { key: 'about', path: '/about' },
   { key: 'contact', path: '/contact' },
   { key: 'cv', path: '/cv' },

@@ -7,6 +7,7 @@ import lazyWithRetry from 'utils/lazyWithRetry';
 const Home = lazyWithRetry(() => import('views/pages/Home'));
 const Projects = lazyWithRetry(() => import('views/pages/Projects'));
 const ProjectDetail = lazyWithRetry(() => import('views/pages/ProjectDetail'));
+const Platform = lazyWithRetry(() => import('views/pages/Platform'));
 const About = lazyWithRetry(() => import('views/pages/About'));
 const Contact = lazyWithRetry(() => import('views/pages/Contact'));
 const Cv = lazyWithRetry(() => import('views/pages/Cv'));
@@ -21,6 +22,7 @@ const pages: { path: string; Page: React.ComponentType }[] = [
   { path: paths.home, Page: Home },
   { path: paths.projects, Page: Projects },
   { path: paths.projectDetail, Page: ProjectDetail },
+  { path: paths.platform, Page: Platform },
   { path: paths.about, Page: About },
   { path: paths.contact, Page: Contact },
   { path: paths.cv, Page: Cv },

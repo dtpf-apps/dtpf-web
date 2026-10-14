@@ -2,6 +2,7 @@ export const es = {
   // Navigation
   nav_home: 'Inicio',
   nav_projects: 'Proyectos',
+  nav_platform: 'Plataforma',
   nav_about: 'Sobre mí',
   nav_contact: 'Contacto',
 
@@ -352,4 +353,95 @@ export const es = {
   cv_projects: 'Proyectos seleccionados',
   about_cv: 'Currículum',
   contact_cv: 'Currículum (ver o descargar PDF)',
+
+  // Platform page — figures arrive from platformVars() in config/facts.ts
+  platform_title: 'Plataforma',
+  platform_seo_title: 'La plataforma que opero',
+  platform_desc:
+    'Las aplicaciones de este portafolio corren sobre una plataforma que he diseñado y opero yo solo: del firewall a la GPU, con copias, alertas y despliegue automático.',
+  platform_figures_heading: 'La plataforma en cifras',
+  platform_fig_nodes: 'nodos Proxmox en clúster',
+  platform_fig_guests: 'contenedores y máquinas virtuales',
+  platform_fig_unbacked: 'contenedores o VMs sin copia de seguridad',
+  platform_fig_alerts: 'reglas de alerta',
+  platform_fig_probes: 'sondas de disponibilidad',
+  platform_fig_workflows: 'workflows de CI/CD en {{repos}} repositorios',
+  platform_measured_at: 'Datos medidos el {{measuredAt}}.',
+  platform_policy: 'Se publica la arquitectura, no el inventario: sin IPs, nombres de máquina ni cuentas.',
+
+  platform_diagram_label: 'Arquitectura',
+  platform_diagram_heading: 'De internet a los datos',
+  platform_diagram_desc: 'El recorrido de una petición, capa a capa, y lo que opera a su alrededor.',
+  platform_diagram_summary:
+    'Una petición entra por Cloudflare, cruza una pareja de firewalls OPNsense en alta disponibilidad y llega a Nginx Proxy Manager, que la envía al servidor de apps, a un contenedor por app o a dcompany. Las aplicaciones usan MongoDB, dstash e inferencia en GPU propia. Del firewall hacia dentro todo corre en un clúster Proxmox de {{nodes}} nodos, con CI/CD, observabilidad y copias de seguridad operando a su alrededor.',
+  platform_legend_request: 'Recorrido de una petición',
+  platform_legend_ops: 'Operación: despliegue, métricas y copias',
+  platform_frame_cluster: 'Clúster Proxmox VE · {{nodes}} nodos',
+  platform_tier_firewall: 'Firewall en alta disponibilidad · CARP',
+  platform_tier_apps: 'Aplicaciones',
+  platform_tier_data: 'Datos e inferencia',
+  platform_tier_ops: 'Operación',
+  platform_node_cloudflare_sub: 'DNS y proxy',
+  platform_node_fw_primary: 'Principal',
+  platform_node_fw_standby: 'Reserva',
+  platform_node_proxy_sub: 'TLS y listas de acceso',
+  platform_node_appserver: 'Servidor de apps',
+  platform_node_appserver_sub: 'PM2 · las apps Express clásicas',
+  platform_node_lxc: 'Un LXC por app',
+  platform_node_lxc_sub: 'cada aplicación en su contenedor',
+  platform_node_dcompany_sub: 'control plane y un LXC aislado por tenant',
+  platform_node_mongo_sub: 'replica set para transacciones',
+  platform_node_dstash_sub: 'almacén de ficheros, producto propio',
+  platform_node_gpu: 'Inferencia en GPU',
+  platform_node_gpu_sub: 'voz, visión y LLM sin salir de la infraestructura',
+  platform_node_ci_sub: 'GitHub Actions y Gitea Actions, runners propios',
+  platform_node_ci_rel: 'despliega solo con los tests en verde',
+  platform_node_obs: 'Observabilidad',
+  platform_node_obs_rel: 'alertas a Matrix',
+  platform_node_backup: 'Copias de seguridad',
+  platform_node_backup_sub: 'Proxmox Backup Server · {{datastores}} almacenes',
+  platform_node_backup_rel: 'copias programadas del clúster',
+
+  platform_cards_label: 'Piezas',
+  platform_cards_heading: 'Qué la mantiene en pie',
+  platform_cards_desc: 'Cada pieza la he montado, la opero y la mantengo yo.',
+  platform_card_cluster_title: 'Clúster Proxmox con HA y réplicas ZFS',
+  platform_card_cluster_body:
+    'La plataforma corre sobre {{nodes}} nodos Proxmox en alta disponibilidad, con réplicas ZFS entre nodos y copias programadas en Proxmox Backup Server.',
+  platform_card_cluster_meta:
+    '{{lxc}} LXC · {{vms}} VMs · {{replicationJobs}} réplicas ZFS · {{backupTb}} TB en copias',
+  platform_card_firewall_title: 'Firewall en alta disponibilidad (CARP)',
+  platform_card_firewall_body:
+    'Una pareja de OPNsense en CARP: si uno cae, el otro asume el tráfico. Suricata IDS vigila en ambos y, detrás, Nginx Proxy Manager termina TLS con listas de acceso.',
+  platform_card_firewall_meta: 'Cloudflare delante · pareja de VMs · IDS en las dos',
+  platform_card_ci_title: 'CI/CD doble: GitHub Actions y Gitea Actions',
+  platform_card_ci_body:
+    'GitHub Actions y Gitea Actions, ambos con runners propios. Ningún repositorio despliega con un test en rojo; dcompany añade su escalera: dev → staging → SHA firmado → promoción.',
+  platform_card_ci_meta: '{{workflows}} workflows · {{repos}} repositorios · {{forges}} forjas',
+  platform_card_observability_title: 'Observabilidad y alertas a Matrix',
+  platform_card_observability_body:
+    'Prometheus, Loki y Grafana vigilan los servicios públicos e internos, y las alertas llegan a Matrix. error-watcher, una herramienta mía, lee Loki y publica allí los errores.',
+  platform_card_observability_meta:
+    '{{targets}} objetivos en {{jobs}} jobs · {{probes}} sondas · {{alertRules}} reglas',
+  platform_card_inference_title: 'Inferencia self-hosted: voz y visión',
+  platform_card_inference_body:
+    'Funciones en producción servidas desde GPU propias: transcripción, separación de hablantes, visión, un LLM y embeddings. Nada sale de la infraestructura.',
+  platform_card_inference_meta: 'Whisper · pyannote · Qwen · llama-server',
+  platform_card_inference_used: 'En uso en:',
+  platform_card_tools_title: 'Herramientas internas',
+  platform_card_tools_body:
+    'Solo en la red local o por VPN, sin URL pública: aquí se describen, no se enlazan.',
+  platform_tool_voxdrop: 'mando por voz (PWA)',
+  platform_tool_meetscribe: 'transcripción de reuniones',
+  platform_tool_ops: 'portal de operaciones; de él salen las cifras de tests de este sitio',
+  platform_tool_errorwatcher: 'publica en Matrix los errores de Loki',
+  platform_tool_provisioner: 'da de alta y de baja los tenants de dcompany',
+
+  platform_cta_heading: 'Lo que corre encima',
+  platform_cta_desc:
+    'Autenticación, almacenamiento, notas, una tienda para un cliente y una plataforma de agentes de IA, cada uno con su caso de estudio.',
+  platform_cta_projects: 'Ver los proyectos',
+
+  seo_desc_platform:
+    'La infraestructura que opero yo solo: clúster Proxmox, firewall en alta disponibilidad, CI/CD, observabilidad con alertas e inferencia en GPU propia.',
 };

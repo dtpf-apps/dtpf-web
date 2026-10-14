@@ -23,7 +23,7 @@ pnpm test:coverage    # Run tests with v8 coverage report (HTML in coverage/)
 
 ### Testing
 
-Vitest 5 with jsdom environment, @testing-library/react, and jest-dom matchers. **395 tests** across 41 test files (one, the `facts.json` staleness check, runs only when `CI` is set). `test/postbuild/*` imports the build scripts and `test/styles/fonts.test.ts` reads `index.html` and the CSS from disk, so the suite runs from the package root (as `pnpm test` does). Coverage thresholds: 95% (statements, branches, functions, lines) — `pnpm test:coverage` currently FAILS them (72.9% stmts overall; `useSWUpdate.ts` and `lazyWithRetry.ts` are largely uncovered). CI runs `pnpm test` (no coverage gate) before deploy.
+Vitest 5 with jsdom environment, @testing-library/react, and jest-dom matchers. **422 tests** across 43 test files (one, the `facts.json` staleness check, runs only when `CI` is set). `test/postbuild/*` imports the build scripts and `test/styles/fonts.test.ts` reads `index.html` and the CSS from disk, so the suite runs from the package root (as `pnpm test` does). Coverage thresholds: 95% (statements, branches, functions, lines) — `pnpm test:coverage` currently FAILS them (82.0% stmts overall; `useSWUpdate.ts` and `lazyWithRetry.ts` are largely uncovered). CI runs `pnpm test` (no coverage gate) before deploy.
 
 ```
 test/
@@ -31,19 +31,20 @@ test/
 ├── helpers/renderWithProviders.tsx    # MemoryRouter + ThemeProvider + i18n wrapper
 ├── config/
 │   ├── facts.test.ts                 # 23 tests — facts.json consistency, 120-day staleness (CI only), platform figures, formatting helpers, MCP count
+│   ├── platform.test.ts              # 6 tests — every locale key referenced exists in es/en, "used by" slugs are projects, figure variables exist, no inventory (IP, CT/VM number, internal host) in the copy — with a positive control
 │   ├── projects.test.ts              # 18 tests — order, featured four, status vs. liveUrl, no undefined version in a tag
 │   └── site.test.ts                  # 10 tests — canonical/OG path helpers, JSON-LD builders and `<` escaping
 ├── contexts/theme.test.tsx           # 11 tests — ThemeProvider + useTheme
 ├── layouts/PortfolioLayout.test.tsx  # 6 tests — i18n follows the URL, saved-language redirect on arrival
 ├── router/
 │   ├── paths.test.ts                 # 9 tests — path constants + langFromPath/stripLang/localizePath
-│   ├── router.test.tsx               # 14 tests — one page tree per language, 404 per language
+│   ├── router.test.tsx               # 16 tests — one page tree per language, 404 per language
 │   ├── LocalizedLink.test.tsx        # 7 tests — Link/NavLink/Navigate keep the /en prefix
 │   ├── noRawRouterLinks.test.ts      # 1 test — no page/component imports Link/NavLink/Navigate from react-router directly
 │   └── navigation.test.tsx           # 6 tests
 ├── styles/fonts.test.ts              # 4 tests — a self-hosted @font-face per theme family, no font host, valid preloads, OFL present
 ├── postbuild/
-│   ├── routes.test.ts                # 8 tests — route list per language, dist file per route
+│   ├── routes.test.ts                # 9 tests — route list per language, dist file per route
 │   ├── template.test.ts              # 7 tests — head injection with data-prerender, <html lang>, strip
 │   ├── sitemap.test.ts               # 5 tests — one URL per route, privacy ES-only
 │   ├── og.test.ts                    # 4 tests — card text from the page title, embedded fonts, no network URL
@@ -60,7 +61,7 @@ test/
 │   └── useAnalyticsPageView.test.tsx # 6 tests
 ├── components/
 │   ├── ErrorBoundary.test.tsx        # 8 tests — error boundary + fallback UI
-│   ├── Header.test.tsx               # 27 tests — nav, mobile menu, language toggle navigates to the other URL, trackEvent
+│   ├── Header.test.tsx               # 28 tests — five nav links, mobile menu (scrolls), language toggle navigates to the other URL, trackEvent
 │   ├── Footer.test.tsx               # 11 tests — links, "This site" line from facts, cookieless-analytics line, trackEvent
 │   ├── ProjectGallery.test.tsx       # 11 tests — thumbnails, lightbox, keyboard, focus
 │   ├── Seo.test.tsx                  # 10 tests — title, description, canonical, hreflang, OG/Twitter, JSON-LD, noindex, esOnly
@@ -68,13 +69,14 @@ test/
 │   └── printHidden.test.tsx          # 3 tests — header, footer and staging badge carry print:hidden
 └── pages/
     ├── Home.test.tsx                  # 22 tests — proof bar from facts, bento, "How I work" cards and links, CTAs, trackEvent
+    ├── Platform.test.tsx              # 14 tests — six measured figures, dated line, six cards, tools without links, project links, diagram (nodes, accessible name, no headings/focusables), no inventory, CTAs, trackEvent
     ├── About.test.tsx                 # 15 tests — profile, experience, tools, CV button, trackEvent
     ├── Projects.test.tsx              # 9 tests — one card per project, badge per status, visit link only with liveUrl, trackEvent
     ├── ProjectDetail.test.tsx         # 26 tests — case study, metrics, status note, store link, private project without buttons, SEO, trackEvent
     ├── Contact.test.tsx               # 18 tests — form, submit, CV link, trackEvent
     ├── Cv.test.tsx                    # 12 tests — sections from site data, download link per language, trackEvent
-    ├── pageSeo.test.tsx               # 7 tests — every page renders <Seo> with its own title and description
-    ├── headingOutline.test.tsx        # 8 tests — every page opens with its only h1 and never skips a heading level
+    ├── pageSeo.test.tsx               # 8 tests — every page renders <Seo> with its own title and description
+    ├── headingOutline.test.tsx        # 10 tests — every page opens with its only h1 and never skips a heading level
     ├── NotFound.test.tsx              # 2 tests
     └── PrivacyPolicy.test.tsx         # 3 tests — heading, RGPD, cookieless analytics declared
 ```
@@ -94,6 +96,7 @@ The language lives in the URL: `/` is Spanish (canonical) and `/en/...` is Engli
 - `/` — Home (hero, bento grid projects, "How I work" — four habit cards whose figures come from `facts.json` and whose links point at the page that proves each one —, stack, CTA)
 - `/projects` — Projects list with stacked cards
 - `/projects/:slug` — Project detail with case study (Problem → Solution → Result)
+- `/platform` — Platform: six measured figures (`platformVars()`), a request-path architecture diagram (`ArchitectureDiagram`, HTML + CSS grid, no SVG) and six building-block cards; data in `config/platform.ts`, copy in the `platform_*` locale keys. Architecture, not inventory: no IPs, hostnames or machine ids anywhere
 - `/about` — Profile card, bio, experience, tools grid, CV button
 - `/contact` — Contact form + direct links (incl. CV)
 - `/cv` — Printable A4 résumé built from the site data (`config/profile.ts`, `config/projects.ts`, locale strings) + PDF download (`cvPdfPath(lang)`)
@@ -119,7 +122,7 @@ Single `PortfolioLayout` wrapping all routes: sticky Header + `AnimatePresence` 
 
 ### i18n
 
-`src/utils/i18n.ts` — i18next initialised with the language of the URL (`langFromPath(window.location.pathname)`). **No browser-language detection and no automatic redirect**: Googlebot crawls as en-US and must reach the Spanish pages. `PortfolioLayout` keeps i18next in sync with the route (`useLayoutEffect`) and, once on arrival, redirects (replace, keeping search and hash) to the language the visitor chose earlier with the header toggle, persisted in localStorage (`dtpf-lang`); the toggle itself navigates to the same path under the other prefix. Translation files in `src/assets/locale/{es,en}.ts` (~150 keys each). `<html lang>` follows the active language, so `index.html`'s `lang="es"` is only the pre-hydration default (the pre-rendered route files carry the right one). Spanish strings carry their accents; `test/utils/i18n.test.ts` rejects the common unaccented stand-ins and checks `{{placeholder}}` parity between languages. In jsdom tests `test/setup.ts` switches to `en` after importing i18n, so assertions use the English copy.
+`src/utils/i18n.ts` — i18next initialised with the language of the URL (`langFromPath(window.location.pathname)`). **No browser-language detection and no automatic redirect**: Googlebot crawls as en-US and must reach the Spanish pages. `PortfolioLayout` keeps i18next in sync with the route (`useLayoutEffect`) and, once on arrival, redirects (replace, keeping search and hash) to the language the visitor chose earlier with the header toggle, persisted in localStorage (`dtpf-lang`); the toggle itself navigates to the same path under the other prefix. Translation files in `src/assets/locale/{es,en}.ts` (~315 keys each). `<html lang>` follows the active language, so `index.html`'s `lang="es"` is only the pre-hydration default (the pre-rendered route files carry the right one). Spanish strings carry their accents; `test/utils/i18n.test.ts` rejects the common unaccented stand-ins and checks `{{placeholder}}` parity between languages. In jsdom tests `test/setup.ts` switches to `en` after importing i18n, so assertions use the English copy.
 
 ### Discovery: pre-rendered head, OG cards, sitemap, CV PDF
 
@@ -127,7 +130,7 @@ Single `PortfolioLayout` wrapping all routes: sticky Header + `AnimatePresence` 
 
 A crawler or link-preview bot that does not run JavaScript sees none of that, so `pnpm build` runs `scripts/postbuild/index.mjs` after `vite build` (plain Node ESM; `playwright` pinned to an exact version in `package.json` — the CI runner caches that Chromium headless shell under `PLAYWRIGHT_BROWSERS_PATH`, and `deploy.yml` installs it with `--only-shell`, never `--with-deps`):
 
-1. `serve.mjs` serves `dist/` on 127.0.0.1; `prerender.mjs` opens each of the 28 routes (`routes.mjs`: every page × both languages, project slugs read from `config/projects.ts`) in headless Chromium with third-party requests refused and copies only the SEO tags (plus the JSON-LD script) out of the live DOM.
+1. `serve.mjs` serves `dist/` on 127.0.0.1; `prerender.mjs` opens each of the 30 routes (`routes.mjs`: every page × both languages, project slugs read from `config/projects.ts`) in headless Chromium with third-party requests refused and copies only the SEO tags (plus the JSON-LD script) out of the live DOM.
 2. `template.mjs` injects them, marked `data-prerender`, into the untouched `dist/index.html` template with the right `<html lang>`, and `index.mjs` writes `dist/<route>/index.html` (the home is `dist/index.html` itself). `#root` stays empty — head-only pre-rendering, not SSR; `utils/removePrerendered.ts` strips the marked tags before `createRoot`, so React never duplicates them.
 3. `og.mjs` renders a 1200×630 card per route (brand, page title, description, the first desktop screenshot for a project page; fonts embedded from `src/assets/fonts/`) to `dist/og/<lang>/<key>.png`.
 4. `pdf.mjs` prints `/cv` and `/en/cv` in the light theme to `dist/cv/david-pizarro-frick-{es,en}.pdf` (A4, 12 mm margins). The CV page uses plain elements (no Framer Motion) and `print:` utilities plus the `@media print` block in `portfolio.css`, so the print is the page.
@@ -184,9 +187,10 @@ scripts/postbuild/               # Post-build pipeline run by `pnpm build` (see 
 src/
 ├── api/utils/config.ts          # basePath + apiVersion + apiUrl()
 ├── assets/fonts/                # Self-hosted woff2 (static latin instances) + OFL licenses
-├── assets/locale/{es,en}.ts     # i18n translations (~150 keys each)
+├── assets/locale/{es,en}.ts     # i18n translations (~315 keys each)
 ├── config/facts.json            # Measured figures — generated by scripts/utils/portfolio-facts.py (d-context)
 ├── config/facts.ts              # Typed access + per-language number formatting for facts.json
+├── config/platform.ts           # Platform page data: diagram nodes and tiers, figures strip, six cards
 ├── config/profile.ts            # Experience + tool groups (About and Cv)
 ├── config/projects.ts           # Project data (8 projects, status + featured flags; versions and counts from facts.json)
 ├── config/site.ts               # SITE_URL, SITE_NAME, AUTHOR, canonical/OG helpers, JSON-LD builders, cvPdfPath
@@ -213,12 +217,13 @@ src/
 ├── views/
 │   ├── layouts/PortfolioLayout.tsx  # Header + page transitions + footer; syncs i18n to the URL, saved-language redirect
 │   ├── components/
+│   │   ├── ArchitectureDiagram.tsx # Platform page: request path as ordered lists, aria-hidden connectors, sr-only summary
 │   │   ├── navigation/{Header,Footer}.tsx
 │   │   ├── ProjectGallery.tsx   # Screenshot thumbnails + lightbox dialog (Esc/arrows/focus trap/focus return)
 │   │   ├── ProjectStatusBadge.tsx # Production / Private beta / Client work / Private pill per project status
 │   │   ├── Seo.tsx              # Per-page head: title, description, canonical, hreflang, OG/Twitter, JSON-LD
 │   │   └── StagingBadge.tsx     # "Staging" pill on dev.* hostnames
-│   └── pages/{Home,Projects,ProjectDetail,About,Contact,Cv,NotFound,PrivacyPolicy}.tsx
+│   └── pages/{Home,Projects,ProjectDetail,Platform,About,Contact,Cv,NotFound,PrivacyPolicy}.tsx
 ├── ErrorBoundary.tsx            # Top-level error boundary + fallback UI
 ├── service-worker.ts            # Workbox service worker (injectManifest)
 ├── serviceWorkerRegistration.ts # SW registration

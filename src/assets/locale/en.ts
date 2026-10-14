@@ -2,6 +2,7 @@ export const en = {
   // Navigation
   nav_home: 'Home',
   nav_projects: 'Projects',
+  nav_platform: 'Platform',
   nav_about: 'About',
   nav_contact: 'Contact',
 
@@ -347,4 +348,94 @@ export const en = {
   cv_projects: 'Selected projects',
   about_cv: 'Résumé',
   contact_cv: 'Résumé (view or download PDF)',
+
+  // Platform page — figures arrive from platformVars() in config/facts.ts
+  platform_title: 'Platform',
+  platform_seo_title: 'The platform I run',
+  platform_desc:
+    'The apps in this portfolio run on a platform I designed and operate on my own: from the firewall to the GPUs, with backups, alerting and automated deploys.',
+  platform_figures_heading: 'The platform in figures',
+  platform_fig_nodes: 'Proxmox nodes in one cluster',
+  platform_fig_guests: 'containers and virtual machines',
+  platform_fig_unbacked: 'containers or VMs without a backup',
+  platform_fig_alerts: 'alert rules',
+  platform_fig_probes: 'uptime probes',
+  platform_fig_workflows: 'CI/CD workflows across {{repos}} repositories',
+  platform_measured_at: 'Figures measured on {{measuredAt}}.',
+  platform_policy: 'Architecture, not inventory: no IPs, hostnames or account names here.',
+
+  platform_diagram_label: 'Architecture',
+  platform_diagram_heading: 'From the internet to the data',
+  platform_diagram_desc: 'The path of a request, layer by layer, and the operations around it.',
+  platform_diagram_summary:
+    'A request comes in through Cloudflare, crosses a high-availability pair of OPNsense firewalls and reaches Nginx Proxy Manager, which sends it to the app server, a per-app container or dcompany. The apps use MongoDB, dstash and inference on my own GPUs. From the firewall inwards everything runs on a {{nodes}}-node Proxmox cluster, with CI/CD, observability and backups operating around it.',
+  platform_legend_request: 'Request path',
+  platform_legend_ops: 'Operations: deploys, metrics, backups',
+  platform_frame_cluster: 'Proxmox VE cluster · {{nodes}} nodes',
+  platform_tier_firewall: 'High-availability firewall · CARP',
+  platform_tier_apps: 'Applications',
+  platform_tier_data: 'Data and inference',
+  platform_tier_ops: 'Operations',
+  platform_node_cloudflare_sub: 'DNS and proxy',
+  platform_node_fw_primary: 'Primary',
+  platform_node_fw_standby: 'Standby',
+  platform_node_proxy_sub: 'TLS and access lists',
+  platform_node_appserver: 'App server',
+  platform_node_appserver_sub: 'PM2 · the classic Express apps',
+  platform_node_lxc: 'One LXC per app',
+  platform_node_lxc_sub: 'each app in its own container',
+  platform_node_dcompany_sub: 'control plane, one isolated LXC per tenant',
+  platform_node_mongo_sub: 'replica set for transactions',
+  platform_node_dstash_sub: 'file store, one of my products',
+  platform_node_gpu: 'GPU inference',
+  platform_node_gpu_sub: 'speech, vision and LLM, never leaving the infrastructure',
+  platform_node_ci_sub: 'GitHub Actions and Gitea Actions, self-hosted runners',
+  platform_node_ci_rel: 'deploys only on green tests',
+  platform_node_obs: 'Observability',
+  platform_node_obs_rel: 'alerts to Matrix',
+  platform_node_backup: 'Backups',
+  platform_node_backup_sub: 'Proxmox Backup Server · {{datastores}} datastores',
+  platform_node_backup_rel: 'scheduled backups of the cluster',
+
+  platform_cards_label: 'Building blocks',
+  platform_cards_heading: 'What keeps it running',
+  platform_cards_desc: "I built every piece, and I'm the one who runs and maintains it.",
+  platform_card_cluster_title: 'Proxmox cluster with HA and ZFS replication',
+  platform_card_cluster_body:
+    'The platform runs on {{nodes}} Proxmox nodes in a high-availability cluster, with ZFS replication between nodes and scheduled backups to Proxmox Backup Server.',
+  platform_card_cluster_meta:
+    '{{lxc}} LXC · {{vms}} VMs · {{replicationJobs}} ZFS replication jobs · {{backupTb}} TB of backups',
+  platform_card_firewall_title: 'High-availability firewall (CARP)',
+  platform_card_firewall_body:
+    'A CARP pair of OPNsense firewalls: if one fails, the other takes the traffic. Suricata IDS watches both; behind them, Nginx Proxy Manager terminates TLS and enforces access lists.',
+  platform_card_firewall_meta: 'Cloudflare in front · a pair of VMs · IDS on both',
+  platform_card_ci_title: 'Dual CI/CD: GitHub Actions and Gitea Actions',
+  platform_card_ci_body:
+    'GitHub Actions and Gitea Actions, both on self-hosted runners. No repository deploys on a red test, and dcompany adds its own ladder: dev → staging → signed SHA → promotion.',
+  platform_card_ci_meta: '{{workflows}} workflows · {{repos}} repositories · {{forges}} forges',
+  platform_card_observability_title: 'Observability, with alerts to Matrix',
+  platform_card_observability_body:
+    'Prometheus, Loki and Grafana watch public and internal services, and alerts land in Matrix. error-watcher, a tool I wrote, polls Loki and posts errors there too.',
+  platform_card_observability_meta:
+    '{{targets}} targets in {{jobs}} jobs · {{probes}} probes · {{alertRules}} rules',
+  platform_card_inference_title: 'Self-hosted inference: speech and vision',
+  platform_card_inference_body:
+    'Live features served from GPUs of my own: transcription, speaker diarization, vision, an LLM and embeddings. Nothing leaves the infrastructure.',
+  platform_card_inference_meta: 'Whisper · pyannote · Qwen · llama-server',
+  platform_card_inference_used: 'In use in:',
+  platform_card_tools_title: 'Internal tools',
+  platform_card_tools_body: 'LAN or VPN only, with no public URL: described here, never linked.',
+  platform_tool_voxdrop: 'voice remote (PWA)',
+  platform_tool_meetscribe: 'meeting transcription',
+  platform_tool_ops: 'ops portal; the test counts on this site come from it',
+  platform_tool_errorwatcher: 'posts Loki errors to Matrix',
+  platform_tool_provisioner: 'provisions and tears down dcompany tenants',
+
+  platform_cta_heading: 'What runs on top',
+  platform_cta_desc:
+    'Authentication, storage, notes, a shop for a client and an AI-agent platform, each with its own case study.',
+  platform_cta_projects: 'See the projects',
+
+  seo_desc_platform:
+    'The infrastructure I run on my own: a Proxmox cluster, a high-availability firewall, CI/CD, observability with alerting and inference on my own GPUs.',
 };

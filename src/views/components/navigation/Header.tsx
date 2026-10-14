@@ -38,6 +38,7 @@ function Header() {
   const navLinks = [
     { to: paths.home, label: t('nav_home') },
     { to: paths.projects, label: t('nav_projects') },
+    { to: paths.platform, label: t('nav_platform') },
     { to: paths.about, label: t('nav_about') },
     { to: paths.contact, label: t('nav_contact') },
   ];
@@ -138,7 +139,7 @@ function Header() {
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
             transition={{ duration: 0.2 }}
-            className="fixed inset-0 z-[999] bg-bg-primary"
+            className="fixed inset-0 z-[999] overflow-y-auto bg-bg-primary"
             role="dialog"
             aria-modal="true"
             aria-label={t('nav_mobile_menu')}

@@ -23,6 +23,7 @@ describe('postbuild routes', () => {
     const router = [
       paths.home,
       paths.projects,
+      paths.platform,
       paths.about,
       paths.contact,
       paths.cv,
@@ -55,9 +56,16 @@ describe('postbuild routes', () => {
     ).toEqual(['/cv', '/en/cv']);
   });
 
-  it('counts six fixed pages and one per project, twice', () => {
-    expect(FIXED_PAGES).toHaveLength(6);
-    expect(buildRoutes()).toHaveLength((6 + projects.length) * 2);
+  it('lists the platform page in both languages', () => {
+    const routes = buildRoutes();
+    expect(
+      routes.filter((r: { key: string }) => r.key === 'platform').map((r: { path: string }) => r.path)
+    ).toEqual(['/platform', '/en/platform']);
+  });
+
+  it('counts seven fixed pages and one per project, twice', () => {
+    expect(FIXED_PAGES).toHaveLength(7);
+    expect(buildRoutes()).toHaveLength((7 + projects.length) * 2);
   });
 
   it('writes each route to its own index.html', () => {

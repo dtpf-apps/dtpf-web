@@ -13,7 +13,7 @@ export const AUTHOR = {
   email: 'davidpizarrofrick@gmail.com',
 } as const;
 
-/** `key` is `home | projects | about | contact | cv | privacy-policy | project-<slug>`. */
+/** `key` is `home | projects | platform | about | contact | cv | privacy-policy | project-<slug>`. */
 export function ogImagePath(lang: Lang, key: string): string {
   return `/og/${lang}/${key}.png`;
 }
