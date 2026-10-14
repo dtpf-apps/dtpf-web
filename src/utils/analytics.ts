@@ -22,7 +22,12 @@ function injectScript(): void {
   initialized = true;
 }
 
+// Key the consent banner wrote until 0.6.22; returning visitors still carry it, and the
+// site no longer has anything to consent to.
+const LEGACY_CONSENT_KEY = 'dtpf-cookie-consent';
+
 export function initAnalytics(): void {
+  localStorage.removeItem(LEGACY_CONSENT_KEY);
   injectScript();
 }
 

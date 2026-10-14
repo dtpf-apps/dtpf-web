@@ -30,11 +30,12 @@ export const es = {
   home_how_heading: 'No colecciono side projects: los pongo en producción.',
   home_how_desc: 'Cuatro hábitos detrás de cada app, cada uno con su evidencia a un clic.',
   home_how_1_title: 'Test primero, gate en verde',
-  home_how_1_body: '{{tests}} tests en los repos. Cada uno bloquea su despliegue si falla un solo test.',
+  home_how_1_body:
+    '{{tests}} tests en los repos. Cada app despliega desde el mismo pipeline que ejecuta sus tests: si falla uno, no hay despliegue.',
   home_how_1_link: 'Ver las cifras por proyecto',
   home_how_2_title: 'Staging, firma, producción',
   home_how_2_body:
-    'Ningún push llega a producción sin pasar por staging. En dcompany la promoción es deliberada y por SHA firmado.',
+    'Cada app tiene su staging, desplegado desde la rama dev; producción se despliega desde main. En dcompany la promoción es deliberada y por SHA firmado.',
   home_how_2_link: 'Ver dcompany',
   home_how_3_title: 'Observabilidad de verdad',
   home_how_3_body:
@@ -416,7 +417,7 @@ export const es = {
   platform_card_firewall_meta: 'Cloudflare delante · pareja de VMs · IDS en las dos',
   platform_card_ci_title: 'CI/CD doble: GitHub Actions y Gitea Actions',
   platform_card_ci_body:
-    'GitHub Actions y Gitea Actions, ambos con runners propios. Ningún repositorio despliega con un test en rojo; dcompany añade su escalera: dev → staging → SHA firmado → promoción.',
+    'GitHub Actions y Gitea Actions, ambos con runners propios. Cada app despliega desde el mismo pipeline que ejecuta sus tests, así que un test en rojo no despliega; dcompany añade su escalera: dev → staging → SHA firmado → promoción.',
   platform_card_ci_meta: '{{workflows}} workflows · {{repos}} repositorios · {{forges}} forjas',
   platform_card_observability_title: 'Observabilidad y alertas a Matrix',
   platform_card_observability_body:

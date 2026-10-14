@@ -23,7 +23,7 @@ pnpm test:coverage    # Run tests with v8 coverage report (HTML in coverage/)
 
 ### Testing
 
-Vitest 5 with jsdom environment, @testing-library/react, and jest-dom matchers. **422 tests** across 43 test files (one, the `facts.json` staleness check, runs only when `CI` is set). `test/postbuild/*` imports the build scripts and `test/styles/fonts.test.ts` reads `index.html` and the CSS from disk, so the suite runs from the package root (as `pnpm test` does). Coverage thresholds: 95% (statements, branches, functions, lines) — `pnpm test:coverage` currently FAILS them (82.0% stmts overall; `useSWUpdate.ts` and `lazyWithRetry.ts` are largely uncovered). CI runs `pnpm test` (no coverage gate) before deploy.
+Vitest 5 with jsdom environment, @testing-library/react, and jest-dom matchers. **425 tests** across 44 test files (one, the `facts.json` staleness check, runs only when `CI` is set). `test/postbuild/*` imports the build scripts and `test/styles/fonts.test.ts` reads `index.html` and the CSS from disk, so the suite runs from the package root (as `pnpm test` does). Coverage thresholds: 95% (statements, branches, functions, lines) — `pnpm test:coverage` currently FAILS them (82.0% stmts overall; `useSWUpdate.ts` and `lazyWithRetry.ts` are largely uncovered). CI runs `pnpm test` (no coverage gate) before deploy.
 
 ```
 test/
@@ -158,7 +158,7 @@ The contact form includes:
 
 ### Analytics & Error Tracking
 
-- `src/utils/analytics.ts` — Umami (analytics.dtpf.es) with separate website IDs for dtpf.es and dev.dtpf.es, injected on every visit from `App` (`data-auto-track` off). **No consent banner**: Umami sets no cookies and stores nothing in the browser, the IP is never stored (hashed with the user agent and a rotating salt), so the site declares it instead of asking — a footer line ("cookieless analytics with Umami · privacy policy") and the "Analítica web" section of `/privacy-policy`. Any change that makes the analytics identify people brings the consent question back. `useAnalyticsPageView` tracks SPA page views on route change plus one `perf:page-load` event.
+- `src/utils/analytics.ts` — Umami (analytics.dtpf.es) with separate website IDs for dtpf.es and dev.dtpf.es, injected on every visit from `App` (`data-auto-track` off). **No consent banner**: Umami sets no cookies and keeps no identifier in the browser, the IP is never stored (hashed with the user agent and a rotating salt), so the site declares it instead of asking — a footer line ("cookieless analytics with Umami · privacy policy") and the "Analítica web" section of `/privacy-policy`. Any change that makes the analytics identify people brings the consent question back. `useAnalyticsPageView` tracks SPA page views on route change plus one `perf:page-load` event.
 - `src/utils/errorTracking.ts` — `window` error/unhandledrejection listeners, dedup + batching, `POST /api/v1/client-errors`, flush on `beforeunload`. `src/ErrorBoundary.tsx` reports render errors and shows a fallback UI.
 - `views/components/StagingBadge.tsx` — fixed "Staging" pill when the hostname starts with `dev.`/`dev-` (`utils/isStaging.ts`).
 

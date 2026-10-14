@@ -163,7 +163,7 @@ export default function ArchitectureDiagram({ headingId, vars }: { headingId: st
                 <motion.li variants={fadeUp}>
                   <p className={captionClass}>{t(firewall.captionKey)}</p>
                   <div className="relative">
-                    <ul role="list" className="grid grid-cols-2 gap-8">
+                    <ul role="list" className="grid grid-cols-2 gap-8 md:gap-20">
                       {firewall.nodes.map((n) => (
                         <li key={n.id}>
                           <NodeBox node={n} vars={vars} />
@@ -173,9 +173,10 @@ export default function ArchitectureDiagram({ headingId, vars }: { headingId: st
                     <span
                       aria-hidden="true"
                       data-connector="carp"
-                      className="pointer-events-none absolute left-1/2 top-1/2 h-0.5 w-8 -translate-x-1/2 -translate-y-1/2 bg-accent"
+                      className="pointer-events-none absolute left-1/2 top-1/2 h-0.5 w-8 -translate-x-1/2 -translate-y-1/2 bg-accent md:w-20"
                     >
-                      <span className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 rounded-full border border-accent bg-bg-primary px-2 py-0.5 font-mono text-[11px] font-semibold text-text-primary">
+                      {/* The pill is wider than the mobile gap, so below md the tier caption alone names CARP */}
+                      <span className="absolute left-1/2 top-1/2 hidden -translate-x-1/2 -translate-y-1/2 rounded-full border border-accent bg-bg-primary px-2 py-0.5 font-mono text-[11px] font-semibold text-text-primary md:block">
                         CARP
                       </span>
                     </span>

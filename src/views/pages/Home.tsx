@@ -256,9 +256,8 @@ export default function Home() {
             <motion.article
               key={card.n}
               variants={fadeUp}
-              className="group relative overflow-hidden rounded-2xl border border-border bg-bg-surface p-7 transition-all duration-300 hover:-translate-y-0.5 hover:border-border-hover hover:shadow-[0_16px_48px_rgba(0,0,0,0.2)]"
+              className="relative overflow-hidden rounded-2xl border border-border bg-bg-surface p-7"
             >
-              <div className="absolute inset-x-0 top-0 h-0.5 bg-gradient-to-r from-accent to-warm opacity-0 transition-opacity group-hover:opacity-100" />
               <div className="mb-4 flex h-10 w-10 items-center justify-center rounded-xl bg-accent-subtle text-accent">
                 <card.Icon size={20} aria-hidden="true" />
               </div>

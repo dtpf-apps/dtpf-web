@@ -60,7 +60,7 @@ function Footer() {
         </a>
       </p>
       {/* No consent banner: the analytics is cookieless, and this line is where the visitor learns it. */}
-      <p className="mb-2 text-xs text-text-muted">
+      <p className="mb-2 text-xs text-text-secondary">
         {t('footer_analytics')} ·{' '}
         <Link
           to={paths.privacyPolicy}

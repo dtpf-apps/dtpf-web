@@ -22,4 +22,14 @@ describe('PrivacyPolicy', () => {
     expect(section).toMatch(/no se almacena tu dirección IP/i);
     expect(screen.queryByText(/si aceptas las cookies/i)).not.toBeInTheDocument();
   });
+
+  it('discloses the server-side technical logs: rate-limit IPs and browser error reports', () => {
+    renderWithProviders(<PrivacyPolicy />);
+    const logs = screen.getByRole('heading', { level: 2, name: /Registros técnicos/ });
+    const section = logs.nextElementSibling?.textContent ?? '';
+    expect(section).toMatch(/dirección IP/);
+    expect(section).toMatch(/errores/);
+    expect(section).toMatch(/agente de usuario/);
+    expect(screen.queryByText(/los únicos datos personales que recopilamos/i)).not.toBeInTheDocument();
+  });
 });

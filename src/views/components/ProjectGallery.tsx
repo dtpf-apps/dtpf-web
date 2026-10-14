@@ -130,7 +130,7 @@ export default function ProjectGallery({ media, projectName }: ProjectGalleryPro
             // Only the backdrop closes: controls and the image mark themselves as keepers.
             if (!(e.target as HTMLElement).closest('[data-lightbox-keep]')) close();
           }}
-          // Above the cookie banner (z-50), like the mobile menu: nothing may paint over an open lightbox.
+          // Same layer as the mobile menu (z-50): nothing may paint over an open lightbox.
           className="fixed inset-0 z-[999] flex items-center justify-center bg-black/90 p-4 outline-none"
         >
           {/* The bar itself lets clicks through to the backdrop; only its two children are keepers. */}

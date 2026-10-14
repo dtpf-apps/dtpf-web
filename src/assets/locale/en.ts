@@ -30,11 +30,11 @@ export const en = {
   home_how_desc: 'Four habits behind every app, each with its evidence one click away.',
   home_how_1_title: 'Tests first, gate green',
   home_how_1_body:
-    '{{tests}} tests across the repos. Each one blocks its own deploy when a single test fails.',
+    '{{tests}} tests across the repos. Each app deploys from the same pipeline that runs its tests: one failure, no deploy.',
   home_how_1_link: 'See the figures per project',
   home_how_2_title: 'Staging, sign-off, production',
   home_how_2_body:
-    'No push reaches production without going through staging. In dcompany, promotion is deliberate and by signed SHA.',
+    'Each app has its own staging, deployed from the dev branch; production deploys from main. In dcompany, promotion is deliberate and by signed SHA.',
   home_how_2_link: 'See dcompany',
   home_how_3_title: 'Real observability',
   home_how_3_body:
@@ -411,7 +411,7 @@ export const en = {
   platform_card_firewall_meta: 'Cloudflare in front · a pair of VMs · IDS on both',
   platform_card_ci_title: 'Dual CI/CD: GitHub Actions and Gitea Actions',
   platform_card_ci_body:
-    'GitHub Actions and Gitea Actions, both on self-hosted runners. No repository deploys on a red test, and dcompany adds its own ladder: dev → staging → signed SHA → promotion.',
+    'GitHub Actions and Gitea Actions, both on self-hosted runners. Each app deploys from the pipeline that runs its tests, so a red test never deploys; dcompany adds its own ladder: dev → staging → signed SHA → promotion.',
   platform_card_ci_meta: '{{workflows}} workflows · {{repos}} repositories · {{forges}} forges',
   platform_card_observability_title: 'Observability, with alerts to Matrix',
   platform_card_observability_body:
