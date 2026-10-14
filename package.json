@@ -1,6 +1,6 @@
 {
   "name": "dtpf-web",
-  "version": "0.6.24",
+  "version": "0.6.25",
   "description": "Frontend of dtpf.es, the personal portfolio of David T. Pizarro Frick",
   "author": "David T. Pizarro Frick",
   "license": "MIT",
@@ -17,7 +17,7 @@
   "packageManager": "pnpm@12.8.1",
   "dependencies": {
     "@tailwindcss/vite": "^4.3.3",
-    "framer-motion": "^14.1.0",
+    "framer-motion": "^14.2.0",
     "i18next": "^26.4.4",
     "lucide-react": "^1.56.0",
     "react": "~19.3.0",
