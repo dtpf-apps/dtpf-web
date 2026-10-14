@@ -44,6 +44,7 @@ describe('paths', () => {
     expect(paths.projectDetail).toBe('/projects/:slug');
     expect(paths.about).toBe('/about');
     expect(paths.contact).toBe('/contact');
+    expect(paths.platform).toBe('/platform');
     expect(paths.privacyPolicy).toBe('/privacy-policy');
   });
 

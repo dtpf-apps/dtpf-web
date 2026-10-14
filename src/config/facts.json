@@ -4,7 +4,31 @@
     "public": 8
   },
   "dauthTenants": 6,
-  "generatedAt": "2026-10-13",
+  "generatedAt": "2026-10-14",
+  "platform": {
+    "backup": {
+      "datastores": 3,
+      "usedBytes": 2787175407616
+    },
+    "ci": {
+      "forges": 2,
+      "repos": 21,
+      "workflows": 39
+    },
+    "guests": {
+      "lxc": 46,
+      "vm": 6
+    },
+    "guestsWithoutBackup": 0,
+    "monitoring": {
+      "alertRules": 85,
+      "jobs": 23,
+      "probes": 33,
+      "targets": 65
+    },
+    "nodes": 4,
+    "replicationJobs": 4
+  },
   "projects": {
     "airam": {
       "ci": "Gitea Actions",

@@ -1,5 +1,7 @@
 import { memo } from 'react';
 import { useTranslation } from 'react-i18next';
+import { LocalizedLink as Link } from 'router/LocalizedLink';
+import { paths } from 'router/paths';
 import { facts, formatInt } from 'config/facts';
 import { trackEvent } from 'utils/analytics';
 
@@ -56,6 +58,17 @@ function Footer() {
           {t('footer_site_source')}
           <span className="sr-only"> ({t('open_new_window')})</span>
         </a>
+      </p>
+      {/* No consent banner: the analytics is cookieless, and this line is where the visitor learns it. */}
+      <p className="mb-2 text-xs text-text-secondary">
+        {t('footer_analytics')} ·{' '}
+        <Link
+          to={paths.privacyPolicy}
+          className="underline-offset-2 transition-colors hover:text-accent hover:underline"
+          onClick={() => trackEvent('footer:privacy')}
+        >
+          {t('footer_privacy')}
+        </Link>
       </p>
       <p className="text-xs text-text-muted">{t('footer_copy')}</p>
     </footer>

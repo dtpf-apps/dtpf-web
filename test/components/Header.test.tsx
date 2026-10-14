@@ -1,4 +1,4 @@
-import { screen, waitFor } from '@testing-library/react';
+import { screen, waitFor, within } from '@testing-library/react';
 import { useLocation } from 'react-router';
 import userEvent from '@testing-library/user-event';
 import { renderWithProviders } from '../helpers/renderWithProviders';
@@ -22,11 +22,17 @@ describe('Header', () => {
     expect(logo.closest('a')).toHaveAttribute('href', '/');
   });
 
-  it('renders 4 navigation links', () => {
+  it('renders 5 navigation links in order, after the logo', () => {
     renderWithProviders(<Header />);
-    const nav = screen.getAllByRole('link');
-    // Logo + 4 nav links = at least 5
-    expect(nav.length).toBeGreaterThanOrEqual(5);
+    const nav = within(screen.getAllByRole('navigation')[0]).getAllByRole('link');
+    expect(nav.map((a) => a.getAttribute('href'))).toEqual([
+      '/',
+      '/projects',
+      '/platform',
+      '/about',
+      '/contact',
+    ]);
+    expect(nav.map((a) => a.textContent)).toEqual(['Home', 'Projects', 'Platform', 'About', 'Contact']);
   });
 
   it('theme toggle button exists', () => {
@@ -91,22 +97,30 @@ describe('Header', () => {
     await user.click(contactLinks[contactLinks.length - 1]);
   });
 
-  it('mobile menu shows 4 navigation links', async () => {
+  it('mobile menu shows 5 navigation links and scrolls when the window is short', async () => {
     const user = userEvent.setup();
     renderWithProviders(<Header />);
 
     await user.click(screen.getByRole('button', { name: 'Menu' }));
 
     await waitFor(() => {
-      // Mobile overlay shows Home, Projects, About, Contact links + LinkedIn + GitHub
+      // Mobile overlay shows Home, Projects, Platform, About, Contact links + LinkedIn + GitHub
       const mobileLinks = screen.getAllByRole('link');
       const navLinks = mobileLinks.filter((l) => {
         const href = l.getAttribute('href');
-        return href === '/' || href === '/projects' || href === '/about' || href === '/contact';
+        return (
+          href === '/' ||
+          href === '/projects' ||
+          href === '/platform' ||
+          href === '/about' ||
+          href === '/contact'
+        );
       });
-      // Desktop 4 + mobile 4 = 8
-      expect(navLinks.length).toBeGreaterThanOrEqual(8);
+      // Logo + desktop 5 + mobile 5 = 11
+      expect(navLinks).toHaveLength(11);
     });
+    // A fifth link makes the overlay taller than a landscape phone: it must scroll.
+    expect(screen.getByRole('dialog')).toHaveClass('overflow-y-auto');
   });
 
   it('mobile menu has language toggle button', async () => {
@@ -381,12 +395,23 @@ describe('Header language in the URL', () => {
     expect(localStorage.getItem('dtpf-lang')).toBe('es');
   });
 
-  it('keeps the four nav links and localizes their hrefs on an English URL', () => {
+  it('keeps the five nav links and localizes their hrefs on an English URL', () => {
     renderWithProviders(<Header />, { route: '/en/about' });
     const hrefs = screen
       .getAllByRole('link')
       .map((a) => a.getAttribute('href'))
       .filter((h) => h?.startsWith('/'));
-    expect(hrefs).toEqual(expect.arrayContaining(['/en', '/en/projects', '/en/about', '/en/contact']));
+    expect(hrefs).toEqual(
+      expect.arrayContaining(['/en', '/en/projects', '/en/platform', '/en/about', '/en/contact'])
+    );
+  });
+
+  it('the Platform link points at /platform, and tracks the click', async () => {
+    const user = userEvent.setup();
+    renderWithProviders(<Header />);
+    const link = screen.getAllByRole('link').find((a) => a.getAttribute('href') === '/platform')!;
+    expect(link).toHaveTextContent(/^(Platform|Plataforma)$/);
+    await user.click(link);
+    expect(trackEvent).toHaveBeenCalledWith('nav:navigate', { page: '/platform' });
   });
 });

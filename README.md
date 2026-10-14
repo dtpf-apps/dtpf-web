@@ -63,11 +63,12 @@ scripts/postbuild/                   # Post-build pipeline (plain Node ESM, run 
 src/
 ├── api/utils/config.ts              # basePath + apiVersion + apiUrl() (auto-detects localhost)
 ├── assets/fonts/                    # Self-hosted Inter, Space Grotesk, JetBrains Mono (static latin woff2 + OFL)
-├── assets/locale/{es,en}.ts         # i18n translations (~150 keys each)
+├── assets/locale/{es,en}.ts         # i18n translations (~315 keys each)
 ├── config/facts.json                # Measured figures (tests, versions, tenants) — generated, never hand-edited
 ├── config/facts.ts                  # Typed access + number formatting for facts.json
 ├── config/site.ts                   # Canonical origin, author links, OG image path convention, JSON-LD builders
 ├── config/profile.ts                # Experience and tool groups shared by About and the CV
+├── config/platform.ts               # Platform page data: diagram nodes, figures strip, cards (copy lives in the locales)
 ├── config/projects.ts               # Typed project data (8 projects; versions and counts from facts.json;
 │                                    #   screenshots under public/projects/<slug>/, WebP, never precached)
 ├── contexts/theme/                  # ThemeContext + ThemeProvider + useTheme
@@ -84,7 +85,6 @@ src/
 │   ├── analytics.ts                 # Umami init + trackPageView/trackEvent
 │   ├── animations.ts                # Shared Framer Motion variants
 │   ├── chunkError.ts                # Chunk-load error detection
-│   ├── cookieConsent.ts             # Cookie consent storage helpers
 │   ├── errorTracking.ts             # Client error reporting (batched)
 │   ├── i18n.ts                      # i18next configuration
 │   ├── isLocalhost.ts               # Localhost detection helper
@@ -94,13 +94,13 @@ src/
 ├── views/
 │   ├── layouts/PortfolioLayout.tsx   # Sticky header + AnimatePresence + footer
 │   ├── components/
+│   │   ├── ArchitectureDiagram.tsx  # Platform page: request path as ordered lists (HTML + CSS grid, no SVG)
 │   │   ├── navigation/              # Header, Footer
-│   │   ├── CookieConsentBanner.tsx  # GDPR consent banner (gates analytics)
 │   │   ├── ProjectGallery.tsx       # Screenshot thumbnails + accessible lightbox
 │   │   ├── ProjectStatusBadge.tsx   # Production / beta / client / private pill
 │   │   ├── Seo.tsx                  # Per-page title, description, canonical, hreflang, OG/Twitter, JSON-LD
 │   │   └── StagingBadge.tsx         # "Staging" pill on dev.* hostnames
-│   └── pages/                       # Home, Projects, ProjectDetail, About,
+│   └── pages/                       # Home, Projects, ProjectDetail, Platform, About,
 │                                    # Contact, Cv, NotFound, PrivacyPolicy
 ├── ErrorBoundary.tsx                # Top-level error boundary + fallback UI
 ├── service-worker.ts                # Workbox service worker (injectManifest)
@@ -113,9 +113,10 @@ src/
 
 | Path              | Page          | Description                                              |
 | ----------------- | ------------- | -------------------------------------------------------- |
-| `/`               | Home          | Hero section, bento grid projects, manifesto, stack, CTA |
+| `/`               | Home          | Hero, bento grid projects, "How I work", stack, CTA      |
 | `/projects`       | Projects      | Project list with stacked card layout                    |
 | `/projects/:slug` | ProjectDetail | Case study: Problem, Solution, Result + gallery          |
+| `/platform`       | Platform      | Figures strip, architecture diagram, six building blocks |
 | `/about`          | About         | Profile card, bio, experience, tools grid                |
 | `/contact`        | Contact       | Contact form with anti-spam + direct links               |
 | `/cv`             | Cv            | Printable A4 résumé + PDF download (built per language)  |
@@ -128,7 +129,7 @@ Dark-mode-first design built with Tailwind CSS v4 and custom `@theme` design tok
 
 ## i18n
 
-i18next, with the language taken from the URL: `/` is Spanish and the `/en` prefix is English (no redirect from the browser language, so crawlers can reach both). An explicit choice from the toggle is persisted in localStorage (`dtpf-lang`) and redirects to the matching URL on arrival. Translation files in `src/assets/locale/{es,en}.ts` with ~150 keys each. `<html lang>` follows the active language. Spanish copy keeps its accents, and a test rejects the common unaccented stand-ins and checks `{{placeholder}}` parity between the two languages.
+i18next, with the language taken from the URL: `/` is Spanish and the `/en` prefix is English (no redirect from the browser language, so crawlers can reach both). An explicit choice from the toggle is persisted in localStorage (`dtpf-lang`) and redirects to the matching URL on arrival. Translation files in `src/assets/locale/{es,en}.ts` with ~315 keys each. `<html lang>` follows the active language. Spanish copy keeps its accents, and a test rejects the common unaccented stand-ins and checks `{{placeholder}}` parity between the two languages.
 
 ## PWA
 
@@ -136,11 +137,11 @@ Progressive Web App via `vite-plugin-pwa` with `injectManifest` strategy. Workbo
 
 ## Analytics & Error Reporting
 
-Self-hosted Umami analytics (analytics.dtpf.es), loaded only after the user accepts analytics in the GDPR cookie consent banner (`CookieConsentBanner`, consent stored in localStorage). Page views and custom events are tracked client-side (`src/utils/analytics.ts`). Unhandled errors, promise rejections, and React render errors are deduplicated, batched, and reported to the backend at `POST /api/v1/client-errors` (`src/utils/errorTracking.ts` + `ErrorBoundary`).
+Self-hosted Umami analytics (analytics.dtpf.es), loaded on every visit without a consent banner: Umami sets no cookies, keeps no identifier in the browser and never stores the IP address (it is hashed with the user agent and a rotating salt), so the site declares it in a footer line and in the privacy policy instead of asking. Page views and custom events are tracked client-side (`src/utils/analytics.ts`). Unhandled errors, promise rejections, and React render errors are deduplicated, batched, and reported to the backend at `POST /api/v1/client-errors` (`src/utils/errorTracking.ts` + `ErrorBoundary`).
 
 ## Testing
 
-405 tests across 43 files using Vitest 5 with jsdom, @testing-library/react, and jest-dom (one test, the `facts.json` staleness check, runs only when `CI` is set). Coverage thresholds: 95% (statements, branches, functions, lines).
+425 tests across 44 files using Vitest 5 with jsdom, @testing-library/react, and jest-dom (one test, the `facts.json` staleness check, runs only when `CI` is set). The coverage thresholds in the Vitest config are 95%; `pnpm test:coverage` is below them today (the figure is tracked in `CLAUDE.md`) and CI does not gate on coverage, only on `pnpm test`, the build and `pnpm postbuild:check`.
 
 Every figure the site shows (test counts, framework versions, dauth tenants, the app census) lives in `src/config/facts.json`, which is generated by a script in the d-context workspace (`scripts/utils/portfolio-facts.py`) from the ops dashboard, each repo's `package.json` and the public dauth domain endpoint. One test only runs when `CI` is set and fails the build if that file is older than 120 days, so a stale figure is a red deploy, not a forgotten edit.
 

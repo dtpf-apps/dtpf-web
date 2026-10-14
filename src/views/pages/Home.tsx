@@ -6,13 +6,22 @@ import Seo from 'views/components/Seo';
 import { personJsonLd } from 'config/site';
 import { projects } from 'config/projects';
 import { motion } from 'framer-motion';
-import { ArrowRight, ExternalLink } from 'lucide-react';
-import { facts, formatInt, projectVars, roundDownToThousand, yearsSince } from 'config/facts';
+import { Activity, ArrowRight, Cpu, ExternalLink, FlaskConical, GitBranch } from 'lucide-react';
+import { facts, formatInt, platformVars, projectVars, roundDownToThousand, yearsSince } from 'config/facts';
 import { trackEvent } from 'utils/analytics';
 import { stagger, fadeUp } from 'utils/animations';
 
 // The bento grid holds four cards; which four is decided in config/projects.ts, in array order.
 const featured = projects.filter((p) => p.featured);
+
+// "How I work": four habits, each pointing at the page that proves it. The copy lives in the
+// locales under home_how_<n>_*; the figures it interpolates come from facts.json.
+const howCards = [
+  { n: 1, Icon: FlaskConical, to: paths.projects },
+  { n: 2, Icon: GitBranch, to: projectDetailPath('dcompany') },
+  { n: 3, Icon: Activity, to: paths.platform },
+  { n: 4, Icon: Cpu, to: projectDetailPath('dcompany'), alt: projectDetailPath('dinventory') },
+] as const;
 
 const stackItems = [
   { abbr: 'R', name: 'React' },
@@ -35,6 +44,7 @@ export default function Home() {
   // Rounded down to the thousand: the exact total is a moving target, the floor is not.
   const testsFigure = `${formatInt(roundDownToThousand(facts.tests.total), lang)}+`;
   const saasYears = yearsSince(facts.saasSince);
+  const howVars = { ...platformVars(lang), tests: testsFigure };
 
   return (
     <>
@@ -226,23 +236,58 @@ export default function Home() {
         </motion.div>
       </section>
 
-      {/* ── Manifesto ── */}
-      <section className="mx-auto max-w-[640px] px-6 py-10 text-center">
-        <motion.p
-          initial={{ opacity: 0 }}
-          whileInView={{ opacity: 1 }}
-          onViewportEnter={() => trackEvent('home:manifesto-visible')}
-          viewport={{ once: true }}
-          transition={{ duration: 0.5 }}
-          className="mb-5 font-heading text-[28px] font-semibold leading-snug tracking-tight"
-        >
-          {t('manifesto_line1')}
-          <br />
-          <span className="text-accent">{t('manifesto_line2')}</span>
-        </motion.p>
-        <p className="mx-auto max-w-[500px] text-[15px] leading-relaxed text-text-secondary">
-          {t('manifesto_body')}
+      {/* ── How I work ── */}
+      <section className="mx-auto max-w-[1100px] px-6 py-20">
+        <p className="mb-3 font-mono text-xs font-medium uppercase tracking-[2px] text-accent">
+          {t('home_how_label')}
         </p>
+        <h2 className="mb-2 font-heading text-[32px] font-bold tracking-tight">{t('home_how_heading')}</h2>
+        <p className="mb-12 max-w-[520px] text-base text-text-secondary">{t('home_how_desc')}</p>
+
+        <motion.div
+          variants={stagger}
+          initial="hidden"
+          whileInView="visible"
+          viewport={{ once: true, margin: '-50px' }}
+          onViewportEnter={() => trackEvent('home:how-visible')}
+          className="grid gap-4 md:grid-cols-2"
+        >
+          {howCards.map((card) => (
+            <motion.article
+              key={card.n}
+              variants={fadeUp}
+              className="relative overflow-hidden rounded-2xl border border-border bg-bg-surface p-7"
+            >
+              <div className="mb-4 flex h-10 w-10 items-center justify-center rounded-xl bg-accent-subtle text-accent">
+                <card.Icon size={20} aria-hidden="true" />
+              </div>
+              <h3 className="mb-2 font-heading text-[20px] font-bold tracking-tight">
+                {t(`home_how_${card.n}_title`)}
+              </h3>
+              <p className="mb-5 text-sm leading-relaxed text-text-secondary">
+                {t(`home_how_${card.n}_body`, howVars)}
+              </p>
+              <div className="flex flex-wrap items-center gap-x-5 gap-y-2">
+                <Link
+                  to={card.to}
+                  onClick={() => trackEvent('home:how-card', { card: card.n })}
+                  className="inline-flex items-center gap-1.5 text-[13px] font-semibold text-accent transition-colors hover:text-accent-hover"
+                >
+                  {t(`home_how_${card.n}_link`)} <ArrowRight size={14} aria-hidden="true" />
+                </Link>
+                {'alt' in card && (
+                  <Link
+                    to={card.alt}
+                    onClick={() => trackEvent('home:how-card', { card: card.n })}
+                    className="inline-flex items-center gap-1.5 text-[13px] font-semibold text-accent transition-colors hover:text-accent-hover"
+                  >
+                    {t(`home_how_${card.n}_link_alt`)} <ArrowRight size={14} aria-hidden="true" />
+                  </Link>
+                )}
+              </div>
+            </motion.article>
+          ))}
+        </motion.div>
       </section>
 
       {/* ── Stack ── */}

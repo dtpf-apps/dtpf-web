@@ -6,6 +6,7 @@ import ProjectDetail from '../../src/views/pages/ProjectDetail';
 import Home from '../../src/views/pages/Home';
 import About from '../../src/views/pages/About';
 import Cv from '../../src/views/pages/Cv';
+import Platform from '../../src/views/pages/Platform';
 
 const meta = (sel: string) => document.head.querySelector(sel)?.getAttribute('content');
 const canonical = () => document.head.querySelector('link[rel="canonical"]')?.getAttribute('href');
@@ -52,6 +53,19 @@ describe('page-level SEO', () => {
     expect(canonical()).toBe('https://dtpf.es/en/cv');
     expect(meta('meta[name="description"]')).toMatch(/^Résumé of David/);
     expect(meta('meta[property="og:image"]')).toBe('https://dtpf.es/og/en/cv.png');
+  });
+
+  it('the platform page has its own title, description, canonical and OG card, and no JSON-LD', () => {
+    renderWithProviders(<Platform />, { route: '/en/platform' });
+    expect(document.title).toBe('The platform I run — David T. Pizarro Frick');
+    expect(meta('meta[name="description"]')).toMatch(/^The infrastructure I run on my own/);
+    expect(canonical()).toBe('https://dtpf.es/en/platform');
+    expect(meta('meta[property="og:image"]')).toBe('https://dtpf.es/og/en/platform.png');
+    expect(document.head.querySelector('link[hreflang="es"]')).toHaveAttribute(
+      'href',
+      'https://dtpf.es/platform'
+    );
+    expect(jsonLd()).toEqual([]);
   });
 
   it('a project page carries a SoftwareApplication and its own OG card key', () => {

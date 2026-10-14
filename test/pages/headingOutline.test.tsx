@@ -6,6 +6,7 @@ import About from '../../src/views/pages/About';
 import Projects from '../../src/views/pages/Projects';
 import ProjectDetail from '../../src/views/pages/ProjectDetail';
 import Contact from '../../src/views/pages/Contact';
+import Platform from '../../src/views/pages/Platform';
 import Cv from '../../src/views/pages/Cv';
 import PrivacyPolicy from '../../src/views/pages/PrivacyPolicy';
 import NotFound from '../../src/views/pages/NotFound';
@@ -24,6 +25,7 @@ const pages: [string, ReactElement, string][] = [
     </Routes>,
     '/projects/dauth',
   ],
+  ['Platform', <Platform />, '/platform'],
   ['Contact', <Contact />, '/contact'],
   ['Cv', <Cv />, '/cv'],
   ['PrivacyPolicy', <PrivacyPolicy />, '/privacy-policy'],
@@ -34,6 +36,11 @@ const headingLevels = () =>
   [...document.querySelectorAll('h1, h2, h3, h4, h5, h6')].map((h) => Number(h.tagName[1]));
 
 describe('heading outline', () => {
+  it('Platform reads h1, three h2 sections, six card h3s and a closing h2', () => {
+    renderWithProviders(<Platform />, { route: '/platform' });
+    expect(headingLevels()).toEqual([1, 2, 2, 2, 3, 3, 3, 3, 3, 3, 2]);
+  });
+
   it.each(pages)('%s opens with its only h1 and never skips a level', (_name, element, route) => {
     renderWithProviders(element, { route });
     const levels = headingLevels();

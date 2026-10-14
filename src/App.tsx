@@ -7,10 +7,8 @@ import { router } from 'router/router';
 import ErrorBoundary from './ErrorBoundary';
 import { initErrorTracking } from 'utils/errorTracking';
 import { basePath, apiVersion } from 'api/utils/config';
-import CookieConsentBanner from 'views/components/CookieConsentBanner';
 import StagingBadge from 'views/components/StagingBadge';
 import { initAnalytics } from 'utils/analytics';
-import { hasAnalyticsConsent } from 'utils/cookieConsent';
 import { checkChunkRecovery } from 'utils/lazyWithRetry';
 import useSWUpdate from 'hooks/useSWUpdate';
 
@@ -19,8 +17,10 @@ initErrorTracking(`${basePath}/${apiVersion}`);
 export default function App() {
   useSWUpdate();
 
+  // Umami runs cookieless and stores no personal data, so it loads on every visit with no
+  // consent wall; the footer says so and the privacy policy spells it out.
   useEffect(() => {
-    if (hasAnalyticsConsent()) initAnalytics();
+    initAnalytics();
     checkChunkRecovery();
   }, []);
 
@@ -39,7 +39,6 @@ export default function App() {
               },
             }}
           />
-          <CookieConsentBanner />
           <StagingBadge />
         </ThemeProvider>
       </MotionConfig>

@@ -36,6 +36,14 @@ describe('analytics', () => {
       expect(script.getAttribute('data-website-id')).toBe('6d02243d-1dfb-4395-b5fa-188dded7cf19');
     });
 
+    it('clears the consent key the retired banner left in returning visitors', () => {
+      localStorage.setItem('dtpf-cookie-consent', '{"analytics":true}');
+
+      analytics.initAnalytics();
+
+      expect(localStorage.getItem('dtpf-cookie-consent')).toBeNull();
+    });
+
     it('injects script when hostname is dev.dtpf.es', async () => {
       Object.defineProperty(window, 'location', {
         value: { hostname: 'dev.dtpf.es' },
