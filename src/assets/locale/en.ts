@@ -23,11 +23,27 @@ export const en = {
   home_projects_desc: 'Each of these is deployed, with real users, CI/CD and monitoring.',
   home_projects_case_study: 'Case study',
   home_projects_visit: 'Visit',
-  // Home: Manifesto
-  manifesto_line1: "I don't collect side projects.",
-  manifesto_line2: 'I ship them to production.',
-  manifesto_body:
-    'Every app I build has its own CI/CD, a staging environment before production, Grafana monitoring and automated deploys. I use AI as part of the engineering process — governed by tests, review and gates — not as a shortcut.',
+  // Home: How I work — four habits, each linked to the page that proves it
+  home_how_label: 'How I work',
+  home_how_heading: "I don't collect side projects: I ship them to production.",
+  home_how_desc: 'Four habits behind every app, each with its evidence one click away.',
+  home_how_1_title: 'Tests first, gate green',
+  home_how_1_body:
+    '{{tests}} tests across the repos. Each one blocks its own deploy when a single test fails.',
+  home_how_1_link: 'See the figures per project',
+  home_how_2_title: 'Staging, sign-off, production',
+  home_how_2_body:
+    'No push reaches production without going through staging. In dcompany, promotion is deliberate and by signed SHA.',
+  home_how_2_link: 'See dcompany',
+  home_how_3_title: 'Real observability',
+  home_how_3_body:
+    'Grafana, Loki and Prometheus across the whole platform: {{probes}} availability probes, {{alertRules}} alert rules and a watcher of my own that pages Matrix.',
+  home_how_3_link: 'See the platform',
+  home_how_4_title: 'AI as engineering, not as a shortcut',
+  home_how_4_body:
+    'Self-hosted speech and vision models on my own GPUs, agents with human approval and a full audit trail, and a guard harness for the assistant itself.',
+  home_how_4_link: 'See dcompany',
+  home_how_4_link_alt: 'See dinventory',
 
   // Home: Stack
   home_stack_label: 'Stack',

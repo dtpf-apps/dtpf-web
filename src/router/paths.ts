@@ -5,6 +5,7 @@ export const paths = {
   about: '/about',
   contact: '/contact',
   cv: '/cv',
+  platform: '/platform',
   privacyPolicy: '/privacy-policy',
 } as const;
 

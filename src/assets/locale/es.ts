@@ -24,11 +24,26 @@ export const es = {
     'Cada uno de estos proyectos está desplegado, con usuarios reales, CI/CD y monitorización.',
   home_projects_case_study: 'Ver caso de estudio',
   home_projects_visit: 'Visitar',
-  // Home: Manifesto
-  manifesto_line1: 'No colecciono side projects.',
-  manifesto_line2: 'Los pongo en producción.',
-  manifesto_body:
-    'Cada app que construyo tiene CI/CD propio, staging antes de producción, monitorización con Grafana y despliegue automático. Uso IA como parte del proceso de ingeniería — gobernada por tests, revisión y gates — no como atajo.',
+  // Home: How I work — four habits, each linked to the page that proves it
+  home_how_label: 'Cómo trabajo',
+  home_how_heading: 'No colecciono side projects: los pongo en producción.',
+  home_how_desc: 'Cuatro hábitos detrás de cada app, cada uno con su evidencia a un clic.',
+  home_how_1_title: 'Test primero, gate en verde',
+  home_how_1_body: '{{tests}} tests en los repos. Cada uno bloquea su despliegue si falla un solo test.',
+  home_how_1_link: 'Ver las cifras por proyecto',
+  home_how_2_title: 'Staging, firma, producción',
+  home_how_2_body:
+    'Ningún push llega a producción sin pasar por staging. En dcompany la promoción es deliberada y por SHA firmado.',
+  home_how_2_link: 'Ver dcompany',
+  home_how_3_title: 'Observabilidad de verdad',
+  home_how_3_body:
+    'Grafana, Loki y Prometheus sobre toda la plataforma: {{probes}} sondas de disponibilidad, {{alertRules}} reglas de alerta y un watcher propio que avisa por Matrix.',
+  home_how_3_link: 'Ver la plataforma',
+  home_how_4_title: 'IA como ingeniería, no como atajo',
+  home_how_4_body:
+    'Modelos de voz y visión self-hosted en GPU propia, agentes con aprobación humana y trazabilidad, y un harness de guardias para el propio asistente.',
+  home_how_4_link: 'Ver dcompany',
+  home_how_4_link_alt: 'Ver dinventory',
 
   // Home: Stack
   home_stack_label: 'Stack',

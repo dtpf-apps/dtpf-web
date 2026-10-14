@@ -23,7 +23,7 @@ pnpm test:coverage    # Run tests with v8 coverage report (HTML in coverage/)
 
 ### Testing
 
-Vitest 5 with jsdom environment, @testing-library/react, and jest-dom matchers. **394 tests** across 41 test files (one, the `facts.json` staleness check, runs only when `CI` is set). `test/postbuild/*` imports the build scripts and `test/styles/fonts.test.ts` reads `index.html` and the CSS from disk, so the suite runs from the package root (as `pnpm test` does). Coverage thresholds: 95% (statements, branches, functions, lines) — `pnpm test:coverage` currently FAILS them (72.9% stmts overall; `useSWUpdate.ts` and `lazyWithRetry.ts` are largely uncovered). CI runs `pnpm test` (no coverage gate) before deploy.
+Vitest 5 with jsdom environment, @testing-library/react, and jest-dom matchers. **395 tests** across 41 test files (one, the `facts.json` staleness check, runs only when `CI` is set). `test/postbuild/*` imports the build scripts and `test/styles/fonts.test.ts` reads `index.html` and the CSS from disk, so the suite runs from the package root (as `pnpm test` does). Coverage thresholds: 95% (statements, branches, functions, lines) — `pnpm test:coverage` currently FAILS them (72.9% stmts overall; `useSWUpdate.ts` and `lazyWithRetry.ts` are largely uncovered). CI runs `pnpm test` (no coverage gate) before deploy.
 
 ```
 test/
@@ -67,7 +67,7 @@ test/
 │   ├── StagingBadge.test.tsx         # 3 tests — staging hostname badge
 │   └── printHidden.test.tsx          # 3 tests — header, footer and staging badge carry print:hidden
 └── pages/
-    ├── Home.test.tsx                  # 21 tests — proof bar from facts, sections, CTAs, trackEvent
+    ├── Home.test.tsx                  # 22 tests — proof bar from facts, bento, "How I work" cards and links, CTAs, trackEvent
     ├── About.test.tsx                 # 15 tests — profile, experience, tools, CV button, trackEvent
     ├── Projects.test.tsx              # 9 tests — one card per project, badge per status, visit link only with liveUrl, trackEvent
     ├── ProjectDetail.test.tsx         # 26 tests — case study, metrics, status note, store link, private project without buttons, SEO, trackEvent
@@ -91,7 +91,7 @@ The language lives in the URL: `/` is Spanish (canonical) and `/en/...` is Engli
 
 **Pages (each also under `/en`):**
 
-- `/` — Home (hero, bento grid projects, manifesto, stack, CTA)
+- `/` — Home (hero, bento grid projects, "How I work" — four habit cards whose figures come from `facts.json` and whose links point at the page that proves each one —, stack, CTA)
 - `/projects` — Projects list with stacked cards
 - `/projects/:slug` — Project detail with case study (Problem → Solution → Result)
 - `/about` — Profile card, bio, experience, tools grid, CV button

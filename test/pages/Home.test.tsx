@@ -1,4 +1,4 @@
-import { screen } from '@testing-library/react';
+import { screen, within } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { renderWithProviders } from '../helpers/renderWithProviders';
 import Home from '../../src/views/pages/Home';
@@ -46,8 +46,11 @@ describe('Home', () => {
 
   it('renders featured projects in bento grid', () => {
     renderWithProviders(<Home />);
-    // 4 featured projects (all except dtpf)
-    const projectHeadings = screen.getAllByRole('heading', { level: 3 });
+    // 4 featured projects (all except dtpf); the "How I work" cards have h3s of their own
+    const bento = screen
+      .getByRole('heading', { level: 2, name: 'Deployed, monitored, maintained' })
+      .closest('section')!;
+    const projectHeadings = within(bento).getAllByRole('heading', { level: 3 });
     expect(projectHeadings.length).toBe(4);
   });
 
@@ -66,7 +69,10 @@ describe('Home', () => {
 
   it('features dcompany, dauth, dinventory and dalist, in that order', () => {
     renderWithProviders(<Home />);
-    const headings = screen.getAllByRole('heading', { level: 3 });
+    const bento = screen
+      .getByRole('heading', { level: 2, name: 'Deployed, monitored, maintained' })
+      .closest('section')!;
+    const headings = within(bento).getAllByRole('heading', { level: 3 });
     expect(headings.map((h) => h.textContent)).toEqual(['dcompany', 'dauth', 'dinventory', 'dalist']);
   });
 
@@ -76,10 +82,41 @@ describe('Home', () => {
     expect(screen.getByText(new RegExp(`${floored}\\+ MCP tools`))).toBeInTheDocument();
   });
 
-  it('renders manifesto section', () => {
+  it('renders the "How I work" section: four cards, measured figures and one evidence link each', () => {
     renderWithProviders(<Home />);
-    expect(screen.getByText(/don't collect side projects/i)).toBeInTheDocument();
-    expect(screen.getByText(/ship them to production/i)).toBeInTheDocument();
+    const heading = screen.getByRole('heading', { level: 2, name: /don't collect side projects/i });
+    const section = heading.closest('section')!;
+    expect(
+      within(section)
+        .getAllByRole('heading', { level: 3 })
+        .map((h) => h.textContent)
+    ).toEqual([
+      'Tests first, gate green',
+      'Staging, sign-off, production',
+      'Real observability',
+      'AI as engineering, not as a shortcut',
+    ]);
+    const tests = `${formatInt(roundDownToThousand(facts.tests.total), 'en')}+`;
+    expect(
+      within(section).getByText(new RegExp(`^${tests.replace('+', '\\+')} tests across`))
+    ).toBeInTheDocument();
+    const { probes, alertRules } = facts.platform.monitoring;
+    expect(
+      within(section).getByText(new RegExp(`${probes} availability probes, ${alertRules} alert rules`))
+    ).toBeInTheDocument();
+    expect(
+      within(section)
+        .getAllByRole('link')
+        .map((a) => a.getAttribute('href'))
+    ).toEqual(['/projects', '/projects/dcompany', '/platform', '/projects/dcompany', '/projects/dinventory']);
+    expect(section.textContent).not.toMatch(/\{\{|undefined|NaN/);
+  });
+
+  it('tracks a click on an evidence link with the card number', async () => {
+    const user = userEvent.setup();
+    renderWithProviders(<Home />);
+    await user.click(screen.getByText('See the platform'));
+    expect(trackEvent).toHaveBeenCalledWith('home:how-card', { card: 3 });
   });
 
   it('has CTA link to projects page', () => {
@@ -178,7 +215,7 @@ describe('Home', () => {
     expect(trackEvent).toHaveBeenCalledWith('home:final-cta');
   });
 
-  it('manifesto onViewportEnter fires trackEvent when element enters viewport', () => {
+  it('"How I work" onViewportEnter fires trackEvent when the grid enters the viewport', () => {
     // Override IntersectionObserver to immediately call callback with isIntersecting: true
     const originalIO = globalThis.IntersectionObserver;
     globalThis.IntersectionObserver = class MockIO {
