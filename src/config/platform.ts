@@ -23,18 +23,18 @@ import {
 // Architecture, not inventory: no IPs, hostnames, machine ids or account names belong in
 // this file, in the locale strings or on the page.
 
-export interface DiagramNode {
+/** A proper name shown verbatim, or a locale key for a translated one: exactly one. */
+type NodeName = { name: string; nameKey?: never } | { nameKey: string; name?: never };
+/** The optional second line, on the same terms: verbatim, a locale key, or neither. */
+type NodeSub = { sub?: string; subKey?: never } | { subKey: string; sub?: never };
+
+export type DiagramNode = {
   id: string;
   icon: LucideIcon;
-  /** Proper name shown verbatim… */
-  name?: string;
-  /** …or a locale key for a translated one. */
-  nameKey?: string;
-  sub?: string;
-  subKey?: string;
   /** Operations nodes only: how the node relates to the cluster, in words. */
   relationKey?: string;
-}
+} & NodeName &
+  NodeSub;
 
 export const edgeNodes: { internet: DiagramNode; cloudflare: DiagramNode } = {
   internet: { id: 'internet', icon: Globe, name: 'Internet' },

@@ -4,6 +4,7 @@ import { motion } from 'framer-motion';
 import { LocalizedLink as Link } from 'router/LocalizedLink';
 import { paths, projectDetailPath } from 'router/paths';
 import Seo from 'views/components/Seo';
+import SectionHeader from 'views/components/SectionHeader';
 import ArchitectureDiagram from 'views/components/ArchitectureDiagram';
 import { platformCards, platformFigures } from 'config/platform';
 import { projects } from 'config/projects';
@@ -19,7 +20,7 @@ export default function Platform() {
 
   return (
     <>
-      <Seo titleKey="platform_seo_title" description={t('seo_desc_platform')} ogKey="platform" />
+      <Seo pageName={t('platform_seo_title')} description={t('seo_desc_platform')} ogKey="platform" />
 
       <div className="mx-auto max-w-[1100px] px-6 pt-14">
         <h1 className="mb-3 font-heading text-4xl font-bold tracking-tight">{t('platform_title')}</h1>
@@ -60,26 +61,24 @@ export default function Platform() {
       </div>
 
       <section aria-labelledby={DIAGRAM_HEADING_ID} className="mx-auto max-w-[1100px] px-6 pt-20 md:pt-24">
-        <p className="mb-3 font-mono text-xs font-medium uppercase tracking-[2px] text-accent">
-          {t('platform_diagram_label')}
-        </p>
-        <h2 id={DIAGRAM_HEADING_ID} className="mb-2 font-heading text-[32px] font-bold tracking-tight">
-          {t('platform_diagram_heading')}
-        </h2>
-        <p className="max-w-[520px] text-base text-text-secondary">{t('platform_diagram_desc')}</p>
+        <SectionHeader
+          label={t('platform_diagram_label')}
+          heading={t('platform_diagram_heading')}
+          desc={t('platform_diagram_desc')}
+          headingId={DIAGRAM_HEADING_ID}
+        />
         <div className="mt-10">
           <ArchitectureDiagram headingId={DIAGRAM_HEADING_ID} vars={vars} />
         </div>
       </section>
 
       <section aria-labelledby="platform-cards-heading" className="mx-auto max-w-[1100px] px-6 py-20">
-        <p className="mb-3 font-mono text-xs font-medium uppercase tracking-[2px] text-accent">
-          {t('platform_cards_label')}
-        </p>
-        <h2 id="platform-cards-heading" className="mb-2 font-heading text-[32px] font-bold tracking-tight">
-          {t('platform_cards_heading')}
-        </h2>
-        <p className="max-w-[520px] text-base text-text-secondary">{t('platform_cards_desc')}</p>
+        <SectionHeader
+          label={t('platform_cards_label')}
+          heading={t('platform_cards_heading')}
+          desc={t('platform_cards_desc')}
+          headingId="platform-cards-heading"
+        />
 
         <motion.ul
           role="list"

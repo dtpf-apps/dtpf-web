@@ -1,18 +1,31 @@
 import { screen, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
+import { toast } from 'sonner';
 import { renderWithProviders } from '../helpers/renderWithProviders';
 import Contact from '../../src/views/pages/Contact';
 import { trackEvent } from '../../src/utils/analytics';
-
-vi.mock('../../src/api/utils/config', () => ({
-  apiUrl: (path: string) => `http://localhost:3998/api/v1${path}`,
-}));
 
 vi.mock('../../src/utils/analytics', () => ({
   trackEvent: vi.fn(),
   trackPageView: vi.fn(),
   initAnalytics: vi.fn(),
 }));
+
+vi.mock('sonner', () => ({ toast: { success: vi.fn(), error: vi.fn() } }));
+
+const GENERIC_ERROR = 'Error sending. Please try again.';
+
+function jsonResponse(ok: boolean, status: number, body: unknown) {
+  return { ok, status, json: () => Promise.resolve(body) };
+}
+
+async function fillAndSubmit(user: ReturnType<typeof userEvent.setup>, name = '') {
+  await user.type(screen.getByLabelText(/^Email/), 'test@example.com');
+  if (name) await user.type(screen.getByLabelText('Name'), name);
+  await user.type(screen.getByLabelText(/^Message/), 'Hola, este es un mensaje de prueba.');
+  await user.click(screen.getByRole('checkbox'));
+  await user.click(screen.getByRole('button', { name: 'Send message' }));
+}
 
 describe('Contact', () => {
   const mockFetch = vi.fn();
@@ -22,263 +35,192 @@ describe('Contact', () => {
     global.fetch = mockFetch;
   });
 
-  it('renders form with email, name, and message fields', () => {
-    renderWithProviders(<Contact />);
-    expect(document.querySelector('input[name="email"]')).toBeInTheDocument();
-    expect(document.querySelector('input[name="name"]')).toBeInTheDocument();
-    expect(document.querySelector('textarea[name="message"]')).toBeInTheDocument();
-  });
+  describe('form', () => {
+    it('applies the API limits in the browser', () => {
+      renderWithProviders(<Contact />);
+      expect(screen.getByLabelText(/^Email/)).toHaveAttribute('maxLength', '254');
+      expect(screen.getByLabelText('Name')).toHaveAttribute('maxLength', '100');
+      const message = screen.getByLabelText(/^Message/);
+      expect(message).toHaveAttribute('minLength', '10');
+      expect(message).toHaveAttribute('maxLength', '5000');
+    });
 
-  it('has a hidden honeypot field', () => {
-    renderWithProviders(<Contact />);
-    const honeypot = document.querySelector('input[name="website"]');
-    expect(honeypot).toBeInTheDocument();
-    expect(honeypot!.closest('div')).toHaveClass('-left-[9999px]');
-  });
+    it('marks email, message and the privacy checkbox as required', () => {
+      renderWithProviders(<Contact />);
+      expect(screen.getByLabelText(/^Email/)).toBeRequired();
+      expect(screen.getByLabelText(/^Message/)).toBeRequired();
+      expect(screen.getByLabelText('Name')).not.toBeRequired();
+      expect(screen.getByRole('checkbox')).toBeRequired();
+    });
 
-  it('has a submit button', () => {
-    renderWithProviders(<Contact />);
-    const btn = document.querySelector('button[type="submit"]');
-    expect(btn).toBeInTheDocument();
-  });
+    it('has a honeypot field hidden off-screen', () => {
+      renderWithProviders(<Contact />);
+      const honeypot = document.querySelector('input[name="website"]');
+      expect(honeypot).toHaveAttribute('tabIndex', '-1');
+      expect(honeypot?.closest('div')).toHaveClass('-left-[9999px]');
+    });
 
-  it('has a privacy policy link', () => {
-    renderWithProviders(<Contact />);
-    const link = screen.getByRole('link', { name: /privac/i });
-    expect(link).toHaveAttribute('href', '/privacy-policy');
-  });
-
-  it('submits form with correct data', async () => {
-    const user = userEvent.setup();
-    mockFetch.mockResolvedValueOnce({ ok: true, json: () => Promise.resolve({ status: 200 }) });
-
-    renderWithProviders(<Contact />);
-
-    const emailInput = document.querySelector('input[name="email"]') as HTMLInputElement;
-    const nameInput = document.querySelector('input[name="name"]') as HTMLInputElement;
-    const messageInput = document.querySelector('textarea[name="message"]') as HTMLTextAreaElement;
-
-    await user.type(emailInput, 'test@example.com');
-    await user.type(nameInput, 'Test User');
-    await user.type(messageInput, 'Hola, este es un test.');
-
-    // Check the privacy checkbox
-    const checkbox = screen.getByRole('checkbox');
-    await user.click(checkbox);
-
-    // Submit
-    const submitBtn = document.querySelector('button[type="submit"]') as HTMLButtonElement;
-    await user.click(submitBtn);
-
-    await waitFor(() => {
-      expect(mockFetch).toHaveBeenCalledWith(
-        'http://localhost:3998/api/v1/contact-me',
-        expect.objectContaining({
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-        })
-      );
+    it('links the privacy policy', () => {
+      renderWithProviders(<Contact />);
+      expect(screen.getByRole('link', { name: /privac/i })).toHaveAttribute('href', '/privacy-policy');
     });
   });
 
-  it('renders direct contact links', () => {
-    renderWithProviders(<Contact />);
-    expect(screen.getByText('davidpizarrofrick@gmail.com')).toBeInTheDocument();
-  });
+  describe('submit', () => {
+    it('posts the fields, the empty honeypot and the time the form appeared', async () => {
+      const user = userEvent.setup();
+      mockFetch.mockResolvedValueOnce(jsonResponse(true, 201, {}));
+      const before = Date.now();
+      renderWithProviders(<Contact />);
 
-  it('disables submit button while loading', async () => {
-    const user = userEvent.setup();
-    // Mock a slow response
-    mockFetch.mockImplementation(
-      () =>
-        new Promise((resolve) =>
-          setTimeout(() => resolve({ ok: true, json: () => Promise.resolve({ status: 200 }) }), 500)
-        )
-    );
+      await fillAndSubmit(user, 'Test User');
 
-    renderWithProviders(<Contact />);
+      await waitFor(() => expect(mockFetch).toHaveBeenCalled());
+      const [url, init] = mockFetch.mock.calls[0];
+      expect(url).toBe('/api/v1/contact-me');
+      expect(init.method).toBe('POST');
+      expect(init.headers).toEqual({ 'Content-Type': 'application/json' });
+      const body = JSON.parse(init.body);
+      expect(body).toMatchObject({
+        email: 'test@example.com',
+        name: 'Test User',
+        message: 'Hola, este es un mensaje de prueba.',
+        website: '',
+      });
+      expect(body._t).toBeGreaterThanOrEqual(before);
+      expect(body._t).toBeLessThanOrEqual(Date.now());
+    });
 
-    const emailInput = document.querySelector('input[name="email"]') as HTMLInputElement;
-    const nameInput = document.querySelector('input[name="name"]') as HTMLInputElement;
-    const messageInput = document.querySelector('textarea[name="message"]') as HTMLTextAreaElement;
-    const checkbox = screen.getByRole('checkbox');
+    it('confirms, clears the form and tracks success', async () => {
+      const user = userEvent.setup();
+      mockFetch.mockResolvedValueOnce(jsonResponse(true, 201, {}));
+      renderWithProviders(<Contact />);
 
-    await user.type(emailInput, 'test@test.com');
-    await user.type(nameInput, 'Test');
-    await user.type(messageInput, 'Mensaje de prueba.');
-    await user.click(checkbox);
+      await fillAndSubmit(user);
 
-    const submitBtn = document.querySelector('button[type="submit"]') as HTMLButtonElement;
-    await user.click(submitBtn);
+      await waitFor(() => expect(toast.success).toHaveBeenCalledWith("Message sent. I'll reply soon."));
+      expect(screen.getByLabelText(/^Message/)).toHaveValue('');
+      expect(trackEvent).toHaveBeenCalledWith('contact:success');
+    });
 
-    await waitFor(() => {
-      expect(submitBtn).toBeDisabled();
+    it('disables the button while the request is in flight', async () => {
+      const user = userEvent.setup();
+      mockFetch.mockReturnValueOnce(new Promise(() => {}));
+      renderWithProviders(<Contact />);
+
+      await fillAndSubmit(user);
+
+      expect(await screen.findByRole('button', { name: 'Sending...' })).toBeDisabled();
     });
   });
 
-  it('shows success toast after successful submit', async () => {
-    const user = userEvent.setup();
-    mockFetch.mockResolvedValueOnce({ ok: true, json: () => Promise.resolve({ status: 200 }) });
+  describe('errors: the API code becomes copy that says what to change', () => {
+    it.each([
+      [{ code: 'invalid_email' }, 'Check the email: it does not look like a valid address.'],
+      [{ code: 'message_too_short' }, 'Make the message longer: it needs at least 10 characters.'],
+      [{ code: 'message_too_long' }, 'Shorten the message: it takes up to 5000 characters.'],
+      [{ code: 'too_many_links' }, 'Remove some links: a message can carry 5 at most.'],
+      [
+        { code: 'rate_limited', retryAfter: 1500 },
+        'You have sent several messages in a row. You can send another in 25 min, or email me instead.',
+      ],
+      [
+        { code: 'email_cooldown', retryAfter: 7200 },
+        'A message from this email already reached me in the last 24 hours. You can send another in 2 h, or email me instead.',
+      ],
+    ])('%o', async (body, expected) => {
+      const user = userEvent.setup();
+      mockFetch.mockResolvedValueOnce(jsonResponse(false, 400, { status: 400, message: 'texto', ...body }));
+      renderWithProviders(<Contact />);
 
-    renderWithProviders(<Contact />);
+      await fillAndSubmit(user);
 
-    const emailInput = document.querySelector('input[name="email"]') as HTMLInputElement;
-    const messageInput = document.querySelector('textarea[name="message"]') as HTMLTextAreaElement;
-    const checkbox = screen.getByRole('checkbox');
+      await waitFor(() => expect(toast.error).toHaveBeenCalledWith(expected));
+      expect(trackEvent).toHaveBeenCalledWith('contact:error', { status: 400 });
+    });
 
-    await user.type(emailInput, 'test@test.com');
-    await user.type(messageInput, 'Mensaje de prueba.');
-    await user.click(checkbox);
-    await user.click(document.querySelector('button[type="submit"]') as HTMLButtonElement);
+    it.each([
+      ['a code this form never causes', { code: 'invalid_json', message: 'texto' }],
+      ['a 429 without its retryAfter', { code: 'rate_limited' }],
+      ['a body that is not an error at all', null],
+    ])('falls back to the generic message for %s', async (_name, body) => {
+      const user = userEvent.setup();
+      mockFetch.mockResolvedValueOnce(jsonResponse(false, 400, body));
+      renderWithProviders(<Contact />);
 
-    await waitFor(() => {
-      expect(mockFetch).toHaveBeenCalled();
+      await fillAndSubmit(user);
+
+      await waitFor(() => expect(toast.error).toHaveBeenCalledWith(GENERIC_ERROR));
+    });
+
+    it('falls back to the generic message when the error body is not JSON', async () => {
+      const user = userEvent.setup();
+      mockFetch.mockResolvedValueOnce({
+        ok: false,
+        status: 502,
+        json: () => Promise.reject(new Error('html')),
+      });
+      renderWithProviders(<Contact />);
+
+      await fillAndSubmit(user);
+
+      await waitFor(() => expect(toast.error).toHaveBeenCalledWith(GENERIC_ERROR));
+    });
+
+    it('says so when the network fails', async () => {
+      const user = userEvent.setup();
+      mockFetch.mockRejectedValueOnce(new TypeError('Failed to fetch'));
+      renderWithProviders(<Contact />);
+
+      await fillAndSubmit(user);
+
+      await waitFor(() => expect(toast.error).toHaveBeenCalledWith(GENERIC_ERROR));
+      expect(trackEvent).toHaveBeenCalledWith('contact:error', { status: 'network' });
+    });
+
+    it('says the request timed out when it was aborted', async () => {
+      const user = userEvent.setup();
+      mockFetch.mockRejectedValueOnce(new DOMException('aborted', 'AbortError'));
+      renderWithProviders(<Contact />);
+
+      await fillAndSubmit(user);
+
+      await waitFor(() => expect(toast.error).toHaveBeenCalledWith('Request timed out. Please try again.'));
+      expect(trackEvent).toHaveBeenCalledWith('contact:error', { status: 'timeout' });
     });
   });
 
-  it('shows error toast when server returns non-ok response', async () => {
-    const user = userEvent.setup();
-    mockFetch.mockResolvedValueOnce({
-      ok: false,
-      json: () => Promise.resolve({ message: 'Demasiados mensajes' }),
+  describe('direct links', () => {
+    it.each([
+      ['mailto:davidpizarrofrick@gmail.com', 'davidpizarrofrick@gmail.com', 'contact:email', false],
+      [
+        'https://www.linkedin.com/in/david-tomas-pizarro-frick',
+        'linkedin.com/in/david-tomas-pizarro-frick',
+        'contact:linkedin',
+        true,
+      ],
+      ['https://github.com/DTPF', 'github.com/DTPF', 'contact:github', true],
+    ])('%s reads as its address and is tracked', async (href, text, event, external) => {
+      const user = userEvent.setup();
+      renderWithProviders(<Contact />);
+      const link = screen.getByRole('link', { name: new RegExp(text.replace(/\./g, '\\.')) });
+      expect(link).toHaveAttribute('href', href);
+      expect(link.getAttribute('target')).toBe(external ? '_blank' : null);
+      await user.click(link);
+      expect(trackEvent).toHaveBeenCalledWith(event);
     });
 
-    renderWithProviders(<Contact />);
+    it('links to the CV in the current language and tracks contact:cv', async () => {
+      const user = userEvent.setup();
+      const { unmount } = renderWithProviders(<Contact />, { route: '/contact' });
+      const link = screen.getByRole('link', { name: /Résumé/ });
+      expect(link).toHaveAttribute('href', '/cv');
+      await user.click(link);
+      expect(trackEvent).toHaveBeenCalledWith('contact:cv');
+      unmount();
 
-    const emailInput = document.querySelector('input[name="email"]') as HTMLInputElement;
-    const messageInput = document.querySelector('textarea[name="message"]') as HTMLTextAreaElement;
-    const checkbox = screen.getByRole('checkbox');
-
-    await user.type(emailInput, 'test@test.com');
-    await user.type(messageInput, 'Mensaje de prueba.');
-    await user.click(checkbox);
-    await user.click(document.querySelector('button[type="submit"]') as HTMLButtonElement);
-
-    await waitFor(() => {
-      expect(mockFetch).toHaveBeenCalled();
+      renderWithProviders(<Contact />, { route: '/en/contact' });
+      expect(screen.getByRole('link', { name: /Résumé/ })).toHaveAttribute('href', '/en/cv');
     });
-  });
-
-  it('sends _t timestamp in request body', async () => {
-    const user = userEvent.setup();
-    mockFetch.mockResolvedValueOnce({ ok: true, json: () => Promise.resolve({ status: 200 }) });
-
-    renderWithProviders(<Contact />);
-
-    const emailInput = document.querySelector('input[name="email"]') as HTMLInputElement;
-    const messageInput = document.querySelector('textarea[name="message"]') as HTMLTextAreaElement;
-    const checkbox = screen.getByRole('checkbox');
-
-    await user.type(emailInput, 'test@test.com');
-    await user.type(messageInput, 'Mensaje de prueba.');
-    await user.click(checkbox);
-    await user.click(document.querySelector('button[type="submit"]') as HTMLButtonElement);
-
-    await waitFor(() => {
-      const body = JSON.parse(mockFetch.mock.calls[0][1].body);
-      expect(body._t).toBeDefined();
-      expect(typeof body._t).toBe('number');
-    });
-  });
-
-  it('has a required checkbox for privacy policy', () => {
-    renderWithProviders(<Contact />);
-    const checkbox = screen.getByRole('checkbox');
-    expect(checkbox).toBeRequired();
-  });
-
-  it('renders LinkedIn and GitHub contact links', () => {
-    renderWithProviders(<Contact />);
-    const links = screen.getAllByRole('link');
-    const linkedin = links.find((l) => l.getAttribute('href')?.includes('linkedin'));
-    const github = links.find((l) => l.getAttribute('href')?.includes('github'));
-    expect(linkedin).toBeDefined();
-    expect(github).toBeDefined();
-  });
-
-  it('shows error toast on network failure', async () => {
-    const user = userEvent.setup();
-    mockFetch.mockRejectedValueOnce(new Error('Network error'));
-
-    renderWithProviders(<Contact />);
-
-    const emailInput = document.querySelector('input[name="email"]') as HTMLInputElement;
-    const messageInput = document.querySelector('textarea[name="message"]') as HTMLTextAreaElement;
-    const checkbox = screen.getByRole('checkbox');
-
-    await user.type(emailInput, 'test@test.com');
-    await user.type(messageInput, 'Mensaje de prueba.');
-    await user.click(checkbox);
-    await user.click(document.querySelector('button[type="submit"]') as HTMLButtonElement);
-
-    await waitFor(() => {
-      expect(mockFetch).toHaveBeenCalled();
-    });
-  });
-
-  it('handles non-ok response when json() fails', async () => {
-    const user = userEvent.setup();
-    mockFetch.mockResolvedValueOnce({
-      ok: false,
-      json: () => Promise.reject(new Error('invalid json')),
-    });
-
-    renderWithProviders(<Contact />);
-
-    const emailInput = document.querySelector('input[name="email"]') as HTMLInputElement;
-    const messageInput = document.querySelector('textarea[name="message"]') as HTMLTextAreaElement;
-    const checkbox = screen.getByRole('checkbox');
-
-    await user.type(emailInput, 'test@test.com');
-    await user.type(messageInput, 'Mensaje de prueba.');
-    await user.click(checkbox);
-    await user.click(document.querySelector('button[type="submit"]') as HTMLButtonElement);
-
-    await waitFor(() => {
-      expect(mockFetch).toHaveBeenCalled();
-    });
-  });
-
-  it('clicking email link tracks contact:email event', async () => {
-    const user = userEvent.setup();
-    renderWithProviders(<Contact />);
-    const emailLink = screen
-      .getAllByRole('link')
-      .find((l) => l.getAttribute('href') === 'mailto:davidpizarrofrick@gmail.com');
-    await user.click(emailLink!);
-    expect(trackEvent).toHaveBeenCalledWith('contact:email');
-  });
-
-  it('clicking LinkedIn link tracks contact:linkedin event', async () => {
-    const user = userEvent.setup();
-    renderWithProviders(<Contact />);
-    const linkedinLink = screen
-      .getAllByRole('link')
-      .find((l) => l.getAttribute('href')?.includes('linkedin'));
-    await user.click(linkedinLink!);
-    expect(trackEvent).toHaveBeenCalledWith('contact:linkedin');
-  });
-
-  it('clicking GitHub link tracks contact:github event', async () => {
-    const user = userEvent.setup();
-    renderWithProviders(<Contact />);
-    const githubLink = screen
-      .getAllByRole('link')
-      .find((l) => l.getAttribute('href')?.includes('github.com/DTPF'));
-    await user.click(githubLink!);
-    expect(trackEvent).toHaveBeenCalledWith('contact:github');
-  });
-
-  it('links to the CV in the current language and tracks contact:cv', async () => {
-    const user = userEvent.setup();
-    const { unmount } = renderWithProviders(<Contact />, { route: '/contact' });
-    const link = screen.getByRole('link', { name: /Résumé/ });
-    expect(link).toHaveAttribute('href', '/cv');
-    await user.click(link);
-    expect(trackEvent).toHaveBeenCalledWith('contact:cv');
-    unmount();
-
-    renderWithProviders(<Contact />, { route: '/en/contact' });
-    expect(screen.getByRole('link', { name: /Résumé/ })).toHaveAttribute('href', '/en/cv');
   });
 });

@@ -3,7 +3,7 @@ import { Download } from 'lucide-react';
 import { facts, projectVars } from 'config/facts';
 import { experience, tools } from 'config/profile';
 import { projects } from 'config/projects';
-import { AUTHOR, SITE_URL, cvPdfPath } from 'config/site';
+import { AUTHOR, SITE_URL, cvPdfPath, displayUrl } from 'config/site';
 import { trackEvent } from 'utils/analytics';
 import useRouteLang from 'router/useRouteLang';
 import Seo from 'views/components/Seo';
@@ -21,7 +21,7 @@ export default function Cv() {
 
   return (
     <>
-      <Seo titleKey="cv_title" description={t('seo_desc_cv')} ogKey="cv" />
+      <Seo pageName={t('cv_title')} description={t('seo_desc_cv')} ogKey="cv" />
 
       <article className="mx-auto max-w-[820px] px-6 py-12 pb-24 print:max-w-none print:p-0 print:text-[9.5pt] print:leading-snug">
         <header className="mb-7 flex flex-col gap-4 sm:flex-row sm:items-start sm:justify-between print:mb-4">
@@ -38,10 +38,10 @@ export default function Cv() {
               {AUTHOR.email}
             </a>
             <a href={AUTHOR.linkedin} target="_blank" rel="noreferrer" className={LINK}>
-              linkedin.com/in/david-tomas-pizarro-frick
+              {displayUrl(AUTHOR.linkedin)}
             </a>
             <a href={AUTHOR.github} target="_blank" rel="noreferrer" className={LINK}>
-              github.com/DTPF
+              {displayUrl(AUTHOR.github)}
             </a>
             <a href={SITE_URL} className={LINK}>
               dtpf.es

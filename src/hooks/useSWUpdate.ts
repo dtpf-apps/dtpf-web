@@ -38,10 +38,9 @@ export default function useSWUpdate() {
       }
     }
 
+    // An open dialog (the mobile menu, the gallery lightbox) is the visitor in the middle of something.
     function isUserBusy(): boolean {
-      if (document.querySelector('[data-editing]')) return true;
-      if (document.querySelector('[role="dialog"], [aria-modal="true"]')) return true;
-      return false;
+      return document.querySelector('[role="dialog"], [aria-modal="true"]') !== null;
     }
 
     function onNavigationClick(e: MouseEvent) {

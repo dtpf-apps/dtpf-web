@@ -5,7 +5,7 @@ import { trackEvent } from 'utils/analytics';
 import { stagger, fadeUp } from 'utils/animations';
 import useRouteLang from 'router/useRouteLang';
 import Seo from 'views/components/Seo';
-import { personJsonLd } from 'config/site';
+import { AUTHOR, personJsonLd } from 'config/site';
 import { experience, tools } from 'config/profile';
 import { LocalizedLink as Link } from 'router/LocalizedLink';
 import { paths } from 'router/paths';
@@ -17,7 +17,7 @@ export default function About() {
   return (
     <>
       <Seo
-        titleKey="about_title"
+        pageName={t('about_title')}
         description={t('seo_desc_about')}
         ogKey="about"
         type="profile"
@@ -35,13 +35,13 @@ export default function About() {
             DP
           </div>
           <div className="text-center sm:text-left">
-            <p className="mb-0.5 font-heading text-xl font-bold tracking-tight">David T. Pizarro Frick</p>
+            <p className="mb-0.5 font-heading text-xl font-bold tracking-tight">{AUTHOR.name}</p>
             <p className="mb-0.5 text-sm font-medium text-accent">{t('about_role')}</p>
             <p className="text-[13px] text-text-muted">{t('about_location')}</p>
             <p className="mb-3 text-[13px] text-text-secondary">{t('availability')}</p>
             <div className="flex justify-center gap-2 sm:justify-start">
               <a
-                href="https://www.linkedin.com/in/david-tomas-pizarro-frick"
+                href={AUTHOR.linkedin}
                 target="_blank"
                 rel="noreferrer"
                 className="rounded-md border border-border px-3 py-1 text-xs font-medium text-text-secondary transition hover:border-accent hover:text-accent"
@@ -50,7 +50,7 @@ export default function About() {
                 LinkedIn ↗
               </a>
               <a
-                href="https://github.com/DTPF"
+                href={AUTHOR.github}
                 target="_blank"
                 rel="noreferrer"
                 className="rounded-md border border-border px-3 py-1 text-xs font-medium text-text-secondary transition hover:border-accent hover:text-accent"

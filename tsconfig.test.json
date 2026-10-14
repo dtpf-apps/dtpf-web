@@ -1,0 +1,15 @@
+{
+  // Type-checks the tests together with the source they import. `pnpm build` only
+  // checks src/, and Vitest strips types without checking them.
+  "extends": "./tsconfig.json",
+  "compilerOptions": {
+    "types": ["vite/client", "vitest/globals", "@testing-library/jest-dom", "node"],
+    // A test file with no import is still its own module, not a global script.
+    "moduleDetection": "force",
+    // test/postbuild imports the plain-ESM build scripts; their types are inferred, not checked.
+    "allowJs": true,
+    // `getAllByRole(...)[0]` past the end fails the test anyway; src keeps the strict flag.
+    "noUncheckedIndexedAccess": false
+  },
+  "include": ["src", "test", "vite.config.ts"]
+}

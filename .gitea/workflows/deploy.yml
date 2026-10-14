@@ -70,8 +70,18 @@ jobs:
       - name: Install Chromium headless shell
         run: pnpm exec playwright install --only-shell chromium
 
-      - name: Run tests
-        run: pnpm test
+      # Cheapest first: a formatting or type slip fails in seconds, before the suite and the build.
+      - name: Check formatting
+        run: pnpm format:check
+
+      - name: Lint
+        run: pnpm lint
+
+      - name: Typecheck tests
+        run: pnpm typecheck
+
+      - name: Run tests with coverage thresholds
+        run: pnpm test:coverage
 
       - name: Determine environment
         id: env
@@ -97,7 +107,7 @@ jobs:
           TARGET: ${{ steps.env.outputs.target }}
         run: |
           DEPLOY_DIR="/html/$SERVICE_NAME/$TARGET"
-          rsync -az --delete -e "ssh -o StrictHostKeyChecking=no -p $APP_SERVER_PORT" \
+          rsync -az --delete -e "ssh -o StrictHostKeyChecking=accept-new -p $APP_SERVER_PORT" \
             dist/ $APP_SERVER:$DEPLOY_DIR/client/
           echo "frontend deployed to $TARGET"
 

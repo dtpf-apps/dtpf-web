@@ -8,7 +8,7 @@ export default function NotFound() {
 
   return (
     <>
-      <Seo title="404 — David T. Pizarro Frick" description={t('not_found_desc')} ogKey="home" noindex />
+      <Seo pageName="404" description={t('not_found_desc')} ogKey="home" noindex />
       <div className="mx-auto flex max-w-[460px] flex-col items-center px-6 py-40 text-center">
         <span className="mb-5 font-heading text-[140px] font-bold leading-none tracking-[-8px] text-transparent bg-clip-text bg-gradient-to-br from-accent to-warm">
           404

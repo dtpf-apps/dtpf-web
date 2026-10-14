@@ -1,9 +1,8 @@
-import { isLocalhost } from '../../utils/isLocalhost';
-export const apiVersion = 'v1';
-export const basePath = isLocalhost
-  ? `${window.location.protocol}//${window.location.hostname}:3998/api`
-  : `${window.location.origin}/api`;
+// Same origin everywhere: deployed, dtpf-api serves this client itself, and in development
+// (and `vite preview`) the Vite server proxies /api to the API on :3998 (vite.config.ts).
+// The API sends no CORS headers, so a cross-origin call would fail by design.
+const API_BASE = '/api/v1';
 
-export function apiUrl(path: string) {
-  return `${basePath}/${apiVersion}${path.startsWith('/') ? path : `/${path}`}`;
+export function apiUrl(path: string): string {
+  return `${API_BASE}${path.startsWith('/') ? path : `/${path}`}`;
 }

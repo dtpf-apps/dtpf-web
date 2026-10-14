@@ -1,7 +1,8 @@
+import { Suspense, type ComponentType, type ReactNode } from 'react';
 import { createBrowserRouter, type RouteObject } from 'react-router';
 import { paths, localizePath, type Lang } from './paths';
 import PortfolioLayout from 'views/layouts/PortfolioLayout';
-import { Suspense } from 'react';
+import { RouteErrorFallback } from '../ErrorBoundary';
 import lazyWithRetry from 'utils/lazyWithRetry';
 
 const Home = lazyWithRetry(() => import('views/pages/Home'));
@@ -14,11 +15,13 @@ const Cv = lazyWithRetry(() => import('views/pages/Cv'));
 const PrivacyPolicy = lazyWithRetry(() => import('views/pages/PrivacyPolicy'));
 const NotFound = lazyWithRetry(() => import('views/pages/NotFound'));
 
-function Lazy({ children }: { children: React.ReactNode }) {
+// No loading indicator: a page chunk is a few kB gzipped, and <main> is flex-1 inside the layout, so
+// the footer stays at the bottom while it arrives.
+function Lazy({ children }: { children: ReactNode }) {
   return <Suspense fallback={null}>{children}</Suspense>;
 }
 
-const pages: { path: string; Page: React.ComponentType }[] = [
+const pages: { path: string; Page: ComponentType }[] = [
   { path: paths.home, Page: Home },
   { path: paths.projects, Page: Projects },
   { path: paths.projectDetail, Page: ProjectDetail },
@@ -55,6 +58,7 @@ function pageTree(lang: Lang): RouteObject[] {
 export const routes: RouteObject[] = [
   {
     element: <PortfolioLayout />,
+    errorElement: <RouteErrorFallback />,
     children: [...pageTree('es'), ...pageTree('en')],
   },
 ];

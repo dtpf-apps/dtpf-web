@@ -1,6 +1,7 @@
 import { useTranslation } from 'react-i18next';
 import { useParams } from 'react-router';
-import { LocalizedLink as Link, LocalizedNavigate as Navigate } from 'router/LocalizedLink';
+import { LocalizedLink as Link } from 'router/LocalizedLink';
+import NotFound from 'views/pages/NotFound';
 import Seo from 'views/components/Seo';
 import { softwareJsonLd } from 'config/site';
 import { projects } from 'config/projects';
@@ -15,18 +16,21 @@ import ProjectGallery from 'views/components/ProjectGallery';
 export default function ProjectDetail() {
   const { slug } = useParams<{ slug: string }>();
   const { t, i18n } = useTranslation();
+  const lang = i18n.language;
   const project = projects.find((p) => p.slug === slug);
 
-  if (!project) return <Navigate to={paths.projects} replace />;
+  // The server already answers an unknown slug with a 404 status; the page says the same.
+  if (!project) return <NotFound />;
 
-  const vars = projectVars(project.slug, i18n.language);
+  const { caseStudy } = project;
+  const vars = projectVars(project.slug, lang);
   // A private app has nothing a visitor can open: no button row at all, rather than a dead one.
   const hasLinks = Boolean(project.liveUrl || project.storeUrl || project.githubUrl);
 
   return (
     <>
       <Seo
-        title={`${t(project.nameKey)} — David T. Pizarro Frick`}
+        pageName={t(project.nameKey)}
         description={t(project.taglineLongKey ?? project.taglineKey, vars)}
         ogKey={`project-${project.slug}`}
         type="article"
@@ -86,11 +90,7 @@ export default function ProjectDetail() {
               >
                 {/* Official Google Play artwork: shown as supplied, never restyled. */}
                 <img
-                  src={
-                    i18n.language.startsWith('en')
-                      ? '/badges/google-play-en.png'
-                      : '/badges/google-play-es.png'
-                  }
+                  src={`/badges/google-play-${lang}.png`}
                   alt={t('detail_store')}
                   width={646}
                   height={250}
@@ -115,25 +115,21 @@ export default function ProjectDetail() {
 
         <hr className="border-border" />
 
-        {/* Case study body */}
-        {project.problemKey && (
+        {caseStudy ? (
           <div className="mt-9">
-            <p className="mb-4 text-base leading-[1.85] text-text-secondary">
-              <strong className="text-text-primary">{t('detail_problem')}</strong>{' '}
-              {t(project.problemKey, vars)}
-            </p>
-            <p className="mb-4 text-base leading-[1.85] text-text-secondary">
-              <strong className="text-text-primary">{t('detail_solution')}</strong>{' '}
-              {t(project.solutionKey!, vars)}
-            </p>
-            <p className="mb-4 text-base leading-[1.85] text-text-secondary">
-              <strong className="text-text-primary">{t('detail_result')}</strong>{' '}
-              {t(project.resultKey!, vars)}
-            </p>
+            {(
+              [
+                ['detail_problem', caseStudy.problemKey],
+                ['detail_solution', caseStudy.solutionKey],
+                ['detail_result', caseStudy.resultKey],
+              ] as const
+            ).map(([labelKey, bodyKey]) => (
+              <p key={labelKey} className="mb-4 text-base leading-[1.85] text-text-secondary">
+                <strong className="text-text-primary">{t(labelKey)}</strong> {t(bodyKey, vars)}
+              </p>
+            ))}
           </div>
-        )}
-
-        {!project.problemKey && (
+        ) : (
           <p className="mt-9 text-base leading-[1.85] text-text-secondary">{t(project.descKey, vars)}</p>
         )}
 
@@ -184,7 +180,7 @@ export default function ProjectDetail() {
                     {m.valueKey
                       ? t(m.valueKey)
                       : typeof m.value === 'number'
-                        ? formatInt(m.value, i18n.language)
+                        ? formatInt(m.value, lang)
                         : m.value}
                   </span>
                 </div>

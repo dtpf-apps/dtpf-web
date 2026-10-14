@@ -14,22 +14,24 @@ import NotFound from '../../src/views/pages/NotFound';
 // Screen readers and crawlers walk a page by its headings, so a level that jumps (h2 → h4) reads as
 // a missing section. Each page renders alone here: the outline measured is the page's own, and the
 // layout's chrome adds no heading of its own.
-const pages: [string, ReactElement, string][] = [
-  ['Home', <Home />, '/'],
-  ['About', <About />, '/about'],
-  ['Projects', <Projects />, '/projects'],
+const pages: [string, () => ReactElement, string][] = [
+  ['Home', () => <Home />, '/'],
+  ['About', () => <About />, '/about'],
+  ['Projects', () => <Projects />, '/projects'],
   [
     'ProjectDetail',
-    <Routes>
-      <Route path="/projects/:slug" element={<ProjectDetail />} />
-    </Routes>,
+    () => (
+      <Routes>
+        <Route path="/projects/:slug" element={<ProjectDetail />} />
+      </Routes>
+    ),
     '/projects/dauth',
   ],
-  ['Platform', <Platform />, '/platform'],
-  ['Contact', <Contact />, '/contact'],
-  ['Cv', <Cv />, '/cv'],
-  ['PrivacyPolicy', <PrivacyPolicy />, '/privacy-policy'],
-  ['NotFound', <NotFound />, '/nope'],
+  ['Platform', () => <Platform />, '/platform'],
+  ['Contact', () => <Contact />, '/contact'],
+  ['Cv', () => <Cv />, '/cv'],
+  ['PrivacyPolicy', () => <PrivacyPolicy />, '/privacy-policy'],
+  ['NotFound', () => <NotFound />, '/nope'],
 ];
 
 const headingLevels = () =>
@@ -41,8 +43,8 @@ describe('heading outline', () => {
     expect(headingLevels()).toEqual([1, 2, 2, 2, 3, 3, 3, 3, 3, 3, 2]);
   });
 
-  it.each(pages)('%s opens with its only h1 and never skips a level', (_name, element, route) => {
-    renderWithProviders(element, { route });
+  it.each(pages)('%s opens with its only h1 and never skips a level', (_name, page, route) => {
+    renderWithProviders(page(), { route });
     const levels = headingLevels();
     expect(levels[0]).toBe(1);
     expect(levels.filter((level) => level === 1)).toHaveLength(1);

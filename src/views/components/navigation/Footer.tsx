@@ -1,24 +1,24 @@
-import { memo } from 'react';
 import { useTranslation } from 'react-i18next';
 import { LocalizedLink as Link } from 'router/LocalizedLink';
 import { paths } from 'router/paths';
 import { facts, formatInt } from 'config/facts';
+import { AUTHOR } from 'config/site';
 import { trackEvent } from 'utils/analytics';
 
 // The portfolio is not one of its own project cards: its stack and test count live on this
 // line, measured in facts.json like every other figure, next to the link to its public source.
 const site = facts.projects.dtpf;
 
-function Footer() {
+export default function Footer() {
   const { t, i18n } = useTranslation();
   const v = site.versions;
 
   return (
     <footer className="print:hidden mx-auto w-full max-w-[1100px] border-t border-border px-6 py-12 text-center">
-      <p className="mb-1 font-heading text-sm font-semibold text-text-primary">David T. Pizarro Frick</p>
+      <p className="mb-1 font-heading text-sm font-semibold text-text-primary">{AUTHOR.name}</p>
       <div className="mb-4 flex justify-center gap-5">
         <a
-          href="https://www.linkedin.com/in/david-tomas-pizarro-frick"
+          href={AUTHOR.linkedin}
           target="_blank"
           rel="noreferrer"
           className="text-[13px] text-text-muted transition-colors hover:text-accent"
@@ -28,7 +28,7 @@ function Footer() {
           <span className="sr-only"> ({t('open_new_window')})</span>
         </a>
         <a
-          href="https://github.com/DTPF"
+          href={AUTHOR.github}
           target="_blank"
           rel="noreferrer"
           className="text-[13px] text-text-muted transition-colors hover:text-accent"
@@ -38,7 +38,7 @@ function Footer() {
           <span className="sr-only"> ({t('open_new_window')})</span>
         </a>
         <a
-          href="mailto:davidpizarrofrick@gmail.com"
+          href={`mailto:${AUTHOR.email}`}
           className="text-[13px] text-text-muted transition-colors hover:text-accent"
           onClick={() => trackEvent('footer:email')}
         >
@@ -74,5 +74,3 @@ function Footer() {
     </footer>
   );
 }
-
-export default memo(Footer);

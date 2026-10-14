@@ -22,24 +22,31 @@ describe('errorTracking', () => {
   });
 
   describe('initErrorTracking', () => {
-    it('sets up apiUrl and marks as initialized', () => {
-      errorTracking.initErrorTracking('https://api.test.com/v1');
-      // After init, reportError should enqueue (not bail out early)
+    it('posts reports to the endpoint it was given', () => {
+      errorTracking.initErrorTracking('/api/v1/client-errors');
       errorTracking.reportError(new Error('test'));
       vi.advanceTimersByTime(2000);
       expect(global.fetch).toHaveBeenCalledWith(
-        'https://api.test.com/v1/client-errors',
+        '/api/v1/client-errors',
         expect.objectContaining({ method: 'POST' })
       );
     });
 
     it('does not re-initialize on second call', () => {
-      errorTracking.initErrorTracking('https://first.com');
-      errorTracking.initErrorTracking('https://second.com');
+      errorTracking.initErrorTracking('/first');
+      errorTracking.initErrorTracking('/second');
       errorTracking.reportError(new Error('test'));
       vi.advanceTimersByTime(2000);
-      // Should still use the first URL
-      expect(global.fetch).toHaveBeenCalledWith('https://first.com/client-errors', expect.anything());
+      expect(global.fetch).toHaveBeenCalledWith('/first', expect.anything());
+    });
+
+    it('flushes the queue when the page is hidden, without waiting for the timer', () => {
+      errorTracking.initErrorTracking('/api/v1/client-errors');
+      errorTracking.reportError(new Error('leaving'));
+      window.dispatchEvent(new Event('pagehide'));
+      expect(global.fetch).toHaveBeenCalledTimes(1);
+      vi.advanceTimersByTime(2000);
+      expect(global.fetch).toHaveBeenCalledTimes(1);
     });
 
     it('registers window error listener', () => {
@@ -81,17 +88,6 @@ describe('errorTracking', () => {
     });
   });
 
-  describe('reportFetchError', () => {
-    it('enqueues a fetch error with formatted message', () => {
-      errorTracking.initErrorTracking('https://api.test.com');
-      errorTracking.reportFetchError('/api/users', 500);
-      vi.advanceTimersByTime(2000);
-      const body = JSON.parse((global.fetch as ReturnType<typeof vi.fn>).mock.calls[0][1].body);
-      expect(body.message).toBe('Fetch failed: 500 /api/users');
-      expect(body.source).toBe('fetch-error');
-    });
-  });
-
   describe('deduplication', () => {
     it('ignores duplicate errors with same source:message', () => {
       errorTracking.initErrorTracking('https://api.test.com');
@@ -104,9 +100,8 @@ describe('errorTracking', () => {
     it('allows same message with different source', () => {
       errorTracking.initErrorTracking('https://api.test.com');
       errorTracking.reportError(new Error('same'), 'error-boundary');
-      errorTracking.reportFetchError('same', 0);
+      errorTracking.reportError(new Error('same'), 'unhandled-error');
       vi.advanceTimersByTime(2000);
-      // fetch-error message is "Fetch failed: 0 same" — different dedup key
       expect(global.fetch).toHaveBeenCalledTimes(2);
     });
   });
@@ -146,9 +141,10 @@ describe('errorTracking', () => {
     it('batches multiple errors into one flush cycle', () => {
       errorTracking.initErrorTracking('https://api.test.com');
       errorTracking.reportError(new Error('err1'));
-      errorTracking.reportFetchError('/api/test', 404);
-      // Both should flush at the same time
-      vi.advanceTimersByTime(2000);
+      errorTracking.reportError(new Error('err2'));
+      vi.advanceTimersByTime(1999);
+      expect(global.fetch).not.toHaveBeenCalled();
+      vi.advanceTimersByTime(1);
       expect(global.fetch).toHaveBeenCalledTimes(2);
     });
 
@@ -247,19 +243,17 @@ describe('errorTracking', () => {
   });
 
   describe('fetch call details', () => {
-    it('sends with correct headers and options', () => {
-      errorTracking.initErrorTracking('https://api.test.com');
+    it('sends JSON with keepalive and no explicit credentials mode', () => {
+      errorTracking.initErrorTracking('/api/v1/client-errors');
       errorTracking.reportError(new Error('test'));
       vi.advanceTimersByTime(2000);
-      expect(global.fetch).toHaveBeenCalledWith(
-        'https://api.test.com/client-errors',
-        expect.objectContaining({
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          credentials: 'include',
-          keepalive: true,
-        })
-      );
+      const init = (global.fetch as ReturnType<typeof vi.fn>).mock.calls[0][1];
+      expect(init).toEqual({
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: expect.any(String),
+        keepalive: true,
+      });
     });
   });
 });

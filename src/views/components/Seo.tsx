@@ -1,14 +1,15 @@
-import { useTranslation } from 'react-i18next';
 import { localizePath, stripLang, type Lang } from 'router/paths';
 import useRouteLang from 'router/useRouteLang';
 import { useLocation } from 'react-router';
 import { SITE_URL, SITE_NAME, canonicalUrl, ogImagePath, serializeJsonLd } from 'config/site';
 
-interface SeoProps {
-  /** Locale key of the page name, rendered as "<name> — <site>". */
-  titleKey?: string;
+type SeoTitle =
+  /** The page's name, already in the page's language; the title reads "<name> — <site>". */
+  | { pageName: string; title?: never }
   /** A complete title, used verbatim (the home page). */
-  title?: string;
+  | { title: string; pageName?: never };
+
+type SeoProps = SeoTitle & {
   description: string;
   /** Which OG card to point at; see `ogImagePath`. */
   ogKey: string;
@@ -18,7 +19,7 @@ interface SeoProps {
   noindex?: boolean;
   /** Page exists only in Spanish: the canonical is the Spanish URL and no alternates are declared. */
   esOnly?: boolean;
-}
+};
 
 const LOCALE: Record<Lang, string> = { es: 'es_ES', en: 'en_US' };
 const OTHER: Record<Lang, Lang> = { es: 'en', en: 'es' };
@@ -26,20 +27,18 @@ const OTHER: Record<Lang, Lang> = { es: 'en', en: 'es' };
 // React 19 hoists <title>, <meta> and <link> to <head>; the language tags come from the URL
 // because it is what a crawler sees, and i18next only follows it.
 export default function Seo({
-  titleKey,
-  title,
   description,
   ogKey,
   type = 'website',
   jsonLd,
   noindex = false,
   esOnly = false,
+  ...name
 }: SeoProps) {
-  const { t } = useTranslation();
   const { pathname } = useLocation();
   const routeLang = useRouteLang();
   const lang: Lang = esOnly ? 'es' : routeLang;
-  const fullTitle = title ?? `${t(titleKey ?? '')} — ${SITE_NAME}`;
+  const fullTitle = name.title === undefined ? `${name.pageName} — ${SITE_NAME}` : name.title;
 
   if (noindex) {
     return (

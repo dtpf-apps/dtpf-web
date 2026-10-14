@@ -1,5 +1,5 @@
 import { useTranslation } from 'react-i18next';
-import { SITE_NAME } from 'config/site';
+import { AUTHOR } from 'config/site';
 import Seo from 'views/components/Seo';
 
 export default function PrivacyPolicy() {
@@ -8,7 +8,7 @@ export default function PrivacyPolicy() {
   return (
     <>
       <Seo
-        title={`Política de Privacidad — ${SITE_NAME}`}
+        pageName="Política de Privacidad"
         description={t('seo_desc_privacy', { lng: 'es' })}
         ogKey="privacy-policy"
         esOnly
@@ -22,7 +22,9 @@ export default function PrivacyPolicy() {
             web.
           </p>
           <h2 className="font-heading text-xl font-bold text-text-primary">Responsable del tratamiento</h2>
-          <p>David T. Pizarro Frick — davidpizarrofrick@gmail.com</p>
+          <p>
+            {AUTHOR.name} — {AUTHOR.email}
+          </p>
           <h2 className="font-heading text-xl font-bold text-text-primary">Formulario de contacto</h2>
           <p>
             A través del formulario de contacto nos envías voluntariamente tu nombre, tu email y tu mensaje.
@@ -64,7 +66,7 @@ export default function PrivacyPolicy() {
           <h2 className="font-heading text-xl font-bold text-text-primary">Derechos</h2>
           <p>
             Puedes ejercer tus derechos de acceso, rectificación, supresión, oposición y portabilidad enviando
-            un email a davidpizarrofrick@gmail.com.
+            un email a {AUTHOR.email}.
           </p>
         </div>
       </div>

@@ -82,14 +82,14 @@ describe('page-level SEO', () => {
     expect(canonical()).toBe('https://dtpf.es/en/projects/dauth');
   });
 
-  it('an unknown project slug redirects inside the English tree', () => {
+  it('an unknown project slug gets the 404 page, kept out of the index', () => {
     renderWithProviders(
       <Routes>
         <Route path="/en/projects/:slug" element={<ProjectDetail />} />
-        <Route path="/en/projects" element={<span>list</span>} />
       </Routes>,
       { route: '/en/projects/nope' }
     );
-    expect(document.body).toHaveTextContent('list');
+    expect(document.title).toBe('404 — David T. Pizarro Frick');
+    expect(document.head.querySelector('meta[name="robots"]')).toHaveAttribute('content', 'noindex');
   });
 });

@@ -21,6 +21,8 @@ const captionClass = 'mb-2 font-mono text-[11px] font-semibold uppercase trackin
 function NodeBox({ node, vars, ops = false }: { node: DiagramNode; vars: Vars; ops?: boolean }) {
   const { t } = useTranslation();
   const Icon = node.icon;
+  const name = node.nameKey === undefined ? node.name : t(node.nameKey);
+  const sub = node.subKey === undefined ? node.sub : t(node.subKey, vars);
   return (
     <div
       data-node={node.id}
@@ -36,11 +38,11 @@ function NodeBox({ node, vars, ops = false }: { node: DiagramNode; vars: Vars; o
       </span>
       <span className="min-w-0">
         <span className="block font-heading text-[14px] font-semibold leading-tight text-text-primary md:text-[15px]">
-          {node.name ?? t(node.nameKey ?? '')}
+          {name}
         </span>
-        {(node.sub || node.subKey) && (
+        {sub && (
           <span className="mt-0.5 block text-[12px] leading-snug text-text-secondary md:text-[13px]">
-            {node.sub ?? t(node.subKey ?? '', vars)}
+            {sub}
           </span>
         )}
         {node.relationKey && (

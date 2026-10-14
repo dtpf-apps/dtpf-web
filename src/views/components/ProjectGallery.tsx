@@ -3,13 +3,12 @@ import { useTranslation } from 'react-i18next';
 import { motion } from 'framer-motion';
 import { ChevronLeft, ChevronRight, X } from 'lucide-react';
 import type { ProjectMedia } from 'config/projects';
+import { trapFocus } from 'utils/focusTrap';
 
 interface ProjectGalleryProps {
   media: ProjectMedia[];
   projectName: string;
 }
-
-const FOCUSABLE = 'a[href], button, input, textarea, select, [tabindex]:not([tabindex="-1"])';
 
 const controlClass =
   'flex h-11 w-11 items-center justify-center rounded-full border border-white/25 bg-black/60 text-white transition-colors hover:bg-black/80 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent';
@@ -58,26 +57,9 @@ export default function ProjectGallery({ media, projectName }: ProjectGalleryPro
       step(-1);
       return;
     }
-    if (e.key !== 'Tab') return;
-    const focusable = e.currentTarget.querySelectorAll<HTMLElement>(FOCUSABLE);
-    if (focusable.length === 0) return;
-    const first = focusable[0];
-    const last = focusable[focusable.length - 1];
-    const active = document.activeElement;
     // A click on the image or the counter lands focus on the dialog itself (tabIndex -1);
-    // from there Tab must enter the controls, never the page behind.
-    if (active === e.currentTarget) {
-      e.preventDefault();
-      (e.shiftKey ? last : first).focus();
-      return;
-    }
-    if (e.shiftKey && active === first) {
-      e.preventDefault();
-      last.focus();
-    } else if (!e.shiftKey && active === last) {
-      e.preventDefault();
-      first.focus();
-    }
+    // the trap moves the next Tab into the controls.
+    trapFocus(e);
   }
 
   const current = openIndex !== null ? media[openIndex] : null;

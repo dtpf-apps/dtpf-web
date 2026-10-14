@@ -1,0 +1,49 @@
+{
+  "$schema": "./node_modules/oxlint/configuration_schema.json",
+  "plugins": ["typescript", "unicorn", "oxc", "react", "jsx-a11y", "vitest"],
+  "categories": {
+    "correctness": "error"
+  },
+  "rules": {
+    "react/rules-of-hooks": "error",
+    "react/exhaustive-deps": "error",
+
+    // Vitest's `expect` takes an optional failure message as its second argument.
+    "vitest/valid-expect": ["error", { "maxArgs": 2 }],
+    // `vi.fn()` infers its signature from use; spelling it out in every test adds nothing.
+    "vitest/require-mock-type-parameters": "off",
+
+    // Tailwind's preflight removes list markers, and Safari's VoiceOver then stops
+    // announcing a <ul>/<ol> as a list unless `role="list"` is explicit.
+    "jsx-a11y/no-redundant-roles": ["error", { "ul": ["list"], "ol": ["list"] }],
+    // The mobile menu and the gallery lightbox follow the WAI-ARIA modal dialog pattern
+    // (role, aria-modal, focus trap, focus return); a native <dialog> is a different component.
+    "jsx-a11y/prefer-tag-over-role": "off",
+
+    "jsx-a11y/alt-text": "error",
+    "jsx-a11y/anchor-has-content": "error",
+    "jsx-a11y/anchor-is-valid": "error",
+    "jsx-a11y/aria-props": "error",
+    "jsx-a11y/aria-proptypes": "error",
+    "jsx-a11y/aria-role": "error",
+    "jsx-a11y/aria-unsupported-elements": "error",
+    "jsx-a11y/autocomplete-valid": "error",
+    "jsx-a11y/click-events-have-key-events": "error",
+    "jsx-a11y/control-has-associated-label": "error",
+    "jsx-a11y/heading-has-content": "error",
+    "jsx-a11y/html-has-lang": "error",
+    "jsx-a11y/iframe-has-title": "error",
+    "jsx-a11y/img-redundant-alt": "error",
+    "jsx-a11y/interactive-supports-focus": "error",
+    "jsx-a11y/label-has-associated-control": "error",
+    "jsx-a11y/no-aria-hidden-on-focusable": "error",
+    "jsx-a11y/no-autofocus": "error",
+    "jsx-a11y/no-noninteractive-element-interactions": "error",
+    "jsx-a11y/no-noninteractive-tabindex": "error",
+    "jsx-a11y/no-static-element-interactions": "error",
+    "jsx-a11y/role-has-required-aria-props": "error",
+    "jsx-a11y/role-supports-aria-props": "error",
+    "jsx-a11y/tabindex-no-positive": "error"
+  },
+  "ignorePatterns": ["dist/**", "coverage/**", "build/**", "design/**"]
+}

@@ -13,6 +13,11 @@ export const AUTHOR = {
   email: 'davidpizarrofrick@gmail.com',
 } as const;
 
+/** A profile URL as it reads in running text: no scheme, no `www.`. */
+export function displayUrl(url: string): string {
+  return url.replace(/^https?:\/\/(www\.)?/, '');
+}
+
 /** `key` is `home | projects | platform | about | contact | cv | privacy-policy | project-<slug>`. */
 export function ogImagePath(lang: Lang, key: string): string {
   return `/og/${lang}/${key}.png`;

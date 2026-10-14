@@ -1,6 +1,8 @@
 import { render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
-import ErrorBoundary from '../../src/ErrorBoundary';
+import { createMemoryRouter, Outlet, RouterProvider } from 'react-router';
+import ErrorBoundary, { RouteErrorFallback } from '../../src/ErrorBoundary';
+import { reportError } from '../../src/utils/errorTracking';
 
 vi.mock('../../src/utils/analytics', () => ({
   trackEvent: vi.fn(),
@@ -17,7 +19,7 @@ function ThrowError({ shouldThrow, message }: { shouldThrow: boolean; message?: 
   return <div>Child content</div>;
 }
 
-function ThrowChunkError() {
+function ThrowChunkError(): never {
   throw new Error('Failed to fetch dynamically imported module /assets/Home-abc123.js');
 }
 
@@ -69,14 +71,13 @@ describe('ErrorBoundary', () => {
     expect(screen.getByText('An unexpected error occurred. Please try again.')).toBeInTheDocument();
   });
 
-  it('shows updating spinner for chunk errors', () => {
+  it('offers Reload for a chunk that still fails after the automatic retry', () => {
     render(
       <ErrorBoundary>
         <ThrowChunkError />
       </ErrorBoundary>
     );
-    expect(screen.getByText('Updating app...')).toBeInTheDocument();
-    expect(screen.queryByRole('button', { name: 'Reload' })).not.toBeInTheDocument();
+    expect(screen.getByRole('button', { name: 'Reload' })).toBeInTheDocument();
   });
 
   it('calls trackEvent on error', async () => {
@@ -92,17 +93,49 @@ describe('ErrorBoundary', () => {
     );
   });
 
-  it('calls reportError via dynamic import on error', async () => {
+  it('reports the error to the API', () => {
     render(
       <ErrorBoundary>
         <ThrowError shouldThrow={true} />
       </ErrorBoundary>
     );
-    // componentDidCatch does dynamic import — wait for microtask
-    await vi.waitFor(async () => {
-      const { reportError } = await import('../../src/utils/errorTracking');
-      expect(reportError).toHaveBeenCalledWith(expect.any(Error), 'error-boundary');
-    });
+    expect(reportError).toHaveBeenCalledWith(
+      expect.objectContaining({ message: 'Test error' }),
+      'error-boundary'
+    );
+  });
+
+  it('catches what a page throws inside the router, which the class boundary never sees', () => {
+    const router = createMemoryRouter([
+      {
+        element: <Outlet />,
+        errorElement: <RouteErrorFallback />,
+        children: [{ path: '/', element: <ThrowError shouldThrow={true} message="page crash" /> }],
+      },
+    ]);
+    render(
+      <ErrorBoundary>
+        <RouterProvider router={router} />
+      </ErrorBoundary>
+    );
+    expect(screen.getByRole('heading', { name: 'Something went wrong' })).toBeInTheDocument();
+    expect(screen.getByRole('button', { name: 'Reload' })).toBeInTheDocument();
+    expect(reportError).toHaveBeenCalledWith(
+      expect.objectContaining({ message: 'page crash' }),
+      'error-boundary'
+    );
+  });
+
+  it('reports a thrown value that is not an Error as one, with the value as its message', () => {
+    function ThrowString(): never {
+      throw 'page threw a string';
+    }
+    const router = createMemoryRouter([
+      { path: '/', element: <ThrowString />, errorElement: <RouteErrorFallback /> },
+    ]);
+    render(<RouterProvider router={router} />);
+    expect(screen.getByRole('button', { name: 'Reload' })).toBeInTheDocument();
+    expect(reportError).toHaveBeenCalledWith(new Error('page threw a string'), 'error-boundary');
   });
 
   it('Reload button calls window.location.reload', async () => {

@@ -1,6 +1,6 @@
 {
   "name": "dtpf-web",
-  "version": "0.6.25",
+  "version": "0.7.1",
   "description": "Frontend of dtpf.es, the personal portfolio of David T. Pizarro Frick",
   "author": "David T. Pizarro Frick",
   "license": "MIT",
@@ -40,7 +40,10 @@
     "test": "vitest run",
     "test:watch": "vitest",
     "test:coverage": "vitest run --coverage",
-    "format": "prettier --write \"src/**/*.{js,jsx,ts,tsx,json,css,scss,md}\" \"scripts/**/*.mjs\""
+    "lint": "oxlint --deny-warnings src test scripts vite.config.ts",
+    "typecheck": "tsc -p tsconfig.test.json",
+    "format": "prettier --write \"src/**/*.{js,jsx,ts,tsx,json,css,scss,md}\" \"test/**/*.{ts,tsx}\" \"scripts/**/*.mjs\" vite.config.ts",
+    "format:check": "prettier --check \"src/**/*.{js,jsx,ts,tsx,json,css,scss,md}\" \"test/**/*.{ts,tsx}\" \"scripts/**/*.mjs\" vite.config.ts"
   },
   "prettier": {
     "semi": true,
@@ -71,6 +74,7 @@
     "@vitejs/plugin-react-swc": "~4.3.3",
     "@vitest/coverage-v8": "^5.0.4",
     "jsdom": "^30.1.2",
+    "oxlint": "^1.88.0",
     "playwright": "1.64.0",
     "prettier": "^3.9.10",
     "typescript": "~7.0.2",
