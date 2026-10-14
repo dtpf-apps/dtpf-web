@@ -62,7 +62,7 @@ export default function Projects() {
               <Link
                 to={projectDetailPath(p.slug)}
                 onClick={() => trackEvent('projects:case-study', { slug: p.slug })}
-                className="inline-flex items-center gap-1.5 rounded-lg bg-accent px-4 py-2 text-[13px] font-semibold text-[#0B0F19] transition hover:bg-accent-hover"
+                className="inline-flex items-center gap-1.5 rounded-lg bg-accent px-4 py-2 text-[13px] font-semibold text-on-accent transition hover:bg-accent-hover"
               >
                 {t('projects_case_study')} <ArrowRight size={14} aria-hidden="true" />
               </Link>

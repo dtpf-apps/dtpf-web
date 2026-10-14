@@ -53,7 +53,7 @@ export default function Cv() {
           href={cvPdfPath(lang)}
           download
           onClick={() => trackEvent('cv:download', { lang })}
-          className="mb-8 inline-flex items-center gap-2 rounded-[10px] bg-accent px-5 py-2.5 text-sm font-semibold text-[#0B0F19] transition hover:bg-accent-hover print:hidden"
+          className="mb-8 inline-flex items-center gap-2 rounded-[10px] bg-accent px-5 py-2.5 text-sm font-semibold text-on-accent transition hover:bg-accent-hover print:hidden"
         >
           <Download size={15} aria-hidden="true" />
           {t('cv_download')}

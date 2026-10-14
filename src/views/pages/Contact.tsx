@@ -157,7 +157,7 @@ export default function Contact() {
             type="submit"
             disabled={loading}
             aria-busy={loading}
-            className="flex w-full items-center justify-center gap-2 rounded-[10px] bg-accent px-6 py-3 text-sm font-semibold text-[#0B0F19] transition-all hover:bg-accent-hover disabled:opacity-50"
+            className="flex w-full items-center justify-center gap-2 rounded-[10px] bg-accent px-6 py-3 text-sm font-semibold text-on-accent transition-all hover:bg-accent-hover disabled:opacity-50"
           >
             <Send size={15} aria-hidden="true" />
             {loading ? t('contact_sending') : t('contact_submit')}

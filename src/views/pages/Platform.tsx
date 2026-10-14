@@ -166,7 +166,7 @@ export default function Platform() {
             <Link
               to={paths.projects}
               onClick={() => trackEvent('platform:cta-projects')}
-              className="inline-flex items-center justify-center gap-2 rounded-[10px] bg-accent px-7 py-3.5 text-[15px] font-semibold text-[#0B0F19] transition-all hover:-translate-y-0.5 hover:bg-accent-hover hover:shadow-[0_0_40px_var(--color-accent-glow)]"
+              className="inline-flex items-center justify-center gap-2 rounded-[10px] bg-accent px-7 py-3.5 text-[15px] font-semibold text-on-accent transition-all hover:-translate-y-0.5 hover:bg-accent-hover hover:shadow-[0_0_40px_var(--color-accent-glow)]"
             >
               {t('platform_cta_projects')}
             </Link>
