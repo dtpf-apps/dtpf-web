@@ -36,7 +36,7 @@ export interface ProjectFacts {
 export interface PlatformFacts {
   /** Proxmox cluster nodes. */
   nodes: number;
-  /** Running guests by kind; templates are not counted. */
+  /** Guests defined in the cluster by kind (stopped ones included); templates are not counted. */
   guests: { lxc: number; vm: number };
   /** ZFS replication jobs between nodes. */
   replicationJobs: number;
