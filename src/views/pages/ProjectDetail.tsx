@@ -70,7 +70,7 @@ export default function ProjectDetail() {
                 href={project.liveUrl}
                 target="_blank"
                 rel="noreferrer"
-                className="inline-flex items-center gap-2 rounded-[10px] bg-accent px-6 py-3 text-sm font-semibold text-[#0B0F19] transition hover:bg-accent-hover"
+                className="inline-flex items-center gap-2 rounded-[10px] bg-accent px-6 py-3 text-sm font-semibold text-on-accent transition hover:bg-accent-hover"
                 onClick={() => trackEvent('project:visit-live', { slug: project.slug })}
               >
                 {t('detail_visit')} {t(project.urlKey)} <ExternalLink size={14} aria-hidden="true" />

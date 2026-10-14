@@ -134,7 +134,7 @@ export default function Home() {
           <Link
             to={paths.projects}
             onClick={() => trackEvent('home:hero-view-projects')}
-            className="inline-flex items-center justify-center gap-2 rounded-[10px] bg-accent px-7 py-3.5 text-[15px] font-semibold text-[#0B0F19] transition-all hover:bg-accent-hover hover:shadow-[0_0_40px_var(--color-accent-glow)] hover:-translate-y-0.5"
+            className="inline-flex items-center justify-center gap-2 rounded-[10px] bg-accent px-7 py-3.5 text-[15px] font-semibold text-on-accent transition-all hover:bg-accent-hover hover:shadow-[0_0_40px_var(--color-accent-glow)] hover:-translate-y-0.5"
           >
             {t('hero_cta_projects')}
           </Link>
@@ -215,7 +215,7 @@ export default function Home() {
                 <Link
                   to={projectDetailPath(p.slug)}
                   onClick={() => trackEvent('home:project-card', { slug: p.slug })}
-                  className="inline-flex items-center gap-1.5 rounded-lg bg-accent px-4 py-2 text-[13px] font-semibold text-[#0B0F19] transition-all hover:bg-accent-hover"
+                  className="inline-flex items-center gap-1.5 rounded-lg bg-accent px-4 py-2 text-[13px] font-semibold text-on-accent transition-all hover:bg-accent-hover"
                 >
                   {t('home_projects_case_study')} <ArrowRight size={14} aria-hidden="true" />
                 </Link>
@@ -331,7 +331,7 @@ export default function Home() {
           <Link
             to={paths.contact}
             onClick={() => trackEvent('home:final-cta')}
-            className="relative inline-flex items-center gap-2 rounded-[10px] bg-accent px-7 py-3.5 text-[15px] font-semibold text-[#0B0F19] transition-all hover:bg-accent-hover hover:shadow-[0_0_40px_var(--color-accent-glow)] hover:-translate-y-0.5"
+            className="relative inline-flex items-center gap-2 rounded-[10px] bg-accent px-7 py-3.5 text-[15px] font-semibold text-on-accent transition-all hover:bg-accent-hover hover:shadow-[0_0_40px_var(--color-accent-glow)] hover:-translate-y-0.5"
           >
             {t('home_cta_button')}
           </Link>

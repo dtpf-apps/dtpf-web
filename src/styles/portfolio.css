@@ -98,6 +98,8 @@
   --color-accent-hover: #5eead4;
   --color-accent-glow: rgba(45, 212, 191, 0.12);
   --color-accent-subtle: rgba(45, 212, 191, 0.06);
+  /* Text on an accent-filled control; each theme picks the side of the accent that reads at AA */
+  --color-on-accent: #0b0f19;
 
   --color-warm: #fbbf24;
 
@@ -118,10 +120,12 @@
   --color-text-secondary: #64748b;
   --color-text-muted: #94a3b8;
 
-  --color-accent: #0d9488;
-  --color-accent-hover: #0f766e;
-  --color-accent-glow: rgba(13, 148, 136, 0.08);
-  --color-accent-subtle: rgba(13, 148, 136, 0.04);
+  /* Teal 700: small accent text on the light backgrounds reads at 5.2:1 (teal 600 was 3.6:1) */
+  --color-accent: #0f766e;
+  --color-accent-hover: #115e59;
+  --color-accent-glow: rgba(15, 118, 110, 0.08);
+  --color-accent-subtle: rgba(15, 118, 110, 0.04);
+  --color-on-accent: #ffffff;
 
   --color-warm: #d97706;
 
@@ -196,7 +200,7 @@ select:focus-visible {
     --color-text-primary: #0f172a;
     --color-text-secondary: #334155;
     --color-text-muted: #64748b;
-    --color-accent: #0d9488;
+    --color-accent: #0f766e;
     --color-border: #cbd5e1;
   }
 

@@ -23,7 +23,7 @@ pnpm test:coverage    # Run tests with v8 coverage report (HTML in coverage/)
 
 ### Testing
 
-Vitest 5 with jsdom environment, @testing-library/react, and jest-dom matchers. **425 tests** across 44 test files (one, the `facts.json` staleness check, runs only when `CI` is set). `test/postbuild/*` imports the build scripts and `test/styles/fonts.test.ts` reads `index.html` and the CSS from disk, so the suite runs from the package root (as `pnpm test` does). Coverage thresholds: 95% (statements, branches, functions, lines) — `pnpm test:coverage` currently FAILS them (82.0% stmts overall; `useSWUpdate.ts` and `lazyWithRetry.ts` are largely uncovered). CI runs `pnpm test` (no coverage gate) before deploy.
+Vitest 5 with jsdom environment, @testing-library/react, and jest-dom matchers. **451 tests** across 45 test files (one, the `facts.json` staleness check, runs only when `CI` is set). `test/postbuild/*` imports the build scripts and `test/styles/fonts.test.ts` reads `index.html` and the CSS from disk, so the suite runs from the package root (as `pnpm test` does). Coverage thresholds: 95% (statements, branches, functions, lines) — `pnpm test:coverage` currently FAILS them (82.0% stmts overall; `useSWUpdate.ts` and `lazyWithRetry.ts` are largely uncovered). CI runs `pnpm test` (no coverage gate) before deploy.
 
 ```
 test/
@@ -110,7 +110,7 @@ Single `PortfolioLayout` wrapping all routes: sticky Header + `AnimatePresence` 
 ### Styling
 
 - **Tailwind CSS v4** with `@theme` design tokens in `src/styles/portfolio.css`
-- **Ocean Teal palette**: accent `#2DD4BF`, warm `#FBBF24`, dark bg `#0B0F19`
+- **Ocean Teal palette**: accent `#2DD4BF`, warm `#FBBF24`, dark bg `#0B0F19`; light accent is teal 700 `#0F766E` (teal 600 read at 3.6:1 on the light background). Text on an accent-filled control is `text-on-accent` (dark in dark mode, white in light), never a hardcoded hex. `test/styles/contrast.test.ts` measures accent/on-accent/text-secondary pairs against the tokens at AA in both themes and in print, and fails on the first regression.
 - **Fonts**: Space Grotesk (headings), Inter (body), JetBrains Mono (code/labels) — self-hosted from `src/assets/fonts/` (`@font-face` in `portfolio.css`, static latin woff2 instances with their OFL text; `index.html` preloads the body and heading faces). Static instances on purpose: Chromium prints a variable font as a Type 3 font, which résumé parsers read worse than the CID TrueType a static one yields. `test/styles/fonts.test.ts` fails on any font host or missing file.
 - Light mode overrides via `.light` class on `<html>` (ThemeContext manages this)
 - Grain texture overlay via CSS SVG filter on `body::after`
