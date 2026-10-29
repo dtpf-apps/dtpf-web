@@ -56,10 +56,16 @@ jobs:
           # and concurrent jobs race on the default ~/setup-pnpm (ENOTEMPTY).
           dest: ${{ runner.temp }}/setup-pnpm
 
+      # `package-manager-cache: false`: the cache setup-node v5 turns on by itself
+      # for a `packageManager` field keys on pnpm's store path, which the per-job
+      # `dest` above moves into the job's temp dir. That path is new on every job,
+      # so it never restored anything, and each run uploaded a fresh copy of the
+      # store to the runner's cache server until the runner's disk filled.
       - name: Setup Node.js
         uses: actions/setup-node@a0853c24544627f65ddf259abe73b1d18a591444 # v5
         with:
           node-version-file: .nvmrc
+          package-manager-cache: false
 
       - name: Verify pnpm
         run: pnpm --version
