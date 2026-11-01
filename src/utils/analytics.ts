@@ -8,7 +8,28 @@ const WEBSITE_IDS: Record<string, string> = {
   'dev.dtpf.es': 'd30c7c40-a1e0-49a8-bc92-27c6d7c7c332',
 };
 
+// With auto-track off nothing records the landing pageview for us, and it is requested before the
+// script has loaded (the layout's effect runs before App's). Calls made in that window wait here and
+// go out on the script's load event; the cap bounds the queue when a blocker keeps the script out.
+const MAX_PENDING = 20;
+const pending: Array<(umami: UmamiTrack) => void> = [];
+
 let initialized = false;
+
+function flushPending(): void {
+  const umami = getUmami();
+  if (!umami?.track) return;
+  pending.splice(0).forEach((call) => call(umami));
+}
+
+function send(call: (umami: UmamiTrack) => void): void {
+  const umami = getUmami();
+  if (umami?.track) {
+    call(umami);
+    return;
+  }
+  if (pending.length < MAX_PENDING) pending.push(call);
+}
 
 function injectScript(): void {
   const websiteId = WEBSITE_IDS[window.location.hostname];
@@ -20,6 +41,7 @@ function injectScript(): void {
   script.defer = true;
   script.setAttribute('data-website-id', websiteId);
   script.setAttribute('data-auto-track', 'false');
+  script.addEventListener('load', flushPending);
   document.head.appendChild(script);
   initialized = true;
 }
@@ -41,17 +63,15 @@ function getUmami(): UmamiTrack | undefined {
 }
 
 export function trackPageView(url?: string, title?: string): void {
-  const umami = getUmami();
-  if (!umami?.track) return;
-  if (url) {
-    umami.track((props: Record<string, unknown>) => ({ ...props, url, title: title || document.title }));
-  } else {
-    umami.track();
-  }
+  send((umami) => {
+    if (url) {
+      umami.track((props: Record<string, unknown>) => ({ ...props, url, title: title || document.title }));
+    } else {
+      umami.track();
+    }
+  });
 }
 
 export function trackEvent(name: string, data?: Record<string, string | number>): void {
-  const umami = getUmami();
-  if (!umami?.track) return;
-  umami.track(name, data);
+  send((umami) => umami.track(name, data));
 }

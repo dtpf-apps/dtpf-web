@@ -202,6 +202,84 @@ describe('analytics', () => {
 
       expect(mockTrack).toHaveBeenCalledWith();
     });
+
+    it('sends the landing pageview once the script has loaded', async () => {
+      Object.defineProperty(window, 'location', {
+        value: { hostname: 'dtpf.es' },
+        writable: true,
+        configurable: true,
+      });
+      Object.defineProperty(window, 'umami', { value: undefined, writable: true, configurable: true });
+      resetModule();
+      analytics = await import('../../src/utils/analytics');
+
+      // The layout's effect runs before App's, so the landing pageview arrives before the script exists.
+      analytics.trackPageView('/');
+      analytics.initAnalytics();
+
+      const mockTrack = vi.fn((cb: unknown) => (typeof cb === 'function' ? cb({}) : undefined));
+      Object.defineProperty(window, 'umami', {
+        value: { track: mockTrack },
+        writable: true,
+        configurable: true,
+      });
+      document.getElementById('umami-analytics')!.dispatchEvent(new Event('load'));
+
+      expect(mockTrack).toHaveBeenCalledTimes(1);
+      expect(mockTrack.mock.results[0].value).toMatchObject({ url: '/' });
+    });
+
+    it('sends calls made before the script loaded in order, and only once', async () => {
+      Object.defineProperty(window, 'location', {
+        value: { hostname: 'dtpf.es' },
+        writable: true,
+        configurable: true,
+      });
+      Object.defineProperty(window, 'umami', { value: undefined, writable: true, configurable: true });
+      resetModule();
+      analytics = await import('../../src/utils/analytics');
+
+      analytics.trackPageView('/');
+      analytics.initAnalytics();
+      analytics.trackEvent('perf:page-load', { duration: 1 });
+
+      const mockTrack = vi.fn();
+      Object.defineProperty(window, 'umami', {
+        value: { track: mockTrack },
+        writable: true,
+        configurable: true,
+      });
+      const script = document.getElementById('umami-analytics')!;
+      script.dispatchEvent(new Event('load'));
+      script.dispatchEvent(new Event('load'));
+
+      expect(mockTrack).toHaveBeenCalledTimes(2);
+      expect(mockTrack.mock.calls[1]).toEqual(['perf:page-load', { duration: 1 }]);
+    });
+
+    it('holds at most 20 calls while the script is blocked', async () => {
+      Object.defineProperty(window, 'location', {
+        value: { hostname: 'dtpf.es' },
+        writable: true,
+        configurable: true,
+      });
+      Object.defineProperty(window, 'umami', { value: undefined, writable: true, configurable: true });
+      resetModule();
+      analytics = await import('../../src/utils/analytics');
+      analytics.initAnalytics();
+
+      for (let i = 0; i < 25; i++) analytics.trackEvent(`event-${i}`);
+
+      const mockTrack = vi.fn();
+      Object.defineProperty(window, 'umami', {
+        value: { track: mockTrack },
+        writable: true,
+        configurable: true,
+      });
+      document.getElementById('umami-analytics')!.dispatchEvent(new Event('load'));
+
+      expect(mockTrack).toHaveBeenCalledTimes(20);
+    });
   });
 
   describe('trackEvent', () => {
