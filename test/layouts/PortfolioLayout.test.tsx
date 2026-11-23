@@ -6,7 +6,6 @@ import PortfolioLayout from '../../src/views/layouts/PortfolioLayout';
 
 vi.mock('../../src/utils/analytics', () => ({
   trackEvent: vi.fn(),
-  trackPageView: vi.fn(),
   initAnalytics: vi.fn(),
 }));
 

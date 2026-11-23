@@ -79,7 +79,6 @@ src/
 │                                    #   screenshots under public/projects/<slug>/, WebP, never precached)
 ├── contexts/theme/                  # ThemeContext + ThemeProvider + useTheme
 ├── hooks/
-│   ├── useAnalyticsPageView.ts      # SPA page-view + page-load perf tracking
 │   └── useSWUpdate.ts               # Silent PWA update (version.json polling)
 ├── router/
 │   ├── router.tsx                   # Route definitions with lazyWithRetry(), one page tree per language
@@ -88,7 +87,7 @@ src/
 │   └── useRouteLang.ts              # Language of the current URL (the source of truth)
 ├── styles/portfolio.css             # Tailwind @theme design tokens + base styles
 ├── utils/
-│   ├── analytics.ts                 # Umami init + trackPageView/trackEvent
+│   ├── analytics.ts                 # Umami init + trackEvent (page views and web vitals are the tracker's own)
 │   ├── animations.ts                # Shared Framer Motion variants
 │   ├── chunkError.ts                # Chunk-load error detection
 │   ├── errorTracking.ts             # Client error reporting (batched)
@@ -145,7 +144,7 @@ Progressive Web App via `vite-plugin-pwa` with `injectManifest` strategy. Workbo
 
 ## Analytics & Error Reporting
 
-Self-hosted Umami analytics (analytics.dtpf.es), loaded on every visit without a consent banner: Umami sets no cookies, keeps no identifier in the browser and never stores the IP address (it is hashed with the user agent and a rotating salt), so the site declares it in a footer line and in the privacy policy instead of asking. Page views and custom events are tracked client-side (`src/utils/analytics.ts`). Unhandled errors, promise rejections, and React render errors are deduplicated, batched, and reported to the backend at `POST /api/v1/client-errors` (`src/utils/errorTracking.ts` + `ErrorBoundary`).
+Self-hosted Umami analytics (analytics.dtpf.es), loaded on every visit without a consent banner: Umami sets no cookies, keeps no identifier in the browser and never stores the IP address (it is hashed with the user agent and a rotating salt), so the site declares it in a footer line and in the privacy policy instead of asking. The Umami tracker records page views and web vitals itself; the app only sends custom events (`src/utils/analytics.ts`). Unhandled errors, promise rejections, and React render errors are deduplicated, batched, and reported to the backend at `POST /api/v1/client-errors` (`src/utils/errorTracking.ts` + `ErrorBoundary`).
 
 ## Testing
 

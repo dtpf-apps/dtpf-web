@@ -4,7 +4,6 @@ import { initAnalytics } from '../src/utils/analytics';
 
 vi.mock('../src/utils/analytics', () => ({
   initAnalytics: vi.fn(),
-  trackPageView: vi.fn(),
   trackEvent: vi.fn(),
 }));
 vi.mock('../src/hooks/useSWUpdate', () => ({ default: vi.fn() }));

@@ -8,9 +8,9 @@ const WEBSITE_IDS: Record<string, string> = {
   'dev.dtpf.es': 'd30c7c40-a1e0-49a8-bc92-27c6d7c7c332',
 };
 
-// With auto-track off nothing records the landing pageview for us, and it is requested before the
-// script has loaded (the layout's effect runs before App's). Calls made in that window wait here and
-// go out on the script's load event; the cap bounds the queue when a blocker keeps the script out.
+// An event can fire before the script has loaded (a chunk-reload retry, a click in the first frames).
+// Calls made in that window wait here and go out on the script's load event; the cap bounds the queue
+// when a blocker keeps the script out.
 const MAX_PENDING = 20;
 const pending: Array<(umami: UmamiTrack) => void> = [];
 
@@ -40,7 +40,10 @@ function injectScript(): void {
   script.src = SCRIPT_URL;
   script.defer = true;
   script.setAttribute('data-website-id', websiteId);
-  script.setAttribute('data-auto-track', 'false');
+  // Umami tracks page views itself — the first one of each load and every client-side route change —
+  // and, with `data-performance`, the web vitals. The vitals go as Umami's own performance reports,
+  // which its bounce rate ignores: sent as a custom event, they marked every visit as engaged.
+  script.setAttribute('data-performance', 'true');
   script.addEventListener('load', flushPending);
   document.head.appendChild(script);
   initialized = true;
@@ -53,23 +56,12 @@ export function initAnalytics(): void {
 }
 
 type UmamiTrack = {
-  track: ((payload?: object | string, data?: Record<string, string | number>) => void) &
-    ((callback: (props: Record<string, unknown>) => object) => void);
+  track: (name: string, data?: Record<string, string | number>) => void;
 };
 
 function getUmami(): UmamiTrack | undefined {
   if (!initialized) return undefined;
   return (window as unknown as Record<string, unknown>).umami as UmamiTrack | undefined;
-}
-
-export function trackPageView(url?: string, title?: string): void {
-  send((umami) => {
-    if (url) {
-      umami.track((props: Record<string, unknown>) => ({ ...props, url, title: title || document.title }));
-    } else {
-      umami.track();
-    }
-  });
 }
 
 export function trackEvent(name: string, data?: Record<string, string | number>): void {

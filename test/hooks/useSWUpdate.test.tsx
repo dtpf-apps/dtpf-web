@@ -4,7 +4,6 @@ import { trackEvent } from '../../src/utils/analytics';
 
 vi.mock('../../src/utils/analytics', () => ({
   trackEvent: vi.fn(),
-  trackPageView: vi.fn(),
   initAnalytics: vi.fn(),
 }));
 

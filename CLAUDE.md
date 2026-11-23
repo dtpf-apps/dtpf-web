@@ -68,7 +68,6 @@ test/
 │   ├── removePrerendered.test.ts     # build-time head tags removed before React renders
 │   └── storage.test.ts               # a localStorage that throws never breaks the page
 ├── hooks/
-│   ├── useAnalyticsPageView.test.tsx
 │   └── useSWUpdate.test.tsx          # version.json polling, update applied on a same-origin link or on return to the tab, never with a dialog open
 ├── components/
 │   ├── ErrorBoundary.test.tsx        # fallback + Reload, report to the API, a page crash caught by the router's errorElement
@@ -172,7 +171,7 @@ The contact form includes:
 
 ### Analytics & Error Tracking
 
-- `src/utils/analytics.ts` — Umami (analytics.dtpf.es) with separate website IDs for dtpf.es and dev.dtpf.es, injected on every visit from `App` (`data-auto-track` off). **No consent banner**: Umami sets no cookies and keeps no identifier in the browser, the IP is never stored (hashed with the user agent and a rotating salt), so the site declares it instead of asking — a footer line ("cookieless analytics with Umami · privacy policy") and the "Analítica web" section of `/privacy-policy`. Any change that makes the analytics identify people brings the consent question back. `useAnalyticsPageView` tracks SPA page views on route change plus one `perf:page-load` event.
+- `src/utils/analytics.ts` — Umami (analytics.dtpf.es) with separate website IDs for dtpf.es and dev.dtpf.es, injected on every visit from `App`. **No consent banner**: Umami sets no cookies and keeps no identifier in the browser, the IP is never stored (hashed with the user agent and a rotating salt), so the site declares it instead of asking — a footer line ("cookieless analytics with Umami · privacy policy") and the "Analítica web" section of `/privacy-policy`. Any change that makes the analytics identify people brings the consent question back. **The tracker records page views and web vitals itself** (auto-track on, `data-performance`): the app only calls `trackEvent`, and events fired before the script loads wait in a capped queue. Never send a custom event on every page load — Umami counts a visit with any custom event as engaged, and a hand-sent `perf:page-load` held the bounce rate at 0%. `data-performance` does nothing with `data-auto-track="false"`: the tracker starts its vitals observer inside the auto-track startup.
 - `src/utils/errorTracking.ts` — `window` error/unhandledrejection listeners, dedup per page load, 2 s batching, `POST /api/v1/client-errors` with `keepalive`, flush on `pagehide` (not `beforeunload`, which keeps a page out of the back/forward cache). `src/ErrorBoundary.tsx` reports render errors and shows a fallback with a Reload button. It has two halves: the router catches what a page throws while rendering, so a page crash never reaches the class boundary in `App` — `RouteErrorFallback` is the layout route's `errorElement` in `router.tsx`, and the class boundary covers everything outside the router.
 - `views/components/StagingBadge.tsx` — fixed "Staging" pill when the hostname starts with `dev.`/`dev-` (`utils/isStaging.ts`).
 
@@ -210,7 +209,6 @@ src/
 ├── config/site.ts               # SITE_URL, SITE_NAME, AUTHOR, canonical/OG helpers, JSON-LD builders, cvPdfPath
 ├── contexts/theme/              # ThemeContext + ThemeProvider + useTheme
 ├── hooks/
-│   ├── useAnalyticsPageView.ts  # SPA page-view + page-load perf tracking
 │   └── useSWUpdate.ts           # Silent PWA update (version.json polling)
 ├── router/
 │   ├── router.tsx               # createBrowserRouter + lazyWithRetry; one page tree per language
@@ -219,7 +217,7 @@ src/
 │   └── useRouteLang.ts          # Language of the current URL
 ├── styles/portfolio.css         # @font-face + Tailwind @theme tokens + base styles + @media print
 ├── utils/
-│   ├── analytics.ts             # Umami init + trackPageView/trackEvent
+│   ├── analytics.ts             # Umami init + trackEvent (page views and web vitals are the tracker's own)
 │   ├── animations.ts            # Shared Framer Motion variants (stagger, fadeUp, fadeIn)
 │   ├── chunkError.ts            # Chunk-load error detection
 │   ├── errorTracking.ts         # Client error reporting (batched POST /client-errors)

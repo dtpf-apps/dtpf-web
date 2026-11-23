@@ -6,14 +6,12 @@ import { readStored, STORAGE_KEYS } from 'utils/storage';
 import Header from 'views/components/navigation/Header';
 import Footer from 'views/components/navigation/Footer';
 import { AnimatePresence, motion } from 'framer-motion';
-import useAnalyticsPageView from 'hooks/useAnalyticsPageView';
 
 export default function PortfolioLayout() {
   const { t, i18n } = useTranslation();
   const { pathname, search, hash } = useLocation();
   const navigate = useNavigate();
   const [announcement, setAnnouncement] = useState('');
-  useAnalyticsPageView();
 
   const urlLang = langFromPath(pathname);
 
